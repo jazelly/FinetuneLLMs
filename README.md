@@ -1,7 +1,11 @@
 # FinetuneLLMs
 Collections of all kinds of LLMs finetuning scripts
 
-## Installation dependencies 
+This repo aims to provide the finest collection of all tuning scripts that can be easily accessed by anyone.
+
+Every training script in this repo is tested across multiple platforms.
+
+## Install dependencies 
 
 ### Install pytorch
 
@@ -27,8 +31,9 @@ pip3 install -r requirements.txt
 
 #### For Windows
 
-Enable WSL2 on your machine
-Install CUDA inside WSL by followwing the Linux guide.
+Enable WSL2 on your machine.
+
+Install CUDA inside WSL by following the Linux guide.
 
 
 #### For Mac
@@ -40,3 +45,11 @@ Incoming, with mlx
 
 LLM scripts are categorized by their names. Under each, you will see `notebook/`, for `jupyter notebook`, and `script/`, for `python` scripts. They should share same dependencies. 
 The training dataset or logic, however, might not be the same, as the purpose of this repo is to share various different examples of finetuning scripts so you can grasp the ideas.
+
+
+## TODO
+
+- [ ] Try training at GGML and GGUF level
+- [ ] Explore OLLAMA
+- [ ] Explore mlx examples
+- [ ] Explore Finetuning Model in LangChain with OLLAMA
