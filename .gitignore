@@ -161,3 +161,4 @@ cython_debug/
 #.idea/
 
 results/
+llama-2-7b/
