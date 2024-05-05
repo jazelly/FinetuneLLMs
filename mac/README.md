@@ -9,4 +9,6 @@ Both only support LLAMA based models.
 
 ## Slowllama
 
-Slowllama is  a python project purely focusing on finetuning LLAMA model on MacBook. It offloads weights to SSD to support training of large-sized model, i.e. with 70B.
+Slowllama is a python project purely focusing on finetuning LLAMA model on MacBook. It offloads weights to SSD to support training of large-sized model, i.e. 70B parameters.
+
+Please refer to `./slowllama/` for specific instructions of usage

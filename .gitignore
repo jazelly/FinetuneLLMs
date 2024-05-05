@@ -163,3 +163,4 @@ cython_debug/
 checkpoint_dir/
 results/
 llama-2-7b/
+data/**
