@@ -1,3 +1,6 @@
 [submodule "llama-gguf/llama.cpp"]
 	path = llama-gguf/llama.cpp
 	url = git@github.com:ggerganov/llama.cpp.git
+[submodule "mac/slowllama/slowllama"]
+	path = mac/slowllama/slowllama
+	url = git@github.com:jazelly/slowllama.git
