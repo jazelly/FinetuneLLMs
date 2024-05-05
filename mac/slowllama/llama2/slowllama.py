@@ -10,7 +10,8 @@ import gc
 import glob
 import shutil
 
-from llama2 import Transformer
+# from llama2 import Transformer
+from model.llama import Transformer
 
 from dataclasses import dataclass
 from typing import Optional
@@ -264,7 +265,6 @@ def add_lora(model_path, lora_path):
         del checkpoint
         gc.collect()
 
-
 logging.basicConfig(
     format="%(asctime)s %(message)s",
     level=logging.DEBUG,
@@ -272,10 +272,11 @@ logging.basicConfig(
 )
 torch.random.manual_seed(seed)
 
-prepare_model(
-    llama2_path=llama2_model_path,
-    frozen_path=frozen_model_path,
-    compute_dtype=compute_dtype,
-    lora_rank=lora_rank,
-    frozen_dtype=frozen_dtype,
-)
+if __name__ == '__main__' and __package__ is None:
+    prepare_model(
+        llama2_path=llama2_model_path,
+        frozen_path=frozen_model_path,
+        compute_dtype=compute_dtype,
+        lora_rank=lora_rank,
+        frozen_dtype=frozen_dtype,
+    )

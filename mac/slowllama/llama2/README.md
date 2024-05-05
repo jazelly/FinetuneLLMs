@@ -12,6 +12,16 @@ project
 ```
 
 - Download model from [meta-llama/llama](https://github.com/meta-llama/llama) to 
-this dir
+this dir, and put it like `./llama-2-7b`, at the same level with this README
 
-- Suppose the downloaded model is in dir `llama-2-7b`
+- Install submodules
+    ```
+    git submodule init
+    git submodule update --init --recursive
+    ```
+
+- Install llama as module
+    ```
+    cd model
+    python setup.py install
+    ```
