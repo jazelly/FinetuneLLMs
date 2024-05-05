@@ -1,8 +1,0 @@
-**/__pycache__/**
-data/**
-*.log
-frozen/**
-inputs/**
-model/**
-llama7b_serve/**
-out/**
