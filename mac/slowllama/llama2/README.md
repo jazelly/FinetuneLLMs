@@ -20,8 +20,9 @@ this dir, and put it like `./llama-2-7b`, at the same level with this README
     git submodule update --init --recursive
     ```
 
-- Install llama as module
+- Update `config.py` to match model path
+
+- Prepare model first
     ```
-    cd model
-    python setup.py install
+    python slowllama.py
     ```

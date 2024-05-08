@@ -10,8 +10,30 @@ import gc
 import glob
 import shutil
 
-# from llama2 import Transformer
-from model.llama import Transformer
+import sys
+from pathlib import Path
+
+logging.basicConfig(
+    format="%(asctime)s %(message)s",
+    level=logging.DEBUG,
+    filename="logs/prepare_model.log",
+)
+
+file = Path(__file__).resolve()
+temp_syspath_llama2 = str(file.parent) + "/slowllama"
+sys.path.append(temp_syspath_llama2)
+logging.info(f"Added syspath {temp_syspath_llama2}")
+
+from llama2 import Transformer
+
+try:
+    logging.info(f"Removing syspath {temp_syspath_llama2}")
+    sys.path.remove(temp_syspath_llama2)
+    logging.info(f"Removed syspath {temp_syspath_llama2}")
+except ValueError:
+    logging.WARN(f"Error occurred while trying to remove syspath {temp_syspath_llama2}")
+    logging.WARN(ValueError)
+    pass
 
 from dataclasses import dataclass
 from typing import Optional
@@ -265,14 +287,9 @@ def add_lora(model_path, lora_path):
         del checkpoint
         gc.collect()
 
-logging.basicConfig(
-    format="%(asctime)s %(message)s",
-    level=logging.DEBUG,
-    filename="logs/prepare_model.log",
-)
 torch.random.manual_seed(seed)
 
-if __name__ == '__main__' and __package__ is None:
+if __name__ == "__main__" and __package__ is None:
     prepare_model(
         llama2_path=llama2_model_path,
         frozen_path=frozen_model_path,
