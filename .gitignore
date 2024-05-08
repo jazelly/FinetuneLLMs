@@ -162,4 +162,4 @@ cython_debug/
 
 checkpoint_dir/
 results/
-llama-2-7b/
+llama-2-7b*/
