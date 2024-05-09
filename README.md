@@ -5,6 +5,20 @@ This repo aims to provide the finest collection of all tuning scripts that can b
 
 Every training script in this repo is tested across multiple platforms.
 
+## Supported finetuning techniques
+
+There are still a lot to implement, so stay tuned.
+
+| Model      | SFT | DPO | ORPO | KTO | PRO |
+|------------|-----|-----|------|-----|-----|
+| llama 2    | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
+| llama 3    | ✅  |  ❌  |  ✅  |  ❌  |  ❌ |
+| llama-gguf | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
+| llama-ggml | ❌  |  ❌  |  ❌  |  ❌  |  ❌ |
+| phi-3      | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
+| Mistral    | ✅  |  ✅  |  ❌  |  ❌  |  ❌ |
+
+
 ## General Setup
 
 - Install pytorch
