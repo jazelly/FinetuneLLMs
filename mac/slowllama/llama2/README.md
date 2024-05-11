@@ -24,5 +24,10 @@ this dir, and put it like `./llama-2-7b`, at the same level with this README
 
 - Prepare model first
     ```
-    python slowllama.py
+    python load_model.py
+    ```
+
+- Once it's done, you can finetune it by
+    ```
+    python finetune.py
     ```

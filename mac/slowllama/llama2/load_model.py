@@ -16,22 +16,22 @@ from pathlib import Path
 logging.basicConfig(
     format="%(asctime)s %(message)s",
     level=logging.DEBUG,
-    filename="logs/prepare_model.log",
+    filename="logs/load_model.log",
 )
 
 file = Path(__file__).resolve()
-temp_syspath_llama2 = str(file.parent) + "/slowllama"
-sys.path.append(temp_syspath_llama2)
-logging.info(f"Added syspath {temp_syspath_llama2}")
+temp_syspath_slowllama = str(file.parent) + "/slowllama"
+sys.path.append(temp_syspath_slowllama)
+logging.debug(f"Added syspath {temp_syspath_slowllama}")
 
 from llama2 import Transformer
 
 try:
-    logging.info(f"Removing syspath {temp_syspath_llama2}")
-    sys.path.remove(temp_syspath_llama2)
-    logging.info(f"Removed syspath {temp_syspath_llama2}")
+    logging.debug(f"Removing syspath {temp_syspath_slowllama}")
+    sys.path.remove(temp_syspath_slowllama)
+    logging.debug(f"Removed syspath {temp_syspath_slowllama}")
 except ValueError:
-    logging.WARN(f"Error occurred while trying to remove syspath {temp_syspath_llama2}")
+    logging.WARN(f"Error occurred while trying to remove syspath {temp_syspath_slowllama}")
     logging.WARN(ValueError)
     pass
 

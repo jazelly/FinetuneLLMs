@@ -49,14 +49,18 @@ prompt = 'Cubestat reports the following metrics: '
 snapshots_path = 'out'
 
 # plaintext input file which will be tokenized and used for training 
-finetune_file = '../slowllama/test_data/cubestat.txt'
+finetune_file = './slowllama/test_data/cubestat.txt'
 
 # which model to use - path to raw model
-llama2_model_path = './llama-2-7b'
+llama2_model_path = './llama-2-7b-chat'
 
 adamw_eps = 1e-4
 compute_dtype = torch.float16
 frozen_dtype = torch.float16
 
 # trained model to store
-frozen_model_path = './llama-2-7b_f16'
+frozen_model_path = llama2_model_path + '_f16'
+
+adamw_eps = 1e-4
+compute_dtype = torch.float16
+frozen_dtype = torch.float16
