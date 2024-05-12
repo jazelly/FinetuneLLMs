@@ -14,7 +14,6 @@ There are still a lot to implement, so stay tuned.
 | llama 2    | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
 | llama 3    | ✅  |  ❌  |  ✅  |  ❌  |  ❌ |
 | llama-gguf | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
-| llama-ggml | ❌  |  ❌  |  ❌  |  ❌  |  ❌ |
 | phi-3      | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
 | Mistral    | ✅  |  ✅  |  ❌  |  ❌  |  ❌ |
 
@@ -61,6 +60,8 @@ Please note, there might be other dependencies for different model training tech
 
 - [x] Support training at GGUF level
 - [x] Explore `ollama` and `llama.cpp`
+- [ ] Expose scripts as API and GUI
+- [ ] Containerize backend and frontend
 - [ ] Explore `mlx-examples`
 - [ ] Support other models than LLAMA
 - [ ] Explore `pykan`
