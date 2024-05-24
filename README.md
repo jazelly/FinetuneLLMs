@@ -20,6 +20,11 @@ There are still a lot to implement, so stay tuned.
 
 ## General Setup
 
+- Pull submodules
+    ```
+    git submodule update --init
+    ```
+
 - Install pytorch
 
     The easist way to do this is via conda. If you don't have conda, please go to [the installation guide](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)
