@@ -1,4 +1,4 @@
-# FinetuneLLMs
+# FinetuneLLMs (Work in Progress, Actively!)
 Collections of all kinds of LLMs finetuning scripts
 
 This repo aims to provide the finest collection of all tuning scripts that can be easily accessed by anyone.
@@ -7,18 +7,19 @@ Every training script in this repo is tested across multiple platforms.
 
 ## Supported finetuning techniques
 
-There are still a lot to implement, so stay tuned.
 
-| Model      | SFT | DPO | ORPO | KTO | PRO |
-|------------|-----|-----|------|-----|-----|
-| llama 2    | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
-| llama 3    | ✅  |  ❌  |  ✅  |  ❌  |  ❌ |
-| llama-gguf | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
-| phi-3      | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
-| Mistral    | ✅  |  ✅  |  ❌  |  ❌  |  ❌ |
+| Model \ Method  |  SFT | DPO  | ORPO  | KTO  | PRO  |
+|-----------------|------|------|-------|------|------|
+| llama 2         | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
+| llama 3         | ✅  |  ❌  |  ✅  |  ❌  |  ❌ |
+| gguf            | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
+| phi-3           | ✅  |  ❌  |  ❌  |  ❌  |  ❌ |
+| Mistral         | ✅  |  ✅  |  ❌  |  ❌  |  ❌ |
 
+The end goal is any combination of Transformers model and method can be interacted with a few clicks, 
+i.e. select model, method, and your dataset, and hit start
 
-## General Setup
+## General Setup (deprecating, will provide a UI usage documentation)
 
 - Pull submodules
     ```
@@ -64,9 +65,10 @@ Please note, there might be other dependencies for different model training tech
 ## TODO
 
 - [x] Support training at GGUF level
-- [x] Explore `ollama` and `llama.cpp`
-- [ ] Expose scripts as API and GUI
+- [x] Support `llama.cpp`
+- [ ] Expose a finetune script as API and GUI for CUDA (WIP)
+- [ ] Add more finetune scripts for different OS
+- [ ] Make finetune script configurable
+- [ ] Provide a playground to instantly test the trained model
 - [ ] Containerize backend and frontend
-- [ ] Explore `mlx-examples`
-- [ ] Support other models than LLAMA
-- [ ] Explore `pykan`
+

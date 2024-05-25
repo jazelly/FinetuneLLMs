@@ -7,7 +7,7 @@ async function main() {
     { label: "users_can_delete_workspaces", value: "false" },
     { label: "limit_user_messages", value: "false" },
     { label: "message_limit", value: "25" },
-    { label: "logo_filename", value: "anything-llm.png" },
+    { label: "logo_filename", value: "FinetuneLLMs_transparent.png" },
   ];
 
   for (let setting of settings) {

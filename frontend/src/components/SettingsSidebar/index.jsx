@@ -49,6 +49,7 @@ export default function SettingsSidebar() {
     handleBg();
   }, [showSidebar]);
 
+  console.log('isMobile', isMobile);
   if (isMobile) {
     return (
       <>
@@ -133,7 +134,7 @@ export default function SettingsSidebar() {
         <img
           src={logo}
           alt="Logo"
-          className="rounded max-h-[24px]"
+          className="rounded h-[24px]"
           style={{ objectFit: "contain" }}
         />
       </Link>

@@ -52,7 +52,7 @@ export default function PrivacyAndDataHandling() {
           ) : (
             <>
               <ThirdParty settings={settings} />
-              <TelemetryLogs settings={settings} />
+              <TelemetryLogs />
             </>
           )}
         </div>
@@ -133,73 +133,24 @@ function ThirdParty({ settings }) {
   );
 }
 
-function TelemetryLogs({ settings }) {
-  const [telemetry, setTelemetry] = useState(
-    settings?.DisableTelemetry !== "true"
-  );
-  async function toggleTelemetry() {
-    await System.updateSystem({
-      DisableTelemetry: !telemetry ? "false" : "true",
-    });
-    setTelemetry(!telemetry);
-    showToast(
-      `Anonymous Telemetry has been ${!telemetry ? "enabled" : "disabled"}.`,
-      "info",
-      { clear: true }
-    );
-  }
+function TelemetryLogs() {
+  setTelemetry(false);
+
 
   return (
     <div className="relative w-full max-h-full">
       <div className="relative rounded-lg">
         <div className="flex items-start justify-between px-6 py-4"></div>
-        <div className="space-y-6 flex h-full w-full">
-          <div className="w-full flex flex-col gap-y-4">
-            <div className="">
-              <label className="mb-2.5 block font-medium text-white">
-                Anonymous Telemetry Enabled
-              </label>
-              <label className="relative inline-flex cursor-pointer items-center">
-                <input
-                  type="checkbox"
-                  onClick={toggleTelemetry}
-                  checked={telemetry}
-                  className="peer sr-only pointer-events-none"
-                />
-                <div className="pointer-events-none peer h-6 w-11 rounded-full bg-stone-400 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:shadow-xl after:border after:border-gray-600 after:bg-white after:box-shadow-md after:transition-all after:content-[''] peer-checked:bg-lime-300 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-800"></div>
-              </label>
-            </div>
-          </div>
-        </div>
         <div className="flex flex-col items-left space-y-2">
           <p className="text-white/80 text-xs rounded-lg w-96">
-            All events do not record IP-address and contain{" "}
-            <b>no identifying</b> content, settings, chats, or other non-usage
-            based information. To see the list of event tags collected you can
-            look on{" "}
-            <a
-              href="https://github.com/search?q=repo%3AMintplex-Labs%2Fanything-llm%20.sendTelemetry(&type=code"
-              className="underline text-blue-400"
-              target="_blank"
-            >
-              Github here
-            </a>
-            .
+            We do not collect your data
           </p>
           <p className="text-white/80 text-xs rounded-lg w-96">
             As an open-source project we respect your right to privacy. We are
             dedicated to building the best solution for integrating AI and
             documents privately and securely. If you do decide to turn off
             telemetry all we ask is to consider sending us feedback and thoughts
-            so that we can continue to improve AnythingLLM for you.{" "}
-            <a
-              href="mailto:team@mintplexlabs.com"
-              className="underline text-blue-400"
-              target="_blank"
-            >
-              team@mintplexlabs.com
-            </a>
-            .
+            so that we can continue to improve AnythingLLM for you.
           </p>
         </div>
       </div>

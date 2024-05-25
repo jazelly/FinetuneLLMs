@@ -56,7 +56,7 @@ export default function Footer() {
           >
             <GithubLogo weight="fill" className="h-5 w-5 " />
           </a>
-          <a
+          {/* <a
             href={paths.docs()}
             target="_blank"
             rel="noreferrer"
@@ -76,7 +76,7 @@ export default function Footer() {
               weight="fill"
               className="h-5 w-5 stroke-slate-200 group-hover:stroke-slate-200"
             />
-          </a>
+          </a> */}
           {!isMobile && <SettingsButton />}
         </div>
       </div>

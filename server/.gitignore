@@ -1,7 +1,7 @@
 .env.production
 .env.development
 storage/assets/*
-!storage/assets/anything-llm.png
+!storage/assets/FinetuneLLMs_transparent.png
 storage/documents/*
 storage/comkey/*
 storage/tmp/*

@@ -26,13 +26,13 @@ export default function Sidebar() {
     <div>
       <Link
         to={paths.home()}
-        className="flex shrink-0 max-w-[55%] items-center justify-start mx-[38px] my-[18px]"
+        className="flex shrink-0 max-w-[100%] items-center justify-start mx-[24px] my-[18px]"
         aria-label="Home"
       >
         <img
           src={logo}
           alt="Logo"
-          className="rounded max-h-[24px]"
+          className="rounded h-[36px]"
           style={{ objectFit: "contain" }}
         />
       </Link>

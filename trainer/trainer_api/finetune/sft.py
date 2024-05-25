@@ -1,4 +1,5 @@
 import os
+import sys
 import torch
 
 from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments,BitsAndBytesConfig
@@ -6,8 +7,45 @@ from datasets import load_dataset
 from trl import SFTTrainer
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 
-import bitsandbytes as bnb
+script_dir = os.path.dirname(os.path.abspath(__file__))
+print(script_dir)
+trainer_router_path = os.path.normpath(os.path.join(script_dir, "../../"))
+print(trainer_router_path)
+sys.path.append(trainer_router_path)
+from trainer_router.settings import BASE_DIR
 
+
+#############
+# Pass args #
+#############
+output_dir="./results"
+model_name ="NousResearch/Llama-2-7b-hf"
+
+args = {}
+
+if len(sys.argv) > 1:
+    print(sys.argv)
+    for arg in sys.argv[1:]:
+        if arg.startswith('--'):
+            kv = arg.split('=')
+            k = kv[0][2:]
+            v = '='.join(kv[1:])
+            args[k] = v
+
+print(args)
+
+#TODO: think about how to safely pass in dataset
+dataset_path = os.path.normpath(os.path.join(BASE_DIR, "../server/storage/datasets"))
+print(dataset_path)
+
+dataset = load_dataset("json", data_files=dataset_path, split="train")
+
+
+
+
+
+
+import bitsandbytes as bnb
 def find_all_linear_names(model):
     cls = bnb.nn.Linear4bit
     lora_module_names = set()
@@ -32,12 +70,6 @@ def print_trainable_parameters(model):
   print(
       f"trainable params: {trainable_params} | all params: {all_param} | trainables%: {100 * trainable_params / all_param}"
   )
-
-output_dir="./results"
-model_name ="NousResearch/Llama-2-7b-hf"
-
-dataset = load_dataset("json", data_files="conversations.json",split="train")
-
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_quant_type="nf4",

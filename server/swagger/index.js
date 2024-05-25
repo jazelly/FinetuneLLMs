@@ -21,8 +21,8 @@ function waitForElm(selector) {
 // Force change the Swagger logo in the header
 waitForElm('img[alt="Swagger UI"]').then((elm) => {
   if (window.SWAGGER_DOCS_ENV === 'development') {
-    elm.src = 'http://localhost:3000/public/anything-llm.png'
+    elm.src = 'http://localhost:3000/public/FinetuneLLMs_transparent.png'
   } else {
-    elm.src = `${window.location.origin}/anything-llm.png`
+    elm.src = `${window.location.origin}/FinetuneLLMs_transparent.png`
   }
 });
