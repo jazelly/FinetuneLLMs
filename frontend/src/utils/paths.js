@@ -36,6 +36,9 @@ export default {
   github: () => {
     return "https://github.com/jazelly/FinetuneLLMs";
   },
+  uploadDatasets: () => {
+    return "/upload"
+  },
   discord: () => {
     return "https://discord.com/invite/6UyHPeGZAC";
   },

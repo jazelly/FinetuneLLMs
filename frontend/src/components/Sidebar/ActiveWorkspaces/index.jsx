@@ -121,7 +121,7 @@ export default function ActiveWorkspaces() {
                   {(isActive || isHovered || gearHover[workspace.id]) &&
                   user?.role !== "default" ? (
                     <div className="flex items-center gap-x-[2px]">
-                      <div
+                      {/* <div
                         className={`flex hover:bg-[#646768] p-[2px] rounded-[4px] text-[#A7A8A9] hover:text-white ${
                           uploadHover[workspace.id] ? "bg-[#646768]" : ""
                         }`}
@@ -146,7 +146,7 @@ export default function ActiveWorkspaces() {
                             weight="bold"
                           />
                         </button>
-                      </div>
+                      </div> */}
 
                       <Link
                         type="button"

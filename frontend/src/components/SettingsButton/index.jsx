@@ -23,7 +23,7 @@ export default function SettingsButton() {
 
   return (
     <Link
-      to={!!user?.role ? paths.settings.system() : paths.settings.appearance()}
+      to={paths.settings.system()}
       className="transition-all duration-300 p-2 rounded-full text-white bg-sidebar-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
       aria-label="Settings"
     >
