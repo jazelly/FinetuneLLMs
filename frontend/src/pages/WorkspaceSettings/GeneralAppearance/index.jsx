@@ -6,7 +6,6 @@ import VectorCount from "./VectorCount";
 import WorkspaceName from "./WorkspaceName";
 import SuggestedChatMessages from "./SuggestedChatMessages";
 import DeleteWorkspace from "./DeleteWorkspace";
-import WorkspacePfp from "./WorkspacePfp";
 
 export default function GeneralInfo({ slug }) {
   const [workspace, setWorkspace] = useState(null);
@@ -67,7 +66,6 @@ export default function GeneralInfo({ slug }) {
         )}
       </form>
       <SuggestedChatMessages slug={workspace.slug} />
-      <WorkspacePfp workspace={workspace} slug={slug} />
       <DeleteWorkspace workspace={workspace} />
     </>
   );
