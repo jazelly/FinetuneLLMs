@@ -16,7 +16,7 @@ def train_sft(request):
             body_json = json.loads(request.body)
         # schedule the task
         worker = Worker()
-        worker.add_task(method = Methods.SFT, model = Models.LLAMA2)
+        worker.submit(method = Methods.SFT, model = Models.LLAMA2)
         return JsonResponse({"status": "success", "message": "Added task to queue"})
     else:
         return JsonResponse({"status": "error", "message": "Invalid request method."})

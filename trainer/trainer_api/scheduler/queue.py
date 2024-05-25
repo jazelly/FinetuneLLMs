@@ -36,7 +36,7 @@ class MQueue(Generic[T]):
 
         return 0
     
-    def pop(self) -> T:
+    def pop(self) -> T | None:
         cur_next = self.head.next
         if cur_next is None:
             return None
@@ -46,8 +46,11 @@ class MQueue(Generic[T]):
         if cur_next_next is not None:
             cur_next_next.prev = self.head
 
+        if self.tail == cur_next:
+            self.tail = self.head
         cur_next.prev = None
         cur_next.next = None
+
         
         self.length -= 1
         return cur_next.value
@@ -57,8 +60,11 @@ class MQueue(Generic[T]):
         cur = self.head
         index = 0
         while cur is not None:
-            result += f"| Task {index} "
+            result += f"Task: {index} "
+            if cur.next is not None:
+                result += "-> "
             cur = cur.next
+            index += 1
         return result
 
 Comparator = Callable[[T, T], int]

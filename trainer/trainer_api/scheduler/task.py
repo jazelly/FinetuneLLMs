@@ -1,3 +1,5 @@
+import subprocess
+import sys
 import uuid
 
 from trainer_api.consts import Methods, Models
@@ -5,21 +7,13 @@ from trainer_api.consts import Methods, Models
 class Task:
     def __init__(self, **kwargs):
         self.id = uuid.uuid4()
-        if len(kwargs) > 0:
-            for key, value in kwargs.items():
-                # finetune method
-                if key == "method":
-                    if not isinstance(value, Methods):
-                        raise TypeError("Must provide supported methods")
-                    self.method = value
-                # base model
-                if key == "model":
-                    if not isinstance(value, Models):
-                        raise TypeError("Must provide supported models")
-                    self.model = value
+        self.retried = 0
+        self.max_retry = kwargs["max_retry"] if "max_retry" in kwargs else 1 # default retry once
 
-        else:
-            raise TypeError("Task must be constructed from method and model")
-        
+    def run(self, log=sys.stdout):
+        if self.method == Methods.SFT and self.model == Models.LLAMA2:
+            subprocess.run(["python3", "../finetune/sft.py"], stdout=log, stderr=log, check=True)
+    
+
     def __str__(self):
-        return f"[Task] method: {self.method} training | model: {self.model}"
+        return f"[Task] method: {self.method if hasattr(self, 'method') else 'None'} training | model: {self.model if hasattr(self, 'model') else 'None'}"
