@@ -1,11 +1,13 @@
 
 from collections import defaultdict
 from datetime import datetime
+import os
 import threading
 import subprocess
 from typing import Dict
 
 
+from trainer_router.settings import BASE_DIR
 from trainer_api.consts import MAX_IDLE_TIME, Methods, Models, WorkerStates
 from trainer_api.scheduler.task import Task
 from .queue import MQueue
@@ -131,28 +133,38 @@ class WorkerThread(threading.Thread):
             print("[Worker] Nothing in queue, passing")
             return
 
-        try:
-            task = self.worker_instance.pop_task()
-            if task is None:
-                print(f"[Worker] Worker thread is finished with state {self.state}.")
-                self.worker_instance.remove_worker(self.id)
-                return
-            
-            # notify worker manager: started working on a task
-            self.task_id = task.id
-            print(f"[Worker] Picked a task: \n{task}")
-            # process task
-            if task.method == Methods.SFT and task.model == Models.LLAMA2:
-                self.state = WorkerStates.BUSY
-                # prepare the log file
-                with open(f"../logs/{(datetime.now().timestamp())}.txt", 'w') as log:
-                    subprocess.run(["python3", "../finetune/sft.py"], stdout=log, stderr= subprocess.STDOUT, check=True)
-            
-            self.state = WorkerStates.DONE
-            print(f"[Worker] Task completed: {task}")
-        except subprocess.CalledProcessError as e:
-            self.state = WorkerStates.ERROR
-            print(f"[Worker] Task failed: {task}, Error: {str(e)}")
+
+        # prepare the log file
+        log_filename = datetime.now().strftime("%Y%m%d_%H%M%S_worker.txt")
+        log_dir_path = "trainer_api/logs/"
+        log_path = os.path.join(BASE_DIR, log_dir_path, log_filename)
+        os.makedirs(log_dir_path, exist_ok=True)
+        print(log_path)
+        with open(log_path, 'w') as log:
+            try:
+                task = self.worker_instance.pop_task()
+                if task is None:
+                    print(f"[Worker] Worker thread is finished with state {self.state}.")
+                    log.write(f"[Worker] Worker thread is finished with state {self.state}.\n")
+                    self.worker_instance.remove_worker(self.id)
+                    return
+                
+                # notify worker manager: started working on a task
+                self.task_id = task.id
+                print(f"[Worker] Picked a task: \n{task}")
+                # process task
+                if task.method == Methods.SFT and task.model == Models.LLAMA2:
+                    self.state = WorkerStates.BUSY
+                    
+                    subprocess.run(["python3", "../finetune/sft.py"], stdout=log, stderr=log, check=True)
+                
+                self.state = WorkerStates.DONE
+                print(f"[Worker] Task completed: {task}")
+                log.write(f"[Worker] Task completed: {task}.\n")
+            except subprocess.CalledProcessError as e:
+                self.state = WorkerStates.ERROR
+                print(f"[Worker] Task failed: {task}, Error: {str(e)}")
+                log.write(f"[Worker] Task failed: {task}, Error: {str(e)}.\n")
 
         print(f"[Worker] Worker thread is finished with state {self.state}")
         self.worker_instance.remove_worker(self.id)

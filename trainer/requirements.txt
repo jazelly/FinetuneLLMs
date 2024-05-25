@@ -1,5 +1,7 @@
 django
 django-ratelimit
+python-dotenv
+
 transformers
 trl
 peft
