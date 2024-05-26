@@ -91,25 +91,6 @@ export default function Survey({ setHeader, setForwardBtn, setBackBtn }) {
     navigate(paths.onboarding.createWorkspace());
   };
 
-  if (!!window?.localStorage?.getItem(COMPLETE_QUESTIONNAIRE)) {
-    return (
-      <div className="w-full flex justify-center items-center py-40">
-        <div className="w-full flex items-center justify-center px-1 md:px-8 py-4">
-          <div className="w-auto flex flex-col gap-y-1 items-center">
-            <CheckCircle size={60} className="text-green-500" />
-            <p className="text-white text-lg">Thank you for your feedback!</p>
-            <a
-              href={paths.mailToMintplex()}
-              className="text-sky-400 underline text-xs"
-            >
-              team@mintplexlabs.com
-            </a>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full flex justify-center">
       <form onSubmit={handleSubmit} ref={formRef} className="">

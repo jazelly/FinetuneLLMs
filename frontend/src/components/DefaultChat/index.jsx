@@ -51,34 +51,9 @@ export default function DefaultChatContainer() {
             <span
               className={`whitespace-pre-line text-white font-normal text-sm md:text-sm flex flex-col gap-y-1 mt-2`}
             >
-              Welcome to AnythingLLM, AnythingLLM is an open-source AI tool by
-              Mintplex Labs that turns anything into a trained chatbot you can
-              query and chat with. AnythingLLM is a BYOK (bring-your-own-keys)
-              software so there is no subscription, fee, or charges for this
-              software outside of the services you want to use with it.
-            </span>
-          </div>
-        </div>
-      </div>
-    </React.Fragment>,
-
-    <React.Fragment>
-      <div
-        className={`flex justify-center items-end w-full ${AI_BACKGROUND_COLOR}`}
-      >
-        <div
-          className={`pb-4 pt-2 px-4 w-full flex gap-x-5 md:max-w-[800px] flex-col`}
-        >
-          <div className="flex gap-x-5">
-            <Jazzicon size={36} user={{ uid: "system" }} role={"assistant"} />
-
-            <span
-              className={`whitespace-pre-line text-white font-normal text-sm md:text-sm flex flex-col gap-y-1 mt-2`}
-            >
-              AnythingLLM is the easiest way to put powerful AI products like
-              OpenAi, GPT-4, LangChain, PineconeDB, ChromaDB, and other services
-              together in a neat package with no fuss to increase your
-              productivity by 100x.
+              Welcome to FinetuneLLMs, FinetuneLLMs is an open-source AI tool
+              that simplify your AI training requirements. All you need is an 
+              Nvidia GPU on your server.
             </span>
           </div>
         </div>
@@ -95,16 +70,6 @@ export default function DefaultChatContainer() {
           <div className="flex gap-x-5">
             <Jazzicon size={36} user={{ uid: "system" }} role={"assistant"} />
             <div>
-              <span
-                className={`whitespace-pre-line text-white font-normal text-sm md:text-sm flex flex-col gap-y-1 mt-2`}
-              >
-                AnythingLLM can run totally locally on your machine with little
-                overhead you wont even notice it's there! No GPU needed. Cloud
-                and on-premises installation is available as well.
-                <br />
-                The AI tooling ecosystem gets more powerful everyday.
-                AnythingLLM makes it easy to use.
-              </span>
               <a
                 href={paths.github()}
                 target="_blank"
@@ -156,13 +121,11 @@ export default function DefaultChatContainer() {
               <span
                 className={`whitespace-pre-line text-white font-normal text-sm md:text-sm flex flex-col gap-y-1 mt-2`}
               >
-                It's simple. All collections are organized into buckets we call{" "}
-                "Workspaces". Workspaces are buckets of files, documents,
-                images, PDFs, and other files which will be transformed into
-                something LLM's can understand and use in conversation.
+                It's simple. You need just need to upload your datasets at the bottom of the sidebar.
+                Once a dataset is uploaded, you can use it at any workspace.
                 <br />
-                <br />
-                You can add and remove files at anytime.
+                A workspace is typically created for a particular finetune job, in which you can choose 
+                what method and what base model is used for finetuning.
               </span>
 
               {(!user || user?.role !== "default") && (
@@ -171,97 +134,10 @@ export default function DefaultChatContainer() {
                   className="mt-5 w-fit transition-all duration-300 border border-slate-200 px-4 py-2 rounded-lg text-white text-sm items-center flex gap-x-2 hover:bg-slate-200 hover:text-slate-800 focus:ring-gray-800"
                 >
                   <Plus className="h-4 w-4" />
-                  <p>Create your first workspace</p>
+                  <p>Start uploading datasets and create your first finetuning job</p>
                 </button>
               )}
             </div>
-          </div>
-        </div>
-      </div>
-    </React.Fragment>,
-
-    <React.Fragment>
-      <div
-        className={`flex justify-center items-end w-full ${USER_BACKGROUND_COLOR}`}
-      >
-        <div
-          className={`py-6 px-4 w-full flex gap-x-5 md:max-w-[800px] flex-col`}
-        >
-          <div className="flex gap-x-5">
-            <Jazzicon
-              size={36}
-              user={{ uid: userFromStorage()?.username }}
-              role={"user"}
-            />
-
-            <span
-              className={`whitespace-pre-line text-white font-normal text-sm md:text-sm flex flex-col gap-y-1 mt-2`}
-            >
-              Is this like an AI dropbox or something? What about chatting? It
-              is a chatbot isn't it?
-            </span>
-          </div>
-        </div>
-      </div>
-    </React.Fragment>,
-
-    <React.Fragment>
-      <div
-        className={`flex justify-center items-end w-full ${AI_BACKGROUND_COLOR}`}
-      >
-        <div
-          className={`py-6 px-4 w-full flex gap-x-5 md:max-w-[800px] flex-col`}
-        >
-          <div className="flex gap-x-5">
-            <Jazzicon size={36} user={{ uid: "system" }} role={"assistant"} />
-
-            <span
-              className={`whitespace-pre-line text-white font-normal text-sm md:text-sm flex flex-col gap-y-1 mt-2`}
-            >
-              AnythingLLM is more than a smarter Dropbox.
-              <br />
-              <br />
-              AnythingLLM offers two ways of talking with your data:
-              <br />
-              <br />
-              <i>Query:</i> Your chats will return data or inferences found with
-              the documents in your workspace it has access to. Adding more
-              documents to the Workspace make it smarter!
-              <br />
-              <br />
-              <i>Conversational:</i> Your documents + your on-going chat history
-              both contribute to the LLM knowledge at the same time. Great for
-              appending real-time text-based info or corrections and
-              misunderstandings the LLM might have.
-              <br />
-              <br />
-              You can toggle between either mode{" "}
-              <i>in the middle of chatting!</i>
-            </span>
-          </div>
-        </div>
-      </div>
-    </React.Fragment>,
-
-    <React.Fragment>
-      <div
-        className={`flex justify-center items-end w-full ${USER_BACKGROUND_COLOR}`}
-      >
-        <div
-          className={`py-6 px-4 w-full flex gap-x-5 md:max-w-[800px] flex-col`}
-        >
-          <div className="flex gap-x-5">
-            <Jazzicon
-              size={36}
-              user={{ uid: userFromStorage()?.username }}
-              role={"user"}
-            />
-
-            <span
-              className={`whitespace-pre-line text-white font-normal text-sm md:text-sm flex flex-col gap-y-1 mt-2`}
-            >
-              Wow, this sounds amazing, let me try it out already!
-            </span>
           </div>
         </div>
       </div>
@@ -291,13 +167,6 @@ export default function DefaultChatContainer() {
                 >
                   <GithubLogo className="h-4 w-4" />
                   <p>Star on GitHub</p>
-                </a>
-                <a
-                  href={paths.mailToMintplex()}
-                  className="mt-5 w-fit transition-all duration-300 border border-slate-200 px-4 py-2 rounded-lg text-white text-sm items-center flex gap-x-2 hover:bg-slate-200 hover:text-slate-800 focus:ring-gray-800"
-                >
-                  <EnvelopeSimple className="h-4 w-4" />
-                  <p>Contact Mintplex Labs</p>
                 </a>
               </div>
             </div>
