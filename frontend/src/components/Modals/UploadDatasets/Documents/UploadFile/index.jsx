@@ -14,10 +14,10 @@ export default function UploadFile({
   setLoading,
   setLoadingMessage,
 }) {
-  const [ready, setReady] = useState(false);
   const [files, setFiles] = useState([]);
   const [fetchingUrl, setFetchingUrl] = useState(false);
 
+  // TODO: download datasets from HF and upload to local
   const handleSendLink = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -72,37 +72,23 @@ export default function UploadFile({
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    disabled: !ready,
   });
 
   return (
     <div>
       <div
-        className={`w-[560px] border-2 border-dashed rounded-2xl bg-zinc-900/50 p-3 ${
-          ready ? "cursor-pointer" : "cursor-not-allowed"
-        } hover:bg-zinc-900/90`}
+        className="w-[560px] border-2 border-dashed rounded-2xl bg-zinc-900/50 p-3 cursor-pointer hover:bg-zinc-900/90"
         {...getRootProps()}
       >
         <input {...getInputProps()} />
-        {ready === false ? (
-          <div className="flex flex-col items-center justify-center h-full">
-            <CloudArrowUp className="w-8 h-8 text-white/80" />
-            <div className="text-white text-opacity-80 text-sm font-semibold py-1">
-              Document Processor Unavailable
-            </div>
-            <div className="text-white text-opacity-60 text-xs font-medium py-1 px-20 text-center">
-              We can't upload your files right now because the document
-              processor is offline. Please try again later.
-            </div>
-          </div>
-        ) : files.length === 0 ? (
+        {files.length === 0 ? (
           <div className="flex flex-col items-center justify-center">
             <CloudArrowUp className="w-8 h-8 text-white/80" />
             <div className="text-white text-opacity-80 text-sm font-semibold py-1">
               Click to upload or drag and drop
             </div>
             <div className="text-white text-opacity-60 text-xs font-medium py-1">
-              supports text files, csv's, spreadsheets, audio files, and more!
+              currently only supports txt, csv and json files
             </div>
           </div>
         ) : (
@@ -113,7 +99,6 @@ export default function UploadFile({
                 file={file.file}
                 uuid={file.uid}
                 setFiles={setFiles}
-                slug={workspace.slug}
                 rejected={file?.rejected}
                 reason={file?.reason}
                 onUploadSuccess={handleUploadSuccess}
@@ -126,7 +111,7 @@ export default function UploadFile({
         )}
       </div>
       <div className="text-center text-white text-opacity-50 text-xs font-medium w-[560px] py-2">
-        or submit a link
+        or provide a huggingface dataset link
       </div>
       <form onSubmit={handleSendLink} className="flex gap-x-2">
         <input
@@ -146,9 +131,7 @@ export default function UploadFile({
         </button>
       </form>
       <div className="mt-6 text-center text-white text-opacity-80 text-xs font-medium w-[560px]">
-        These files will be uploaded to the document processor running on this
-        AnythingLLM instance. These files are not sent or shared with a third
-        party.
+        These files will be uploaded to FintuneLLM server storage.
       </div>
     </div>
   );

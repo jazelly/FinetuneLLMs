@@ -8,11 +8,27 @@ import useUser from "../../../hooks/useUser";
 import DocumentSettings from "./Documents";
 import DataConnectors from "./DataConnectors";
 
+// TODO: we don't need this data structure
+// What we need is a settings of 
+interface WorkspaceSettings {
+  id: number;
+  agentModel?: any;
+  agentProvider?: any;
+  createdAt: Date;
+  lastUpdatedAt: Date;
+  topN: number;
+  slug: string;
+  name: string;
+  documents: Array<any>;
+  chatMode: string;
+  openAiHistory: number;
+}
+
 const noop = () => {};
-const ManageWorkspace = ({ hideModal = noop, providedSlug = null }) => {
+const UploadDatasets = ({ hideModal = noop, providedSlug = null }) => {
   const { slug } = useParams();
   const { user } = useUser();
-  const [workspace, setWorkspace] = useState(null);
+  const [workspace, setWorkspace] = useState<WorkspaceSettings | null>(null);
   const [settings, setSettings] = useState({});
   const [selectedTab, setSelectedTab] = useState("documents");
 
@@ -26,7 +42,7 @@ const ManageWorkspace = ({ hideModal = noop, providedSlug = null }) => {
 
   useEffect(() => {
     async function fetchWorkspace() {
-      const workspace = await Workspace.bySlug(providedSlug ?? slug);
+      const workspace: WorkspaceSettings = await Workspace.bySlug('a');
       setWorkspace(workspace);
     }
     fetchWorkspace();
@@ -86,18 +102,14 @@ const ManageWorkspace = ({ hideModal = noop, providedSlug = null }) => {
             />
           )}
 
-          {selectedTab === "documents" ? (
-            <DocumentSettings workspace={workspace} systemSettings={settings} />
-          ) : (
-            <DataConnectors workspace={workspace} systemSettings={settings} />
-          )}
+          <DocumentSettings workspace={workspace} systemSettings={settings} />
         </div>
       </div>
     </div>
   );
 };
 
-export default memo(ManageWorkspace);
+export default UploadDatasets;
 
 const ModalTabSwitcher = ({ selectedTab, setSelectedTab }) => {
   return (
@@ -113,21 +125,12 @@ const ModalTabSwitcher = ({ selectedTab, setSelectedTab }) => {
         >
           Documents
         </button>
-        <button
-          onClick={() => setSelectedTab("dataConnectors")}
-          className={`px-4 py-2 rounded-[8px] font-semibold text-white hover:bg-switch-selected hover:bg-opacity-60 ${
-            selectedTab === "dataConnectors"
-              ? "bg-switch-selected shadow-md font-bold"
-              : "bg-sidebar-button text-white/20 font-medium hover:text-white"
-          }`}
-        >
-          Data Connectors
-        </button>
       </div>
     </div>
   );
 };
-export function useManageWorkspaceModal() {
+
+export function useUploadDatasetsModal() {
   const { user } = useUser();
   const [showing, setShowing] = useState(false);
 

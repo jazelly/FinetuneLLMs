@@ -20,9 +20,6 @@ export default {
     embeddingPreference: () => {
       return "/onboarding/embedding-preference";
     },
-    vectorDatabase: () => {
-      return "/onboarding/vector-database";
-    },
     userSetup: () => {
       return "/onboarding/user-setup";
     },
@@ -45,9 +42,6 @@ export default {
   docs: () => {
     return "https://docs.useanything.com";
   },
-  mailToMintplex: () => {
-    return "mailto:team@mintplexlabs.com";
-  },
   hosting: () => {
     return "https://my.mintplexlabs.com/aio-checkout?product=anythingllm";
   },
@@ -62,14 +56,8 @@ export default {
       chatSettings: (slug) => {
         return `/workspace/${slug}/settings/chat-settings`;
       },
-      vectorDatabase: (slug) => {
-        return `/workspace/${slug}/settings/vector-database`;
-      },
       members: (slug) => {
         return `/workspace/${slug}/settings/members`;
-      },
-      agentConfig: (slug) => {
-        return `/workspace/${slug}/settings/agent-config`;
       },
     },
     thread: (wsSlug, threadSlug) => {
@@ -110,9 +98,6 @@ export default {
     },
     embeddingPreference: () => {
       return "/settings/embedding-preference";
-    },
-    vectorDatabase: () => {
-      return "/settings/vector-database";
     },
     security: () => {
       return "/settings/security";

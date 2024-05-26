@@ -320,14 +320,6 @@ const SidebarOptions = ({ user = null }) => (
       }
     />
     <Option
-      href={paths.settings.vectorDatabase()}
-      btnText="Vector Database"
-      icon={<Database className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      flex={true}
-      allowedRole={["admin"]}
-    />
-    <Option
       href={paths.settings.embedSetup()}
       childLinks={[paths.settings.embedChats()]}
       btnText="Embedded Chat"

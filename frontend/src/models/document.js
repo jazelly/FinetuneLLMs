@@ -33,6 +33,13 @@ const Document = {
         return { success: false, error: e.message };
       });
   },
+
+  uploadOneDatasetByChunk: async (datasetChunk) => {
+    return fetch(`${API_BASE}/document/upload-by-chunk`, {
+      mthod: "POST",
+      body: datasetChunk,
+    })
+  }
 };
 
 export default Document;

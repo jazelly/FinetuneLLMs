@@ -1,8 +1,8 @@
 import HistoricalMessage from "./HistoricalMessage";
 import PromptReply from "./PromptReply";
 import { useEffect, useRef, useState } from "react";
-import { useManageWorkspaceModal } from "../../../Modals/MangeWorkspace";
-import ManageWorkspace from "../../../Modals/MangeWorkspace";
+import { useUploadDatasetsModal } from "../../../Modals/UploadDatasets";
+import UploadDatasets from "../../../Modals/UploadDatasets";
 import { ArrowDown } from "@phosphor-icons/react";
 import debounce from "lodash.debounce";
 import useUser from "@/hooks/useUser";
@@ -15,7 +15,7 @@ export default function ChatHistory({
   regenerateAssistantMessage,
 }) {
   const { user } = useUser();
-  const { showing, showModal, hideModal } = useManageWorkspaceModal();
+  const { showing, showModal, hideModal } = useUploadDatasetsModal();
   const [isAtBottom, setIsAtBottom] = useState(true);
   const chatHistoryRef = useRef(null);
   const [textSize, setTextSize] = useState("normal");
@@ -116,7 +116,7 @@ export default function ChatHistory({
           />
         </div>
         {showing && (
-          <ManageWorkspace
+          <UploadDatasets
             hideModal={hideModal}
             providedSlug={workspace.slug}
           />
@@ -176,7 +176,7 @@ export default function ChatHistory({
         );
       })}
       {showing && (
-        <ManageWorkspace hideModal={hideModal} providedSlug={workspace.slug} />
+        <UploadDatasets hideModal={hideModal} providedSlug={workspace.slug} />
       )}
       {!isAtBottom && (
         <div className="fixed bottom-40 right-10 md:right-20 z-50 cursor-pointer animate-pulse">

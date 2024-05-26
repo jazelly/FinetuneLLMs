@@ -1,6 +1,6 @@
 import UploadFile from "../UploadFile";
 import PreLoader from "@/components/Preloader";
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import FolderRow from "./FolderRow";
 import System from "@/models/system";
 import { Plus, Trash } from "@phosphor-icons/react";
@@ -14,7 +14,6 @@ function Directory({
   setFiles,
   loading,
   setLoading,
-  workspace,
   fetchKeys,
   selectedItems,
   setSelectedItems,
@@ -303,7 +302,6 @@ function Directory({
           )}
         </div>
         <UploadFile
-          workspace={workspace}
           fetchKeys={fetchKeys}
           setLoading={setLoading}
           setLoadingMessage={setLoadingMessage}
@@ -313,4 +311,4 @@ function Directory({
   );
 }
 
-export default memo(Directory);
+export default Directory;

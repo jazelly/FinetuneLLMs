@@ -4,9 +4,9 @@ import { CheckCircle, XCircle } from "@phosphor-icons/react";
 import Workspace from "../../../../../../models/workspace";
 import { humanFileSize, milliToHms } from "../../../../../../utils/numbers";
 import PreLoader from "../../../../../Preloader";
+import Document from "@/models/document";
 
 function FileUploadProgressComponent({
-  slug,
   uuid,
   file,
   setFiles,
@@ -39,26 +39,48 @@ function FileUploadProgressComponent({
       setLoading(true);
       setLoadingMessage("Uploading file...");
       const start = Number(new Date());
-      const formData = new FormData();
-      formData.append("file", file, file.name);
+
       const timer = setInterval(() => {
         setTimerMs(Number(new Date()) - start);
       }, 100);
 
-      // Chunk streaming not working in production so we just sit and wait
-      const { response, data } = await Workspace.uploadFile(slug, formData);
-      if (!response.ok) {
-        setStatus("failed");
-        clearInterval(timer);
-        onUploadError(data.error);
-        setError(data.error);
-      } else {
-        setLoading(false);
-        setLoadingMessage("");
-        setStatus("complete");
-        clearInterval(timer);
-        onUploadSuccess();
+      const fileSize = file.size;
+      const totalChunks = Math.ceil(fileSize / CHUNK_SIZE);
+
+
+      for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+        const start = chunkIndex * CHUNK_SIZE;
+        const end = Math.min(start + CHUNK_SIZE, fileSize);
+        const chunk = file.slice(start, end);
+
+        const formData = new FormData();
+        formData.append('file', chunk, file.name);
+        formData.append('chunkIndex', chunkIndex);
+        formData.append('totalChunks', totalChunks);
+
+        const response = await Document.uploadOneDatasetByChunk(formData);
+        if (!response.ok) {
+          setStatus("failed");
+          clearInterval(timer);
+          onUploadError(data.error);
+          setError(data.error);
+
+          // Begin fadeout timer to clear uploader queue.
+          setTimeout(() => {
+            fadeOut(() => setTimeout(() => beginFadeOut(), 300));
+          }, 5000);
+
+          return;
+        }
       }
+
+
+      setLoading(false);
+      setLoadingMessage("");
+      setStatus("complete");
+      clearInterval(timer);
+      onUploadSuccess();
+      
 
       // Begin fadeout timer to clear uploader queue.
       setTimeout(() => {
@@ -135,4 +157,4 @@ function FileUploadProgressComponent({
   );
 }
 
-export default memo(FileUploadProgressComponent);
+export default FileUploadProgressComponent;

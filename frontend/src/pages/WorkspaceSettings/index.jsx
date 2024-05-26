@@ -93,20 +93,10 @@ function ShowWorkspaceChat() {
             to={paths.workspace.settings.chatSettings(slug)}
           />
           <TabItem
-            title="Vector Database"
-            icon={<Database className="h-6 w-6" />}
-            to={paths.workspace.settings.vectorDatabase(slug)}
-          />
-          <TabItem
             title="Members"
             icon={<User className="h-6 w-6" />}
             to={paths.workspace.settings.members(slug)}
             visible={["admin", "manager"].includes(user?.role)}
-          />
-          <TabItem
-            title="Agent Configuration"
-            icon={<Robot className="h-6 w-6" />}
-            to={paths.workspace.settings.agentConfig(slug)}
           />
         </div>
         <div className="px-16 py-6">

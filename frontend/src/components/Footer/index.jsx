@@ -12,9 +12,10 @@ import {
   LinkSimple,
   UploadSimple,
 } from "@phosphor-icons/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import SettingsButton from "../SettingsButton";
 import { isMobile } from "react-device-detect";
+import UploadDatasets, { useUploadDatasetsModal } from "../Modals/UploadDatasets";
 
 export const MAX_ICONS = 3;
 export const ICON_COMPONENTS = {
@@ -30,89 +31,34 @@ export const ICON_COMPONENTS = {
 };
 
 export default function Footer() {
-  const [footerData, setFooterData] = useState(false);
+  const {showing: showingUpload, showModal: showUploadModal, hideModal: hideUploadModal} = useUploadDatasetsModal();
 
-  useEffect(() => {
-    async function fetchFooterData() {
-      const { footerData } = await System.fetchCustomFooterIcons();
-      setFooterData(footerData);
-    }
-    fetchFooterData();
-  }, []);
-
-  // wait for some kind of non-false response from footer data first
-  // to prevent pop-in.
-  if (footerData === false) return null;
-
-  if (!Array.isArray(footerData) || footerData.length === 0) {
-    return (
-      <div className="flex justify-center mb-2">
-        <div className="flex space-x-4">
-          <a
-            href={paths.github()}
-            target="_blank"
-            rel="noreferrer"
-            className="transition-all duration-300 p-2 rounded-full text-white bg-sidebar-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
-            aria-label="Find me on Github"
-          >
-            <GithubLogo weight="fill" className="h-5 w-5 " />
-          </a>
-
-          <a
-            href={paths.uploadDatasets()}
-            className="transition-all duration-300 p-2 rounded-full text-white bg-sidebar-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
-            aria-label="Upload your datasets"
-          >
-            <UploadSimple weight="fill" className="h-5 w-5 " />
-          </a>
-
-
-          {/* <a
-            href={paths.docs()}
-            target="_blank"
-            rel="noreferrer"
-            className="transition-all duration-300 p-2 rounded-full text-white bg-sidebar-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
-            aria-label="Docs"
-          >
-            <BookOpen weight="fill" className="h-5 w-5 " />
-          </a>
-          <a
-            href={paths.discord()}
-            target="_blank"
-            rel="noreferrer"
-            className="transition-all duration-300 p-2 rounded-full text-white bg-sidebar-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
-            aria-label="Join our Discord server"
-          >
-            <DiscordLogo
-              weight="fill"
-              className="h-5 w-5 stroke-slate-200 group-hover:stroke-slate-200"
-            />
-          </a> */}
-          {!isMobile && <SettingsButton />}
-        </div>
-      </div>
-    );
-  }
+  console.log(showingUpload);
 
   return (
     <div className="flex justify-center mb-2">
       <div className="flex space-x-4">
-        {footerData.map((item, index) => (
-          <a
-            key={index}
-            href={item.url}
-            target="_blank"
-            rel="noreferrer"
-            className="transition-all duration-300 p-2 rounded-full text-white bg-sidebar-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
-          >
-            {React.createElement(ICON_COMPONENTS[item.icon], {
-              weight: "fill",
-              className: "h-5 w-5",
-            })}
-          </a>
-        ))}
+        <a
+          href={paths.github()}
+          target="_blank"
+          rel="noreferrer"
+          className="transition-all duration-300 p-2 rounded-full text-white bg-sidebar-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
+          aria-label="Find me on Github"
+        >
+          <GithubLogo weight="fill" className="h-5 w-5 " />
+        </a>
+        <div
+          className="transition-all duration-300 p-2 cursor-pointer rounded-full text-white bg-sidebar-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
+          aria-label="Upload your datasets"
+          onClick={showUploadModal}
+        >
+          <UploadSimple weight="fill" className="h-5 w-5 " />
+        </div>
         {!isMobile && <SettingsButton />}
       </div>
+      
+      {showingUpload && <UploadDatasets hideModal={hideUploadModal} />}
     </div>
   );
+
 }

@@ -2,9 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import * as Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Workspace from "@/models/workspace";
-import ManageWorkspace, {
-  useManageWorkspaceModal,
-} from "../../Modals/MangeWorkspace";
 import paths from "@/utils/paths";
 import { useParams } from "react-router-dom";
 import { GearSix, SquaresFour, UploadSimple } from "@phosphor-icons/react";
@@ -17,11 +14,8 @@ export default function ActiveWorkspaces() {
   const { slug } = useParams();
   const [loading, setLoading] = useState(true);
   const [workspaces, setWorkspaces] = useState([]);
-  const [selectedWs, setSelectedWs] = useState(null);
   const [hoverStates, setHoverStates] = useState({});
   const [gearHover, setGearHover] = useState({});
-  const [uploadHover, setUploadHover] = useState({});
-  const { showing, showModal, hideModal } = useManageWorkspaceModal();
   const { user } = useUser();
   const isInWorkspaceSettings = !!useMatch("/workspace/:slug/settings/:tab");
 
@@ -121,33 +115,6 @@ export default function ActiveWorkspaces() {
                   {(isActive || isHovered || gearHover[workspace.id]) &&
                   user?.role !== "default" ? (
                     <div className="flex items-center gap-x-[2px]">
-                      {/* <div
-                        className={`flex hover:bg-[#646768] p-[2px] rounded-[4px] text-[#A7A8A9] hover:text-white ${
-                          uploadHover[workspace.id] ? "bg-[#646768]" : ""
-                        }`}
-                      >
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setSelectedWs(workspace);
-                            showModal();
-                          }}
-                          onMouseEnter={() =>
-                            handleUploadMouseEnter(workspace.id)
-                          }
-                          onMouseLeave={() =>
-                            handleUploadMouseLeave(workspace.id)
-                          }
-                          className="rounded-md flex items-center justify-center ml-auto"
-                        >
-                          <UploadSimple
-                            className="h-[20px] w-[20px]"
-                            weight="bold"
-                          />
-                        </button>
-                      </div> */}
-
                       <Link
                         type="button"
                         to={
@@ -187,12 +154,6 @@ export default function ActiveWorkspaces() {
           </div>
         );
       })}
-      {showing && (
-        <ManageWorkspace
-          hideModal={hideModal}
-          providedSlug={selectedWs ? selectedWs.slug : null}
-        />
-      )}
     </div>
   );
 }
