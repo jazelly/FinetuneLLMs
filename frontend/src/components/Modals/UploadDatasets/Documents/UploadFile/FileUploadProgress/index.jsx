@@ -6,6 +6,8 @@ import { humanFileSize, milliToHms } from "../../../../../../utils/numbers";
 import PreLoader from "../../../../../Preloader";
 import Document from "@/models/document";
 
+const CHUNK_SIZE = 1000;
+
 function FileUploadProgressComponent({
   uuid,
   file,
@@ -47,40 +49,36 @@ function FileUploadProgressComponent({
       const fileSize = file.size;
       const totalChunks = Math.ceil(fileSize / CHUNK_SIZE);
 
-
+      let response;
       for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
         const start = chunkIndex * CHUNK_SIZE;
         const end = Math.min(start + CHUNK_SIZE, fileSize);
         const chunk = file.slice(start, end);
 
         const formData = new FormData();
-        formData.append('file', chunk, file.name);
-        formData.append('chunkIndex', chunkIndex);
-        formData.append('totalChunks', totalChunks);
+        formData.append("file", chunk, file.name);
+        formData.append("chunkIndex", chunkIndex);
+        formData.append("totalChunks", totalChunks);
 
-        const response = await Document.uploadOneDatasetByChunk(formData);
+        console.log("Uploading chunk: ", chunkIndex);
+        response = await Document.uploadOneDatasetByChunk(formData);
         if (!response.ok) {
-          setStatus("failed");
-          clearInterval(timer);
-          onUploadError(data.error);
-          setError(data.error);
-
-          // Begin fadeout timer to clear uploader queue.
-          setTimeout(() => {
-            fadeOut(() => setTimeout(() => beginFadeOut(), 300));
-          }, 5000);
-
-          return;
+          break;
         }
       }
 
+      if (!response.ok) {
+        setStatus("failed");
+        onUploadError(response.error);
+        setError(response.error);
+      } else {
+        setStatus("complete");
+        onUploadSuccess();
+      }
 
       setLoading(false);
       setLoadingMessage("");
-      setStatus("complete");
       clearInterval(timer);
-      onUploadSuccess();
-      
 
       // Begin fadeout timer to clear uploader queue.
       setTimeout(() => {
@@ -157,4 +155,4 @@ function FileUploadProgressComponent({
   );
 }
 
-export default FileUploadProgressComponent;
+export default memo(FileUploadProgressComponent);

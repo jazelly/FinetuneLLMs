@@ -62,14 +62,6 @@ export default function UploadFile({
     setFiles([...newAccepted, ...newRejected]);
   };
 
-  useEffect(() => {
-    async function checkProcessorOnline() {
-      const online = await System.checkDocumentProcessorOnline();
-      setReady(online);
-    }
-    checkProcessorOnline();
-  }, []);
-
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
   });

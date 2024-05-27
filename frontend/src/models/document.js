@@ -36,7 +36,7 @@ const Document = {
 
   uploadOneDatasetByChunk: async (datasetChunk) => {
     return fetch(`${API_BASE}/document/upload-by-chunk`, {
-      mthod: "POST",
+      method: "POST",
       body: datasetChunk,
     })
   }

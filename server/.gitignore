@@ -8,6 +8,8 @@ storage/tmp/*
 storage/vector-cache/*.json
 storage/exports
 storage/imports
+storage/datasets/*
+storage/temp/*
 !storage/documents/DOCUMENTS.md
 logs/server.log
 *.db

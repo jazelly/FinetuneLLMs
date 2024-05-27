@@ -8,6 +8,56 @@ const {
 const { validatedRequest } = require("../utils/middleware/validatedRequest");
 const fs = require("fs");
 const path = require("path");
+const { promisify } = require("util");
+const multer = require("multer");
+
+const appendFile = promisify(fs.appendFile);
+const unlinkFile = promisify(fs.unlink);
+
+const serverRootDir = process.cwd();
+const datasetsDirPath = path.join(serverRootDir, "storage/datasets");
+const tempDirPath = path.join(serverRootDir, "storage/temp");
+
+function getDatasetDestination(req, file, cb) {
+  const fileName = file.originalname;
+  const savePath = path.join(tempDirPath, fileName);
+  cb(null, savePath);
+}
+
+class DatasetStorage {
+  getDestination;
+
+  constructor(opts) {
+    this.getDestination = opts.destination || getDatasetDestination;
+  }
+
+  _handleFile(req, file, cb) {
+    this.getDestination(req, file, function (err, path) {
+      if (err) return cb(err);
+
+      const outStream = fs.createWriteStream(path);
+
+      file.stream.pipe(outStream);
+      outStream.on("error", cb);
+      outStream.on("finish", function () {
+        cb(null, {
+          path: path,
+          size: outStream.bytesWritten,
+        });
+
+        // fs.unlink(path, (err) => {
+        //   if (err) throw err;
+        //   console.log("upload finished, cleaned temp path");
+        // });
+      });
+    });
+  }
+  _removeFile(req, file, cb) {
+    fs.unlink(file.path, cb);
+  }
+}
+
+const uploadMiddleware = multer({ storage: new DatasetStorage({}) });
 
 function documentEndpoints(app) {
   if (!app) return;
@@ -63,7 +113,7 @@ function documentEndpoints(app) {
                 console.error(`Error moving file ${from} to ${to}:`, err);
                 reject(err);
               } else {
-                resolve();
+                resolve(undefined);
               }
             });
           });
@@ -95,6 +145,51 @@ function documentEndpoints(app) {
         response
           .status(500)
           .json({ success: false, message: "Failed to move files." });
+      }
+    }
+  );
+
+  app.post(
+    "/document/upload-by-chunk",
+    [
+      validatedRequest,
+      flexUserRoleValid([ROLES.admin, ROLES.manager]),
+      uploadMiddleware.single("file"),
+    ],
+    async (req, res) => {
+      const { file } = req;
+
+      console.log("req.file", file);
+      const { chunkIndex, totalChunks } = req.body;
+
+      const tempPath = file.path;
+
+      console.log("tempPath", tempPath);
+      const targetPath = path.join(datasetsDirPath, file.originalname);
+      console.log("targetPath", targetPath);
+
+      try {
+        // Append the chunk to the target file
+        await appendFile(targetPath, fs.readFileSync(tempPath));
+
+        // remove the most recent chunk
+        await unlinkFile(tempPath);
+
+        if (Number(chunkIndex) === Number(totalChunks) - 1) {
+          console.log("Upload completed");
+        }
+
+        res.sendStatus(200);
+      } catch (error) {
+        console.error("Error during file upload:", error);
+
+        // Clean up: delete the partially uploaded file
+        if (fs.existsSync(targetPath)) {
+          await unlinkFile(targetPath);
+        }
+
+        // Respond with an error status
+        res.status(500).send("Error during file upload");
       }
     }
   );
