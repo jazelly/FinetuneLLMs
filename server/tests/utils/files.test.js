@@ -11,7 +11,34 @@ describe("utils/files", () => {
       const result = readFilesRecursively(dummyPath);
 
       const sortedResult = result.slice().sort();
-      const expect = ["d4.txt", "d3.txt", "dummy2.txt", "dummyText.txt"].sort();
+
+      const expected = [
+        {
+          name: "dummy2.txt",
+          extension: ".txt",
+          size: 0,
+          lastUpdatedAt: 1716931798397.915,
+        },
+        {
+          name: "dummyText.txt",
+          extension: ".txt",
+          size: 0,
+          lastUpdatedAt: 1716931791098.3196,
+        },
+        {
+          name: "d3.txt",
+          extension: ".txt",
+          size: 9,
+          lastUpdatedAt: 1716933951051.3662,
+        },
+        {
+          name: "d4.txt",
+          extension: ".txt",
+          size: 0,
+          lastUpdatedAt: 1716931818187.9438,
+        },
+      ];
+      const expect = expected.sort();
       assert.strictEqual(JSON.stringify(sortedResult), JSON.stringify(expect));
     });
   });

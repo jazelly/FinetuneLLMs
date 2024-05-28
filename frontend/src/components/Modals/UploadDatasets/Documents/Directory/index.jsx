@@ -1,7 +1,7 @@
 import UploadFile from "../UploadFile";
 import PreLoader from "@/components/Preloader";
 import { useEffect, useState } from "react";
-import FolderRow from "./FolderRow";
+import FileRow from "./FileRow";
 import System from "@/models/system";
 import { Plus, Trash } from "@phosphor-icons/react";
 import Document from "@/models/document";
@@ -23,63 +23,10 @@ function Directory({
   const [amountSelected, setAmountSelected] = useState(0);
   const [newFolderName, setNewFolderName] = useState("");
   const [showNewFolderInput, setShowNewFolderInput] = useState(false);
-  const [showFolderSelection, setShowFolderSelection] = useState(false);
 
   useEffect(() => {
     setAmountSelected(Object.keys(selectedItems).length);
   }, [selectedItems]);
-
-  const deleteFiles = async (event) => {
-    event.stopPropagation();
-    if (
-      !window.confirm(
-        "Are you sure you want to delete these files and folders?\nThis will remove the files from the system and remove them from any existing workspaces automatically.\nThis action is not reversible."
-      )
-    ) {
-      return false;
-    }
-
-    try {
-      const toRemove = [];
-      const foldersToRemove = [];
-
-      for (const itemId of Object.keys(selectedItems)) {
-        for (const folder of files.items) {
-          const foundItem = folder.items.find((file) => file.id === itemId);
-          if (foundItem) {
-            toRemove.push(`${folder.name}/${foundItem.name}`);
-            break;
-          }
-        }
-      }
-      for (const folder of files.items) {
-        if (folder.name === "custom-documents") {
-          continue;
-        }
-
-        if (isSelected(folder.id, folder)) {
-          foldersToRemove.push(folder.name);
-        }
-      }
-
-      setLoading(true);
-      setLoadingMessage(
-        `Removing ${toRemove.length} documents and ${foldersToRemove.length} folders. Please wait.`
-      );
-      await System.deleteDocuments(toRemove);
-      for (const folderName of foldersToRemove) {
-        await System.deleteFolder(folderName);
-      }
-
-      await fetchDatasets();
-      setSelectedItems({});
-    } catch (error) {
-      console.error("Failed to delete files and folders:", error);
-    } finally {
-      setLoading(false);
-      setSelectedItems({});
-    }
-  };
 
   const toggleSelection = (item) => {
     setSelectedItems((prevSelectedItems) => {
@@ -144,42 +91,6 @@ function Directory({
     }
   };
 
-  const moveToFolder = async (folder) => {
-    const toMove = [];
-    for (const itemId of Object.keys(selectedItems)) {
-      for (const currentFolder of files.items) {
-        const foundItem = currentFolder.items.find(
-          (file) => file.id === itemId
-        );
-        if (foundItem) {
-          toMove.push({ ...foundItem, folderName: currentFolder.name });
-          break;
-        }
-      }
-    }
-    setLoading(true);
-    setLoadingMessage(`Moving ${toMove.length} documents. Please wait.`);
-    const { success, message } = await Document.moveToFolder(
-      toMove,
-      folder.name
-    );
-    if (!success) {
-      showToast(`Error moving files: ${message}`, "error");
-      setLoading(false);
-      return;
-    }
-
-    if (success && message) {
-      // show info if some files were not moved due to being embedded
-      showToast(message, "info");
-    } else {
-      showToast(`Successfully moved ${toMove.length} documents.`, "success");
-    }
-    await fetchDatasets();
-    setSelectedItems({});
-    setLoading(false);
-  };
-
   return (
     <div className="px-8 pb-8">
       <div className="flex flex-col gap-y-6">
@@ -231,24 +142,18 @@ function Directory({
                   {loadingMessage}
                 </p>
               </div>
-            ) : files.items ? (
-              files.items.map(
-                (item, index) =>
-                  item.type === "folder" && (
-                    <FolderRow
-                      key={index}
-                      item={item}
-                      selected={isSelected(
-                        item.id,
-                        item.type === "folder" ? item : null
-                      )}
-                      onRowClick={() => toggleSelection(item)}
-                      toggleSelection={toggleSelection}
-                      isSelected={isSelected}
-                      autoExpanded={index === 0}
-                    />
-                  )
-              )
+            ) : files ? (
+              files.map((file, index) => (
+                <FileRow
+                  key={index}
+                  file={file}
+                  selected={isSelected(file.name)}
+                  onRowClick={() => toggleSelection(file)}
+                  toggleSelection={toggleSelection}
+                  isSelected={isSelected}
+                  autoExpanded={index === 0}
+                />
+              ))
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <p className="text-white text-opacity-40 text-sm font-medium">
@@ -264,25 +169,6 @@ function Directory({
                   <button className="border-none text-sm font-semibold bg-white h-[30px] px-2.5 rounded-lg hover:text-white hover:bg-neutral-800/80">
                     Move to Workspace
                   </button>
-                  <div className="relative">
-                    <button
-                      onClick={() =>
-                        setShowFolderSelection(!showFolderSelection)
-                      }
-                      className="border-none text-sm font-semibold bg-white h-[32px] w-[32px] rounded-lg text-[#222628] hover:bg-neutral-800/80 flex justify-center items-center group"
-                    >
-                      <MoveToFolderIcon className="text-[#222628] group-hover:text-white" />
-                    </button>
-                    {showFolderSelection && (
-                      <FolderSelectionPopup
-                        folders={files.items.filter(
-                          (item) => item.type === "folder"
-                        )}
-                        onSelect={moveToFolder}
-                        onClose={() => setShowFolderSelection(false)}
-                      />
-                    )}
-                  </div>
                   <button
                     onClick={deleteFiles}
                     className="border-none text-sm font-semibold bg-white h-[32px] w-[32px] rounded-lg text-[#222628] hover:text-white hover:bg-neutral-800/80 flex justify-center items-center"

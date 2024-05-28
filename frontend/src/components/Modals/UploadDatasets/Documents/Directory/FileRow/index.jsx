@@ -1,13 +1,9 @@
 import { useState } from "react";
-import {
-  formatDate,
-  getFileExtension,
-  middleTruncate,
-} from "@/utils/directories";
+import { formatDate, middleTruncate } from "@/utils/directories";
 import { File } from "@phosphor-icons/react";
 import debounce from "lodash.debounce";
 
-export default function FileRow({ item, selected, toggleSelection }) {
+export default function FileRow({ file, selected, toggleSelection }) {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handleShowTooltip = () => {
@@ -23,7 +19,7 @@ export default function FileRow({ item, selected, toggleSelection }) {
 
   return (
     <tr
-      onClick={() => toggleSelection(item)}
+      onClick={() => toggleSelection(file)}
       className={`text-white/80 text-xs grid grid-cols-12 py-2 pl-3.5 pr-8 hover:bg-sky-500/20 cursor-pointer file-row ${
         selected ? "selected" : ""
       }`}
@@ -47,28 +43,21 @@ export default function FileRow({ item, selected, toggleSelection }) {
           onMouseLeave={handleMouseLeave}
         >
           <p className="whitespace-nowrap overflow-hidden max-w-[165px] text-ellipsis">
-            {middleTruncate(item.title, 17)}
+            {middleTruncate(file.name, 17)}
           </p>
           {showTooltip && (
             <div className="absolute left-0 bg-white text-black p-1.5 rounded shadow-lg whitespace-nowrap">
-              {item.title}
+              {file.name}
             </div>
           )}
         </div>
       </div>
       <p className="col-span-3 pl-3.5 whitespace-nowrap">
-        {formatDate(item?.published)}
+        {formatDate(file.lastUpdatedAt)}
       </p>
       <p className="col-span-2 pl-2 uppercase overflow-x-hidden">
-        {getFileExtension(item.url)}
+        {file.extension}
       </p>
-      <div className="-col-span-2 flex justify-end items-center">
-        {item?.cached && (
-          <div className="bg-white/10 rounded-3xl">
-            <p className="text-xs px-2 py-0.5">Cached</p>
-          </div>
-        )}
-      </div>
     </tr>
   );
 }

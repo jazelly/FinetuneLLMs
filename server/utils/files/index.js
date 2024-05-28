@@ -27,8 +27,14 @@ const readFilesRecursively = (dir) => {
       // Recursively read from directory
       results = results.concat(readFilesRecursively(fileRes));
     } else {
-      // It's a file, add to results
-      results.push(file);
+      const resultNode = {
+        name: file,
+        extension: path.extname(fileRes),
+        size: stat.size,
+        lastUpdatedAt: stat.mtimeMs, // raw timestamp convert it via new Date()
+      };
+
+      results.push(resultNode);
     }
   }
 
@@ -50,19 +56,15 @@ async function fileData(filePath = null) {
 async function viewLocalFiles() {
   if (!fs.existsSync(datasetsPath)) fs.mkdirSync(datasetsPath);
 
-  const directory = {
-    name: "datasets",
-    type: "folder",
-    items: [],
-  };
-
   // TODO: support folder read as well
   // Currently we read all files regardless of their layers
-
   const results = readFilesRecursively(datasetsPath);
 
-  console.log("rec results", results);
-  return directory;
+  return {
+    name: "datasets",
+    type: "folder",
+    items: results,
+  };
 }
 
 // Searches the vector-cache folder for existing information so we dont have to re-embed a
