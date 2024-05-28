@@ -10,6 +10,6 @@
     "./utils/**/*",
     "./swagger/**/*",
     "index.js"
-  ],
+, "tests"  ],
   "exclude": ["node_modules", "storage"]
 }

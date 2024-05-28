@@ -1,22 +1,46 @@
 const fs = require("fs");
 const path = require("path");
 const { v5: uuidv5 } = require("uuid");
-const { Document } = require("../../models/documents");
-const documentsPath =
+const { Dataset } = require("../../models/datasets");
+
+const datasetsPath =
   process.env.NODE_ENV === "development"
     ? path.resolve(__dirname, `../../storage/datasets`)
-    : path.resolve(process.env.STORAGE_DIR, `datasets`);
+    : path.resolve(process.env.STORAGE_DIR ?? __dirname, `datasets`);
 const vectorCachePath =
   process.env.NODE_ENV === "development"
     ? path.resolve(__dirname, `../../storage/vector-cache`)
-    : path.resolve(process.env.STORAGE_DIR, `vector-cache`);
+    : path.resolve(process.env.STORAGE_DIR ?? __dirname, `vector-cache`);
+
+const readFilesRecursively = (dir) => {
+  if (!fs.existsSync(dir)) return;
+
+  let results = [];
+  const list = fs.readdirSync(dir);
+  for (const file of list) {
+    if (path.extname(file) === ".md") continue;
+
+    const fileRes = path.resolve(dir, file);
+    const stat = fs.statSync(fileRes);
+
+    if (stat && stat.isDirectory()) {
+      // Recursively read from directory
+      results = results.concat(readFilesRecursively(fileRes));
+    } else {
+      // It's a file, add to results
+      results.push(file);
+    }
+  }
+
+  return results;
+};
 
 // Should take in a folder that is a subfolder of documents
 // eg: youtube-subject/video-123.json
 async function fileData(filePath = null) {
   if (!filePath) throw new Error("No docPath provided in request");
-  const fullFilePath = path.resolve(documentsPath, normalizePath(filePath));
-  if (!fs.existsSync(fullFilePath) || !isWithin(documentsPath, fullFilePath))
+  const fullFilePath = path.resolve(datasetsPath, normalizePath(filePath));
+  if (!fs.existsSync(fullFilePath) || !isWithin(datasetsPath, fullFilePath))
     return null;
 
   const data = fs.readFileSync(fullFilePath, "utf8");
@@ -24,7 +48,7 @@ async function fileData(filePath = null) {
 }
 
 async function viewLocalFiles() {
-  if (!fs.existsSync(documentsPath)) fs.mkdirSync(documentsPath);
+  if (!fs.existsSync(datasetsPath)) fs.mkdirSync(datasetsPath);
 
   const directory = {
     name: "datasets",
@@ -32,46 +56,12 @@ async function viewLocalFiles() {
     items: [],
   };
 
-  for (const file of fs.readdirSync(documentsPath)) {
-    if (path.extname(file) === ".md") continue;
-    const folderPath = path.resolve(documentsPath, file);
-    const isFolder = fs.lstatSync(folderPath).isDirectory();
-    if (isFolder) {
-      const subdocs = {
-        name: file,
-        type: "folder",
-        items: [],
-      };
-      const subfiles = fs.readdirSync(folderPath);
+  // TODO: support folder read as well
+  // Currently we read all files regardless of their layers
 
-      for (const subfile of subfiles) {
-        if (path.extname(subfile) !== ".json") continue;
-        const filePath = path.join(folderPath, subfile);
-        const rawData = fs.readFileSync(filePath, "utf8");
-        const cachefilename = `${file}/${subfile}`;
-        const { pageContent, ...metadata } = JSON.parse(rawData);
+  const results = readFilesRecursively(datasetsPath);
 
-        subdocs.items.push({
-          name: subfile,
-          type: "file",
-          ...metadata,
-          cached: await cachedVectorInformation(cachefilename, true),
-          pinnedWorkspaces: await Document.getPins({
-            docpath: cachefilename,
-            pinned: true,
-          }),
-        });
-      }
-      directory.items.push(subdocs);
-    }
-  }
-
-  // Make sure custom-documents is always the first folder in picker
-  directory.items = [
-    directory.items.find((folder) => folder.name === "custom-documents"),
-    ...directory.items.filter((folder) => folder.name !== "custom-documents"),
-  ].filter((i) => !!i);
-
+  console.log("rec results", results);
   return directory;
 }
 
@@ -112,11 +102,11 @@ async function storeVectorResult(vectorData = [], filename = null) {
 // Purges a file from the documents/ folder.
 async function purgeSourceDocument(filename = null) {
   if (!filename) return;
-  const filePath = path.resolve(documentsPath, normalizePath(filename));
+  const filePath = path.resolve(datasetsPath, normalizePath(filename));
 
   if (
     !fs.existsSync(filePath) ||
-    !isWithin(documentsPath, filePath) ||
+    !isWithin(datasetsPath, filePath) ||
     !fs.lstatSync(filePath).isFile()
   )
     return;
@@ -142,18 +132,18 @@ async function purgeVectorCache(filename = null) {
 // folder via iteration of all folders and checking if the expected file exists.
 async function findDocumentInDocuments(documentName = null) {
   if (!documentName) return null;
-  for (const folder of fs.readdirSync(documentsPath)) {
+  for (const folder of fs.readdirSync(datasetsPath)) {
     const isFolder = fs
-      .lstatSync(path.join(documentsPath, folder))
+      .lstatSync(path.join(datasetsPath, folder))
       .isDirectory();
     if (!isFolder) continue;
 
     const targetFilename = normalizePath(documentName);
-    const targetFileLocation = path.join(documentsPath, folder, targetFilename);
+    const targetFileLocation = path.join(datasetsPath, folder, targetFilename);
 
     if (
       !fs.existsSync(targetFileLocation) ||
-      !isWithin(documentsPath, targetFileLocation)
+      !isWithin(datasetsPath, targetFileLocation)
     )
       continue;
 
@@ -206,6 +196,7 @@ function hasVectorCachedFiles() {
 }
 
 module.exports = {
+  readFilesRecursively,
   findDocumentInDocuments,
   cachedVectorInformation,
   viewLocalFiles,
@@ -215,6 +206,6 @@ module.exports = {
   fileData,
   normalizePath,
   isWithin,
-  documentsPath,
+  datasetsPath,
   hasVectorCachedFiles,
 };

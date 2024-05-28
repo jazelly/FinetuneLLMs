@@ -1,20 +1,11 @@
-import { ArrowsDownUp } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
-import Workspace from "../../../../models/workspace";
 import System from "../../../../models/system";
 import showToast from "../../../../utils/toast";
 import Directory from "./Directory";
-import WorkspaceDirectory from "./WorkspaceDirectory";
 import Document from "@/models/document";
 
 // OpenAI Cost per token
 // ref: https://openai.com/pricing#:~:text=%C2%A0/%201K%20tokens-,Embedding%20models,-Build%20advanced%20search
-
-const MODEL_COSTS = {
-  "text-embedding-ada-002": 0.0000001, // $0.0001 / 1K tokens
-  "text-embedding-3-small": 0.00000002, // $0.00002 / 1K tokens
-  "text-embedding-3-large": 0.00000013, // $0.00013 / 1K tokens
-};
 
 export default function DocumentSettings({ systemSettings }) {
   const [availableDocs, setAvailableDocs] = useState([]);
@@ -23,7 +14,7 @@ export default function DocumentSettings({ systemSettings }) {
   const [hasChanges, setHasChanges] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
 
-  async function fetchKeys() {
+  async function fetchDatasets() {
     setLoading(true);
     const localFiles = await System.localFiles();
     const remoteDatasetsResponse = await Document.readRemoteDatasets();
@@ -56,7 +47,7 @@ export default function DocumentSettings({ systemSettings }) {
   }
 
   useEffect(() => {
-    fetchKeys(true);
+    fetchDatasets();
   }, []);
 
   return (
@@ -67,7 +58,7 @@ export default function DocumentSettings({ systemSettings }) {
         loading={loading}
         loadingMessage={loadingMessage}
         setLoading={setLoading}
-        fetchKeys={fetchKeys}
+        fetchDatasets={fetchDatasets}
         selectedItems={selectedItems}
         setSelectedItems={setSelectedItems}
         setLoadingMessage={setLoadingMessage}

@@ -64,13 +64,6 @@ const ScriptTag = ({ embed }) => {
           Have your workspace chat embed function like a help desk chat bottom
           in the corner of your website.
         </p>
-        <a
-          href="https://github.com/Mintplex-Labs/anything-llm/tree/master/embed/README.md"
-          target="_blank"
-          className="text-blue-300 hover:underline"
-        >
-          View all style and configuration options &rarr;
-        </a>
       </div>
       <button
         disabled={copied}

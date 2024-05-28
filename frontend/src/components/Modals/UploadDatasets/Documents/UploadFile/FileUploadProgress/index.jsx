@@ -63,12 +63,13 @@ function FileUploadProgressComponent({
 
         console.log("Uploading chunk: ", chunkIndex);
         response = await Document.uploadOneDatasetByChunk(formData);
-        if (!response.ok) {
+        console.log(`chunk ${chunkIndex}`, response);
+        if (response.status !== 200) {
           break;
         }
       }
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         setStatus("failed");
         onUploadError(response.error);
         setError(response.error);

@@ -363,41 +363,8 @@ function systemEndpoints(app) {
     [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
     async (_, response) => {
       try {
-        const localFiles = await viewLocalFiles();
-        response.status(200).json({ localFiles });
-      } catch (e) {
-        console.log(e.message, e);
-        response.sendStatus(500).end();
-      }
-    }
-  );
-
-  app.get(
-    "/system/document-processing-status",
-    [validatedRequest],
-    async (_, response) => {
-      try {
-        const online = await new CollectorApi().online();
-        response.sendStatus(online ? 200 : 503);
-      } catch (e) {
-        console.log(e.message, e);
-        response.sendStatus(500).end();
-      }
-    }
-  );
-
-  app.get(
-    "/system/accepted-document-types",
-    [validatedRequest],
-    async (_, response) => {
-      try {
-        const types = await new CollectorApi().acceptedFileTypes();
-        if (!types) {
-          response.sendStatus(404).end();
-          return;
-        }
-
-        response.status(200).json({ types });
+        const directory = await viewLocalFiles();
+        response.status(200).json({ localFiles: directory });
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();

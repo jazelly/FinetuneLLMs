@@ -14,7 +14,8 @@
     "start": "NODE_ENV=production node index.js",
     "lint": "yarn prettier --write ./endpoints ./models ./utils index.js",
     "swagger": "node ./swagger/init.js",
-    "sqlite:migrate": "cd ./utils/prisma && node migrateFromSqlite.js"
+    "sqlite:migrate": "cd ./utils/prisma && node migrateFromSqlite.js",
+    "test": "node --test tests/**/*.test.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"

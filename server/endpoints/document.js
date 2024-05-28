@@ -170,11 +170,11 @@ function documentEndpoints(app) {
 
         if (Number(chunkIndex) === Number(totalChunks) - 1) {
           res.status(200).json({
-            message: `Upload completed for ${file.originalname}`,
+            message: `all chunks completed for ${file.originalname}`,
           });
+        } else {
+          res.status(200).send({ mesage: `finished chunk ${chunkIndex}` });
         }
-
-        res.sendStatus(201);
       } catch (error) {
         console.error("Error during file upload:", error);
 
@@ -242,8 +242,11 @@ function documentEndpoints(app) {
         method: "GET",
       });
 
+      // delete previous saved dataset link if there are any
+      await Datasets.deleteAllByName(name);
+
       const infoJson = await info.json();
-      console.log('infoJson', infoJson);
+      console.log("infoJson", infoJson);
       const datasetInfo = infoJson["dataset_info"];
       for (const configSplit of configSplitSet) {
         const configSplitJson = JSON.parse(configSplit);
@@ -277,8 +280,6 @@ function documentEndpoints(app) {
     [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
     async (req, res) => {
       const remoteDatasets = await Datasets.readBy({ path: null });
-
-      console.log("remoteDatasets", remoteDatasets);
       res.json(remoteDatasets);
     }
   );

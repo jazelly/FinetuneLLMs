@@ -26,9 +26,7 @@ interface WorkspaceSettings {
 
 const noop = () => {};
 const UploadDatasets = ({ hideModal = noop, providedSlug = null }) => {
-  const { slug } = useParams();
   const { user } = useUser();
-  const [workspace, setWorkspace] = useState<WorkspaceSettings | null>(null);
   const [settings, setSettings] = useState({});
   const [selectedTab, setSelectedTab] = useState("documents");
 

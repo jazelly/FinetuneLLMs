@@ -40,7 +40,7 @@ const Document = {
       body: datasetChunk,
     });
 
-    return response.json();
+    return response;
   },
 
   saveDatasetFromHF: async (link) => {

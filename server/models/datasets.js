@@ -39,6 +39,14 @@ const Datasets = {
 
     return datasets;
   },
+
+  deleteAllByName: async (name) => {
+    await prisma.datasets.deleteMany({
+      where: {
+        name,
+      },
+    });
+  },
 };
 
 module.exports = { Datasets };

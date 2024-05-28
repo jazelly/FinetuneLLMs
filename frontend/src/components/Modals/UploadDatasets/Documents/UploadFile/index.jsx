@@ -9,7 +9,7 @@ import { isHFDatasetLinkValid } from "../../../../../utils/dataset";
 import Document from "@/models/document";
 
 export default function UploadFile({
-  fetchKeys,
+  fetchDatasets,
   setLoading,
   setLoadingMessage,
 }) {
@@ -44,7 +44,7 @@ export default function UploadFile({
     if (response.message !== "dataset saved") {
       showToast(`Error uploading link: ${response.error}`, "error");
     } else {
-      fetchKeys(true);
+      fetchDatasets();
       const configSplits = response.configSplit;
       console.log("configSplit", configSplits);
       let toastMessage =
@@ -62,8 +62,8 @@ export default function UploadFile({
     setFetchingUrl(false);
   };
 
-  // Don't spam fetchKeys, wait 1s between calls at least.
-  const handleUploadSuccess = debounce(() => fetchKeys(true), 1000);
+  // Don't spam fetchDatasets, wait 1s between calls at least.
+  const handleUploadSuccess = debounce(() => fetchDatasets(), 1000);
   const handleUploadError = (_msg) => null; // stubbed.
 
   const onDrop = async (acceptedFiles, rejections) => {

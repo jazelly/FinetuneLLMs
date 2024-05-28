@@ -14,7 +14,7 @@ function Directory({
   setFiles,
   loading,
   setLoading,
-  fetchKeys,
+  fetchDatasets,
   selectedItems,
   setSelectedItems,
   setLoadingMessage,
@@ -71,7 +71,7 @@ function Directory({
         await System.deleteFolder(folderName);
       }
 
-      await fetchKeys(true);
+      await fetchDatasets();
       setSelectedItems({});
     } catch (error) {
       console.error("Failed to delete files and folders:", error);
@@ -175,7 +175,7 @@ function Directory({
     } else {
       showToast(`Successfully moved ${toMove.length} documents.`, "success");
     }
-    await fetchKeys(true);
+    await fetchDatasets();
     setSelectedItems({});
     setLoading(false);
   };
@@ -184,7 +184,7 @@ function Directory({
     <div className="px-8 pb-8">
       <div className="flex flex-col gap-y-6">
         <div className="flex items-center justify-between w-[560px] px-5 relative">
-          <h3 className="text-white text-base font-bold">My Documents</h3>
+          <h3 className="text-white text-base font-bold">Available Datasets</h3>
           {showNewFolderInput ? (
             <div className="flex items-center gap-x-2 z-50">
               <input
@@ -295,7 +295,7 @@ function Directory({
           )}
         </div>
         <UploadFile
-          fetchKeys={fetchKeys}
+          fetchDatasets={fetchDatasets}
           setLoading={setLoading}
           setLoadingMessage={setLoadingMessage}
         />
