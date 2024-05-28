@@ -43,33 +43,10 @@ export default function CodeSnippetModal({ embed, closeModal }) {
   );
 }
 
-function createScriptTagSnippet(embed, scriptHost, serverHost) {
-  return `<!--
-Paste this script at the bottom of your HTML before the </body> tag.
-See more style and config options on our docs
-https://github.com/Mintplex-Labs/anything-llm/tree/master/embed/README.md
--->
-<script
-  data-embed-id="${embed.uuid}"
-  data-base-api-url="${serverHost}/api/embed"
-  src="${scriptHost}/embed/anythingllm-chat-widget.min.js">
-</script>
-<!-- FinetuneLLMs (https://useanything.com) -->
-`;
-}
-
 const ScriptTag = ({ embed }) => {
   const [copied, setCopied] = useState(false);
-  const scriptHost = import.meta.env.DEV
-    ? "http://localhost:3000"
-    : window.location.origin;
-  const serverHost = import.meta.env.DEV
-    ? "http://localhost:3001"
-    : window.location.origin;
-  const snippet = createScriptTagSnippet(embed, scriptHost, serverHost);
 
   const handleClick = () => {
-    window.navigator.clipboard.writeText(snippet);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
