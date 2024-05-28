@@ -1,12 +1,11 @@
 import React, { useState, useEffect, memo } from "react";
 import truncate from "truncate";
 import { CheckCircle, XCircle } from "@phosphor-icons/react";
-import Workspace from "../../../../../../models/workspace";
 import { humanFileSize, milliToHms } from "../../../../../../utils/numbers";
 import PreLoader from "../../../../../Preloader";
 import Document from "@/models/document";
 
-const CHUNK_SIZE = 1000;
+const CHUNK_SIZE = 100000; // bytes
 
 function FileUploadProgressComponent({
   uuid,
@@ -45,6 +44,8 @@ function FileUploadProgressComponent({
       const timer = setInterval(() => {
         setTimerMs(Number(new Date()) - start);
       }, 100);
+
+      console.log("file", file);
 
       const fileSize = file.size;
       const totalChunks = Math.ceil(fileSize / CHUNK_SIZE);
@@ -155,4 +156,4 @@ function FileUploadProgressComponent({
   );
 }
 
-export default memo(FileUploadProgressComponent);
+export default FileUploadProgressComponent;

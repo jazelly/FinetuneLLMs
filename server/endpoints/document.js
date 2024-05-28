@@ -10,6 +10,8 @@ const fs = require("fs");
 const path = require("path");
 const { promisify } = require("util");
 const multer = require("multer");
+const { Datasets } = require("../models/datasets");
+const { HF_DATA_VALIDITY_URL, HF_DATA_API_BASE } = require("./constants");
 
 const appendFile = promisify(fs.appendFile);
 const unlinkFile = promisify(fs.unlink);
@@ -23,6 +25,8 @@ function getDatasetDestination(req, file, cb) {
   const savePath = path.join(tempDirPath, fileName);
   cb(null, savePath);
 }
+
+const HF_DATASET_LINK_BASE = "https://huggingface.co/datasets/";
 
 class DatasetStorage {
   getDestination;
@@ -44,11 +48,6 @@ class DatasetStorage {
           path: path,
           size: outStream.bytesWritten,
         });
-
-        // fs.unlink(path, (err) => {
-        //   if (err) throw err;
-        //   console.log("upload finished, cleaned temp path");
-        // });
       });
     });
   }
@@ -158,15 +157,9 @@ function documentEndpoints(app) {
     ],
     async (req, res) => {
       const { file } = req;
-
-      console.log("req.file", file);
       const { chunkIndex, totalChunks } = req.body;
-
       const tempPath = file.path;
-
-      console.log("tempPath", tempPath);
       const targetPath = path.join(datasetsDirPath, file.originalname);
-      console.log("targetPath", targetPath);
 
       try {
         // Append the chunk to the target file
@@ -176,10 +169,12 @@ function documentEndpoints(app) {
         await unlinkFile(tempPath);
 
         if (Number(chunkIndex) === Number(totalChunks) - 1) {
-          console.log("Upload completed");
+          res.status(200).json({
+            message: `Upload completed for ${file.originalname}`,
+          });
         }
 
-        res.sendStatus(200);
+        res.sendStatus(201);
       } catch (error) {
         console.error("Error during file upload:", error);
 
@@ -191,6 +186,98 @@ function documentEndpoints(app) {
         // Respond with an error status
         res.status(500).send("Error during file upload");
       }
+    }
+  );
+
+  const getDatasetName = (link) => {
+    const segments = link.split("/");
+    const datasetsIndex = segments.indexOf("datasets");
+    return segments.slice(datasetsIndex + 1).join("/"); // e.g. ibm/duorc or rotten_tomatoes
+  };
+
+  app.post(
+    "/document/save-from-hf",
+    [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
+    async (req, res) => {
+      console.log(req.body.link);
+
+      const { link } = req.body;
+
+      if (!link.startsWith(HF_DATASET_LINK_BASE))
+        res.status(400).send({ message: "must be a HuggingFace link" });
+
+      const name = getDatasetName(link);
+      const datasetValidity = await fetch(
+        `${HF_DATA_VALIDITY_URL}?dataset=${name}`,
+        {
+          method: "GET",
+        }
+      );
+      const validityJson = await datasetValidity.json();
+
+      if (
+        !validityJson.preview &&
+        !validityJson.search &&
+        !validityJson.filter &&
+        !validityJson.viewer
+      ) {
+        res.status(400).send({ message: "dataset not available" });
+      }
+
+      // split and config
+      const splitsNConfigs = await fetch(
+        `${HF_DATA_API_BASE}/splits?dataset=${name}`,
+        {
+          headers: { Authorization: `Bearer ${API_TOKEN}` },
+          method: "GET",
+        }
+      );
+      const splitsNConfigsJson = await splitsNConfigs.json();
+      const splits = splitsNConfigsJson.splits;
+
+      const configSplitSet = new Set();
+      const configSet = new Set(); // en fr zh etc.
+      const splitSet = new Set(); // train validation test
+
+      splits.forEach((item) => {
+        const { config, split } = item;
+        const configSplit = JSON.stringify({ config, split });
+        configSplitSet.add(configSplit);
+        configSet.add(config);
+        splitSet.add(split);
+      });
+
+      // get dataset meta data and save to space
+      const info = await fetch(`${HF_DATA_API_BASE}/info?${name}`, {
+        headers: { Authorization: `Bearer ${API_TOKEN}` },
+        method: "GET",
+      });
+
+      const infoJson = await info.json();
+      const datasetInfo = infoJson.dataset_info;
+      for (const configSplit of configSplitSet) {
+        const configSplitJson = JSON.parse(configSplit);
+        const configJson = datasetInfo[configSplitJson.config];
+        if (configJson) {
+          const splitJson = configJson["splits"][configSplitJson.split];
+          const size = splitJson["num_bytes"];
+          const numRows = splitJson["num_examples"];
+          await Datasets.create({
+            name,
+            source: link,
+            extension: "parquet",
+            split: configSplitJson.split,
+            config: configSplitJson.config,
+            size,
+            numRows,
+          });
+        }
+      }
+
+      res.status(200).send({
+        configSplit: Array.from(configSplitSet),
+        message: "dataset saved",
+      });
     }
   );
 }

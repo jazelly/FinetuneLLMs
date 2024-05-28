@@ -38,8 +38,15 @@ const Document = {
     return fetch(`${API_BASE}/document/upload-by-chunk`, {
       method: "POST",
       body: datasetChunk,
-    })
-  }
+    });
+  },
+
+  saveDatasetFromHF: async (link) => {
+    return fetch(`${API_BASE}/document/save-from-hf`, {
+      method: "POST",
+      body: link,
+    });
+  },
 };
 
 export default Document;

@@ -12,7 +12,7 @@ generator client {
 // }
 datasource db {
   provider = "sqlite"
-  url      = "file:../storage/anythingllm.db"
+  url      = "file:../storage/finetunellms.db"
 }
 
 model api_keys {
@@ -274,4 +274,18 @@ model slash_command_presets {
   user          users?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([uid, command])
+}
+
+model datasets {
+  id Int @id @default(autoincrement())
+  path String?
+  name String
+  config String @default("en") // can be varied
+  split String @default("train") // train validation test
+  size Int // in byte
+  source String
+  extension String
+  numRows Int?
+  createdAt DateTime @default(now())
+  lastUpdatedAt DateTime @default(now())
 }

@@ -9,6 +9,8 @@ export const SEEN_DOC_PIN_ALERT = "anythingllm_pinned_document_alert";
 export const USER_BACKGROUND_COLOR = "bg-historical-msg-user";
 export const AI_BACKGROUND_COLOR = "bg-historical-msg-system";
 
+export const HF_DATASET_LINK_BASE = "https://huggingface.co/datasets/";
+
 export function fullApiUrl() {
   if (API_BASE !== "/api") return API_BASE;
   return `${window.location.origin}/api`;
