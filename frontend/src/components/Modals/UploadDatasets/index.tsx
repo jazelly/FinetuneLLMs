@@ -40,15 +40,7 @@ const UploadDatasets = ({ hideModal = noop, providedSlug = null }) => {
     getSettings();
   }, []);
 
-  useEffect(() => {
-    async function fetchWorkspace() {
-      const workspace: WorkspaceSettings = await Workspace.bySlug('a');
-      setWorkspace(workspace);
-    }
-    fetchWorkspace();
-  }, [providedSlug, slug]);
 
-  if (!workspace) return null;
 
   if (isMobile) {
     return (
@@ -58,7 +50,7 @@ const UploadDatasets = ({ hideModal = noop, providedSlug = null }) => {
           <div className="relative max-w-lg mx-auto bg-main-gradient rounded-[12px] shadow border-2 border-slate-300/10">
             <div className="p-6">
               <h1 className="text-white text-lg font-semibold">
-                Editing "{workspace.name}"
+                Editing
               </h1>
               <p className="text-white mt-4">
                 Editing these settings are only available on a desktop device.
@@ -102,7 +94,7 @@ const UploadDatasets = ({ hideModal = noop, providedSlug = null }) => {
             />
           )}
 
-          <DocumentSettings workspace={workspace} systemSettings={settings} />
+          <DocumentSettings systemSettings={settings} />
         </div>
       </div>
     </div>

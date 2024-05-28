@@ -35,17 +35,29 @@ const Document = {
   },
 
   uploadOneDatasetByChunk: async (datasetChunk) => {
-    return fetch(`${API_BASE}/document/upload-by-chunk`, {
+    const response = await fetch(`${API_BASE}/document/upload-by-chunk`, {
       method: "POST",
       body: datasetChunk,
     });
+
+    return response.json();
   },
 
   saveDatasetFromHF: async (link) => {
-    return fetch(`${API_BASE}/document/save-from-hf`, {
+    const response = await fetch(`${API_BASE}/document/save-from-hf`, {
       method: "POST",
-      body: link,
+      body: JSON.stringify({ link }),
     });
+
+    return response.json();
+  },
+
+  readRemoteDatasets: async () => {
+    const response = await fetch(`${API_BASE}/document/remote/all`, {
+      method: "GET",
+    });
+
+    return response.json();
   },
 };
 

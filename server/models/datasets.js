@@ -11,7 +11,7 @@ const Datasets = {
     split,
     numRows,
   }) => {
-    const newDataset = await prisma.dataset.create({
+    const newDataset = await prisma.datasets.create({
       data: {
         name,
         extension,
@@ -24,6 +24,20 @@ const Datasets = {
       },
     });
     console.log("Created new dataset:", newDataset);
+  },
+
+  readBy: async (params) => {
+    const whereParams = [];
+    for (const [key, value] of Object.entries(params)) {
+      whereParams.push({ [key]: value });
+    }
+    const datasets = await prisma.datasets.findMany({
+      where: {
+        AND: whereParams,
+      },
+    });
+
+    return datasets;
   },
 };
 

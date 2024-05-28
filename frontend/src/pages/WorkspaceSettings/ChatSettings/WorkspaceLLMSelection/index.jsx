@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import AnythingLLMIcon from "@/media/logo/anything-llm-icon.png";
+import FinetuneLLMsIcon from "@/media/logo/anything-llm-icon.png";
 import WorkspaceLLMItem from "./WorkspaceLLMItem";
 import { AVAILABLE_LLM_PROVIDERS } from "@/pages/GeneralSettings/LLMPreference";
 import { CaretUpDown, MagnifyingGlass, X } from "@phosphor-icons/react";
@@ -12,7 +12,7 @@ const DISABLED_PROVIDERS = ["azure", "lmstudio", "native"];
 const LLM_DEFAULT = {
   name: "System default",
   value: "default",
-  logo: AnythingLLMIcon,
+  logo: FinetuneLLMsIcon,
   options: () => <React.Fragment />,
   description: "Use the system LLM preference for this workspace.",
   requiredConfig: [],

@@ -199,9 +199,7 @@ function documentEndpoints(app) {
     "/document/save-from-hf",
     [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
     async (req, res) => {
-      console.log(req.body.link);
-
-      const { link } = req.body;
+      const { link } = reqBody(req);
 
       if (!link.startsWith(HF_DATASET_LINK_BASE))
         res.status(400).send({ message: "must be a HuggingFace link" });
@@ -209,9 +207,7 @@ function documentEndpoints(app) {
       const name = getDatasetName(link);
       const datasetValidity = await fetch(
         `${HF_DATA_VALIDITY_URL}?dataset=${name}`,
-        {
-          method: "GET",
-        }
+        { method: "GET" }
       );
       const validityJson = await datasetValidity.json();
 
@@ -228,7 +224,6 @@ function documentEndpoints(app) {
       const splitsNConfigs = await fetch(
         `${HF_DATA_API_BASE}/splits?dataset=${name}`,
         {
-          headers: { Authorization: `Bearer ${API_TOKEN}` },
           method: "GET",
         }
       );
@@ -236,27 +231,23 @@ function documentEndpoints(app) {
       const splits = splitsNConfigsJson.splits;
 
       const configSplitSet = new Set();
-      const configSet = new Set(); // en fr zh etc.
-      const splitSet = new Set(); // train validation test
-
       splits.forEach((item) => {
         const { config, split } = item;
         const configSplit = JSON.stringify({ config, split });
         configSplitSet.add(configSplit);
-        configSet.add(config);
-        splitSet.add(split);
       });
 
       // get dataset meta data and save to space
-      const info = await fetch(`${HF_DATA_API_BASE}/info?${name}`, {
-        headers: { Authorization: `Bearer ${API_TOKEN}` },
+      const info = await fetch(`${HF_DATA_API_BASE}/info?dataset=${name}`, {
         method: "GET",
       });
 
       const infoJson = await info.json();
-      const datasetInfo = infoJson.dataset_info;
+      console.log('infoJson', infoJson);
+      const datasetInfo = infoJson["dataset_info"];
       for (const configSplit of configSplitSet) {
         const configSplitJson = JSON.parse(configSplit);
+        console.log("configSplit", configSplit);
         const configJson = datasetInfo[configSplitJson.config];
         if (configJson) {
           const splitJson = configJson["splits"][configSplitJson.split];
@@ -278,6 +269,17 @@ function documentEndpoints(app) {
         configSplit: Array.from(configSplitSet),
         message: "dataset saved",
       });
+    }
+  );
+
+  app.get(
+    "/document/remote/all",
+    [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
+    async (req, res) => {
+      const remoteDatasets = await Datasets.readBy({ path: null });
+
+      console.log("remoteDatasets", remoteDatasets);
+      res.json(remoteDatasets);
     }
   );
 }

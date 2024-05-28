@@ -52,7 +52,7 @@ export default function DefaultChatContainer() {
               className={`whitespace-pre-line text-white font-normal text-sm md:text-sm flex flex-col gap-y-1 mt-2`}
             >
               Welcome to FinetuneLLMs, FinetuneLLMs is an open-source AI tool
-              that simplify your AI training requirements. All you need is an 
+              that simplify your AI training requirements. All you need is an
               Nvidia GPU on your server.
             </span>
           </div>
@@ -121,11 +121,12 @@ export default function DefaultChatContainer() {
               <span
                 className={`whitespace-pre-line text-white font-normal text-sm md:text-sm flex flex-col gap-y-1 mt-2`}
               >
-                It's simple. You need just need to upload your datasets at the bottom of the sidebar.
-                Once a dataset is uploaded, you can use it at any workspace.
-                <br />
-                A workspace is typically created for a particular finetune job, in which you can choose 
-                what method and what base model is used for finetuning.
+                It's simple. You need just need to upload your datasets at the
+                bottom of the sidebar. Once a dataset is uploaded, you can use
+                it at any workspace.
+                <br />A workspace is typically created for a particular finetune
+                job, in which you can choose what method and what base model is
+                used for finetuning.
               </span>
 
               {(!user || user?.role !== "default") && (
@@ -134,7 +135,10 @@ export default function DefaultChatContainer() {
                   className="mt-5 w-fit transition-all duration-300 border border-slate-200 px-4 py-2 rounded-lg text-white text-sm items-center flex gap-x-2 hover:bg-slate-200 hover:text-slate-800 focus:ring-gray-800"
                 >
                   <Plus className="h-4 w-4" />
-                  <p>Start uploading datasets and create your first finetuning job</p>
+                  <p>
+                    Start uploading datasets and create your first finetuning
+                    job
+                  </p>
                 </button>
               )}
             </div>
@@ -201,8 +205,6 @@ export default function DefaultChatContainer() {
     processMsgs();
   }, []);
 
-
-  console.log('isMobile', isMobile);
   return (
     <div
       style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}

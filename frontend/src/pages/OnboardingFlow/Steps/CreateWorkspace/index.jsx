@@ -7,7 +7,7 @@ import Workspace from "@/models/workspace";
 
 const TITLE = "Create your first workspace";
 const DESCRIPTION =
-  "Create your first workspace and get started with AnythingLLM.";
+  "Create your first workspace and get started with FinetuneLLMs.";
 
 export default function CreateWorkspace({
   setHeader,

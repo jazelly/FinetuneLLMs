@@ -4,8 +4,8 @@ const { v5: uuidv5 } = require("uuid");
 const { Document } = require("../../models/documents");
 const documentsPath =
   process.env.NODE_ENV === "development"
-    ? path.resolve(__dirname, `../../storage/documents`)
-    : path.resolve(process.env.STORAGE_DIR, `documents`);
+    ? path.resolve(__dirname, `../../storage/datasets`)
+    : path.resolve(process.env.STORAGE_DIR, `datasets`);
 const vectorCachePath =
   process.env.NODE_ENV === "development"
     ? path.resolve(__dirname, `../../storage/vector-cache`)
@@ -27,7 +27,7 @@ async function viewLocalFiles() {
   if (!fs.existsSync(documentsPath)) fs.mkdirSync(documentsPath);
 
   const directory = {
-    name: "documents",
+    name: "datasets",
     type: "folder",
     items: [],
   };

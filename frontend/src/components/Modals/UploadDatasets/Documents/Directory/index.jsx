@@ -17,8 +17,6 @@ function Directory({
   fetchKeys,
   selectedItems,
   setSelectedItems,
-  setHighlightWorkspace,
-  moveToWorkspace,
   setLoadingMessage,
   loadingMessage,
 }) {
@@ -263,12 +261,7 @@ function Directory({
             <div className="absolute bottom-[12px] left-0 right-0 flex justify-center pointer-events-none">
               <div className="mx-auto bg-white/40 rounded-lg py-1 px-2 pointer-events-auto">
                 <div className="flex flex-row items-center gap-x-2">
-                  <button
-                    onClick={moveToWorkspace}
-                    onMouseEnter={() => setHighlightWorkspace(true)}
-                    onMouseLeave={() => setHighlightWorkspace(false)}
-                    className="border-none text-sm font-semibold bg-white h-[30px] px-2.5 rounded-lg hover:text-white hover:bg-neutral-800/80"
-                  >
+                  <button className="border-none text-sm font-semibold bg-white h-[30px] px-2.5 rounded-lg hover:text-white hover:bg-neutral-800/80">
                     Move to Workspace
                   </button>
                   <div className="relative">

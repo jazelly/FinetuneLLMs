@@ -3,7 +3,7 @@ import Sidebar from "@/components/SettingsSidebar";
 import { isMobile } from "react-device-detect";
 import System from "@/models/system";
 import showToast from "@/utils/toast";
-import AnythingLLMIcon from "@/media/logo/anything-llm-icon.png";
+import FinetuneLLMsIcon from "@/media/logo/anything-llm-icon.png";
 import OpenAiLogo from "@/media/llmprovider/openai.png";
 import AzureOpenAiLogo from "@/media/llmprovider/azure.png";
 import LocalAiLogo from "@/media/llmprovider/localai.png";
@@ -28,12 +28,12 @@ import CTAButton from "@/components/lib/CTAButton";
 
 const EMBEDDERS = [
   {
-    name: "AnythingLLM Embedder",
+    name: "FinetuneLLMs Embedder",
     value: "native",
-    logo: AnythingLLMIcon,
+    logo: FinetuneLLMsIcon,
     options: (settings) => <NativeEmbeddingOptions settings={settings} />,
     description:
-      "Use the built-in embedding provider for AnythingLLM. Zero setup!",
+      "Use the built-in embedding provider for FinetuneLLMs. Zero setup!",
   },
   {
     name: "OpenAI",
@@ -214,7 +214,7 @@ export default function GeneralEmbeddingPreference() {
                   <br />
                   Embedding is the process of turning text into vectors. These
                   credentials are required to turn your files and prompts into a
-                  format which AnythingLLM can use to process.
+                  format which FinetuneLLMs can use to process.
                 </p>
               </div>
               <div className="w-full justify-end flex">

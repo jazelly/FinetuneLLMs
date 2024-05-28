@@ -1,4 +1,4 @@
-# AnythingLLM Storage
+# FinetuneLLMs Storage
 
 This folder is for the local or disk storage of ready-to-embed documents, vector-cached embeddings, and the disk-storage of LanceDB and the local SQLite database.
 

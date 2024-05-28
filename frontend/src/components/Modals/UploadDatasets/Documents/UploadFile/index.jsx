@@ -38,14 +38,26 @@ export default function UploadFile({
     );
     setFetchingUrl(true);
 
-    const { response, data } = await Document.saveDatasetFromHF(link);
-    if (!response.ok) {
-      showToast(`Error uploading link: ${data.error}`, "error");
+    console.log("link", link);
+    const response = await Document.saveDatasetFromHF(link);
+
+    if (response.message !== "dataset saved") {
+      showToast(`Error uploading link: ${response.error}`, "error");
     } else {
       fetchKeys(true);
-      showToast("Link fetched successfully", "success");
+      const configSplits = response.configSplit;
+      console.log("configSplit", configSplits);
+      let toastMessage =
+        "Found and saved the following configuration and split: \n";
+      for (const configSplit of configSplits) {
+        const configSplitJson = JSON.parse(configSplit);
+        toastMessage += `${configSplitJson.config}-${configSplitJson.split}; \n`;
+      }
+
+      showToast(toastMessage, "success");
       formEl.reset();
     }
+
     setLoading(false);
     setFetchingUrl(false);
   };

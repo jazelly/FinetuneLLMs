@@ -40,7 +40,7 @@ export default function PrivacyAndDataHandling() {
             </div>
             <p className="text-xs leading-[18px] font-base text-white text-opacity-60">
               This is your configuration for how connected third party providers
-              and AnythingLLM handle your data.
+              and FinetuneLLMs handle your data.
             </p>
           </div>
           {loading ? (
@@ -136,7 +136,6 @@ function ThirdParty({ settings }) {
 function TelemetryLogs() {
   setTelemetry(false);
 
-
   return (
     <div className="relative w-full max-h-full">
       <div className="relative rounded-lg">
@@ -150,7 +149,7 @@ function TelemetryLogs() {
             dedicated to building the best solution for integrating AI and
             documents privately and securely. If you do decide to turn off
             telemetry all we ask is to consider sending us feedback and thoughts
-            so that we can continue to improve AnythingLLM for you.
+            so that we can continue to improve FinetuneLLMs for you.
           </p>
         </div>
       </div>
