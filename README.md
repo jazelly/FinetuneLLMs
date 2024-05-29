@@ -1,6 +1,6 @@
 # FinetuneLLMs (Work in Progress, Actively!)
 
-Finetune an LLM model with your dataset, within a few clicks!
+Finetune an LLM, within a few clicks!
 
 ## Supported finetuning techniques
 
