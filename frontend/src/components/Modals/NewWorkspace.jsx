@@ -26,14 +26,14 @@ export default function NewWorkspaceModal({ hideModal = noop }) {
         className="flex fixed top-0 left-0 right-0 w-full h-full"
         onClick={hideModal}
       />
-      <div className="relative w-[500px] max-h-full">
+      <div className="absolute max-h-full transition duration-300 z-20 md:overflow-y-auto py-10 w-[500px]">
         <div className="relative bg-modal-gradient rounded-lg shadow-md border-2 border-accent">
           <div className="flex items-start justify-between p-4 border-b rounded-t border-white/10">
             <h3 className="text-xl font-semibold text-white">New Workspace</h3>
             <button
               onClick={hideModal}
               type="button"
-              className="transition-all duration-300 text-gray-400 bg-transparent hover:border-white/60 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center bg-sidebar-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
+              className="transition-all duration-300 text-gray-400 bg-transparent hover:border-white/60 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center bg-main-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
             >
               <X className="text-gray-300 text-lg" />
             </button>

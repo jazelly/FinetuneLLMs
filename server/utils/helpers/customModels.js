@@ -210,6 +210,7 @@ async function getKoboldCPPModels(basePath = null) {
 
 async function ollamaAIModels(basePath = null) {
   let url;
+
   try {
     let urlPath = basePath ?? process.env.OLLAMA_BASE_PATH;
     new URL(urlPath);
@@ -220,24 +221,28 @@ async function ollamaAIModels(basePath = null) {
     return { models: [], error: "Not a valid URL." };
   }
 
-  const models = await fetch(`${url}/api/tags`)
-    .then((res) => {
-      if (!res.ok)
-        throw new Error(`Could not reach Ollama server! ${res.status}`);
-      return res.json();
-    })
-    .then((data) => data?.models || [])
-    .then((models) =>
-      models.map((model) => {
-        return { id: model.name };
-      })
-    )
-    .catch((e) => {
-      console.error(e);
-      return [];
-    });
+  const models = [];
+  let error = null;
+  try {
+    const res = await fetch(`${url}/api/tags`);
 
-  return { models, error: null };
+    if (!res.ok) {
+      error = `Could not reach Ollama server! ${res.status}`;
+      console.error(error);
+    }
+    const data = await res.json();
+
+    if (data?.models && data.models.length) models.concat(data.models);
+
+    models.map((model) => {
+      return { id: model.name };
+    });
+  } catch (e) {
+    error = e;
+    console.error(error);
+  }
+
+  return { models, error };
 }
 
 async function getTogetherAiModels() {

@@ -66,7 +66,7 @@ export default function LogRow({ log }) {
 const EventMetadata = ({ metadata, expanded = false }) => {
   if (!metadata || !expanded) return null;
   return (
-    <tr className="bg-sidebar">
+    <tr className="bg-main">
       <td
         colSpan="2"
         className="px-6 py-4 font-medium text-white rounded-l-2xl"

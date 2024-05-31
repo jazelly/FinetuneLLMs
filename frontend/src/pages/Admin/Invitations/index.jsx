@@ -4,7 +4,6 @@ import { isMobile } from "react-device-detect";
 import * as Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { EnvelopeSimple } from "@phosphor-icons/react";
-import usePrefersDarkMode from "@/hooks/usePrefersDarkMode";
 import Admin from "@/models/admin";
 import InviteRow from "./InviteRow";
 import NewInviteModal from "./NewInviteModal";
@@ -16,7 +15,7 @@ export default function AdminInvites() {
   const { isOpen, openModal, closeModal } = useModal();
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-sidebar flex">
+    <div className="w-screen h-screen overflow-hidden bg-main flex">
       <Sidebar />
       <div
         style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
@@ -51,7 +50,6 @@ export default function AdminInvites() {
 }
 
 function InvitationsContainer() {
-  const darkMode = usePrefersDarkMode();
   const [loading, setLoading] = useState(true);
   const [invites, setInvites] = useState([]);
 

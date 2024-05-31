@@ -10,7 +10,7 @@ import NewWorkspaceModal, {
 } from "../Modals/NewWorkspace";
 import paths from "@/utils/paths";
 import { isMobile } from "react-device-detect";
-import { SidebarMobileHeader } from "../Sidebar";
+import SidebarMobileHeader from "../SidebarMobileHeader";
 import ChatBubble from "../ChatBubble";
 import System from "@/models/system";
 import Jazzicon from "../UserIcon";
@@ -40,11 +40,9 @@ export default function DefaultChatContainer() {
   const MESSAGES = [
     <React.Fragment>
       <div
-        className={`flex justify-center items-end w-full ${AI_BACKGROUND_COLOR} md:mt-0 mt-[40px]`}
+        className={`flex justify-center items-end w-full ${AI_BACKGROUND_COLOR}`}
       >
-        <div
-          className={`pt-10 pb-6 px-4 w-full flex gap-x-5 md:max-w-[800px] flex-col`}
-        >
+        <div className={`pt-10 pb-6 px-4 w-full flex gap-x-5 flex-col`}>
           <div className="flex gap-x-5">
             <Jazzicon size={36} user={{ uid: "system" }} role={"assistant"} />
 

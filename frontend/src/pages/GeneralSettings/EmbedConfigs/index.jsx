@@ -15,7 +15,7 @@ export default function EmbedConfigs() {
   const { isOpen, openModal, closeModal } = useModal();
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-sidebar flex">
+    <div className="w-screen h-screen overflow-hidden bg-main flex">
       <Sidebar />
       <div
         style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}

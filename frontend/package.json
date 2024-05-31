@@ -1,8 +1,9 @@
 {
-  "name": "anything-llm-frontend",
+  "name": "finetune-llms-frontend",
   "private": false,
   "license": "MIT",
   "type": "module",
+  "author": "jazelly",
   "scripts": {
     "start": "vite --open",
     "dev": "NODE_ENV=development vite --debug --host=0.0.0.0",
@@ -26,6 +27,7 @@
     "react-device-detect": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
+    "react-grid-layout": "^1.4.4",
     "react-loading-skeleton": "^3.1.0",
     "react-router-dom": "^6.3.0",
     "react-speech-recognition": "^3.10.0",

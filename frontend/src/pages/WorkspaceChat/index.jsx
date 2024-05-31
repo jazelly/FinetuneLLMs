@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { default as WorkspaceChatContainer } from "@/components/WorkspaceChat";
-import Sidebar from "@/components/Sidebar";
 import { useParams } from "react-router-dom";
 import Workspace from "@/models/workspace";
 import PasswordModal, { usePasswordModal } from "@/components/Modals/Password";
-import { isMobile } from "react-device-detect";
 import { FullScreenLoader } from "@/components/Preloader";
 
 export default function WorkspaceChat() {
@@ -44,8 +42,7 @@ function ShowWorkspaceChat() {
   }, []);
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-sidebar flex">
-      {!isMobile && <Sidebar />}
+    <div className="w-screen h-screen overflow-hidden bg-main flex">
       <WorkspaceChatContainer loading={loading} workspace={workspace} />
     </div>
   );

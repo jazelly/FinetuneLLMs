@@ -35,6 +35,27 @@ a {
   border-color: #302f30;
 }
 
+.SidebarContainer {
+  width: 4rem;
+  height: 100%;
+  min-height: 100%;
+  padding: 2px 2px;
+}
+
+.MainContainer {
+
+}
+
+.Header {
+  height: 4rem;
+  z-index: 20;
+}
+
+.MainBody {
+  z-index: 0;
+  overflow-y: auto;
+}
+
 @font-face {
   font-family: "plus-jakarta-sans";
   src: url("../public/fonts/PlusJakartaSans.ttf");
@@ -117,35 +138,12 @@ a {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .sidebar-items:after {
-    content: " ";
-    position: absolute;
-    left: 0;
-    right: 0px;
-    height: 4em;
-    top: 69vh;
-    z-index: 1;
-    pointer-events: none;
-  }
-}
-
 @media (prefers-color-scheme: light) {
   .fade-up-border {
     background: linear-gradient(
       to bottom,
       rgba(220, 221, 223, 10%),
       rgb(220, 221, 223) 89%
-    );
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .fade-up-border {
-    background: linear-gradient(
-      to bottom,
-      rgba(41, 37, 36, 50%),
-      rgb(41 37 36) 90%
     );
   }
 }

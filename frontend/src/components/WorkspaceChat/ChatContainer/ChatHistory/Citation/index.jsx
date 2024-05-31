@@ -14,7 +14,6 @@ import {
   X,
   YoutubeLogo,
 } from "@phosphor-icons/react";
-import ConfluenceLogo from "@/media/dataConnectors/confluence.png";
 import { Tooltip } from "react-tooltip";
 import { toPercentString } from "@/utils/numbers";
 
@@ -150,7 +149,7 @@ function CitationDetailModal({ source, onClose }) {
           <button
             onClick={onClose}
             type="button"
-            className="absolute top-6 right-6 transition-all duration-300 text-gray-400 bg-transparent hover:border-white/60 rounded-lg text-sm p-1.5 inline-flex items-center bg-sidebar-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
+            className="absolute top-6 right-6 transition-all duration-300 text-gray-400 bg-transparent hover:border-white/60 rounded-lg text-sm p-1.5 inline-flex items-center bg-main-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
           >
             <X className="text-gray-300 text-lg" />
           </button>

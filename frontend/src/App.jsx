@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useRef } from "react";
 import { Routes, Route } from "react-router-dom";
 import { ContextWrapper } from "@/AuthContext";
 import PrivateRoute, {
@@ -9,13 +9,19 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "@/pages/Login";
 import OnboardingFlow from "@/pages/OnboardingFlow";
-
+import { isMobile } from "react-device-detect";
 import { PfpProvider } from "./PfpContext";
 import { LogoProvider } from "./LogoContext";
+import Sidebar from "@/components/Sidebar";
+import Header from "./components/Header";
+import UploadDatasets, {
+  useUploadDatasetsModal,
+} from "@/components/Modals/UploadDatasets";
 
-const Main = lazy(() => import("@/pages/Main"));
+const DefaultChat = lazy(() => import("@/pages/DefaultChat"));
 const InvitePage = lazy(() => import("@/pages/Invite"));
-const WorkspaceChat = lazy(() => import("@/pages/WorkspaceChat"));
+// const WorkspaceChat = lazy(() => import("@/pages/WorkspaceChat"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const AdminUsers = lazy(() => import("@/pages/Admin/Users"));
 const AdminInvites = lazy(() => import("@/pages/Admin/Invitations"));
 const AdminWorkspaces = lazy(() => import("@/pages/Admin/Workspaces"));
@@ -55,118 +61,157 @@ const PrivacyAndData = lazy(() =>
 );
 
 export default function App() {
-  return (
-    <div className="App">
-      <Suspense fallback={<div />}>
-        <ContextWrapper>
-          <LogoProvider>
-            <PfpProvider>
-              <Routes>
-                <Route path="/" element={<PrivateRoute Component={Main} />} />
-                <Route path="/login" element={<Login />} />
-                <Route
-                  path="/workspace/:slug/settings/:tab"
-                  element={<ManagerRoute Component={WorkspaceSettings} />}
-                />
-                <Route
-                  path="/workspace/:slug"
-                  element={<PrivateRoute Component={WorkspaceChat} />}
-                />
-                <Route
-                  path="/workspace/:slug/t/:threadSlug"
-                  element={<PrivateRoute Component={WorkspaceChat} />}
-                />
-                <Route path="/accept-invite/:code" element={<InvitePage />} />
+  const sidebarRef = useRef(null);
+  const {
+    showing: showingUpload,
+    showModal: showUploadModal,
+    hideModal: hideUploadModal,
+  } = useUploadDatasetsModal();
 
-                {/* Admin */}
-                <Route
-                  path="/settings/llm-preference"
-                  element={<AdminRoute Component={GeneralLLMPreference} />}
-                />
-                <Route
-                  path="/settings/transcription-preference"
-                  element={
-                    <AdminRoute Component={GeneralTranscriptionPreference} />
-                  }
-                />
-                <Route
-                  path="/settings/audio-preference"
-                  element={<AdminRoute Component={GeneralAudioPreference} />}
-                />
-                <Route
-                  path="/settings/embedding-preference"
-                  element={
-                    <AdminRoute Component={GeneralEmbeddingPreference} />
-                  }
-                />
-                <Route
-                  path="/settings/text-splitter-preference"
-                  element={
-                    <AdminRoute Component={EmbeddingTextSplitterPreference} />
-                  }
-                />
-                <Route
-                  path="/settings/vector-database"
-                  element={<AdminRoute Component={GeneralVectorDatabase} />}
-                />
-                <Route
-                  path="/settings/event-logs"
-                  element={<AdminRoute Component={AdminLogs} />}
-                />
-                <Route
-                  path="/settings/embed-config"
-                  element={<AdminRoute Component={EmbedConfigSetup} />}
-                />
-                <Route
-                  path="/settings/embed-chats"
-                  element={<AdminRoute Component={EmbedChats} />}
-                />
-                {/* Manager */}
-                <Route
-                  path="/settings/security"
-                  element={<ManagerRoute Component={GeneralSecurity} />}
-                />
-                <Route
-                  path="/settings/privacy"
-                  element={<AdminRoute Component={PrivacyAndData} />}
-                />
-                <Route
-                  path="/settings/appearance"
-                  element={<ManagerRoute Component={GeneralAppearance} />}
-                />
-                <Route
-                  path="/settings/api-keys"
-                  element={<AdminRoute Component={GeneralApiKeys} />}
-                />
-                <Route
-                  path="/settings/workspace-chats"
-                  element={<ManagerRoute Component={GeneralChats} />}
-                />
-                <Route
-                  path="/settings/system-preferences"
-                  element={<ManagerRoute Component={AdminSystem} />}
-                />
-                <Route
-                  path="/settings/invites"
-                  element={<ManagerRoute Component={AdminInvites} />}
-                />
-                <Route
-                  path="/settings/users"
-                  element={<ManagerRoute Component={AdminUsers} />}
-                />
-                <Route
-                  path="/settings/workspaces"
-                  element={<ManagerRoute Component={AdminWorkspaces} />}
-                />
-                {/* Onboarding Flow */}
-                <Route path="/onboarding" element={<OnboardingFlow />} />
-                <Route path="/onboarding/:step" element={<OnboardingFlow />} />
-              </Routes>
+  return (
+    <Suspense fallback={<div />}>
+      <ContextWrapper>
+        <LogoProvider>
+          <PfpProvider>
+            <div className="bg-main flex h-full">
+              {showingUpload && <UploadDatasets hideModal={hideUploadModal} />}
+
+              {!isMobile && (
+                <div
+                  className={`SidebarContainer h-full flex flex-col items-center justify-between`}
+                  ref={sidebarRef}
+                >
+                  <Sidebar />
+                </div>
+              )}
+              <div className="MainContainer flex-1 flex flex-col">
+                {!isMobile ? (
+                  <div className="Header">
+                    <Header showUploadModal={showUploadModal} />
+                  </div>
+                ) : (
+                  <div className="Header"></div>
+                )}
+                <div className={`MainBody flex-1 mr-4 mb-4 rounded-2xl shadow`}>
+                  <Routes>
+                    <Route
+                      path="/"
+                      element={<PrivateRoute Component={DefaultChat} />}
+                    />
+                    <Route path="/login" element={<Login />} />
+                    <Route
+                      path="/new"
+                      element={<PrivateRoute Component={Dashboard} />}
+                    />
+                    <Route
+                      path="/accept-invite/:code"
+                      element={<InvitePage />}
+                    />
+
+                    {/* Admin */}
+                    <Route
+                      path="/settings"
+                      element={<AdminRoute Component={GeneralLLMPreference} />}
+                    />
+                    <Route
+                      path="/settings/llm-preference"
+                      element={<AdminRoute Component={GeneralLLMPreference} />}
+                    />
+                    <Route
+                      path="/settings/transcription-preference"
+                      element={
+                        <AdminRoute
+                          Component={GeneralTranscriptionPreference}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/settings/audio-preference"
+                      element={
+                        <AdminRoute Component={GeneralAudioPreference} />
+                      }
+                    />
+                    <Route
+                      path="/settings/embedding-preference"
+                      element={
+                        <AdminRoute Component={GeneralEmbeddingPreference} />
+                      }
+                    />
+                    <Route
+                      path="/settings/text-splitter-preference"
+                      element={
+                        <AdminRoute
+                          Component={EmbeddingTextSplitterPreference}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/settings/vector-database"
+                      element={<AdminRoute Component={GeneralVectorDatabase} />}
+                    />
+                    <Route
+                      path="/settings/event-logs"
+                      element={<AdminRoute Component={AdminLogs} />}
+                    />
+                    <Route
+                      path="/settings/embed-config"
+                      element={<AdminRoute Component={EmbedConfigSetup} />}
+                    />
+                    <Route
+                      path="/settings/embed-chats"
+                      element={<AdminRoute Component={EmbedChats} />}
+                    />
+                    {/* Manager */}
+                    <Route
+                      path="/settings/security"
+                      element={<ManagerRoute Component={GeneralSecurity} />}
+                    />
+                    <Route
+                      path="/settings/privacy"
+                      element={<AdminRoute Component={PrivacyAndData} />}
+                    />
+                    <Route
+                      path="/settings/appearance"
+                      element={<ManagerRoute Component={GeneralAppearance} />}
+                    />
+                    <Route
+                      path="/settings/api-keys"
+                      element={<AdminRoute Component={GeneralApiKeys} />}
+                    />
+                    <Route
+                      path="/settings/workspace-chats"
+                      element={<ManagerRoute Component={GeneralChats} />}
+                    />
+                    <Route
+                      path="/settings/system-preferences"
+                      element={<ManagerRoute Component={AdminSystem} />}
+                    />
+                    <Route
+                      path="/settings/invites"
+                      element={<ManagerRoute Component={AdminInvites} />}
+                    />
+                    <Route
+                      path="/settings/users"
+                      element={<ManagerRoute Component={AdminUsers} />}
+                    />
+                    <Route
+                      path="/settings/workspaces"
+                      element={<ManagerRoute Component={AdminWorkspaces} />}
+                    />
+                    {/* Onboarding Flow */}
+                    <Route path="/onboarding" element={<OnboardingFlow />} />
+                    <Route
+                      path="/onboarding/:step"
+                      element={<OnboardingFlow />}
+                    />
+                  </Routes>
+                </div>
+              </div>
               <ToastContainer />
-            </PfpProvider>
-          </LogoProvider>
-        </ContextWrapper>
-      </Suspense>
-    </div>
+            </div>
+          </PfpProvider>
+        </LogoProvider>
+      </ContextWrapper>
+    </Suspense>
   );
 }

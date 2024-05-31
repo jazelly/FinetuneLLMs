@@ -116,10 +116,7 @@ export default function ChatHistory({
           />
         </div>
         {showing && (
-          <UploadDatasets
-            hideModal={hideModal}
-            providedSlug={workspace.slug}
-          />
+          <UploadDatasets hideModal={hideModal} providedSlug={workspace.slug} />
         )}
       </div>
     );
@@ -218,7 +215,7 @@ function WorkspaceChatSuggestions({ suggestions = [], sendSuggestion }) {
       {suggestions.map((suggestion, index) => (
         <button
           key={index}
-          className="text-left p-2.5 border rounded-xl border-white/20 bg-sidebar hover:bg-workspace-item-selected-gradient"
+          className="text-left p-2.5 border rounded-xl border-white/20 bg-main hover:bg-workspace-item-selected-gradient"
           onClick={() => sendSuggestion(suggestion.heading, suggestion.message)}
         >
           <p className="font-semibold">{suggestion.heading}</p>
