@@ -34,6 +34,7 @@ export default {
         "sidebar-logo-active": "#5f27cd",
         "header-inactive": "#909dae",
         "header-logo-static": "#737b85",
+        divline: "#eef4fa",
       },
       backgroundImage: {
         "preference-gradient":

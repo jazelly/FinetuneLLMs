@@ -92,17 +92,14 @@ export default function App() {
                 ) : (
                   <div className="Header"></div>
                 )}
-                <div className={`MainBody flex-1 mr-4 mb-4 rounded-2xl shadow`}>
+                <div className={`MainBody flex-1 mr-4 mb-8 rounded-2xl shadow`}>
                   <Routes>
+                    <Route path="/" element={<Dashboard />} />
                     <Route
-                      path="/"
+                      path="/logs"
                       element={<PrivateRoute Component={DefaultChat} />}
                     />
                     <Route path="/login" element={<Login />} />
-                    <Route
-                      path="/new"
-                      element={<PrivateRoute Component={Dashboard} />}
-                    />
                     <Route
                       path="/accept-invite/:code"
                       element={<InvitePage />}

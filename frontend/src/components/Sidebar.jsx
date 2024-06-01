@@ -10,8 +10,8 @@ export default function Sidebar() {
   const { logo } = useLogo();
   const navigate = useNavigate();
 
-  const isNewingJob = useMatch("/new");
-  const isViewingLog = useMatch("/");
+  const isNewingJob = useMatch("/");
+  const isViewingLog = useMatch("/logs");
   const isViewingSettings = useMatch("/settings/*");
 
   const handleNavigate = (path) => {
@@ -19,8 +19,8 @@ export default function Sidebar() {
       case "/":
         navigate("/");
         break;
-      case "new":
-        navigate("/new");
+      case "logs":
+        navigate("/logs");
         break;
       case "settings":
         navigate("/settings");
@@ -54,21 +54,6 @@ export default function Sidebar() {
               }}
               className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 bg-main rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
             >
-              <AlignLeft
-                size={28}
-                color={isViewingLog ? "#5f27cd" : "#748497"}
-                weight="fill"
-              />
-            </button>
-          </div>
-
-          <div className="flex gap-x-2 items-center justify-between">
-            <button
-              onClick={() => {
-                handleNavigate("new");
-              }}
-              className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 bg-main rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
-            >
               <Circuitry
                 color={isNewingJob ? "#5f27cd" : "#748497"}
                 size={28}
@@ -76,7 +61,20 @@ export default function Sidebar() {
               />
             </button>
           </div>
-
+          <div className="flex gap-x-2 items-center justify-between">
+            <button
+              onClick={() => {
+                handleNavigate("/logs");
+              }}
+              className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 bg-main rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
+            >
+              <AlignLeft
+                size={28}
+                color={isViewingLog ? "#5f27cd" : "#748497"}
+                weight="fill"
+              />
+            </button>
+          </div>
           <div className="flex gap-x-2 items-center justify-between">
             <button
               onClick={() => {

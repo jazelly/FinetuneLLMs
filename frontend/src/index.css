@@ -53,7 +53,36 @@ a {
 
 .MainBody {
   z-index: 0;
-  overflow-y: auto;
+  overflow-y: hidden;
+}
+
+.div-handle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #dae2eb;
+  height: 100%;
+  min-width: 3px;
+}
+
+.div-handle-drag-horizontal {
+  cursor: e-resize;
+  position: relative;
+  right: 2px;
+}
+
+.div-handle-drag-vertical {
+  cursor: s-resize;
+}
+
+.div-handle-highlight {
+  background-color: #9a77df;
+  min-width: 5px;
+}
+
+.div-handle-highlight-weak {
+  background-color: #b59ce7;
+  min-width: 4px;
 }
 
 @font-face {
