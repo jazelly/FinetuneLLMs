@@ -13,7 +13,7 @@ Finetune an LLM, within a few clicks!
 | Mistral        | ✅  | ✅  | ❌   | ❌  | ❌  |
 | ...            | ?   | ?   | ?    | ?   | ?   |
 
-## General Setup (deprecating, will provide a UI usage documentation)
+## General Setup
 
 This repo provides 3 modules, `frontend `(react), `server` (nodejs), and `trainer` (python django)
 
