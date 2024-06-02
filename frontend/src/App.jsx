@@ -92,7 +92,7 @@ export default function App() {
                 ) : (
                   <div className="Header"></div>
                 )}
-                <div className={`MainBody flex-1 mr-4 mb-8 rounded-2xl shadow`}>
+                <div className={`MainBody flex-1 mr-4 mb-8 rounded-xl shadow`}>
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route

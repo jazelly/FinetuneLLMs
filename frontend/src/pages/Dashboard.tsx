@@ -1,12 +1,53 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FinetunePanel from "@/components/FinetunePanel.component";
 import DivResizeHandle from "@/components/DivResizeHandle.component";
 import { ArrowLineLeft, ArrowLineRight } from "@phosphor-icons/react";
 import { ResizableBox } from "react-resizable";
 import type { ResizeHandle } from "react-resizable";
 import "react-resizable/css/styles.css";
+import DashboardModel from "../models/dashboard";
+import { AllJobOptions } from "@/models/types/dashboard";
 
 const Dashboard = () => {
+  const [jobOptions, setJobOptions] = useState<AllJobOptions | undefined>(
+    undefined
+  );
+
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const abortController = new AbortController(); // Create an AbortController instance
+    const signal = abortController.signal;
+
+    const fetchJobOptions = async () => {
+      try {
+        const resp = await DashboardModel.getJobOptions();
+        if (!resp.success) {
+          setJobOptions({
+            baseModels: [],
+            trainingMethods: [],
+            datasets: [],
+          });
+        } else {
+          setJobOptions(resp.data);
+        }
+      } catch (error: any) {
+        if (error.name === "AbortError") {
+          console.log("request aborted");
+        } else {
+          setError(error);
+        }
+      }
+    };
+
+    fetchJobOptions();
+
+    return () => {
+      // Perform cleanup here (e.g., canceling pending requests, removing event listeners)
+      abortController.abort();
+    };
+  }, []);
+
   const initialLeftWidth = ((window.innerWidth - 42 - 16) * 3) / 5;
   const initialTopHeight = ((window.innerHeight - 32 - 64) * 2) / 3; // 32 is the bottom gap, 64 is the top gap
 

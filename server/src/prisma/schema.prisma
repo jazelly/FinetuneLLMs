@@ -277,15 +277,28 @@ model slash_command_presets {
 }
 
 model datasets {
-  id Int @id @default(autoincrement())
-  path String?
-  name String
-  config String @default("en") // can be varied
-  split String @default("train") // train validation test
-  size Int // in byte
-  source String
-  extension String
-  numRows Int?
-  createdAt DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  path          String?
+  name          String
+  config        String   @default("en") // can be varied
+  split         String   @default("train") // train validation test
+  size          Int // in byte
+  source        String
+  extension     String
+  numRows       Int?
+  createdAt     DateTime @default(now())
   lastUpdatedAt DateTime @default(now())
+}
+
+model jobs {
+  id              Int      @id @default(autoincrement())
+  name            String
+  userId          Int?
+  baseModel       String
+  datasetId       String
+  trainingMethod  String
+  status          String   @default("running")
+  hyperparameters String // sqlite doesn't support json so we stringify before persisting
+  createdAt       DateTime @default(now())
+  lastUpdatedAt   DateTime @default(now())
 }

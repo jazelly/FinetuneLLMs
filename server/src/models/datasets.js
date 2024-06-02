@@ -11,6 +11,15 @@ const Datasets = {
     split,
     numRows,
   }) => {
+    const whereParams = [{ name, source, config, split }];
+
+    await prisma.datasets.deleteMany({
+      where: {
+        whereParams,
+      },
+    });
+    console.log("found duplicated, delete first");
+
     const newDataset = await prisma.datasets.create({
       data: {
         name,
@@ -24,6 +33,11 @@ const Datasets = {
       },
     });
     console.log("Created new dataset:", newDataset);
+  },
+
+  readAll: async () => {
+    const datasets = await prisma.datasets.findMany();
+    return datasets;
   },
 
   readBy: async (params) => {

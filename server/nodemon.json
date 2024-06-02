@@ -1,0 +1,6 @@
+{
+  "watch": ["endpoints", "models"],
+  "ext": "ts",
+  "ignore": ["tests/**/*", "storage/**/*", "swagger"],
+  "exec": "sucrase-node ./index.ts"
+}

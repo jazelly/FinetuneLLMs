@@ -242,9 +242,6 @@ function documentEndpoints(app) {
         method: "GET",
       });
 
-      // delete previous saved dataset link if there are any
-      await Datasets.deleteAllByName(name);
-
       const infoJson = await info.json();
       console.log("infoJson", infoJson);
       const datasetInfo = infoJson["dataset_info"];
@@ -277,7 +274,7 @@ function documentEndpoints(app) {
 
   app.get(
     "/document/remote/all",
-    [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
+    [validatedRequest, flexUserRoleValid([ROLES.all])],
     async (req, res) => {
       const remoteDatasets = await Datasets.readBy({ path: null });
       res.json(remoteDatasets);
