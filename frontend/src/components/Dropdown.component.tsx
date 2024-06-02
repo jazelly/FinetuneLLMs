@@ -21,6 +21,19 @@ const Dropdown = <T extends string>({
   const dropdownRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!isOpen) return;
 
     const dropdownHeight = dropdownRef.current!.clientHeight;
@@ -45,29 +58,27 @@ const Dropdown = <T extends string>({
   };
 
   return (
-    <div className="flex item-center">
+    <div className="flex flex-col items-start">
       {!!label && (
         <div
-          className={`mr-2 font-semibold flex items-center justify-center h-full ${
-            isOpen ? "bg-blue-200" : ""
-          }`}
+          className={`mr-2 font-semibold text-main-title flex items-center justify-center h-full`}
         >
           {label}
         </div>
       )}
       <div
-        className={`relative h-8 flex ${!disabled && "cursor-pointer"}`}
+        className={`relative h-10 mt-1 w-full ${!disabled && "cursor-pointer"}`}
         onClick={toggleDropdown}
+        ref={dropdownRef}
       >
         <input
-          className="bg-white border rounded shadow cursor-pointer px-3"
+          className="bg-white border focus:outline-none h-10 rounded-lg shadow cursor-pointer px-3 w-full"
           placeholder={placeholder}
           value={selectedItem as string}
           readOnly={true}
-          ref={dropdownRef}
           disabled={!!disabled}
         />
-        <div className="absolute right-1 flex items-center justify-center h-full">
+        <div className="absolute right-1 top-0 flex items-center justify-center h-full">
           {isOpen ? (
             <CaretUp size={24} color="#b2c6dc" weight="bold" />
           ) : (
@@ -82,7 +93,7 @@ const Dropdown = <T extends string>({
               animate={{ opacity: 1, maxHeight: 200 }}
               exit={{ opacity: 0, maxHeight: 0 }}
               transition={{ duration: 0.3 }}
-              className="absolute z-50 left-0 bg-white border rounded shadow overflow-hidden"
+              className="absolute z-50 left-0 w-full bg-white border rounded shadow overflow-hidden"
               style={{ top: "100%" }}
             >
               {options.length === 0 ? (

@@ -33,7 +33,6 @@ const DivResizeHandle = React.forwardRef<ResizableBox, ResizeHandleProps>(
     };
 
     const handleMouseLeave = (e) => {
-      console.log("leave-----");
       setIsHovered(false);
     };
 
@@ -43,7 +42,6 @@ const DivResizeHandle = React.forwardRef<ResizableBox, ResizeHandleProps>(
     };
 
     const handleMouseUpCallback = () => {
-      console.log("upupupupup-----");
       setIsHoldingHandle(false);
     };
 

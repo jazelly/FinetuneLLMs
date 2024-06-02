@@ -37,7 +37,9 @@ const DetailPanel = ({
         !!jsonError && "bg-red"
       }`}
     >
-      <div className="text-lg font-semibold">Training Hyperparameters</div>
+      <div className="text-lg font-semibold text-main-title">
+        Training Hyperparameters
+      </div>
       <JSONView
         onEdit={handleHyperparametersStringChange}
         src={hyperparameters}

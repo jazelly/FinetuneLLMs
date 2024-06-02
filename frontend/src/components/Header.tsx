@@ -50,9 +50,8 @@ function Header({ showUploadModal }: { showUploadModal: () => void }) {
         >
           <FileArrowUp
             weight={uploadHover ? "fill" : "bold"}
-            size={36}
+            size={24}
             color="#737b85"
-            className="h-5 w-5 "
           />
         </div>
         <a
@@ -70,8 +69,8 @@ function Header({ showUploadModal }: { showUploadModal: () => void }) {
         >
           <GithubLogo
             weight={githubHover ? "fill" : "bold"}
+            size={24}
             color="#737b85"
-            className="h-5 w-5 "
           />
         </a>
       </div>

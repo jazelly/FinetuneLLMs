@@ -35,6 +35,7 @@ export default {
         "header-inactive": "#909dae",
         "header-logo-static": "#737b85",
         divline: "#eef4fa",
+        "main-title-text": "#404b58",
       },
       backgroundImage: {
         "preference-gradient":
