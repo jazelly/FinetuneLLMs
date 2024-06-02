@@ -4,27 +4,25 @@ process.env.NODE_ENV === "development"
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 const path = require("path");
-const { reqBody } = require("./src/utils/http");
-const { systemEndpoints } = require("./src/endpoints/system");
-const { workspaceEndpoints } = require("./src/endpoints/workspaces");
-const { chatEndpoints } = require("./src/endpoints/chat");
-const { embeddedEndpoints } = require("./src/endpoints/embed");
-const { embedManagementEndpoints } = require("./src/endpoints/embedManagement");
-const { getVectorDbClass } = require("./src/utils/helpers");
-const { adminEndpoints } = require("./src/endpoints/admin");
-const { inviteEndpoints } = require("./src/endpoints/invite");
-const { utilEndpoints } = require("./src/endpoints/utils");
-const { developerEndpoints } = require("./src/endpoints/api");
-const { extensionEndpoints } = require("./src/endpoints/extensions");
-const { bootHTTP, bootSSL } = require("./src/utils/boot");
-const {
-  workspaceThreadEndpoints,
-} = require("./src/endpoints/workspaceThreads");
-const { documentEndpoints } = require("./src/endpoints/document");
-const { jobEndpoints } = require("./src/endpoints/job");
-const { agentWebsocket } = require("./src/endpoints/agentWebsocket");
+import cors from "cors";
+import { reqBody } from "./src/utils/http";
+import { systemEndpoints } from "./src/endpoints/system";
+import { workspaceEndpoints } from "./src/endpoints/workspaces";
+import { chatEndpoints } from "./src/endpoints/chat";
+import { embeddedEndpoints } from "./src/endpoints/embed";
+import { embedManagementEndpoints } from "./src/endpoints/embedManagement";
+import { getVectorDbClass } from "./src/utils/helpers";
+import { adminEndpoints } from "./src/endpoints/admin";
+import { inviteEndpoints } from "./src/endpoints/invite";
+import { utilEndpoints } from "./src/endpoints/utils";
+import { developerEndpoints } from "./src/endpoints/api";
+import { extensionEndpoints } from "./src/endpoints/extensions";
+import { bootHTTP, bootSSL } from "./src/utils/boot";
+import { workspaceThreadEndpoints } from "./src/endpoints/workspaceThreads";
+import { documentEndpoints } from "./src/endpoints/document";
+import { jobEndpoints } from "./src/endpoints/job";
+import { agentWebsocket } from "./src/endpoints/agentWebsocket";
 const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";

@@ -10,8 +10,7 @@ import {
   HouseLine,
   Info,
   LinkSimple,
-  UploadSimple,
-  Wrench,
+  FileArrowUp,
 } from "@phosphor-icons/react";
 
 export const MAX_ICONS = 3;
@@ -32,9 +31,30 @@ function Header({ showUploadModal }: { showUploadModal: () => void }) {
   const [uploadHover, setUploadHover] = useState<boolean>(false);
 
   return (
-    <div className="flex justify-between items-center pt-1 px-3 text-2xl h-full">
-      <div className="text-header-inactive font-extrabold">FinetuneLLMs</div>
-      <div id="header-right-logo" className="flex justify-center space-x-4">
+    <div className="flex justify-between items-center pt-1 px-2 text-2xl h-full">
+      <div className="header-title">FinetuneLLMs</div>
+      <div
+        id="header-right-logo"
+        className="flex justify-center space-x-6 mr-2"
+      >
+        <div
+          onMouseEnter={() => {
+            setUploadHover(true);
+          }}
+          onMouseLeave={() => {
+            setUploadHover(false);
+          }}
+          className="transition-all duration-300 p-2 rounded-xl bg-white shadow-sm border border-transparent cursor-pointer"
+          aria-label="Upload your datasets"
+          onClick={showUploadModal}
+        >
+          <FileArrowUp
+            weight={uploadHover ? "fill" : "bold"}
+            size={36}
+            color="#737b85"
+            className="h-5 w-5 "
+          />
+        </div>
         <a
           href={paths.github()}
           target="_blank"
@@ -45,7 +65,7 @@ function Header({ showUploadModal }: { showUploadModal: () => void }) {
           onMouseLeave={() => {
             setGithubHover(false);
           }}
-          className="transition-all duration-300 p-2 rounded-xl bg-white shadow-sm border border-transparent border"
+          className="transition-all duration-300 p-2 rounded-xl bg-white shadow-sm border border-transparent"
           aria-label="Find me on Github"
         >
           <GithubLogo
@@ -54,23 +74,6 @@ function Header({ showUploadModal }: { showUploadModal: () => void }) {
             className="h-5 w-5 "
           />
         </a>
-        <div
-          onMouseEnter={() => {
-            setUploadHover(true);
-          }}
-          onMouseLeave={() => {
-            setUploadHover(false);
-          }}
-          className="transition-all duration-300 p-2 rounded-xl bg-white shadow-sm border border-transparent border cursor-pointer"
-          aria-label="Upload your datasets"
-          onClick={showUploadModal}
-        >
-          <UploadSimple
-            weight={uploadHover ? "bold" : "fill"}
-            color="#737b85"
-            className="h-5 w-5 "
-          />
-        </div>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
 
-const DATABASE_PATH = process.env.DB_URL || "../../storage/finetunellms.db";
+const DATABASE_PATH = process.env.DB_URL || "../storage/finetunellms.db";
 const BACKUP_PATH = path.join(
   path.dirname(DATABASE_PATH),
   "finetunellms_backup.db"

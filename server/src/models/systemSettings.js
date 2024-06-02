@@ -3,7 +3,7 @@ process.env.NODE_ENV === "development"
   : require("dotenv").config();
 
 const { isValidUrl } = require("../utils/http");
-const prisma = require("../utils/prisma");
+const prisma = require("../utils/prisma").default;
 
 function isNullOrNaN(value) {
   if (value === null) return true;

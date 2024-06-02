@@ -12,7 +12,7 @@ generator client {
 // }
 datasource db {
   provider = "sqlite"
-  url      = "file:../storage/finetunellms.db"
+  url      = "file:../src/storage/finetunellms.db"
 }
 
 model api_keys {

@@ -11,10 +11,3 @@ export interface IDataset {
   createdAt: Date;
   lastUpdatedAt: Date;
 }
-
-export interface AllJobOptions {
-  baseModels: Array<string>;
-  trainingMethods: Array<string>;
-  datasets: Array<Record<string, any>>;
-  hyperparameters: Record<string, string | number | boolean>;
-}

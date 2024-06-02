@@ -28,6 +28,7 @@
     "react-device-detect": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
+    "react-json-view": "^1.21.3",
     "react-loading-skeleton": "^3.1.0",
     "react-resizable": "^3.0.5",
     "react-router-dom": "^6.3.0",
@@ -39,7 +40,8 @@
     "recharts-to-png": "^2.3.1",
     "text-case": "^1.0.9",
     "truncate": "^3.0.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",

@@ -1,5 +1,5 @@
 const { v4 } = require("uuid");
-const prisma = require("../utils/prisma");
+const prisma = require("../utils/prisma").default;
 const CMD_REGEX = new RegExp(/[^a-zA-Z0-9_-]/g);
 
 const SlashCommandPresets = {

@@ -1,4 +1,4 @@
-const prisma = require("../utils/prisma");
+const prisma = require("../utils/prisma").default;
 const slugify = require("slugify");
 const { Document } = require("./documents");
 const { WorkspaceUser } = require("./workspaceUsers");

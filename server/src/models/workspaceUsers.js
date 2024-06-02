@@ -1,4 +1,4 @@
-const prisma = require("../utils/prisma");
+const prisma = require("../utils/prisma").default;
 
 const WorkspaceUser = {
   createMany: async function (userId, workspaceIds = []) {

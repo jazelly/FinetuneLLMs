@@ -1,4 +1,4 @@
-const prisma = require("../utils/prisma");
+const prisma = require("../utils/prisma").default;
 
 const WorkspaceChats = {
   new: async function ({

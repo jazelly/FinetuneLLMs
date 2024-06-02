@@ -42,13 +42,28 @@ a {
   padding: 2px 2px;
 }
 
-.MainContainer {
-
-}
-
 .Header {
   height: 4rem;
   z-index: 20;
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #7649d4;
+  animation: slideIn 1s ease-out forwards;
+}
+
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%); /* Slide in from top */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* Slide to its final position */
+  }
 }
 
 .MainBody {

@@ -28,36 +28,36 @@ const AdminWorkspaces = lazy(() => import("@/pages/Admin/Workspaces"));
 const AdminSystem = lazy(() => import("@/pages/Admin/System"));
 const AdminLogs = lazy(() => import("@/pages/Admin/Logging"));
 const GeneralChats = lazy(() => import("@/pages/GeneralSettings/Chats"));
-const GeneralAppearance = lazy(() =>
-  import("@/pages/GeneralSettings/Appearance")
+const GeneralAppearance = lazy(
+  () => import("@/pages/GeneralSettings/Appearance")
 );
 const GeneralApiKeys = lazy(() => import("@/pages/GeneralSettings/ApiKeys"));
-const GeneralLLMPreference = lazy(() =>
-  import("@/pages/GeneralSettings/LLMPreference")
+const GeneralLLMPreference = lazy(
+  () => import("@/pages/GeneralSettings/LLMPreference")
 );
-const GeneralTranscriptionPreference = lazy(() =>
-  import("@/pages/GeneralSettings/TranscriptionPreference")
+const GeneralTranscriptionPreference = lazy(
+  () => import("@/pages/GeneralSettings/TranscriptionPreference")
 );
-const GeneralAudioPreference = lazy(() =>
-  import("@/pages/GeneralSettings/AudioPreference")
+const GeneralAudioPreference = lazy(
+  () => import("@/pages/GeneralSettings/AudioPreference")
 );
-const GeneralEmbeddingPreference = lazy(() =>
-  import("@/pages/GeneralSettings/EmbeddingPreference")
+const GeneralEmbeddingPreference = lazy(
+  () => import("@/pages/GeneralSettings/EmbeddingPreference")
 );
-const EmbeddingTextSplitterPreference = lazy(() =>
-  import("@/pages/GeneralSettings/EmbeddingTextSplitterPreference")
+const EmbeddingTextSplitterPreference = lazy(
+  () => import("@/pages/GeneralSettings/EmbeddingTextSplitterPreference")
 );
-const GeneralVectorDatabase = lazy(() =>
-  import("@/pages/GeneralSettings/VectorDatabase")
+const GeneralVectorDatabase = lazy(
+  () => import("@/pages/GeneralSettings/VectorDatabase")
 );
 const GeneralSecurity = lazy(() => import("@/pages/GeneralSettings/Security"));
 const WorkspaceSettings = lazy(() => import("@/pages/WorkspaceSettings"));
-const EmbedConfigSetup = lazy(() =>
-  import("@/pages/GeneralSettings/EmbedConfigs")
+const EmbedConfigSetup = lazy(
+  () => import("@/pages/GeneralSettings/EmbedConfigs")
 );
 const EmbedChats = lazy(() => import("@/pages/GeneralSettings/EmbedChats"));
-const PrivacyAndData = lazy(() =>
-  import("@/pages/GeneralSettings/PrivacyAndData")
+const PrivacyAndData = lazy(
+  () => import("@/pages/GeneralSettings/PrivacyAndData")
 );
 
 export default function App() {
@@ -95,6 +95,7 @@ export default function App() {
                 <div className={`MainBody flex-1 mr-4 mb-8 rounded-xl shadow`}>
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
+                    <Route path="/job/:jobId" element={<Dashboard />} />
                     <Route
                       path="/logs"
                       element={<PrivateRoute Component={DefaultChat} />}

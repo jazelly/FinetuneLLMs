@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require("uuid");
 const { getVectorDbClass } = require("../utils/helpers");
-const prisma = require("../utils/prisma");
+const prisma = require("../utils/prisma").default;
 const { Telemetry } = require("./telemetry");
 const { EventLogs } = require("./eventLogs");
 

@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
 
 // npx prisma introspect
 // npx prisma generate
@@ -10,4 +10,4 @@ const prisma = new PrismaClient({
   log: logLevels,
 });
 
-module.exports = prisma;
+export default prisma;

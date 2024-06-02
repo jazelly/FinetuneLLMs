@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import FinetunePanel from "@/components/FinetunePanel.component";
 import DivResizeHandle from "@/components/DivResizeHandle.component";
-import { ArrowLineLeft, ArrowLineRight } from "@phosphor-icons/react";
 import { ResizableBox } from "react-resizable";
 import type { ResizeHandle } from "react-resizable";
 import "react-resizable/css/styles.css";
 import DashboardModel from "../models/dashboard";
 import { AllJobOptions } from "@/models/types/dashboard";
+import { useParams } from "react-router-dom";
+import DetailPanel from "@/components/DetailPanel.component";
 
 const Dashboard = () => {
+  const { jobId } = useParams();
+
   const [jobOptions, setJobOptions] = useState<AllJobOptions | undefined>(
     undefined
   );
@@ -16,9 +19,6 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const abortController = new AbortController(); // Create an AbortController instance
-    const signal = abortController.signal;
-
     const fetchJobOptions = async () => {
       try {
         const resp = await DashboardModel.getJobOptions();
@@ -27,6 +27,7 @@ const Dashboard = () => {
             baseModels: [],
             trainingMethods: [],
             datasets: [],
+            hyperparameters: {},
           });
         } else {
           setJobOptions(resp.data);
@@ -41,11 +42,6 @@ const Dashboard = () => {
     };
 
     fetchJobOptions();
-
-    return () => {
-      // Perform cleanup here (e.g., canceling pending requests, removing event listeners)
-      abortController.abort();
-    };
   }, []);
 
   const initialLeftWidth = ((window.innerWidth - 42 - 16) * 3) / 5;
@@ -100,6 +96,15 @@ const Dashboard = () => {
     setIsBottomCollapsed(!isBottomCollapsed);
   };
 
+  const handleHyperparametersChange = (
+    hyperparameters: AllJobOptions["hyperparameters"]
+  ) => {
+    setJobOptions({
+      ...jobOptions!,
+      hyperparameters,
+    });
+  };
+
   return (
     <div
       ref={containerRef}
@@ -135,15 +140,17 @@ const Dashboard = () => {
             minConstraints={[leftWidth, minHeightTop]} // width and height
             maxConstraints={[leftWidth, maxHeightTop]}
           >
-            <FinetunePanel />
+            <FinetunePanel jobOptions={jobOptions} />
           </ResizableBox>
           <div className="flex-1 bg-white"> Bottom </div>
         </div>
       </ResizableBox>
       {!isRightCollapsed && (
-        <div className="flex-1 bg-white p-10 border-l-2">
-          <h2>Right Div</h2>
-          <p>This div will expand to fill the remaining space.</p>
+        <div className="flex-1 bg-white">
+          <DetailPanel
+            hyperparameters={jobOptions?.hyperparameters ?? {}}
+            handleHyperparametersChange={handleHyperparametersChange}
+          />
         </div>
       )}
     </div>

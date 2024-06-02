@@ -1,10 +1,10 @@
-const {
+import {
   flexUserRoleValid,
   ROLES,
-} = require("../utils/middleware/multiUserProtected");
-const { validatedRequest } = require("../utils/middleware/validatedRequest");
+} from "../utils/middleware/multiUserProtected";
+import { validatedRequest } from "../utils/middleware/validatedRequest";
 
-const { Datasets } = require("../models/datasets");
+import { Datasets } from "../models/datasets";
 
 function jobEndpoints(app) {
   if (!app) return;
@@ -14,10 +14,10 @@ function jobEndpoints(app) {
     [validatedRequest, flexUserRoleValid([ROLES.all])],
     async (req, res) => {
       const result = {
-        datasets: undefined,
-        trainingMethods: undefined,
-        baseModels: undefined,
-        hyperparameters: undefined,
+        datasets: [] as any,
+        trainingMethods: [] as any,
+        baseModels: [] as any,
+        hyperparameters: [] as any,
       };
 
       const datasetsPromise = Datasets.readAll();
