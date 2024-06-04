@@ -2,21 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { CaretDown, CaretUp } from "@phosphor-icons/react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export interface Dropdown<T extends string> {
-  options: Array<T>;
+export interface Dropdown {
+  options: readonly string[];
   placeholder: string;
   label?: string;
   disabled?: boolean;
 }
 
-const Dropdown = <T extends string>({
-  options,
-  placeholder,
-  label,
-  disabled,
-}: Dropdown<T>) => {
+const Dropdown = ({ options, placeholder, label, disabled }: Dropdown) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<T | undefined>(undefined);
+  const [selectedItem, setSelectedItem] = useState<string>("");
 
   const dropdownRef = useRef<HTMLInputElement>(null);
 
@@ -52,7 +47,7 @@ const Dropdown = <T extends string>({
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (option: T) => {
+  const handleOptionClick = (option: string) => {
     setSelectedItem(option);
     setIsOpen(false);
   };
@@ -74,7 +69,7 @@ const Dropdown = <T extends string>({
         <input
           className="bg-white border focus:outline-none h-10 rounded-lg shadow cursor-pointer px-3 w-full"
           placeholder={placeholder}
-          value={selectedItem as string}
+          value={selectedItem}
           readOnly={true}
           disabled={!!disabled}
         />

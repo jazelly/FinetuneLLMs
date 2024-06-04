@@ -1,4 +1,5 @@
-import prisma from "../utils/prisma";
+import prisma from "../utils/prisma/index";
+import type { Prisma } from "@prisma/client";
 import type { IDataset } from "./schema/datasets.type";
 
 export const Datasets = {
@@ -12,12 +13,8 @@ export const Datasets = {
     split,
     numRows,
   }) => {
-    const whereParams = [{ name, source, config, split }];
-
     await prisma.datasets.deleteMany({
-      where: {
-        whereParams,
-      },
+      where: { name, source, config, split },
     });
     console.log("found duplicated, delete first");
 
@@ -42,7 +39,7 @@ export const Datasets = {
   },
 
   readBy: async (params: Partial<IDataset>) => {
-    const whereParams: Array<Partial<IDataset>> = [];
+    const whereParams: Prisma.datasetsWhereInput[] = [];
     for (const [key, value] of Object.entries(params)) {
       whereParams.push({ [key]: value });
     }

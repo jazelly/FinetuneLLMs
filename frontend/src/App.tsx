@@ -21,7 +21,7 @@ import UploadDatasets, {
 const DefaultChat = lazy(() => import("@/pages/DefaultChat"));
 const InvitePage = lazy(() => import("@/pages/Invite"));
 // const WorkspaceChat = lazy(() => import("@/pages/WorkspaceChat"));
-const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const Dashboard = lazy(() => import("@/pages/Dashboard.page"));
 const AdminUsers = lazy(() => import("@/pages/Admin/Users"));
 const AdminInvites = lazy(() => import("@/pages/Admin/Invitations"));
 const AdminWorkspaces = lazy(() => import("@/pages/Admin/Workspaces"));

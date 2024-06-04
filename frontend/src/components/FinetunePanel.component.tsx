@@ -33,9 +33,7 @@ const FinetunePanel = ({ jobOptions }: FinetunePanelProps) => {
           onClick={handleSubmitJob}
           style={{ backgroundColor: "#0aa8ff" }}
         >
-          <span className={`text-white ${submitHovered && "font-bold"}`}>
-            Submit
-          </span>
+          <span className={`text-white`}>Submit</span>
           <CaretCircleDoubleRight
             weight={submitHovered ? "fill" : "bold"}
             size={24}
@@ -43,19 +41,19 @@ const FinetunePanel = ({ jobOptions }: FinetunePanelProps) => {
           />
         </div>
       </div>
-      <Dropdown<string>
+      <Dropdown
         placeholder="Base model"
         options={jobOptions?.baseModels ?? []}
         label="Base model"
         disabled={!jobOptions}
       />
-      <Dropdown<string>
+      <Dropdown
         placeholder="Training method"
         options={jobOptions?.trainingMethods ?? []}
         label="Training method"
         disabled={!jobOptions}
       />
-      <Dropdown<IDataset["name"]>
+      <Dropdown
         placeholder="Dataset"
         options={jobOptions?.datasets.map((d) => d.name) ?? []}
         label="Dataset"

@@ -16,20 +16,9 @@ const DetailPanel = ({
   // We cannot do strict typing for event or this handler
   // See issue https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11508
   const handleHyperparametersStringChange = (event) => {
-    let newHyper = hyperparameters;
-    try {
-      console.log("event.target.innerText", event.target.innerText);
-      newHyper = JSON.parse(event.target.innerText);
-
-      if (!!jsonError) setJsonError("");
-      handleHyperparametersChange(newHyper);
-    } catch (error: any) {
-      if (error instanceof SyntaxError) {
-        setJsonError("Invalid json format");
-      } else {
-        console.error("An error occurred", error);
-      }
-    }
+    console.log("event", event);
+    const newHyper = event.updated_src;
+    handleHyperparametersChange(newHyper);
   };
   return (
     <div
@@ -44,6 +33,7 @@ const DetailPanel = ({
         onEdit={handleHyperparametersStringChange}
         src={hyperparameters}
         name="hyperparameters"
+        enableClipboard={true}
       />
     </div>
   );
