@@ -3,8 +3,10 @@ import {
   ROLES,
 } from "../utils/middleware/multiUserProtected";
 import { validatedRequest } from "../utils/middleware/validatedRequest";
-
+import { reqBody } from "../utils/http";
 import { Datasets } from "../models/datasets";
+import { Jobs } from "../models/jobs";
+import { v4 } from "uuid";
 
 function jobEndpoints(app) {
   if (!app) return;
@@ -56,6 +58,36 @@ function jobEndpoints(app) {
       result.trainingMethods = trainingMethods;
       result.baseModels = baseModels;
       result.hyperparameters = hyperparameters;
+
+      res.json(result);
+    }
+  );
+
+  /**
+   * Create a job
+   */
+  app.post(
+    "/job",
+    [validatedRequest, flexUserRoleValid([ROLES.all])],
+    async (req, res) => {
+      console.log(req);
+
+      const { datasetId, trainingMethod, baseModel, hyperparameters } =
+        reqBody(req);
+
+      // forward to trainer
+      // wait for trainer handshaking with client
+      // persist the job to Database
+      const metaString = JSON.stringify(hyperparameters);
+
+      const name = `${trainingMethod}-${baseModel}-${datasetId}_${v4()}`;
+      const result = await Jobs.create({
+        name,
+        datasetId,
+        trainingMethod,
+        baseModel,
+        hyperparameters: metaString,
+      });
 
       res.json(result);
     }

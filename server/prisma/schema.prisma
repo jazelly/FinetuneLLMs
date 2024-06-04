@@ -295,7 +295,7 @@ model jobs {
   name            String
   userId          Int?
   baseModel       String
-  datasetId       String
+  datasetId       Int
   trainingMethod  String
   status          String   @default("running")
   hyperparameters String // sqlite doesn't support json so we stringify before persisting

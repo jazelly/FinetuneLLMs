@@ -12,6 +12,13 @@ export interface IDataset {
   lastUpdatedAt: Date;
 }
 
+export interface JobCreate {
+  baseModel: string;
+  trainingMethod: string;
+  datasetId: number;
+  hyperparameters: Record<string, string | number | boolean>;
+}
+
 export interface AllJobOptions {
   baseModels: Array<string>;
   trainingMethods: Array<string>;

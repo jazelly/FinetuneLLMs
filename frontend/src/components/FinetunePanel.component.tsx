@@ -2,16 +2,60 @@ import React, { useState } from "react";
 import Dropdown from "./Dropdown.component";
 import { AllJobOptions, IDataset } from "@/models/types/dashboard";
 import { CaretCircleDoubleRight } from "@phosphor-icons/react";
+import Job from "@/models/job.model";
+import { useNavigate } from "react-router-dom";
 
 export interface FinetunePanelProps {
   jobOptions: AllJobOptions | undefined;
+  runningJobId?: string; // Haven't figured out what to do with this
 }
 
-const FinetunePanel = ({ jobOptions }: FinetunePanelProps) => {
+const FinetunePanel = ({ jobOptions, runningJobId }: FinetunePanelProps) => {
   const [submitHovered, setSubmitHovered] = useState(false);
+  const [submitJobError, setSubmitJobError] = useState("");
 
-  const handleSubmitJob = () => {
-    // TODO: submit job to DB and trigger training event
+  const [baseModel, setBaseModel] = useState("");
+  const [trainingMethod, setTrainingMethod] = useState("");
+  const [datasetJson, setDatasetJson] = useState<Record<string, any>>({});
+
+  const navigate = useNavigate();
+
+  const clearSubmitJobError = () => {
+    if (submitJobError !== "") setSubmitJobError("");
+  };
+
+  const handleSubmitJob = async () => {
+    if (!jobOptions) return;
+
+    // validate selections
+    if (!baseModel || !trainingMethod || !datasetJson.name || !datasetJson.id) {
+      setSubmitJobError(
+        "Must select a combination of mode, method and dataset"
+      );
+      return;
+    }
+
+    clearSubmitJobError();
+
+    console.log("Submitting", {
+      baseModel,
+      trainingMethod,
+      datasetId: datasetJson.id,
+      hyperparameters: jobOptions.hyperparameters,
+    });
+    const resp = await Job.submitJob({
+      baseModel,
+      trainingMethod,
+      datasetId: datasetJson.id,
+      hyperparameters: jobOptions.hyperparameters,
+    });
+
+    if (!resp.success || (resp.success === true && !resp.data.id))
+      setSubmitJobError("An error occurred when submitting the job");
+    else {
+      navigate(`/job/${resp.data.id}`, { replace: true });
+    }
+
     return;
   };
 
@@ -41,21 +85,33 @@ const FinetunePanel = ({ jobOptions }: FinetunePanelProps) => {
           />
         </div>
       </div>
+      {submitJobError !== "" && (
+        <div className="text-red-500 text-sm italic">{submitJobError}</div>
+      )}
       <Dropdown
         placeholder="Base model"
         options={jobOptions?.baseModels ?? []}
+        onSelect={setBaseModel}
         label="Base model"
         disabled={!jobOptions}
       />
       <Dropdown
         placeholder="Training method"
         options={jobOptions?.trainingMethods ?? []}
+        onSelect={setTrainingMethod}
         label="Training method"
         disabled={!jobOptions}
       />
       <Dropdown
         placeholder="Dataset"
-        options={jobOptions?.datasets.map((d) => d.name) ?? []}
+        options={jobOptions?.datasets?.map((d) => d.name) ?? []}
+        onSelect={(selectedDatasetName) => {
+          const theDataset = jobOptions?.datasets?.find(
+            (dataset) => dataset.name === selectedDatasetName
+          );
+          if (theDataset) setDatasetJson(theDataset);
+          else if (Object.keys(datasetJson).length !== 0) setDatasetJson({});
+        }}
         label="Dataset"
         disabled={!jobOptions}
       />

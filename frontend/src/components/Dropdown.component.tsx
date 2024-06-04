@@ -7,9 +7,16 @@ export interface Dropdown {
   placeholder: string;
   label?: string;
   disabled?: boolean;
+  onSelect: (selected: string) => void;
 }
 
-const Dropdown = ({ options, placeholder, label, disabled }: Dropdown) => {
+const Dropdown = ({
+  options,
+  placeholder,
+  label,
+  disabled,
+  onSelect,
+}: Dropdown) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<string>("");
 
@@ -48,6 +55,7 @@ const Dropdown = ({ options, placeholder, label, disabled }: Dropdown) => {
   };
 
   const handleOptionClick = (option: string) => {
+    onSelect(option);
     setSelectedItem(option);
     setIsOpen(false);
   };
