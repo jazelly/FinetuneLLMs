@@ -11,6 +11,7 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   const isNewingJob = useMatch("/");
+  const isViewingJob = useMatch("/job/:jobId");
   const isViewingLog = useMatch("/logs");
   const isViewingSettings = useMatch("/settings/*");
 
@@ -55,7 +56,7 @@ export default function Sidebar() {
               className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 bg-main rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
             >
               <Circuitry
-                color={isNewingJob ? "#5f27cd" : "#748497"}
+                color={isNewingJob || isViewingJob ? "#5f27cd" : "#748497"}
                 size={28}
                 weight="fill"
               />
