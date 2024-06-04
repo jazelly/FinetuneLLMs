@@ -2,6 +2,8 @@
 
 Finetune an LLM, within a few clicks!
 
+### [Projects](https://github.com/users/jazelly/projects/1/views/1)
+
 ## Supported finetuning techniques
 
 | Model \ Method | SFT | DPO | ORPO | KTO | PRO |
