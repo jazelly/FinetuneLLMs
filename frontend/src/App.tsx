@@ -8,7 +8,6 @@ import PrivateRoute, {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "@/pages/Login";
-import OnboardingFlow from "@/pages/OnboardingFlow";
 import { isMobile } from "react-device-detect";
 import { PfpProvider } from "./PfpContext";
 import { LogoProvider } from "./LogoContext";
@@ -195,12 +194,6 @@ export default function App() {
                     <Route
                       path="/settings/workspaces"
                       element={<ManagerRoute Component={AdminWorkspaces} />}
-                    />
-                    {/* Onboarding Flow */}
-                    <Route path="/onboarding" element={<OnboardingFlow />} />
-                    <Route
-                      path="/onboarding/:step"
-                      element={<OnboardingFlow />}
                     />
                   </Routes>
                 </div>
