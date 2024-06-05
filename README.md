@@ -2,9 +2,13 @@
 
 Finetune an LLM, within a few clicks!
 
-## 🔥What's going on🔥
+## 🔥Goal & Roadmap🔥
 
-### Check out the [Roadmap](https://github.com/users/jazelly/projects/1/views/1)
+The main objective of this project is to lower the barrier to training large language models, especially for startup companies that have hardware on hand. With this project, it should be easy for a company to start experimenting with LLM training within a basic setup on servers with GPU/CPU resources.
+
+In a way, it helps provide an opportunity for everyone who has hardware available and wants to utilize it in the AI field.
+
+### [Roadmap](https://github.com/users/jazelly/projects/1/views/1)
 
 ## Supported finetuning techniques
 
