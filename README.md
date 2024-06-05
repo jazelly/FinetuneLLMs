@@ -1,8 +1,10 @@
-# FinetuneLLMs (Work in Progress, Actively!)
+# FinetuneLLMs (Work in Progress, Actively! 🔥)
 
 Finetune an LLM, within a few clicks!
 
-### [Projects](https://github.com/users/jazelly/projects/1/views/1)
+## 🔥What's going on🔥
+
+### Check out the [Roadmap](https://github.com/users/jazelly/projects/1/views/1)
 
 ## Supported finetuning techniques
 
@@ -55,13 +57,3 @@ cd trainer
 pip install -r requirements.txt
 python manage runserver
 ```
-
-## TODO
-
-- [x] Support training at GGUF level
-- [x] Support `llama.cpp`
-- [ ] Expose a finetune script as API and GUI for CUDA (WIP)
-- [ ] Add more finetune scripts for different OS, e.g. Apple Silicon with mlx
-- [ ] Make finetune script configurable
-- [ ] Provide a playground to instantly test the trained model
-- [ ] Containerize backend and frontend
