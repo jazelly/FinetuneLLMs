@@ -52,4 +52,4 @@ const Jobs = {
   },
 };
 
-module.exports = { Jobs };
+export { Jobs };

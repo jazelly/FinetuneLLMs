@@ -9,8 +9,14 @@ import { AllJobOptions } from "@/models/types/dashboard";
 import { useParams } from "react-router-dom";
 import DetailPanel from "@/components/DetailPanel.component";
 
-const Dashboard = () => {
+const Dashboard = ({ trainerSocket }) => {
   const { jobId } = useParams();
+
+  const sendMessageToTrainer = (msg: string) => {
+    if (trainerSocket && msg) {
+      trainerSocket.send(msg);
+    }
+  };
 
   const [jobOptions, setJobOptions] = useState<AllJobOptions | undefined>(
     undefined
@@ -33,11 +39,7 @@ const Dashboard = () => {
           setJobOptions(resp.data);
         }
       } catch (error: any) {
-        if (error.name === "AbortError") {
-          console.log("request aborted");
-        } else {
-          setError(error);
-        }
+        setError(error);
       }
     };
 
@@ -140,7 +142,10 @@ const Dashboard = () => {
             minConstraints={[leftWidth, minHeightTop]} // width and height
             maxConstraints={[leftWidth, maxHeightTop]}
           >
-            <FinetunePanel jobOptions={jobOptions} />
+            <FinetunePanel
+              jobOptions={jobOptions}
+              sendMessageToTrainer={sendMessageToTrainer}
+            />
           </ResizableBox>
           <div className="flex-1 bg-white"> Bottom </div>
         </div>

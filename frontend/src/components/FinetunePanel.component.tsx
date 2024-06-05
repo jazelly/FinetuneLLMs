@@ -7,10 +7,15 @@ import { useNavigate } from "react-router-dom";
 
 export interface FinetunePanelProps {
   jobOptions: AllJobOptions | undefined;
+  sendMessageToTrainer: (msg: string) => void;
   runningJobId?: string; // Haven't figured out what to do with this
 }
 
-const FinetunePanel = ({ jobOptions, runningJobId }: FinetunePanelProps) => {
+const FinetunePanel = ({
+  jobOptions,
+  sendMessageToTrainer,
+  runningJobId,
+}: FinetunePanelProps) => {
   const [submitHovered, setSubmitHovered] = useState(false);
   const [submitJobError, setSubmitJobError] = useState("");
 
@@ -53,6 +58,8 @@ const FinetunePanel = ({ jobOptions, runningJobId }: FinetunePanelProps) => {
     if (!resp.success || (resp.success === true && !resp.data.id))
       setSubmitJobError("An error occurred when submitting the job");
     else {
+      console.log("send to trainer");
+      sendMessageToTrainer("submitted a job");
       navigate(`/job/${resp.data.id}`, { replace: true });
     }
 

@@ -6,8 +6,8 @@ import System from "@/models/system";
 // Used only for Multi-user mode only as we permission specific pages based on auth role.
 // When in single user mode we just bypass any authchecks.
 function useIsAuthenticated() {
-  const [isAuthd, setIsAuthed] = useState(false);
-    useState(false);
+  const [isAuthd, setIsAuthed] = useState<boolean | null>(null);
+  useState(false);
   const [multiUserMode, setMultiUserMode] = useState(false);
 
   useEffect(() => {

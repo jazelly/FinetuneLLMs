@@ -1,10 +1,9 @@
-import React, { lazy, Suspense, useRef } from "react";
+import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { ContextWrapper } from "@/AuthContext";
-import PrivateRoute, {
-  AdminRoute,
-  ManagerRoute,
-} from "@/components/PrivateRoute";
+import PrivateRoute, { AdminRoute } from "@/components/PrivateRoute";
+
+import { ManagerRoute } from "@/components/ManagerRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "@/pages/Login";
@@ -19,7 +18,7 @@ import UploadDatasets, {
 
 const DefaultChat = lazy(() => import("@/pages/DefaultChat"));
 const InvitePage = lazy(() => import("@/pages/Invite"));
-// const WorkspaceChat = lazy(() => import("@/pages/WorkspaceChat"));
+// const WorkspaceChat = lazy(() => import("@/pages/WorkspaceChat")); // TODO: integarte to testing field
 const Dashboard = lazy(() => import("@/pages/Dashboard.page"));
 const AdminUsers = lazy(() => import("@/pages/Admin/Users"));
 const AdminInvites = lazy(() => import("@/pages/Admin/Invitations"));
@@ -50,7 +49,7 @@ const GeneralVectorDatabase = lazy(
   () => import("@/pages/GeneralSettings/VectorDatabase")
 );
 const GeneralSecurity = lazy(() => import("@/pages/GeneralSettings/Security"));
-const WorkspaceSettings = lazy(() => import("@/pages/WorkspaceSettings"));
+
 const EmbedConfigSetup = lazy(
   () => import("@/pages/GeneralSettings/EmbedConfigs")
 );
@@ -66,6 +65,31 @@ export default function App() {
     showModal: showUploadModal,
     hideModal: hideUploadModal,
   } = useUploadDatasetsModal();
+
+  const [trainerSocket, setTrainerSocket] = useState<WebSocket | null>(null);
+  // establish websocket with trainer
+  useEffect(() => {
+    const socket = new WebSocket("ws://localhost:8000/training/job/");
+
+    socket.onopen = () => {
+      console.log("WebSocket connection established");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("Received message: ", data.message);
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
+
+    setTrainerSocket(socket);
+
+    return () => {
+      socket.close();
+    };
+  }, []);
 
   return (
     <Suspense fallback={<div />}>
@@ -93,8 +117,19 @@ export default function App() {
                 )}
                 <div className={`MainBody flex-1 mr-4 mb-8 rounded-xl shadow`}>
                   <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/job/:jobId" element={<Dashboard />} />
+                    <Route
+                      path="/"
+                      element={<PrivateRoute Component={Dashboard} />}
+                    />
+                    <Route
+                      path="/job/:jobId"
+                      element={
+                        <PrivateRoute
+                          trainerSocket={trainerSocket}
+                          Component={Dashboard}
+                        />
+                      }
+                    />
                     <Route
                       path="/logs"
                       element={<PrivateRoute Component={DefaultChat} />}
