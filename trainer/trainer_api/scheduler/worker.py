@@ -1,4 +1,3 @@
-
 from collections import defaultdict
 from datetime import datetime
 import os
@@ -9,41 +8,47 @@ import time
 from typing import Dict, List
 import uuid
 
-from trainer_router.settings import BASE_DIR
+from trainer.settings import BASE_DIR
 from trainer_api.consts import MAX_IDLE_TIME, Methods, Models, WorkerStates
 from trainer_api.scheduler.task import Task
 from .queue import MQueue
 from queue import Queue
 from multiprocessing import Manager
 
+
 def singleton(cls):
     instances = {}
+
     def get_instance(*args, **kwargs):
         if cls not in instances:
             instances[cls] = cls(*args, **kwargs)
         return instances[cls]
+
     return get_instance
 
 
 @singleton
-class Worker():
+class Worker:
     """
     Worker - Singleton Class of the Worker Manager
     A little bit thread pool implementation for our needs
     More refers to ./README.md
     """
+
     def __init__(self, **kwargs):
-        #TODO: USE PriorityQueue
+        # TODO: USE PriorityQueue
         self.task_queue = MQueue[Task]()
         self.task_queue_lock = threading.Lock()
-        
-        #TODO: start a scheduler that check idle time of all threads and shutdown any that exceeds
-        self.max_idle_time = ~~kwargs["max_idle_time"] if "max_idle_time" in kwargs else MAX_IDLE_TIME
+
+        # TODO: start a scheduler that check idle time of all threads and shutdown any that exceeds
+        self.max_idle_time = (
+            ~~kwargs["max_idle_time"] if "max_idle_time" in kwargs else MAX_IDLE_TIME
+        )
         self.max_thread = ~~kwargs["max_thread"] if "max_thread" in kwargs else 1
 
         manager = Manager()
         self.thread_map: Dict[int, WorkerThread] = {}
-    
+
         # a representation of idle thread queue, a flag ttaso tell if we should spawn new thread
         self._idle_semaphore = threading.Semaphore(0)
 
@@ -58,7 +63,6 @@ class Worker():
         t = self.thread_map.pop(worker_id)
         self._idle_semaphore.release()
         self.urge_worker()
-        
 
     def submit(self, task_instance):
         """
@@ -70,7 +74,7 @@ class Worker():
         self.task_queue.add(task_instance)
         self.urge_worker()
         return 1
-    
+
     def urge_worker(self):
         """
         Urge a worker to do the job and make sure starting doing the job
@@ -89,9 +93,9 @@ class Worker():
             t.start()
             self.thread_map[t.id] = t
 
-
     def pop_task(self) -> Task | None:
         return self.task_queue.pop()
+
 
 class WorkerThread(threading.Thread):
     """
@@ -99,15 +103,15 @@ class WorkerThread(threading.Thread):
     It has states for itself, but they should be handled by Worker, the manager
     """
 
-    #TODO: add a flag that can control the shutdown of a thread from external
-    #TODO: weak ref the instance
+    # TODO: add a flag that can control the shutdown of a thread from external
+    # TODO: weak ref the instance
     def __init__(self, worker_instance: Worker, log_path=sys.stdout):
         super().__init__()
         self.worker_instance = worker_instance
         self.state = WorkerStates.IDLE
         self.id = uuid.uuid4()
         self.log_path = log_path
-    
+
     def notify_job_finished(self):
         self.worker_instance.job_finished(self.id)
 
@@ -117,21 +121,24 @@ class WorkerThread(threading.Thread):
             print("[Worker] Nothing in queue, finished")
             return
 
-        with open(self.log_path, 'w+') as log:
+        with open(self.log_path, "w+") as log:
             try:
                 while True:
                     task = self.worker_instance.pop_task()
-        
+
                     if task is None:
                         print(f"[Worker] Nothing to pick | state: {self.state}")
-                        log.write(f"[Worker] Worker thread is continuing with state {self.state}.\n")
+                        log.write(
+                            f"[Worker] Worker thread is continuing with state {self.state}.\n"
+                        )
 
                         time.sleep(1)
 
-
                     elif self.state == WorkerStates.BUSY:
                         print(f"[Worker] Worker cannot pick up job atm. {self.state}.")
-                        log.write(f"[Worker] Worker cannot pick up job atm. {self.state}.\n")
+                        log.write(
+                            f"[Worker] Worker cannot pick up job atm. {self.state}.\n"
+                        )
 
                         time.sleep(1)
 
@@ -159,7 +166,9 @@ class WorkerThread(threading.Thread):
                 if task.retried < task.max_retry:
                     task.retried += 1
                     # put back to the queue
-                    log.write(f"[Worker] put a task back to the queue for retry: {task}")
+                    log.write(
+                        f"[Worker] put a task back to the queue for retry: {task}"
+                    )
 
             self.notify_job_finished()
 

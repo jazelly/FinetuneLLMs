@@ -1,8 +1,6 @@
 # Trainer in Django
 
-Trainer is like a woker app that is intended to be only communicated with 
-server side. Client should never try to communicate with trainer directly
-
+Trainer is like a woker-like ASGI app that is intended to handle GPU training job.
 
 ## Quick Start
 
@@ -11,8 +9,11 @@ Run on linux with Nvidia GPU, as it requires CUDA
 
 ```
 pip install -r requirements.txt
-python manage.py runserver
+daphne trainer.asgi:application
 ```
 
+## Run Unit Tests
 
-
+```
+python manage.py test
+```
