@@ -19,6 +19,11 @@ export interface JobCreate {
   hyperparameters: Record<string, string | number | boolean>;
 }
 
+export interface IJobDetail extends JobCreate {
+  id: string;
+  status: string;
+}
+
 export interface AllJobOptions {
   baseModels: Array<string>;
   trainingMethods: Array<string>;

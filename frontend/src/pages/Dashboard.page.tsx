@@ -8,6 +8,7 @@ import DashboardModel from "../models/dashboard";
 import { AllJobOptions } from "@/models/types/dashboard";
 import { useParams } from "react-router-dom";
 import DetailPanel from "@/components/DetailPanel.component";
+import MetaPanel from "@/components/MetaPanel.component";
 
 const Dashboard = ({ trainerSocket }) => {
   const { jobId } = useParams();
@@ -152,10 +153,14 @@ const Dashboard = ({ trainerSocket }) => {
       </ResizableBox>
       {!isRightCollapsed && (
         <div className="flex-1 bg-white">
-          <DetailPanel
-            hyperparameters={jobOptions?.hyperparameters ?? {}}
-            handleHyperparametersChange={handleHyperparametersChange}
-          />
+          {jobId !== undefined ? (
+            <DetailPanel jobId={jobId} />
+          ) : (
+            <MetaPanel
+              hyperparameters={jobOptions?.hyperparameters ?? {}}
+              handleHyperparametersChange={handleHyperparametersChange}
+            />
+          )}
         </div>
       )}
     </div>

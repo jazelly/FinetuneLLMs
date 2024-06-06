@@ -63,6 +63,27 @@ function jobEndpoints(app) {
     }
   );
 
+  app.get(
+    "/job/:jobId",
+    [validatedRequest, flexUserRoleValid([ROLES.all])],
+    async (req, res) => {
+      const { jobId } = req.params;
+
+      let id: number;
+      try {
+        id = parseInt(jobId, 10);
+      } catch (err: any) {
+        return res.status(400);
+      }
+
+      const jobs = await Jobs.readBy({
+        id,
+      });
+
+      res.json(jobs[0]);
+    }
+  );
+
   /**
    * Create a job
    */
@@ -70,8 +91,6 @@ function jobEndpoints(app) {
     "/job",
     [validatedRequest, flexUserRoleValid([ROLES.all])],
     async (req, res) => {
-      console.log(req);
-
       const { datasetId, trainingMethod, baseModel, hyperparameters } =
         reqBody(req);
 

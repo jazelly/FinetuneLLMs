@@ -19,6 +19,22 @@ const Job = {
       return { success: false, error: error.message };
     }
   },
+
+  getJobDetails: async (jobId: string) => {
+    try {
+      const resp = await fetch(`${API_BASE}/job/${jobId}`, {
+        method: "GET",
+        headers: baseHeaders(),
+      });
+
+      const res = await resp.json();
+
+      return { success: true, data: res };
+    } catch (error: any) {
+      console.error(error);
+      return { success: false, error: error.message };
+    }
+  },
 };
 
 export default Job;
