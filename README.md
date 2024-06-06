@@ -37,6 +37,8 @@ You need CUDA for now, but once llama.cpp is integrated, this will no longer be 
 
   Install CUDA from [Nvidia installation guide](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
 
+## Dev Setup
+
 Setup frontend
 
 ```
@@ -50,7 +52,7 @@ Setup server
 ```
 // copy .env.example to .env
 cd server
-npx prisma migrate dev --name add_datasets_model
+npx prisma migrate dev
 yarn dev
 ```
 
