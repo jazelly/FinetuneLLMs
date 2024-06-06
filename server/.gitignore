@@ -3,6 +3,7 @@
 src/storage/assets/*
 !src/storage/assets/FinetuneLLMs_transparent.png
 src/storage/documents/*
+storage/comkey/*
 src/storage/comkey/*
 src/storage/tmp/*
 src/storage/vector-cache/*.json
