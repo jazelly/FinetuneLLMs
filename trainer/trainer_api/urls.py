@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import train_sft
+from .views import train
 
 urlpatterns = [
-    path('sft/', train_sft, name='train-sft'),
+    path("job/", train, name="train"),
 ]

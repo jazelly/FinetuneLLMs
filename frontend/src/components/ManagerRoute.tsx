@@ -1,7 +1,6 @@
 // Allows manager and admin to access the route and if in single user mode,
 
 import React from "react";
-import UserMenu from "./UserMenu";
 import useIsAuthenticated from "@/hooks/useIsAuthenticated";
 import paths from "@/utils/paths";
 import { userFromStorage } from "@/utils/request";
@@ -15,9 +14,7 @@ export function ManagerRoute({ Component }) {
 
   const user = userFromStorage();
   return isAuthd && (user?.role !== "default" || !multiUserMode) ? (
-    <UserMenu>
-      <Component />
-    </UserMenu>
+    <Component />
   ) : (
     <Navigate to={paths.home()} />
   );

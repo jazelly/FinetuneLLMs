@@ -2,7 +2,6 @@ import React from "react";
 import DefaultChatContainer from "@/components/DefaultChat";
 import PasswordModal, { usePasswordModal } from "@/components/Modals/Password";
 import { FullScreenLoader } from "@/components/Preloader";
-import UserMenu from "@/components/UserMenu";
 
 export default function Main() {
   const { loading, requiresAuth, mode } = usePasswordModal();
@@ -13,10 +12,8 @@ export default function Main() {
   }
 
   return (
-    <UserMenu>
-      <div className="h-screen overflow-hidden bg-main flex">
-        <DefaultChatContainer />
-      </div>
-    </UserMenu>
+    <div className="h-screen overflow-hidden bg-main flex">
+      <DefaultChatContainer />
+    </div>
   );
 }
