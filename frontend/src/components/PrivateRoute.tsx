@@ -3,12 +3,12 @@ import { Navigate } from "react-router-dom";
 import { FullScreenLoader } from "./Preloader";
 import paths from "@/utils/paths";
 import { userFromStorage } from "@/utils/request";
-import useIsAuthenticated from "@/hooks/useIsAuthenticated";
+import useAuthenticated from "@/hooks/useAuthenticated";
 
 // Allows only admin to access the route and if in single user mode,
 // allows all users to access the route
 export function AdminRoute({ Component }) {
-  const { isAuthd, multiUserMode } = useIsAuthenticated();
+  const { isAuthd, multiUserMode } = useAuthenticated();
   if (isAuthd === null) return <FullScreenLoader />;
 
   const user = userFromStorage();
@@ -20,7 +20,7 @@ export function AdminRoute({ Component }) {
 }
 
 export default function PrivateRoute({ Component, ...restProps }) {
-  const { isAuthd } = useIsAuthenticated();
+  const { isAuthd } = useAuthenticated();
   if (isAuthd === null) return <FullScreenLoader />;
 
   return isAuthd ? (

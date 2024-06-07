@@ -13,7 +13,7 @@ const Workspace = {
       headers: baseHeaders(),
     })
       .then((res) => res.json())
-      .catch((e) => {
+      .catch((e: any) => {
         return { workspace: null, message: e.message };
       });
 
@@ -29,7 +29,7 @@ const Workspace = {
       }
     )
       .then((res) => res.json())
-      .catch((e) => {
+      .catch((e: any) => {
         return { workspace: null, message: e.message };
       });
 
@@ -45,7 +45,7 @@ const Workspace = {
       }
     )
       .then((res) => res.json())
-      .catch((e) => {
+      .catch((e: any) => {
         return { workspace: null, message: e.message };
       });
 
@@ -85,7 +85,7 @@ const Workspace = {
         if (res.ok) return true;
         throw new Error("Failed to delete chats.");
       })
-      .catch((e) => {
+      .catch((e: any) => {
         console.log(e);
         return false;
       });
@@ -229,7 +229,7 @@ const Workspace = {
         return res.json();
       })
       .then((res) => res.suggestedMessages)
-      .catch((e) => {
+      .catch((e: any) => {
         console.error(e);
         return null;
       });
@@ -248,7 +248,7 @@ const Workspace = {
         }
         return { success: true, ...res.json() };
       })
-      .catch((e) => {
+      .catch((e: any) => {
         console.error(e);
         return { success: false, error: e.message };
       });
@@ -267,7 +267,7 @@ const Workspace = {
         }
         return true;
       })
-      .catch((e) => {
+      .catch((e: any) => {
         console.error(e);
         return false;
       });
@@ -283,59 +283,11 @@ const Workspace = {
         throw new Error("Failed to fetch TTS.");
       })
       .then((blob) => (blob ? URL.createObjectURL(blob) : null))
-      .catch((e) => {
+      .catch((e: any) => {
         return null;
       });
   },
   threads: WorkspaceThread,
-
-  uploadPfp: async function (formData, slug) {
-    return await fetch(`${API_BASE}/workspace/${slug}/upload-pfp`, {
-      method: "POST",
-      body: formData,
-      headers: baseHeaders(),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error uploading pfp.");
-        return { success: true, error: null };
-      })
-      .catch((e) => {
-        console.log(e);
-        return { success: false, error: e.message };
-      });
-  },
-
-  fetchPfp: async function (slug) {
-    return await fetch(`${API_BASE}/workspace/${slug}/pfp`, {
-      method: "GET",
-      cache: "no-cache",
-      headers: baseHeaders(),
-    })
-      .then((res) => {
-        if (res.ok && res.status !== 204) return res.blob();
-        throw new Error("Failed to fetch pfp.");
-      })
-      .then((blob) => (blob ? URL.createObjectURL(blob) : null))
-      .catch((e) => {
-        // console.log(e);
-        return null;
-      });
-  },
-
-  removePfp: async function (slug) {
-    return await fetch(`${API_BASE}/workspace/${slug}/remove-pfp`, {
-      method: "DELETE",
-      headers: baseHeaders(),
-    })
-      .then((res) => {
-        if (res.ok) return { success: true, error: null };
-        throw new Error("Failed to remove pfp.");
-      })
-      .catch((e) => {
-        console.log(e);
-        return { success: false, error: e.message };
-      });
-  },
 };
 
 export default Workspace;

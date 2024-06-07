@@ -38,7 +38,6 @@ const {
   ROLES,
   isMultiUserSetup,
 } = require("../utils/middleware/multiUserProtected");
-const { fetchPfp, determinePfpFilepath } = require("../utils/files/pfp");
 const {
   prepareWorkspaceChatsForExport,
   exportChatsAsType,
@@ -74,7 +73,7 @@ function systemEndpoints(app) {
     try {
       const results = await SystemSettings.currentSettings();
       response.status(200).json({ results });
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.message, e);
       response.sendStatus(500).end();
     }
@@ -97,7 +96,7 @@ function systemEndpoints(app) {
         }
 
         response.sendStatus(200).end();
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.message, e);
         response.sendStatus(500).end();
       }
@@ -240,7 +239,7 @@ function systemEndpoints(app) {
           message: null,
         });
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.message, e);
       response.sendStatus(500).end();
     }
@@ -288,7 +287,7 @@ function systemEndpoints(app) {
         } else {
           response.status(400).json({ success, error });
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error resetting password:", error);
         response.status(500).json({ success: false, message: error.message });
       }
@@ -306,7 +305,7 @@ function systemEndpoints(app) {
           ? await VectorDb.namespaceCount(query.slug)
           : await VectorDb.totalVectors();
         response.status(200).json({ vectorCount });
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.message, e);
         response.sendStatus(500).end();
       }
@@ -321,7 +320,7 @@ function systemEndpoints(app) {
         const { name } = reqBody(request);
         await purgeDocument(name);
         response.sendStatus(200).end();
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.message, e);
         response.sendStatus(500).end();
       }
@@ -336,7 +335,7 @@ function systemEndpoints(app) {
         const { names } = reqBody(request);
         for await (const name of names) await purgeDocument(name);
         response.sendStatus(200).end();
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.message, e);
         response.sendStatus(500).end();
       }
@@ -351,7 +350,7 @@ function systemEndpoints(app) {
         const { name } = reqBody(request);
         await purgeFolder(name);
         response.sendStatus(200).end();
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.message, e);
         response.sendStatus(500).end();
       }
@@ -365,7 +364,7 @@ function systemEndpoints(app) {
       try {
         const directory = await viewLocalFiles();
         response.status(200).json({ localFiles: directory });
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.message, e);
         response.sendStatus(500).end();
       }
@@ -385,7 +384,7 @@ function systemEndpoints(app) {
         );
         if (process.env.NODE_ENV === "production") await dumpENV();
         response.status(200).json({ newValues, error });
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.message, e);
         response.sendStatus(500).end();
       }
@@ -413,7 +412,7 @@ function systemEndpoints(app) {
         );
         if (process.env.NODE_ENV === "production") await dumpENV();
         response.status(200).json({ success: !error, error });
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.message, e);
         response.sendStatus(500).end();
       }
@@ -458,7 +457,7 @@ function systemEndpoints(app) {
         });
         await EventLogs.logEvent("multi_user_mode_enabled", {}, user?.id);
         response.status(200).json({ success: !!user, error });
-      } catch (e) {
+      } catch (e: any) {
         await User.delete({});
         await SystemSettings._updateSettings({
           multi_user_mode: false,
@@ -474,7 +473,7 @@ function systemEndpoints(app) {
     try {
       const multiUserMode = await SystemSettings.isMultiUserMode();
       response.status(200).json({ multiUserMode });
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.message, e);
       response.sendStatus(500).end();
     }
@@ -531,114 +530,6 @@ function systemEndpoints(app) {
       response.status(500).json({ message: "Internal server error" });
     }
   });
-
-  app.get(
-    "/system/pfp/:id",
-    [validatedRequest, flexUserRoleValid([ROLES.all])],
-    async function (request, response) {
-      try {
-        const { id } = request.params;
-        const pfpPath = await determinePfpFilepath(id);
-
-        if (!pfpPath) {
-          response.sendStatus(204).end();
-          return;
-        }
-
-        const { found, buffer, size, mime } = fetchPfp(pfpPath);
-        if (!found) {
-          response.sendStatus(204).end();
-          return;
-        }
-
-        response.writeHead(200, {
-          "Content-Type": mime || "image/png",
-          "Content-Disposition": `attachment; filename=${path.basename(
-            pfpPath
-          )}`,
-          "Content-Length": size,
-        });
-        response.end(Buffer.from(buffer, "base64"));
-        return;
-      } catch (error) {
-        console.error("Error processing the logo request:", error);
-        response.status(500).json({ message: "Internal server error" });
-      }
-    }
-  );
-
-  app.post(
-    "/system/upload-pfp",
-    [validatedRequest, flexUserRoleValid([ROLES.all]), handlePfpUpload],
-    async function (request, response) {
-      try {
-        const user = await userFromSession(request, response);
-        const uploadedFileName = request.randomFileName;
-        if (!uploadedFileName) {
-          return response.status(400).json({ message: "File upload failed." });
-        }
-
-        const userRecord = await User.get({ id: user.id });
-        const oldPfpFilename = userRecord.pfpFilename;
-        if (oldPfpFilename) {
-          const oldPfpPath = path.join(
-            __dirname,
-            `../storage/assets/pfp/${normalizePath(userRecord.pfpFilename)}`
-          );
-
-          if (fs.existsSync(oldPfpPath)) fs.unlinkSync(oldPfpPath);
-        }
-
-        const { success, error } = await User.update(user.id, {
-          pfpFilename: uploadedFileName,
-        });
-
-        return response.status(success ? 200 : 500).json({
-          message: success
-            ? "Profile picture uploaded successfully."
-            : error || "Failed to update with new profile picture.",
-        });
-      } catch (error) {
-        console.error("Error processing the profile picture upload:", error);
-        response.status(500).json({ message: "Internal server error" });
-      }
-    }
-  );
-
-  app.delete(
-    "/system/remove-pfp",
-    [validatedRequest, flexUserRoleValid([ROLES.all])],
-    async function (request, response) {
-      try {
-        const user = await userFromSession(request, response);
-        const userRecord = await User.get({ id: user.id });
-        const oldPfpFilename = userRecord.pfpFilename;
-
-        console.log("oldPfpFilename", oldPfpFilename);
-        if (oldPfpFilename) {
-          const oldPfpPath = path.join(
-            __dirname,
-            `../storage/assets/pfp/${normalizePath(oldPfpFilename)}`
-          );
-
-          if (fs.existsSync(oldPfpPath)) fs.unlinkSync(oldPfpPath);
-        }
-
-        const { success, error } = await User.update(user.id, {
-          pfpFilename: null,
-        });
-
-        return response.status(success ? 200 : 500).json({
-          message: success
-            ? "Profile picture removed successfully."
-            : error || "Failed to remove profile picture.",
-        });
-      } catch (error) {
-        console.error("Error processing the profile picture removal:", error);
-        response.status(500).json({ message: "Internal server error" });
-      }
-    }
-  );
 
   app.post(
     "/system/upload-logo",
@@ -989,7 +880,7 @@ function systemEndpoints(app) {
         return;
       }
 
-      const updates = {};
+      const updates: Record<string, any> = {};
       if (username) {
         updates.username = String(username);
       }
@@ -1118,4 +1009,4 @@ function systemEndpoints(app) {
   );
 }
 
-module.exports = { systemEndpoints };
+export { systemEndpoints };

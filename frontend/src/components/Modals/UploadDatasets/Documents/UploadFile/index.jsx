@@ -5,7 +5,7 @@ import { useDropzone } from "react-dropzone";
 import { v4 } from "uuid";
 import FileUploadProgress from "./FileUploadProgress";
 import debounce from "lodash.debounce";
-import { isHFDatasetLinkValid } from "../../../../../utils/dataset";
+import { isHFDatasetLinkValid } from "../../../../../utils/misc";
 import Document from "@/models/document";
 
 export default function UploadFile({

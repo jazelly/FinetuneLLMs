@@ -33,7 +33,7 @@ const System = {
         return res.json();
       })
       .then((res) => res.results)
-      .catch(() => null);
+      .catch(() => {});
   },
   localFiles: async function () {
     return await fetch(`${API_BASE}/system/local-files`, {
@@ -213,21 +213,6 @@ const System = {
         return false;
       });
   },
-  uploadPfp: async function (formData) {
-    return await fetch(`${API_BASE}/system/upload-pfp`, {
-      method: "POST",
-      body: formData,
-      headers: baseHeaders(),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error uploading pfp.");
-        return { success: true, error: null };
-      })
-      .catch((e) => {
-        console.log(e);
-        return { success: false, error: e.message };
-      });
-  },
   uploadLogo: async function (formData) {
     return await fetch(`${API_BASE}/system/upload-logo`, {
       method: "POST",
@@ -318,36 +303,6 @@ const System = {
       .catch((e) => {
         console.log(e);
         return null;
-      });
-  },
-  fetchPfp: async function (id) {
-    return await fetch(`${API_BASE}/system/pfp/${id}`, {
-      method: "GET",
-      cache: "no-cache",
-      headers: baseHeaders(),
-    })
-      .then((res) => {
-        if (res.ok && res.status !== 204) return res.blob();
-        throw new Error("Failed to fetch pfp.");
-      })
-      .then((blob) => (blob ? URL.createObjectURL(blob) : null))
-      .catch((e) => {
-        // console.log(e);
-        return null;
-      });
-  },
-  removePfp: async function (id) {
-    return await fetch(`${API_BASE}/system/remove-pfp`, {
-      method: "DELETE",
-      headers: baseHeaders(),
-    })
-      .then((res) => {
-        if (res.ok) return { success: true, error: null };
-        throw new Error("Failed to remove pfp.");
-      })
-      .catch((e) => {
-        console.log(e);
-        return { success: false, error: e.message };
       });
   },
 

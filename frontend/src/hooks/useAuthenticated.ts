@@ -3,9 +3,7 @@ import validateSessionTokenForUser from "@/utils/session";
 import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from "@/utils/constants";
 import System from "@/models/system";
 
-// Used only for Multi-user mode only as we permission specific pages based on auth role.
-// When in single user mode we just bypass any authchecks.
-function useIsAuthenticated() {
+function useAuthenticated() {
   const [isAuthd, setIsAuthed] = useState<boolean | null>(null);
   useState(false);
   const [multiUserMode, setMultiUserMode] = useState(false);
@@ -19,7 +17,7 @@ function useIsAuthenticated() {
         VectorDB = null,
       } = await System.keys();
 
-      setMultiUserMode(MultiUserMode);
+      setMultiUserMode(!!MultiUserMode);
 
       // Check for the onboarding redirect condition
       if (
@@ -71,7 +69,7 @@ function useIsAuthenticated() {
     validateSession();
   }, []);
 
-  return { isAuthd, shouldRedirectToOnboarding: false, multiUserMode };
+  return { isAuthd, multiUserMode };
 }
 
-export default useIsAuthenticated;
+export default useAuthenticated;

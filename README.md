@@ -44,7 +44,9 @@ Setup frontend
 ```
 // copy .env.example to .env
 cd frontend
-yarn dev
+npm ci
+npm run dev
+// or yarn && yarn dev
 ```
 
 Setup server
@@ -53,6 +55,7 @@ Setup server
 // copy .env.example to .env
 cd server
 npx prisma migrate dev
+yarn
 yarn dev
 ```
 

@@ -23,7 +23,6 @@ const Workspace = {
     "chatModel",
     "topN",
     "chatMode",
-    "pfpFilename",
     "agentProvider",
     "agentModel",
     "queryRefusalResponse",

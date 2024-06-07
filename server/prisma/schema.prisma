@@ -59,7 +59,6 @@ model users {
   id                          Int                           @id @default(autoincrement())
   username                    String?                       @unique
   password                    String
-  pfpFilename                 String?
   role                        String                        @default("default")
   suspended                   Int                           @default(0)
   seen_recovery_codes         Boolean?                      @default(false)
@@ -128,7 +127,6 @@ model workspaces {
   chatModel                    String?
   topN                         Int?                           @default(4)
   chatMode                     String?                        @default("chat")
-  pfpFilename                  String?
   agentProvider                String?
   agentModel                   String?
   queryRefusalResponse         String?

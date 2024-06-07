@@ -59,7 +59,6 @@ const PromptReply = ({
     >
       <div className="py-6 px-4 w-full flex gap-x-5 md:max-w-[800px] flex-col">
         <div className="flex gap-x-5">
-          <WorkspaceProfileImage workspace={workspace} />
           <span
             className={`reply flex flex-col gap-y-1 mt-2`}
             dangerouslySetInnerHTML={{ __html: renderMarkdown(reply) }}
@@ -70,21 +69,5 @@ const PromptReply = ({
     </div>
   );
 };
-
-export function WorkspaceProfileImage({ workspace }) {
-  if (!!workspace.pfpUrl) {
-    return (
-      <div className="relative w-[35px] h-[35px] rounded-full flex-shrink-0 overflow-hidden">
-        <img
-          src={workspace.pfpUrl}
-          alt="Workspace profile picture"
-          className="absolute top-0 left-0 w-full h-full object-cover rounded-full bg-white"
-        />
-      </div>
-    );
-  }
-
-  return <Jazzicon size={36} user={{ uid: workspace.slug }} role="assistant" />;
-}
 
 export default memo(PromptReply);

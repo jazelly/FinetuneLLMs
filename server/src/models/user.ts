@@ -6,7 +6,6 @@ const User = {
     // Used for generic updates so we can validate keys in request body
     "username",
     "password",
-    "pfpFilename",
     "role",
     "suspended",
   ],
