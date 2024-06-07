@@ -11,9 +11,10 @@ const Job = {
         body: JSON.stringify(jobOptions),
       });
 
-      const res = await resp.json();
+      const data = await resp.json();
 
-      return { success: true, data: res };
+      console.log("res", data);
+      return { success: true, data };
     } catch (error: any) {
       console.error(error);
       return { success: false, error: error.message };

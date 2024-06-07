@@ -52,7 +52,7 @@ export const Datasets = {
     return datasets;
   },
 
-  deleteAllByName: async (name) => {
+  deleteAllByName: async (name: string) => {
     await prisma.datasets.deleteMany({
       where: {
         name,

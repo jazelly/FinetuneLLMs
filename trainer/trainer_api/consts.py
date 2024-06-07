@@ -5,6 +5,7 @@ Scheduler scope
 """
 MAX_IDLE_TIME = 5000
 
+
 class WorkerStates(Enum):
     IDLE = 0
     BUSY = 1
@@ -14,8 +15,9 @@ class WorkerStates(Enum):
 
 # A list of supported models
 class Models(Enum):
-    LLAMA2 = "llama2"
-    LLAMA3 = "llama3"
+    LLAMA2 = "LLAMA 2"
+    LLAMA3 = "LLAMA 3"
+
 
 # A list of supported training methods
 class Methods(Enum):

@@ -1,5 +1,5 @@
 export interface IDataset {
-  id: string;
+  id: number;
   name: string;
   path?: string;
   config: string;

@@ -7,6 +7,8 @@ import { reqBody } from "../utils/http";
 import { Datasets } from "../models/datasets";
 import { Jobs } from "../models/jobs";
 import { v4 } from "uuid";
+import Trainer from "../models/trainer.internal";
+import { IDataset } from "../models/schema/datasets.type";
 
 function jobEndpoints(app) {
   if (!app) return;
@@ -94,12 +96,24 @@ function jobEndpoints(app) {
       const { datasetId, trainingMethod, baseModel, hyperparameters } =
         reqBody(req);
 
-      // forward to trainer
-
-      // wait for trainer handshaking with client
-      // persist the job to Database
       const metaString = JSON.stringify(hyperparameters);
+      const datasetEntities = await Datasets.readBy({
+        id: parseInt(datasetId),
+      });
 
+      // forward to trainer
+      const trainerResponse = await Trainer.submitJobToTrainer({
+        trainingMethod,
+        baseModel,
+        hyperparameters,
+        dataset: datasetEntities[0] as IDataset,
+      });
+
+      console.log("trainerResponse", trainerResponse);
+
+      if ((trainerResponse as any).message === "noop") return res.json(201);
+
+      // persist the job to Database
       const name = `${trainingMethod}-${baseModel}-${datasetId}_${v4()}`;
       const result = await Jobs.create({
         name,

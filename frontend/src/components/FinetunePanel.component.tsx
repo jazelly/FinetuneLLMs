@@ -55,7 +55,9 @@ const FinetunePanel = ({
       hyperparameters: jobOptions.hyperparameters,
     });
 
-    if (!resp.success || (resp.success === true && !resp.data.id))
+    if (resp.data === 201)
+      setSubmitJobError("Trainer didn't respond to this request");
+    else if (!resp.success || (resp.success === true && !resp.data.id))
       setSubmitJobError("An error occurred when submitting the job");
     else {
       console.log("send to trainer");

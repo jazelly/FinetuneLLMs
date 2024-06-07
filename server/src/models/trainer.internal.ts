@@ -3,7 +3,7 @@ import { request } from "undici";
 
 const Trainer = {
   submitJobToTrainer: async (params: SubmitJobParams) => {
-    const trainerApi = `${process.env.TRAINER_API_URL}job`;
+    const trainerApi = `${process.env.TRAINER_API_URL}train/job/`;
     try {
       const { body } = await request(trainerApi, {
         method: "POST",
@@ -12,10 +12,12 @@ const Trainer = {
         },
         body: JSON.stringify(params),
       });
+
       const data = await body.json();
-      console.log(data);
+      return data;
     } catch (error) {
       console.error("Error:", error);
+      return { status: "failed", message: "noop" };
     }
   },
 };
