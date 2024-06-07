@@ -1,10 +1,13 @@
 process.env.NODE_ENV === "development"
   ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
   : require("dotenv").config();
-const JWT = require("jsonwebtoken");
-const { User } = require("../../models/user");
+
+import JWT, { JwtPayload } from "jsonwebtoken";
 const { jsonrepair } = require("jsonrepair");
-const extract = require("extract-json-from-string");
+import extract from "extract-json-from-string";
+import { Response } from "express";
+
+import User from "../models/user";
 
 function reqBody(request) {
   return typeof request.body === "string"
@@ -24,7 +27,7 @@ function makeJWT(info = {}, expiry = "30d") {
 
 // Note: Only valid for finding users in multi-user mode
 // as single-user mode with password is not a "user"
-async function userFromSession(request, response = null) {
+async function userFromSession(request, response?: Response) {
   if (!!response && !!response.locals?.user) {
     return response.locals.user;
   }
@@ -36,18 +39,18 @@ async function userFromSession(request, response = null) {
     return null;
   }
 
-  const valid = decodeJWT(token);
-  if (!valid || !valid.id) {
+  const jwt = decodeJWT(token);
+  if (!jwt || !jwt.id) {
     return null;
   }
 
-  const user = await User.get({ id: valid.id });
-  return user;
+  const foundUser = await User.get({ id: jwt.id });
+  return foundUser;
 }
 
 function decodeJWT(jwtToken) {
   try {
-    return JWT.verify(jwtToken, process.env.JWT_SECRET);
+    return JWT.verify(jwtToken, process.env.JWT_SECRET!) as JwtPayload;
   } catch {}
   return { p: null, id: null, username: null };
 }
@@ -91,7 +94,7 @@ function isValidUrl(urlString = "") {
   return false;
 }
 
-module.exports = {
+export {
   reqBody,
   multiUserMode,
   queryParams,

@@ -36,7 +36,7 @@ const User = {
         },
       });
       return { user, error: null };
-    } catch (error) {
+    } catch (error: any) {
       console.error("FAILED TO CREATE USER.", error.message);
       return { user: null, error: error.message };
     }
@@ -57,7 +57,7 @@ const User = {
     return changes;
   },
 
-  update: async function (userId, updates = {}) {
+  update: async function (userId, updates: Record<string, any> = {}) {
     try {
       if (!userId) throw new Error("No user id provided for update");
       const currentUser = await prisma.users.findUnique({
@@ -102,7 +102,7 @@ const User = {
         userId
       );
       return { success: true, error: null };
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
       return { success: false, error: error.message };
     }
@@ -120,7 +120,7 @@ const User = {
         data,
       });
       return { user, message: null };
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
       return { user: null, message: error.message };
     }
@@ -130,7 +130,7 @@ const User = {
     try {
       const user = await prisma.users.findFirst({ where: clause });
       return user ? { ...user } : null;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
       return null;
     }
@@ -140,7 +140,7 @@ const User = {
     try {
       const count = await prisma.users.count({ where: clause });
       return count;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
       return 0;
     }
@@ -150,7 +150,7 @@ const User = {
     try {
       await prisma.users.deleteMany({ where: clause });
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
       return false;
     }
@@ -163,7 +163,7 @@ const User = {
         ...(limit !== null ? { take: limit } : {}),
       });
       return users;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
       return [];
     }
@@ -202,4 +202,4 @@ const User = {
   },
 };
 
-module.exports = { User };
+export default User;

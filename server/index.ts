@@ -112,7 +112,13 @@ app.all("*", function (_, response) {
 });
 
 if (!!process.env.ENABLE_HTTPS) {
-  bootSSL(app, process.env.SERVER_PORT || 3001);
+  bootSSL(
+    app,
+    process.env.SERVER_PORT ? parseInt(process.env.SERVER_PORT) : 3001
+  );
 } else {
-  bootHTTP(app, process.env.SERVER_PORT || 3001);
+  bootHTTP(
+    app,
+    process.env.SERVER_PORT ? parseInt(process.env.SERVER_PORT) : 3001
+  );
 }

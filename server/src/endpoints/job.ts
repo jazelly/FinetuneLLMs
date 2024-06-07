@@ -95,6 +95,7 @@ function jobEndpoints(app) {
         reqBody(req);
 
       // forward to trainer
+
       // wait for trainer handshaking with client
       // persist the job to Database
       const metaString = JSON.stringify(hyperparameters);
@@ -113,4 +114,4 @@ function jobEndpoints(app) {
   );
 }
 
-module.exports = { jobEndpoints };
+export { jobEndpoints };
