@@ -75,11 +75,11 @@ const Dashboard = ({ trainerSocket }) => {
   };
 
   const containerHeight = window.innerHeight - 32 - 64;
-  const minHeightTop = 64 + 150; // 64 is top gap, 150 is the minimum height for panel
+  const minHeightTop = 64 + 350; // 64 is the top header gap, 350 is the minimum height for panel
   const minHeightBottom = 100;
   const maxHeightTop = containerHeight - minHeightBottom;
   const minWidthLeft = 42 + 200;
-  const maxWidthLeft = window.innerWidth - 180;
+  const maxWidthLeft = window.innerWidth - 32 - 330; // 32 is the right empty gap, 330 is the min width of detail panel
 
   const toggleRightCollapse = () => {
     if (isRightCollapsed) {
