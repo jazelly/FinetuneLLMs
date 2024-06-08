@@ -1,4 +1,7 @@
 from enum import Enum
+import os
+
+from django.conf import settings
 
 """
 Scheduler scope
@@ -23,3 +26,10 @@ class Models(Enum):
 class Methods(Enum):
     SFT = "sft"
     DPO = "dpo"
+
+
+FINETUNE_SCRIPT_DIR = os.path.join(settings.BASE_DIR, "./trainer_api/finetune")
+
+
+def convert_to_enum_name(text):
+    return text.upper()

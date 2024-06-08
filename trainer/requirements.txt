@@ -3,6 +3,8 @@ django-ratelimit
 python-dotenv
 channels
 daphne
+watchgod
+psutil
 
 transformers
 trl

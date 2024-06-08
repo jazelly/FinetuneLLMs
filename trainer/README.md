@@ -12,6 +12,12 @@ pip install -r requirements.txt
 daphne trainer.asgi:application
 ```
 
+## Run in watch mode
+
+```
+python watch.py
+```
+
 ## Run Unit Tests
 
 ```

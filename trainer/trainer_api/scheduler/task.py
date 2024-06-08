@@ -6,10 +6,10 @@ import uuid
 from django.conf import settings
 
 from trainer_api.errors import InvalidArgumentError
-from trainer_api.consts import Methods, Models
+from trainer_api.consts import FINETUNE_SCRIPT_DIR, Methods, Models
 
 
-FINETUNE_SCRIPT_DIR = os.path.join(settings.BASE_DIR, "./trainer_api/finetune/sft.py")
+FINETUNE_SCRIPT_PATH = os.path.join(FINETUNE_SCRIPT_DIR, "./sft.py")
 
 
 class Task:
@@ -27,9 +27,8 @@ class Task:
             raise InvalidArgumentError(source=None, message="Missing model")
 
     def run(self, log=sys.stdout):
-        print(
-            f"{self.method == Methods.SFT.value}, {self.model == Models.LLAMA2.value}"
-        )
+        print(self.method)
+        print(self.model)
         if self.method == Methods.SFT.value and self.model == Models.LLAMA2.value:
             subprocess.run(
                 ["python", FINETUNE_SCRIPT_DIR], stdout=log, stderr=log, check=True
