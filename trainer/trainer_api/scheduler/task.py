@@ -27,12 +27,37 @@ class Task:
             raise InvalidArgumentError(source=None, message="Missing model")
 
     def run(self, log=sys.stdout):
-        print(self.method)
-        print(self.model)
-        if self.method == Methods.SFT.value and self.model == Models.LLAMA2.value:
-            subprocess.run(
-                ["python", FINETUNE_SCRIPT_DIR], stdout=log, stderr=log, check=True
+        if self.method == Methods.SFT and self.model == Models.LLAMA2:
+            process = subprocess.Popen(
+                ["python", FINETUNE_SCRIPT_PATH],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
             )
+            self._consume_logs_from_subprocess(process)
+
+    def _consume_logs_from_subprocess(self, process):
+        # Read the output continuously
+        while True:
+            # Read a line from stdout
+            output = process.stdout.readline().strip()
+            if output:
+                print(output)
+            else:
+                # Check if the process has finished
+                return_code = process.poll()
+                if return_code is not None:
+                    break
+
+        # Process has finished, read any remaining output
+        remaining_output = process.stdout.read().strip()
+        if remaining_output:
+            print(remaining_output)
+
+        # Read the error output
+        error_output = process.stderr.read().strip()
+        if error_output:
+            print(error_output)
 
     def __str__(self):
         return f"[Task] method: {self.method if hasattr(self, 'method') else 'None'} training | model: {self.model if hasattr(self, 'model') else 'None'}"
