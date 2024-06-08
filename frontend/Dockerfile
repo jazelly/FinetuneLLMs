@@ -9,5 +9,3 @@ ENV PORT=3000
 FROM development AS build
 RUN npm install
 RUN npm run build
-
-# CMD [ "npm", "run", "dev" ]
