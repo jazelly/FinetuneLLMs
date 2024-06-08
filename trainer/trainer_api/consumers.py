@@ -1,20 +1,24 @@
+from channels.generic.websocket import WebsocketConsumer
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
 
 
-class MyConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        print("connected with react client")
-        await self.accept()
+class TrainerConsumer(WebsocketConsumer):
+    clients = {}
 
-    async def disconnect(self, close_code):
-        pass
+    def connect(self):
+        self.accept()
+        # Store the client identifier (e.g., user ID) associated with the WebSocket connection
+        self.identifier = self.scope[
+            "user"
+        ].id  # Example: using user ID as the identifier
+        self.clients[self.identifier] = self
 
-    async def receive(self, text_data):
-        print(f"received {text_data}")
+    def disconnect(self, close_code):
+        # Remove the client from the mapping when it disconnects
+        del self.clients[self.identifier]
 
-        await self.send(text_data=json.dumps({"message": text_data}))
-
-    async def send_message(self, message):
-        # Send a message to the WebSocket client
-        await self.send(text_data=json.dumps({"message": message}))
+    def send_message_to_client(self, event):
+        # Send message to a specific client
+        client_id = event["client_id"]
+        message = event["message"]
+        self.clients[client_id].send(text_data=json.dumps(message))
