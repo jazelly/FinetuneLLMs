@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "@/components/SettingsSidebar";
 import { isMobile } from "react-device-detect";
 import PreLoader from "@/components/Preloader";
-import CTAButton from "@/components/lib/CTAButton";
+import CTAButton from "@/components/CTAButton";
 import Admin from "@/models/admin";
 import showToast from "@/utils/toast";
 import { nFormatter, numberWithCommas } from "@/utils/numbers";

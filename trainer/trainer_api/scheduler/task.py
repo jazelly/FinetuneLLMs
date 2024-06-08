@@ -42,6 +42,7 @@ class Task:
             # Read a line from stdout
             output = process.stdout.readline().strip()
             if output:
+                # TODO: push to WS
                 print(output)
             else:
                 # Check if the process has finished

@@ -6,7 +6,7 @@ import { isMobile } from "react-device-detect";
 import * as Skeleton from "react-loading-skeleton";
 import LogRow from "./LogRow";
 import showToast from "@/utils/toast";
-import CTAButton from "@/components/lib/CTAButton";
+import CTAButton from "@/components/CTAButton";
 
 export default function AdminLogs() {
   const query = useQuery();
