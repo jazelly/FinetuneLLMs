@@ -52,7 +52,7 @@ npm run dev
 Setup server
 
 ```
-// copy .env.example to .env
+// copy .env.example to .env and .env.development
 cd server
 npx prisma migrate dev
 yarn
