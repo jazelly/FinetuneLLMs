@@ -1,0 +1,16 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - 3000:3000
+
+  web:
+    build:
+      context: ./web
+    container_name: web
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
