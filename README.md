@@ -64,5 +64,5 @@ Setup trainer
 ```
 cd trainer
 pip install -r requirements.txt
-python manage runserver
+daphne trainer.asgi:application
 ```

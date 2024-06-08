@@ -2,6 +2,8 @@ import os
 import sys
 import torch
 
+print("[SFT] starting running SFT")
+
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
@@ -17,7 +19,6 @@ print(script_dir)
 trainer_path = os.path.normpath(os.path.join(script_dir, "../../"))
 print(trainer_path)
 sys.path.append(trainer_path)
-from trainer.settings import BASE_DIR
 
 
 #############
@@ -40,10 +41,11 @@ if len(sys.argv) > 1:
 print(args)
 
 # TODO: think about how to safely pass in dataset
-dataset_path = os.path.normpath(os.path.join(BASE_DIR, "../server/storage/datasets"))
-print(dataset_path)
+# dataset_path = os.path.normpath(os.path.join(BASE_DIR, "../server/storage/datasets"))
+# print(dataset_path)
+dataset_path = "mlabonne/guanaco-llama2-1k"
 
-dataset = load_dataset("json", data_files=dataset_path, split="train")
+dataset = load_dataset(dataset_path, split="train")
 
 
 import bitsandbytes as bnb
@@ -138,6 +140,7 @@ trainer = SFTTrainer(
     formatting_func=formatting_prompts_func,
     args=training_args,
 )
+
 
 trainer.train()
 trainer.save_model(output_dir)
