@@ -1,1 +1,1 @@
-cp frontend/env.dist frontend/.env
+cp frontend/.env.example frontend/.env
