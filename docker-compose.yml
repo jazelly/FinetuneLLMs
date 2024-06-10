@@ -17,3 +17,10 @@ services:
     depends_on:
       - frontend
       
+  trainer:
+    build:
+      context: ./trainer
+    container_name: trainer
+    ports:
+      - "80:80"
+    image: trainer
