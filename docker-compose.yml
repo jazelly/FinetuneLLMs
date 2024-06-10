@@ -5,6 +5,7 @@ services:
     container_name: frontend
     ports:
       - 3000:3000
+    image: frontend
 
   web:
     build:
@@ -12,5 +13,7 @@ services:
     container_name: web
     ports:
       - "80:80"
+    image: web
     depends_on:
       - frontend
+      
