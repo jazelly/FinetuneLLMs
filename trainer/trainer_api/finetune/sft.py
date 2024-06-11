@@ -3,7 +3,7 @@ import sys
 import torch
 import argparse
 
-print("[SFT] starting running SFT")
+print("[Training] starting training process")
 
 from transformers import (
     AutoModelForCausalLM,
@@ -11,13 +11,23 @@ from transformers import (
     BitsAndBytesConfig,
     pipeline,
 )
-from trl import SFTTrainer, SFTConfig
+from trl import SFTTrainer, SFTConfig, ORPOConfig, ORPOTrainer
 from datasets import load_dataset
 from peft import LoraConfig, PeftModel
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 trainer_root_path = os.path.normpath(os.path.join(script_dir, "../../"))
 sys.path.append(trainer_root_path)
+
+
+def check_bf16_compat():
+    if compute_dtype == torch.float16 and use_4bit:
+        major, _ = torch.cuda.get_device_capability()
+        if major >= 8:
+            print("=" * 40)
+            print("Your GPU supports bfloat16")
+            print("=" * 40)
+            return True
 
 
 #############
@@ -34,6 +44,9 @@ def process_args():
     parser.add_argument(
         "--dataset", type=str, dest="dataset", help="Set the name of dataset"
     )
+    parser.add_argument(
+        "--method", type=str, dest="method", help="Set the method to use"
+    )
 
     # Parse the arguments
     args = parser.parse_args()
@@ -43,16 +56,10 @@ def process_args():
 
 args = process_args()
 
-
-def check_bf16_compat():
-    if compute_dtype == torch.float16 and use_4bit:
-        major, _ = torch.cuda.get_device_capability()
-        if major >= 8:
-            print("=" * 40)
-            print("Your GPU supports bfloat16")
-            print("=" * 40)
-            return True
-
+method = args.method
+if not method:
+    print("[Warning] No training method provided, exiting")
+    sys.exit(0)
 
 # The model that you want to train from the Hugging Face hub
 model_name = "NousResearch/Llama-2-7b-chat-hf"
@@ -62,7 +69,8 @@ if not model_name:
     sys.exit(0)
 
 # The instruction dataset to use
-dataset_name = "mlabonne/guanaco-llama2-1k"
+# dataset_name = "mlabonne/guanaco-llama2-1k"
+dataset_name = "mlabonne/orpo-dpo-mix-40k"
 # dataset_name = args.dataset
 if not dataset_name:
     print("[Warning] No dataset provided, exiting")
@@ -102,7 +110,7 @@ learning_rate = 2e-4
 weight_decay = 0.001
 
 # Optimizer to use
-optim = "paged_adamw_32bit"
+optim = "paged_adamw_8bit"
 
 # Learning rate schedule
 lr_scheduler_type = "cosine"
@@ -138,12 +146,12 @@ device_map = {"": 0}
 
 
 # TODO: think about how to safely pass in dataset
-# !!so far maybe we can only support HF datasets!!
+# !!so far we can only support HF datasets!!
 # dataset_path = os.path.normpath(os.path.join(BASE_DIR, "../server/storage/datasets"))
 # print(dataset_path)
 
 
-def get_dataset(name, split="train", cache_dir=DATASET_CACHE_DIR):
+def get_dataset(name, split=None, cache_dir=DATASET_CACHE_DIR):
     return load_dataset(name, split=split, cache_dir=cache_dir)
 
 
@@ -232,8 +240,34 @@ def get_quantized_model(model_name, quantization_config, device_map):
 
 model = get_quantized_model(model_name, bnb_config, device_map)
 
-dataset = get_dataset(name=dataset_name, split="train", cache_dir=DATASET_CACHE_DIR)
-# Set supervised fine-tuning parameters
+dataset = get_dataset(name=dataset_name, cache_dir=DATASET_CACHE_DIR)
+training_set = dataset["train"]
+
+
+if (
+    method == "orpo"
+    and training_set.features is not None
+    and "prompt" not in training_set.features
+    and "chosen" not in training_set.features
+    and "rejected" not in training_set.features
+):
+    print(
+        f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}"
+    )
+    sys.exit(0)
+
+
+def format_chat_template(row):
+    if method == "orpo":
+        row["chosen"] = tokenizer.apply_chat_template(row["chosen"], tokenize=False)
+        row["rejected"] = tokenizer.apply_chat_template(row["rejected"], tokenize=False)
+    return row
+
+
+training_set_formatted = training_set.map(
+    format_chat_template,
+    num_proc=os.cpu_count(),
+)
 
 
 def get_new_model_name():
@@ -244,53 +278,86 @@ def get_new_model_name():
 # TrainingArguments parameters
 ################################################################################
 # Parameters for training arguments details => https://github.com/huggingface/transformers/blob/main/src/transformers/training_args.py#L158
-training_arguments = SFTConfig(
-    output_dir=MODEL_OUTPUT_DIR,
-    max_seq_length=max_seq_length,
-    dataset_text_field="text",
-    num_train_epochs=num_train_epochs,
-    per_device_train_batch_size=per_device_train_batch_size,
-    gradient_accumulation_steps=gradient_accumulation_steps,
-    optim=optim,
-    save_steps=save_steps,
-    logging_steps=logging_steps,
-    learning_rate=learning_rate,
-    weight_decay=weight_decay,
-    fp16=fp16,
-    bf16=bf16,
-    max_grad_norm=max_grad_norm,
-    max_steps=max_steps,
-    warmup_ratio=warmup_ratio,
-    group_by_length=group_by_length,
-    lr_scheduler_type=lr_scheduler_type,
-    report_to="tensorboard",
-)
+def get_training_args_of_method(method: str):
+    if method == "sft":
+        training_arguments = SFTConfig(
+            output_dir=MODEL_OUTPUT_DIR,
+            max_seq_length=max_seq_length,
+            dataset_text_field="text",
+            num_train_epochs=num_train_epochs,
+            per_device_train_batch_size=per_device_train_batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            optim=optim,
+            save_steps=save_steps,
+            logging_steps=logging_steps,
+            learning_rate=learning_rate,
+            weight_decay=weight_decay,
+            fp16=fp16,
+            bf16=bf16,
+            max_grad_norm=max_grad_norm,
+            max_steps=max_steps,
+            warmup_ratio=warmup_ratio,
+            group_by_length=group_by_length,
+            lr_scheduler_type=lr_scheduler_type,
+            # report_to="tensorboard",
+        )
+        return training_arguments
+    elif method == "orpo":
+        training_arguments = ORPOConfig(
+            learning_rate=learning_rate,
+            beta=0.1,
+            lr_scheduler_type="linear",
+            max_length=1024,
+            max_prompt_length=512,
+            per_device_train_batch_size=2,
+            per_device_eval_batch_size=2,
+            gradient_accumulation_steps=4,
+            optim=optim,
+            num_train_epochs=1,
+            eval_strategy="steps",
+            eval_steps=0.2,
+            logging_steps=1,
+            warmup_steps=10,
+            output_dir=MODEL_OUTPUT_DIR,
+            remove_unused_columns=False,
+        )
+        return training_arguments
+
 
 def get_trainer(
     model,
     train_dataset,
     peft_config,
     tokenizer,
-    training_arguments,
-
+    method,
 ):
-    trainer = SFTTrainer(
-        model=model,
-        train_dataset=train_dataset,
-        peft_config=peft_config,
-        tokenizer=tokenizer,
-        args=training_arguments,
-
-    )
-    return trainer
+    training_arguments = get_training_args_of_method(method)
+    if method == "sft":
+        trainer = SFTTrainer(
+            model=model,
+            train_dataset=train_dataset,
+            peft_config=peft_config,
+            tokenizer=tokenizer,
+            args=training_arguments,
+        )
+        return trainer
+    elif method == "orpo":
+        trainer = ORPOTrainer(
+            model=model,
+            args=training_arguments,
+            train_dataset=train_dataset,
+            peft_config=peft_config,
+            tokenizer=tokenizer,
+        )
+        return trainer
 
 
 trainer = get_trainer(
     model=model,
-    train_dataset=dataset,
+    train_dataset=training_set_formatted if method == "orpo" else training_set,
     peft_config=peft_config,
     tokenizer=tokenizer,
-    training_arguments=training_arguments,
+    method=method,
 )
 
 
@@ -308,19 +375,23 @@ def train(trainer):
 def get_gpu_memory():
     if not torch.cuda.is_available():
         return "No GPU available"
-    
+
     total_memory = torch.cuda.get_device_properties(0).total_memory
     free_memory = torch.cuda.memory_reserved(0)
-    
+
     return total_memory, free_memory
+
 
 total_memory, free_memory = get_gpu_memory()
 
 print(f"Free Memory {free_memory} / Total Memory {total_memory}")
 
+
 def get_model_parameters(model):
     # Extract model architecture parameters
-    num_parameters = sum(p.numel() for p in model.parameters())  # Total number of parameters
+    num_parameters = sum(
+        p.numel() for p in model.parameters()
+    )  # Total number of parameters
     batch_size = 1  # Batch size is typically 1 during model loading
     seq_length = 128  # Default sequence length used during model loading
     hidden_size = model.config.hidden_size  # Hidden size of the model
@@ -331,13 +402,17 @@ def get_model_parameters(model):
         "batch_size": batch_size,
         "seq_length": seq_length,
         "hidden_size": hidden_size,
-        "num_layers": num_layers
+        "num_layers": num_layers,
     }
+
 
 model_params = get_model_parameters(model)
 print(get_model_parameters(model))
 
-def calculate_memory_requirements(quantization_bit, num_parameters, batch_size, seq_length, hidden_size, num_layers):
+
+def calculate_memory_requirements(
+    quantization_bit, num_parameters, batch_size, seq_length, hidden_size, num_layers
+):
     bits_per_float = quantization_bit
     model_params_memory = num_parameters * bits_per_float // 8
     gradients_memory = num_parameters * bits_per_float // 8
@@ -345,22 +420,28 @@ def calculate_memory_requirements(quantization_bit, num_parameters, batch_size, 
     activations_per_layer = batch_size * seq_length * hidden_size
     total_activations = activations_per_layer * num_layers
     activations_memory = total_activations * bits_per_float // 8
-    total_memory = model_params_memory + gradients_memory + optimizer_memory + activations_memory
+    total_memory = (
+        model_params_memory + gradients_memory + optimizer_memory + activations_memory
+    )
     return {
         "model_params_memory": model_params_memory,
         "gradients_memory": gradients_memory,
         "optimizer_memory": optimizer_memory,
         "activations_memory": activations_memory,
-        "total_memory": total_memory
+        "total_memory": total_memory,
     }
+
 
 estimated_training_memory_usage = calculate_memory_requirements(4, **model_params)
 print(f"Training model requires {estimated_training_memory_usage}")
 if estimated_training_memory_usage["total_memory"] > free_memory:
-    print(f"Estimated: require at least {estimated_training_memory_usage["total_memory"] // 1e6} MB, but only have {free_memory//1e6} MB left.")
+    print(
+        f"Estimated: require at least {estimated_training_memory_usage['total_memory'] // 1e6} MB, but only have {free_memory//1e6} MB left."
+    )
     sys.exit(0)
 
 train(trainer)
+
 # %load_ext tensorboard
 # %tensorboard --logdir results/runs
 
