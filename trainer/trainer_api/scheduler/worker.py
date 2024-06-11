@@ -9,7 +9,12 @@ from typing import Dict, List
 import uuid
 
 from trainer.settings import BASE_DIR
-from trainer_api.consts import MAX_IDLE_TIME, Methods, Models, WorkerStates
+from trainer_api.utils.consts import (
+    MAX_IDLE_TIME,
+    Methods,
+    Models,
+    WorkerStates,
+)
 from trainer_api.scheduler.task import Task
 from .queue import MQueue
 from queue import Queue

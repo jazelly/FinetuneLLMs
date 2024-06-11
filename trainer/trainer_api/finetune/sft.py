@@ -1,90 +1,77 @@
 import os
 import sys
 import torch
+import argparse
 
 print("[SFT] starting running SFT")
 
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
-    TrainingArguments,
     BitsAndBytesConfig,
     pipeline,
-    logging,
 )
+from trl import SFTTrainer, SFTConfig
 from datasets import load_dataset
-from trl import SFTTrainer
 from peft import LoraConfig, PeftModel
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-trainer_path = os.path.normpath(os.path.join(script_dir, "../../"))
-sys.path.append(trainer_path)
+trainer_root_path = os.path.normpath(os.path.join(script_dir, "../../"))
+sys.path.append(trainer_root_path)
 
 
 #############
 # Pass args #
 #############
-output_dir = "./results"
-model_name = "NousResearch/Llama-2-7b-hf"
 
-args = {}
 
-if len(sys.argv) > 1:
-    print(sys.argv)
-    for arg in sys.argv[1:]:
-        if arg.startswith("--"):
-            kv = arg.split("=")
-            k = kv[0][2:]
-            v = "=".join(kv[1:])
-            args[k] = v
+def process_args():
+    # Create the parser
+    parser = argparse.ArgumentParser(description="Training script parser")
 
-print("system args", args)
+    # Add arguments
+    parser.add_argument("--model", type=str, dest="model", help="Set the name of model")
+    parser.add_argument(
+        "--dataset", type=str, dest="dataset", help="Set the name of dataset"
+    )
+
+    # Parse the arguments
+    args = parser.parse_args()
+
+    return args
+
+
+args = process_args()
+
+
+def check_bf16_compat():
+    if compute_dtype == torch.float16 and use_4bit:
+        major, _ = torch.cuda.get_device_capability()
+        if major >= 8:
+            print("=" * 40)
+            print("Your GPU supports bfloat16")
+            print("=" * 40)
+            return True
 
 
 # The model that you want to train from the Hugging Face hub
 model_name = "NousResearch/Llama-2-7b-chat-hf"
+# model_name = args.model
+if not model_name:
+    print("[Warning] No model provided, exiting")
+    sys.exit(0)
 
 # The instruction dataset to use
 dataset_name = "mlabonne/guanaco-llama2-1k"
+# dataset_name = args.dataset
+if not dataset_name:
+    print("[Warning] No dataset provided, exiting")
+    sys.exit(0)
 
-# Fine-tuned model name
-new_model = "llama-2-7b-miniguanaco"
-
-################################################################################
-# QLoRA parameters
-################################################################################
-
-# LoRA attention dimension
-lora_r = 64
-
-# Alpha parameter for LoRA scaling
-lora_alpha = 16
-
-# Dropout probability for LoRA layers
-lora_dropout = 0.1
-
-################################################################################
-# bitsandbytes parameters
-################################################################################
-
-# Activate 4-bit precision base model loading
-use_4bit = True
-
-# Compute dtype for 4-bit base models
-bnb_4bit_compute_dtype = "float16"
-
-# Quantization type (fp4 or nf4)
-bnb_4bit_quant_type = "nf4"
-
-# Activate nested quantization for 4-bit base models (double quantization)
-use_nested_quant = False
-
-################################################################################
-# TrainingArguments parameters
-################################################################################
 
 # Output directory where the model predictions and checkpoints will be stored
-output_dir = "./results"
+MODEL_OUTPUT_DIR = os.path.join(script_dir, "results")
+DATASET_CACHE_DIR = os.path.join(script_dir, "datasets")
 
 # Number of training epochs
 num_train_epochs = 1
@@ -141,7 +128,7 @@ logging_steps = 25
 ################################################################################
 
 # Maximum sequence length to use
-max_seq_length = None
+max_seq_length = 1024
 
 # Pack multiple short examples in the same input sequence to increase efficiency
 packing = False
@@ -155,54 +142,112 @@ device_map = {"": 0}
 # dataset_path = os.path.normpath(os.path.join(BASE_DIR, "../server/storage/datasets"))
 # print(dataset_path)
 
-dataset = load_dataset(dataset_name, split="train")
 
+def get_dataset(name, split="train", cache_dir=DATASET_CACHE_DIR):
+    return load_dataset(name, split=split, cache_dir=cache_dir)
+
+
+def get_tokenizer(model_name):
+    # Load tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+    tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "right"  # Fix weird overflow issue with fp16 training
+    return tokenizer
+
+
+tokenizer = get_tokenizer(model_name)
+
+################################################################################
+# QLoRA parameters
+################################################################################
+
+# LoRA attention dimension
+lora_r = 64
+
+# Alpha parameter for LoRA scaling
+lora_alpha = 16
+
+# Dropout probability for LoRA layers
+lora_dropout = 0.1
+
+
+def get_lora_config(lora_alpha, lora_dropout, lora_r):
+    return LoraConfig(
+        lora_alpha=lora_alpha,
+        lora_dropout=lora_dropout,
+        r=lora_r,
+        bias="none",
+        task_type="CAUSAL_LM",
+    )
+
+
+peft_config = get_lora_config(
+    lora_alpha=lora_alpha, lora_dropout=lora_dropout, lora_r=lora_r
+)
+
+################################################################################
+# bitsandbytes parameters
+################################################################################
+
+# Activate 4-bit precision base model loading
+use_4bit = True
+
+# Compute dtype for 4-bit base models
+bnb_4bit_compute_dtype = "float16"
+
+# Quantization type (fp4 or nf4)
+bnb_4bit_quant_type = "nf4"
+
+# Activate nested quantization for 4-bit base models (double quantization)
+use_nested_quant = False
 
 # Load tokenizer and model with QLoRA configuration
 compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
 
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=use_4bit,
-    bnb_4bit_quant_type=bnb_4bit_quant_type,
-    bnb_4bit_compute_dtype=compute_dtype,
-    bnb_4bit_use_double_quant=use_nested_quant,
-)
+
+def get_base_model_bnb_config():
+    # Quantization config
+    bnb_config = BitsAndBytesConfig(
+        load_in_4bit=use_4bit,
+        bnb_4bit_quant_type=bnb_4bit_quant_type,
+        bnb_4bit_compute_dtype=compute_dtype,
+        bnb_4bit_use_double_quant=use_nested_quant,
+    )
+
+    return bnb_config
 
 
-# Check GPU compatibility with bfloat16
-if compute_dtype == torch.float16 and use_4bit:
-    major, _ = torch.cuda.get_device_capability()
-    if major >= 8:
-        print("=" * 80)
-        print("Your GPU supports bfloat16: accelerate training with bf16=True")
-        print("=" * 80)
+bnb_config = get_base_model_bnb_config()
 
 
-# Load base model
-model = AutoModelForCausalLM.from_pretrained(
-    model_name, quantization_config=bnb_config, device_map=device_map
-)
-model.config.use_cache = False  # whether the model uses caching during inference to speed up generation by reusing previous computations
-model.config.pretraining_tp = 1
+def get_quantized_model(model_name, quantization_config, device_map):
+    # Load base model
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name, quantization_config=quantization_config, device_map=device_map
+    )
+    model.config.use_cache = False  # whether the model uses caching during inference to speed up generation by reusing previous computations
+    model.config.pretraining_tp = 1
+    return model
 
-# Load LLaMA tokenizer
-tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-tokenizer.pad_token = tokenizer.eos_token
-tokenizer.padding_side = "right"  # Fix weird overflow issue with fp16 training
 
-# Load LoRA configuration
-peft_config = LoraConfig(
-    lora_alpha=lora_alpha,
-    lora_dropout=lora_dropout,
-    r=lora_r,
-    bias="none",
-    task_type="CAUSAL_LM",
-)
+model = get_quantized_model(model_name, bnb_config, device_map)
 
-# Set training parameters
+dataset = get_dataset(name=dataset_name, split="train", cache_dir=DATASET_CACHE_DIR)
+# Set supervised fine-tuning parameters
+
+
+def get_new_model_name():
+    return f"{model_name}-{dataset_name}"
+
+
+################################################################################
+# TrainingArguments parameters
+################################################################################
 # Parameters for training arguments details => https://github.com/huggingface/transformers/blob/main/src/transformers/training_args.py#L158
-training_arguments = TrainingArguments(
-    output_dir=output_dir,
+training_arguments = SFTConfig(
+    output_dir=MODEL_OUTPUT_DIR,
+    max_seq_length=max_seq_length,
+    dataset_text_field="text",
     num_train_epochs=num_train_epochs,
     per_device_train_batch_size=per_device_train_batch_size,
     gradient_accumulation_steps=gradient_accumulation_steps,
@@ -221,31 +266,103 @@ training_arguments = TrainingArguments(
     report_to="tensorboard",
 )
 
+def get_trainer(
+    model,
+    train_dataset,
+    peft_config,
+    tokenizer,
+    training_arguments,
 
-# Set supervised fine-tuning parameters
-trainer = SFTTrainer(
+):
+    trainer = SFTTrainer(
+        model=model,
+        train_dataset=train_dataset,
+        peft_config=peft_config,
+        tokenizer=tokenizer,
+        args=training_arguments,
+
+    )
+    return trainer
+
+
+trainer = get_trainer(
     model=model,
     train_dataset=dataset,
     peft_config=peft_config,
-    dataset_text_field="text",
-    max_seq_length=max_seq_length,
     tokenizer=tokenizer,
-    args=training_arguments,
-    packing=packing,
+    training_arguments=training_arguments,
 )
 
-# Train model
-trainer.train()
 
-# Save trained model
-trainer.model.save_pretrained(new_model)
+# Fine-tuned model name
+new_model = get_new_model_name()
 
+
+def train(trainer):
+    # Train model
+    trainer.train()
+    # Save trained model
+    trainer.model.save_pretrained(new_model)
+
+
+def get_gpu_memory():
+    if not torch.cuda.is_available():
+        return "No GPU available"
+    
+    total_memory = torch.cuda.get_device_properties(0).total_memory
+    free_memory = torch.cuda.memory_reserved(0)
+    
+    return total_memory, free_memory
+
+total_memory, free_memory = get_gpu_memory()
+
+print(f"Free Memory {free_memory} / Total Memory {total_memory}")
+
+def get_model_parameters(model):
+    # Extract model architecture parameters
+    num_parameters = sum(p.numel() for p in model.parameters())  # Total number of parameters
+    batch_size = 1  # Batch size is typically 1 during model loading
+    seq_length = 128  # Default sequence length used during model loading
+    hidden_size = model.config.hidden_size  # Hidden size of the model
+    num_layers = model.config.num_hidden_layers  # Number of layers in the model
+
+    return {
+        "num_parameters": num_parameters,
+        "batch_size": batch_size,
+        "seq_length": seq_length,
+        "hidden_size": hidden_size,
+        "num_layers": num_layers
+    }
+
+model_params = get_model_parameters(model)
+print(get_model_parameters(model))
+
+def calculate_memory_requirements(quantization_bit, num_parameters, batch_size, seq_length, hidden_size, num_layers):
+    bits_per_float = quantization_bit
+    model_params_memory = num_parameters * bits_per_float // 8
+    gradients_memory = num_parameters * bits_per_float // 8
+    optimizer_memory = num_parameters * bits_per_float * 2 // 8
+    activations_per_layer = batch_size * seq_length * hidden_size
+    total_activations = activations_per_layer * num_layers
+    activations_memory = total_activations * bits_per_float // 8
+    total_memory = model_params_memory + gradients_memory + optimizer_memory + activations_memory
+    return {
+        "model_params_memory": model_params_memory,
+        "gradients_memory": gradients_memory,
+        "optimizer_memory": optimizer_memory,
+        "activations_memory": activations_memory,
+        "total_memory": total_memory
+    }
+
+estimated_training_memory_usage = calculate_memory_requirements(4, **model_params)
+print(f"Training model requires {estimated_training_memory_usage}")
+if estimated_training_memory_usage["total_memory"] > free_memory:
+    print(f"Estimated: require at least {estimated_training_memory_usage["total_memory"] // 1e6} MB, but only have {free_memory//1e6} MB left.")
+    sys.exit(0)
+
+train(trainer)
 # %load_ext tensorboard
 # %tensorboard --logdir results/runs
-
-
-# Ignore warnings
-logging.set_verbosity(logging.CRITICAL)
 
 # Run text generation pipeline with our next model
 prompt = "What is a large language model?"
@@ -264,18 +381,19 @@ gc.collect()
 gc.collect()
 
 
-# Reload model in FP16 and merge it with LoRA weights
-base_model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    low_cpu_mem_usage=True,
-    return_dict=True,
-    torch_dtype=torch.float16,
-    device_map=device_map,
-)
-model = PeftModel.from_pretrained(base_model, new_model)
-model = model.merge_and_unload()
+def save_trained_model():
+    # Reload model in FP16 and merge it with LoRA weights
+    base_model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        low_cpu_mem_usage=True,
+        return_dict=True,
+        torch_dtype=torch.float16,
+        device_map=device_map,
+    )
+    model = PeftModel.from_pretrained(base_model, new_model)
+    model = model.merge_and_unload()
 
-# Reload tokenizer to save it
-tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-tokenizer.pad_token = tokenizer.eos_token
-tokenizer.padding_side = "right"
+
+save_trained_model()
+
+saved_tokenizer = tokenizer.save_pretrained(new_model)

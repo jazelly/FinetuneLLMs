@@ -7,11 +7,11 @@ watchgod
 psutil
 
 transformers
-trl
+trl >= 0.9.4, < 1.0.0
 peft
 accelerate
 datasets
 bitsandbytes
 scipy
 sentencepiece
-gradio
+tensorboard

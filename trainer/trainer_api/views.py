@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
 
 from trainer_api.scheduler.task import Task
-from trainer_api.consts import Methods, Models
+from trainer.trainer_api.utils.consts import Methods, Models
 from trainer_api.scheduler.worker import Worker
 
 

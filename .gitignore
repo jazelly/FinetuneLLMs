@@ -161,6 +161,4 @@ cython_debug/
 #.idea/
 
 checkpoint_dir/
-results/
-llama-2-7b*/
 node_modules/

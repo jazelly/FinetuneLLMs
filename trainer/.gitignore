@@ -1,1 +1,4 @@
-trainer_api/logs/*
+trainer_api/logs/**
+results/**
+models/**
+datasets/**
