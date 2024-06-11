@@ -1,4 +1,4 @@
 trainer_api/logs/**
-results/**
-models/**
-datasets/**
+trainer_api/finetune/results/**
+trainer_api/finetune/models/**
+trainer_api/finetune/datasets/**
