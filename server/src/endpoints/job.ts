@@ -9,6 +9,11 @@ import { Jobs } from "../models/jobs";
 import { v4 } from "uuid";
 import Trainer from "../models/trainer.internal";
 import { IDataset } from "../models/schema/datasets.type";
+import {
+  BASE_MODELS,
+  EXAMPLE_DATASETS,
+  TRAINING_METHODS,
+} from "../utils/supportList";
 
 function jobEndpoints(app) {
   if (!app) return;
@@ -25,12 +30,7 @@ function jobEndpoints(app) {
       };
 
       const datasetsPromise = Datasets.readAll();
-      const trainingMethods = ["sft", "dpo"];
-      const baseModels = [
-        "LLAMA 2",
-        "LLAMA 3",
-        "microsoft/Phi-3-mini-4k-instruct",
-      ];
+
       const hyperparameters = {
         bf16: true,
         do_eval: false,
@@ -56,9 +56,9 @@ function jobEndpoints(app) {
       };
 
       const [datasets] = await Promise.all([datasetsPromise]);
-      result.datasets = datasets;
-      result.trainingMethods = trainingMethods;
-      result.baseModels = baseModels;
+      result.datasets = datasets.length ? datasets : EXAMPLE_DATASETS;
+      result.trainingMethods = TRAINING_METHODS;
+      result.baseModels = BASE_MODELS;
       result.hyperparameters = hyperparameters;
 
       res.json(result);

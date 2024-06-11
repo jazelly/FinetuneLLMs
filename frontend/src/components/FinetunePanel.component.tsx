@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export interface FinetunePanelProps {
   jobOptions: AllJobOptions | undefined;
   sendMessageToTrainer: (msg: string) => void;
-  runningJobId?: string; // Haven't figured out what to do with this
+  runningJobId?: string;
 }
 
 const FinetunePanel = ({
@@ -106,7 +106,7 @@ const FinetunePanel = ({
       />
       <Dropdown
         placeholder="Training method"
-        options={jobOptions?.trainingMethods ?? []}
+        options={jobOptions?.trainingMethods?.map((m) => m.name) ?? []}
         onSelect={setTrainingMethod}
         label="Training method"
         disabled={!jobOptions}

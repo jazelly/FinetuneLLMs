@@ -61,17 +61,15 @@ if not method:
     print("[Warning] No training method provided, exiting")
     sys.exit(0)
 
-# The model that you want to train from the Hugging Face hub
-model_name = "NousResearch/Llama-2-7b-chat-hf"
-# model_name = args.model
+# model_name = "NousResearch/Llama-2-7b-chat-hf"
+model_name = args.model
 if not model_name:
     print("[Warning] No model provided, exiting")
     sys.exit(0)
 
-# The instruction dataset to use
 # dataset_name = "mlabonne/guanaco-llama2-1k"
-dataset_name = "mlabonne/orpo-dpo-mix-40k"
-# dataset_name = args.dataset
+# dataset_name = "mlabonne/orpo-dpo-mix-40k"
+dataset_name = args.dataset
 if not dataset_name:
     print("[Warning] No dataset provided, exiting")
     sys.exit(0)
@@ -241,20 +239,40 @@ def get_quantized_model(model_name, quantization_config, device_map):
 model = get_quantized_model(model_name, bnb_config, device_map)
 
 dataset = get_dataset(name=dataset_name, cache_dir=DATASET_CACHE_DIR)
+
+
+def validate_dataset(dataset):
+    training_set = dataset["train"]
+    if not training_set:
+        print(f"[Warning] the dataset {dataset_name} has no train split")
+        sys.exit(0)
+
+    if (
+        method == "orpo"
+        and training_set.features is not None
+        and "prompt" not in training_set.features
+        and "chosen" not in training_set.features
+        and "rejected" not in training_set.features
+    ):
+        print(
+            f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}"
+        )
+        sys.exit(0)
+
+    if (
+        method == "sft"
+        and isinstance(training_set.features, list)
+        and len(training_set.features) != 1
+    ):
+        print(
+            f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}"
+        )
+        sys.exit(0)
+
+
+validate_dataset(dataset)
+
 training_set = dataset["train"]
-
-
-if (
-    method == "orpo"
-    and training_set.features is not None
-    and "prompt" not in training_set.features
-    and "chosen" not in training_set.features
-    and "rejected" not in training_set.features
-):
-    print(
-        f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}"
-    )
-    sys.exit(0)
 
 
 def format_chat_template(row):
@@ -283,7 +301,7 @@ def get_training_args_of_method(method: str):
         training_arguments = SFTConfig(
             output_dir=MODEL_OUTPUT_DIR,
             max_seq_length=max_seq_length,
-            dataset_text_field="text",
+            dataset_text_field=training_set.features[0],
             num_train_epochs=num_train_epochs,
             per_device_train_batch_size=per_device_train_batch_size,
             gradient_accumulation_steps=gradient_accumulation_steps,

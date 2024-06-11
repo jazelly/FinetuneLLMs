@@ -24,9 +24,16 @@ export interface IJobDetail extends JobCreate {
   status: string;
 }
 
+export interface TrainingMethod {
+  name: string;
+  fullName: string;
+  explanation: string;
+  externalLink?: string;
+}
+
 export interface AllJobOptions {
   baseModels: Array<string>;
-  trainingMethods: Array<string>;
+  trainingMethods: Array<TrainingMethod>;
   datasets: Array<Record<string, any>>;
   hyperparameters: Record<string, string | number | boolean>;
 }
