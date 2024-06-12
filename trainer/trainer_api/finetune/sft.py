@@ -42,10 +42,10 @@ def process_args():
     # Add arguments
     parser.add_argument("--model", type=str, dest="model", help="Set the name of model")
     parser.add_argument(
-        "--dataset", type=str, dest="dataset", help="Set the name of dataset"
+        "--method", type=str, dest="method", help="Set the method to use"
     )
     parser.add_argument(
-        "--method", type=str, dest="method", help="Set the method to use"
+        "--dataset", type=str, dest="dataset", help="Set the name of dataset"
     )
 
     # Parse the arguments

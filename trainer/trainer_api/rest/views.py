@@ -1,10 +1,10 @@
 import json
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
 
+from trainer_api.utils.constants import BASE_MODELS, TRAINING_METHODS
 from trainer_api.scheduler.task import Task
-from trainer.trainer_api.utils.consts import Methods, Models
 from trainer_api.scheduler.worker import Worker
 
 
@@ -17,14 +17,22 @@ def train(request):
             body_json = json.loads(request.body)
             print("body_json", body_json)
             if (
-                body_json["trainingMethod"] == Methods.SFT.value
-                and body_json["baseModel"] == Models.LLAMA2.value
+                body_json["trainingMethod"]
+                in map(lambda m: m["name"], TRAINING_METHODS)
+                and body_json["baseModel"] in BASE_MODELS
+                and body_json["dataset"]["name"] is not None
             ):
                 try:
                     # schedule the task and repond immediately
                     print("[Worker] Submitting task")
                     worker = Worker()
-                    worker.submit(Task(method=Methods.SFT, model=Models.LLAMA2))
+                    worker.submit(
+                        Task(
+                            method=body_json["trainingMethod"],
+                            model=body_json["baseModel"],
+                            dataset=body_json["dataset"]["name"],
+                        )
+                    )
 
                     return JsonResponse(
                         {"status": "success", "message": "Added task to queue"},

@@ -7,7 +7,11 @@ import uuid
 from django.conf import settings
 
 from trainer_api.utils.errors import InvalidArgumentError
-from trainer_api.utils.consts import FINETUNE_SCRIPT_DIR, Methods, Models
+from trainer_api.utils.constants import (
+    BASE_MODELS,
+    FINETUNE_SCRIPT_DIR,
+    TRAINING_METHODS,
+)
 from trainer_api.utils import logging
 
 logger = logging.get_logger(__name__)
@@ -24,37 +28,24 @@ class Task:
         self.output = (
             kwargs["output"] if "output" in kwargs else sys.stdout
         )  # default retry once
+
         self.method = kwargs.get("method")
         if self.method is None:
             raise InvalidArgumentError(source=None, message="Missing method")
         self.model = kwargs.get("model")
         if self.model is None:
             raise InvalidArgumentError(source=None, message="Missing model")
+        self.dataset = kwargs.get("dataset")
+        if self.dataset is None:
+            raise InvalidArgumentError(source=None, message="Missing dataset")
         self.training_args = kwargs.get("training_args")
 
-    @property
-    def method(self) -> str:
-        """
-        `str`: Method. Log an error if used while not having been set.
-        """
-        if self.method is None:
-            logger.error("Using method, but it is not set yet.")
-            return None
-        return str(self.method)
-
-    @property
-    def model(self) -> str:
-        """
-        `str`: Model. Log an error if used while not having been set.
-        """
-        if self.model is None:
-            logger.error("Using model, but it is not set yet.")
-            return None
-        return str(self.model)
-
     def run(self, log=sys.stdout):
-        command = self._assemble_command()
-        if self.method == Methods.SFT and self.model == Models.LLAMA2:
+        if (
+            self.method in map(lambda m: m["name"], TRAINING_METHODS)
+            and self.model in BASE_MODELS
+        ):
+            command = self._assemble_command()
             process = subprocess.Popen(
                 command,
                 stdout=subprocess.PIPE,
@@ -64,7 +55,14 @@ class Task:
             self._consume_logs_from_subprocess(process)
 
     def _assemble_command(self):
-        basic = ["python", FINETUNE_SCRIPT_PATH]
+        r = ["python", FINETUNE_SCRIPT_PATH]
+        r.append("--model")
+        r.append(f"{self.model}")
+        r.append("--method")
+        r.append(f"{self.method}")
+        r.append("--dataset")
+        r.append(f"{self.dataset}")
+        return r
 
     def _consume_logs_from_subprocess(self, process):
         # Read the output continuously
