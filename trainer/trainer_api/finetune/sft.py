@@ -15,9 +15,11 @@ from trl import SFTTrainer, SFTConfig, ORPOConfig, ORPOTrainer
 from datasets import load_dataset
 from peft import LoraConfig, PeftModel
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-trainer_root_path = os.path.normpath(os.path.join(script_dir, "../../"))
-sys.path.append(trainer_root_path)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+MODELS_DIR = os.path.dirname(os.path.join(SCRIPT_DIR, "models"))
+TRAINER_ROOT_PATH = os.path.normpath(os.path.join(SCRIPT_DIR, "../../"))
+
+sys.path.append(TRAINER_ROOT_PATH)
 
 
 def check_bf16_compat():
@@ -76,8 +78,8 @@ if not dataset_name:
 
 
 # Output directory where the model predictions and checkpoints will be stored
-MODEL_OUTPUT_DIR = os.path.join(script_dir, "results")
-DATASET_CACHE_DIR = os.path.join(script_dir, "datasets")
+MODEL_OUTPUT_DIR = os.path.join(SCRIPT_DIR, "results")
+DATASET_CACHE_DIR = os.path.join(SCRIPT_DIR, "datasets")
 
 # Number of training epochs
 num_train_epochs = 1

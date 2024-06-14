@@ -15,7 +15,6 @@ import PreLoader from "@/components/Preloader";
 import ChangeWarningModal from "@/components/ChangeWarning";
 import { CaretUpDown, MagnifyingGlass, X } from "@phosphor-icons/react";
 import LanceDBOptions from "@/components/VectorDBSelection/LanceDBOptions";
-import ChromaDBOptions from "@/components/VectorDBSelection/ChromaDBOptions";
 import PineconeDBOptions from "@/components/VectorDBSelection/PineconeDBOptions";
 import QDrantDBOptions from "@/components/VectorDBSelection/QDrantDBOptions";
 import WeaviateDBOptions from "@/components/VectorDBSelection/WeaviateDBOptions";
@@ -111,14 +110,6 @@ export default function GeneralVectorDatabase() {
       options: <LanceDBOptions />,
       description:
         "100% local vector DB that runs on the same instance as FinetuneLLMs.",
-    },
-    {
-      name: "Chroma",
-      value: "chroma",
-      logo: ChromaLogo,
-      options: <ChromaDBOptions settings={settings} />,
-      description:
-        "Open source vector database you can host yourself or on the cloud.",
     },
     {
       name: "Pinecone",

@@ -276,11 +276,6 @@ const SystemSettings = {
       PineConeKey: !!process.env.PINECONE_API_KEY,
       PineConeIndex: process.env.PINECONE_INDEX,
 
-      // Chroma DB Keys
-      ChromaEndpoint: process.env.CHROMA_ENDPOINT,
-      ChromaApiHeader: process.env.CHROMA_API_HEADER,
-      ChromaApiKey: !!process.env.CHROMA_API_KEY,
-
       // Weaviate DB Keys
       WeaviateEndpoint: process.env.WEAVIATE_ENDPOINT,
       WeaviateApiKey: process.env.WEAVIATE_API_KEY,

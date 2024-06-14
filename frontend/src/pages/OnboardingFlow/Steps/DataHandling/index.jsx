@@ -171,14 +171,6 @@ export const LLM_SELECTION_PRIVACY = {
 };
 
 export const VECTOR_DB_PRIVACY = {
-  chroma: {
-    name: "Chroma",
-    description: [
-      "Your vectors and document text are stored on your Chroma instance",
-      "Access to your instance is managed by you",
-    ],
-    logo: ChromaLogo,
-  },
   pinecone: {
     name: "Pinecone",
     description: [

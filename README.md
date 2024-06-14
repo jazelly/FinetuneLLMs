@@ -55,8 +55,8 @@ Setup server
 // copy .env.example to .env and .env.development
 cd server
 npx prisma migrate dev
-yarn
-yarn dev
+npm i
+npm run dev
 ```
 
 Setup trainer
@@ -64,5 +64,5 @@ Setup trainer
 ```
 cd trainer
 pip install -r requirements.txt
-daphne trainer.asgi:application
+python watch.py
 ```
