@@ -18,6 +18,8 @@ class WorkerStates(Enum):
 
 FINETUNE_SCRIPT_DIR = os.path.join(settings.BASE_DIR, "./trainer_api/finetune")
 
+LOG_DIR = log_path = os.path.join(settings.BASE_DIR, "trainer_api/logs/")
+
 
 def convert_to_enum_name(text):
     return text.upper()

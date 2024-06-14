@@ -3,8 +3,6 @@ import sys
 import torch
 import argparse
 
-print("[Training] starting training process")
-
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
@@ -16,10 +14,11 @@ from datasets import load_dataset
 from peft import LoraConfig, PeftModel
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-MODELS_DIR = os.path.dirname(os.path.join(SCRIPT_DIR, "models"))
 TRAINER_ROOT_PATH = os.path.normpath(os.path.join(SCRIPT_DIR, "../../"))
 
 sys.path.append(TRAINER_ROOT_PATH)
+
+from trainer_api.utils.logging import get_stream_logger
 
 
 def check_bf16_compat():
@@ -32,11 +31,12 @@ def check_bf16_compat():
             return True
 
 
+logger = get_stream_logger("sft", "TRAINER")
+
+
 #############
 # Pass args #
 #############
-
-
 def process_args():
     # Create the parser
     parser = argparse.ArgumentParser(description="Training script parser")
@@ -56,30 +56,32 @@ def process_args():
     return args
 
 
+logger.info("Processing args")
 args = process_args()
 
 method = args.method
 if not method:
-    print("[Warning] No training method provided, exiting")
+    logger.warning("No training method provided, exiting")
     sys.exit(0)
 
 # model_name = "NousResearch/Llama-2-7b-chat-hf"
 model_name = args.model
 if not model_name:
-    print("[Warning] No model provided, exiting")
+    logger.warning("No model provided, exiting")
     sys.exit(0)
 
 # dataset_name = "mlabonne/guanaco-llama2-1k"
 # dataset_name = "mlabonne/orpo-dpo-mix-40k"
 dataset_name = args.dataset
 if not dataset_name:
-    print("[Warning] No dataset provided, exiting")
+    logger.warning("No dataset provided, exiting")
     sys.exit(0)
 
 
 # Output directory where the model predictions and checkpoints will be stored
 MODEL_OUTPUT_DIR = os.path.join(SCRIPT_DIR, "results")
 DATASET_CACHE_DIR = os.path.join(SCRIPT_DIR, "datasets")
+MODELS_CACHE_DIR = os.path.join(SCRIPT_DIR, "models")
 
 # Number of training epochs
 num_train_epochs = 1
@@ -141,14 +143,8 @@ max_seq_length = 1024
 # Pack multiple short examples in the same input sequence to increase efficiency
 packing = False
 
-# Load the entire model on the GPU 0
-device_map = {"": 0}
-
-
-# TODO: think about how to safely pass in dataset
-# !!so far we can only support HF datasets!!
-# dataset_path = os.path.normpath(os.path.join(BASE_DIR, "../server/storage/datasets"))
-# print(dataset_path)
+# Load the entire model on GPU
+device_map = "auto"
 
 
 def get_dataset(name, split=None, cache_dir=DATASET_CACHE_DIR):
@@ -163,20 +159,9 @@ def get_tokenizer(model_name):
     return tokenizer
 
 
-tokenizer = get_tokenizer(model_name)
-
 ################################################################################
-# QLoRA parameters
+# QLoRA
 ################################################################################
-
-# LoRA attention dimension
-lora_r = 64
-
-# Alpha parameter for LoRA scaling
-lora_alpha = 16
-
-# Dropout probability for LoRA layers
-lora_dropout = 0.1
 
 
 def get_lora_config(lora_alpha, lora_dropout, lora_r):
@@ -188,10 +173,6 @@ def get_lora_config(lora_alpha, lora_dropout, lora_r):
         task_type="CAUSAL_LM",
     )
 
-
-peft_config = get_lora_config(
-    lora_alpha=lora_alpha, lora_dropout=lora_dropout, lora_r=lora_r
-)
 
 ################################################################################
 # bitsandbytes parameters
@@ -230,23 +211,26 @@ bnb_config = get_base_model_bnb_config()
 
 def get_quantized_model(model_name, quantization_config, device_map):
     # Load base model
+    logger.info(f"Loading model {model_name} to {MODELS_CACHE_DIR}")
     model = AutoModelForCausalLM.from_pretrained(
-        model_name, quantization_config=quantization_config, device_map=device_map
+        model_name,
+        quantization_config=quantization_config,
+        device_map=device_map,
+        cache_dir=MODELS_CACHE_DIR,
+        config={
+            "use_cache": False,
+            "pretraining_tp": 1,
+        },
     )
     model.config.use_cache = False  # whether the model uses caching during inference to speed up generation by reusing previous computations
     model.config.pretraining_tp = 1
     return model
 
 
-model = get_quantized_model(model_name, bnb_config, device_map)
-
-dataset = get_dataset(name=dataset_name, cache_dir=DATASET_CACHE_DIR)
-
-
 def validate_dataset(dataset):
     training_set = dataset["train"]
     if not training_set:
-        print(f"[Warning] the dataset {dataset_name} has no train split")
+        print(f"[Warning] the dataset {dataset_name} has no train split", flush=True)
         sys.exit(0)
 
     if (
@@ -257,7 +241,8 @@ def validate_dataset(dataset):
         and "rejected" not in training_set.features
     ):
         print(
-            f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}"
+            f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}",
+            flush=True,
         )
         sys.exit(0)
 
@@ -267,14 +252,10 @@ def validate_dataset(dataset):
         and len(training_set.features) != 1
     ):
         print(
-            f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}"
+            f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}",
+            flush=True,
         )
         sys.exit(0)
-
-
-validate_dataset(dataset)
-
-training_set = dataset["train"]
 
 
 def format_chat_template(row):
@@ -284,14 +265,64 @@ def format_chat_template(row):
     return row
 
 
-training_set_formatted = training_set.map(
-    format_chat_template,
-    num_proc=os.cpu_count(),
-)
-
-
 def get_new_model_name():
     return f"{model_name}-{dataset_name}"
+
+
+##########################
+## Validate GPU Limit ####
+##########################
+def get_gpu_memory():
+    if not torch.cuda.is_available():
+        logger.warning("No GPU available")
+        sys.exit(0)
+
+    total_memory = torch.cuda.get_device_properties(0).total_memory
+    free_memory = torch.cuda.memory_reserved(0)
+
+    print(f"Free Memory {free_memory} / Total Memory {total_memory}")
+    return total_memory, free_memory
+
+
+def calculate_memory_requirements(
+    quantization_bit, num_parameters, batch_size, seq_length, hidden_size, num_layers
+):
+    bits_per_float = quantization_bit
+    model_params_memory = num_parameters * bits_per_float // 8
+    gradients_memory = num_parameters * bits_per_float // 8
+    optimizer_memory = num_parameters * bits_per_float * 2 // 8
+    activations_per_layer = batch_size * seq_length * hidden_size
+    total_activations = activations_per_layer * num_layers
+    activations_memory = total_activations * bits_per_float // 8
+    total_memory = (
+        model_params_memory + gradients_memory + optimizer_memory + activations_memory
+    )
+    return {
+        "model_params_memory": model_params_memory,
+        "gradients_memory": gradients_memory,
+        "optimizer_memory": optimizer_memory,
+        "activations_memory": activations_memory,
+        "total_memory": total_memory,
+    }
+
+
+def get_model_parameters(model):
+    # Extract model architecture parameters
+    num_parameters = sum(
+        p.numel() for p in model.parameters()
+    )  # Total number of parameters
+    batch_size = 1  # Batch size is typically 1 during model loading
+    seq_length = 128  # Default sequence length used during model loading
+    hidden_size = model.config.hidden_size  # Hidden size of the model
+    num_layers = model.config.num_hidden_layers  # Number of layers in the model
+
+    return {
+        "num_parameters": num_parameters,
+        "batch_size": batch_size,
+        "seq_length": seq_length,
+        "hidden_size": hidden_size,
+        "num_layers": num_layers,
+    }
 
 
 ################################################################################
@@ -305,7 +336,6 @@ def get_training_args_of_method(method: str):
             max_seq_length=max_seq_length,
             dataset_text_field=training_set.features[0],
             num_train_epochs=num_train_epochs,
-            per_device_train_batch_size=per_device_train_batch_size,
             gradient_accumulation_steps=gradient_accumulation_steps,
             optim=optim,
             save_steps=save_steps,
@@ -329,11 +359,11 @@ def get_training_args_of_method(method: str):
             lr_scheduler_type="linear",
             max_length=1024,
             max_prompt_length=512,
-            per_device_train_batch_size=2,
-            per_device_eval_batch_size=2,
+            per_device_train_batch_size=per_device_train_batch_size,
+            per_device_eval_batch_size=per_device_eval_batch_size,
             gradient_accumulation_steps=4,
             optim=optim,
-            num_train_epochs=1,
+            num_train_epochs=num_train_epochs,
             eval_strategy="steps",
             eval_steps=0.2,
             logging_steps=1,
@@ -372,95 +402,62 @@ def get_trainer(
         return trainer
 
 
-trainer = get_trainer(
-    model=model,
-    train_dataset=training_set_formatted if method == "orpo" else training_set,
-    peft_config=peft_config,
-    tokenizer=tokenizer,
-    method=method,
-)
-
-
-# Fine-tuned model name
-new_model = get_new_model_name()
-
-
-def train(trainer):
+def train(trainer, new_model=get_new_model_name()):
     # Train model
     trainer.train()
     # Save trained model
     trainer.model.save_pretrained(new_model)
 
 
-def get_gpu_memory():
-    if not torch.cuda.is_available():
-        return "No GPU available"
-
-    total_memory = torch.cuda.get_device_properties(0).total_memory
-    free_memory = torch.cuda.memory_reserved(0)
-
-    return total_memory, free_memory
+model = get_quantized_model(model_name, bnb_config, device_map)
 
 
 total_memory, free_memory = get_gpu_memory()
-
-print(f"Free Memory {free_memory} / Total Memory {total_memory}")
-
-
-def get_model_parameters(model):
-    # Extract model architecture parameters
-    num_parameters = sum(
-        p.numel() for p in model.parameters()
-    )  # Total number of parameters
-    batch_size = 1  # Batch size is typically 1 during model loading
-    seq_length = 128  # Default sequence length used during model loading
-    hidden_size = model.config.hidden_size  # Hidden size of the model
-    num_layers = model.config.num_hidden_layers  # Number of layers in the model
-
-    return {
-        "num_parameters": num_parameters,
-        "batch_size": batch_size,
-        "seq_length": seq_length,
-        "hidden_size": hidden_size,
-        "num_layers": num_layers,
-    }
-
-
 model_params = get_model_parameters(model)
-print(get_model_parameters(model))
-
-
-def calculate_memory_requirements(
-    quantization_bit, num_parameters, batch_size, seq_length, hidden_size, num_layers
-):
-    bits_per_float = quantization_bit
-    model_params_memory = num_parameters * bits_per_float // 8
-    gradients_memory = num_parameters * bits_per_float // 8
-    optimizer_memory = num_parameters * bits_per_float * 2 // 8
-    activations_per_layer = batch_size * seq_length * hidden_size
-    total_activations = activations_per_layer * num_layers
-    activations_memory = total_activations * bits_per_float // 8
-    total_memory = (
-        model_params_memory + gradients_memory + optimizer_memory + activations_memory
-    )
-    return {
-        "model_params_memory": model_params_memory,
-        "gradients_memory": gradients_memory,
-        "optimizer_memory": optimizer_memory,
-        "activations_memory": activations_memory,
-        "total_memory": total_memory,
-    }
-
-
 estimated_training_memory_usage = calculate_memory_requirements(4, **model_params)
-print(f"Training model requires {estimated_training_memory_usage}")
+
+trainable = True
 if estimated_training_memory_usage["total_memory"] > free_memory:
-    print(
+    logger.warning(
         f"Estimated: require at least {estimated_training_memory_usage['total_memory'] // 1e6} MB, but only have {free_memory//1e6} MB left."
     )
-    sys.exit(0)
+    logger.info("You cannot train model on this server, but you can try the inference")
+    trainable = False
 
-train(trainer)
+if trainable:
+    dataset = get_dataset(name=dataset_name, cache_dir=DATASET_CACHE_DIR)
+    validate_dataset(dataset)
+    training_set = dataset["train"]
+    training_set_formatted = training_set.map(
+        format_chat_template,
+        num_proc=os.cpu_count(),
+    )
+    tokenizer = get_tokenizer(model_name)
+
+    # LoRA attention dimension
+    lora_r = 64
+
+    # Alpha parameter for LoRA scaling
+    lora_alpha = 16
+
+    # Dropout probability for LoRA layers
+    lora_dropout = 0.1
+    peft_config = get_lora_config(
+        lora_alpha=lora_alpha, lora_dropout=lora_dropout, lora_r=lora_r
+    )
+
+    trainer = get_trainer(
+        model=model,
+        train_dataset=training_set_formatted if method == "orpo" else training_set,
+        peft_config=peft_config,
+        tokenizer=tokenizer,
+        method=method,
+    )
+
+    # Fine-tuned model name
+    new_model = get_new_model_name()
+    train(trainer, new_model)
+
 
 # %load_ext tensorboard
 # %tensorboard --logdir results/runs

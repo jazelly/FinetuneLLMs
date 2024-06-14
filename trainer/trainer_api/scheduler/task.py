@@ -14,7 +14,6 @@ from trainer_api.utils.constants import (
 )
 from trainer_api.utils import logging
 
-logger = logging.get_logger(__name__)
 FINETUNE_SCRIPT_PATH = os.path.join(FINETUNE_SCRIPT_DIR, "./sft.py")
 
 
@@ -40,7 +39,7 @@ class Task:
             raise InvalidArgumentError(source=None, message="Missing dataset")
         self.training_args = kwargs.get("training_args")
 
-    def run(self, log=sys.stdout):
+    def run(self):
         if (
             self.method in map(lambda m: m["name"], TRAINING_METHODS)
             and self.model in BASE_MODELS
@@ -53,6 +52,7 @@ class Task:
                 text=True,
             )
             self._consume_logs_from_subprocess(process)
+            process.wait()
 
     def _assemble_command(self):
         r = ["python", FINETUNE_SCRIPT_PATH]
@@ -65,35 +65,9 @@ class Task:
         return r
 
     def _consume_logs_from_subprocess(self, process):
-        # Read the output continuously
-        while True:
-            # Read a line from stdout
-            output = process.stdout.readline().strip()
-            if output:
-                # TODO: push to WS
-                print(output)
-                if self.output is not sys.stdout:
-                    self.output.write(output)
-            else:
-                # Check if the process has finished
-                return_code = process.poll()
-                if return_code is not None:
-                    break
-                time.sleep(1)
-
-        # Process has finished, read any remaining output
-        remaining_output = process.stdout.read().strip()
-        if remaining_output:
-            print(remaining_output)
-            if self.output is not sys.stdout:
-                self.output.write(remaining_output)
-
-        # Read the error output
-        error_output = process.stderr.read().strip()
-        if error_output:
-            print(error_output)
-            if self.output is not sys.stdout:
-                self.output.write(error_output)
+        for pipe in (process.stdout, process.stderr):
+            for line in iter(pipe.readline, b""):
+                print(line)
 
     def __str__(self):
         return f"[Task] method: {self.method if hasattr(self, 'method') else 'None'} training | model: {self.model if hasattr(self, 'model') else 'None'}"
