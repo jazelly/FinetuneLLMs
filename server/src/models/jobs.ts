@@ -1,33 +1,27 @@
 import type { Prisma } from "@prisma/client";
-import { IJobJson, IJobModel } from "./schema/jobs.type";
+import { IJobCreate, IJobModel } from "./schema/jobs.type";
 
 import prisma from "../utils/prisma/index";
 
 const Jobs = {
   create: async ({
+    taskId,
     name,
     userId,
     trainingMethod,
     baseModel,
-    datasetId,
+    datasetName,
     status,
     hyperparameters,
-  }: {
-    name: string;
-    userId?: number;
-    trainingMethod: string;
-    baseModel: string;
-    datasetId: number;
-    status?: string;
-    hyperparameters: string;
-  }) => {
+  }: IJobCreate) => {
     const newJob = await prisma.jobs.create({
       data: {
+        taskId,
         name,
         userId,
         trainingMethod,
         baseModel,
-        datasetId,
+        datasetName,
         status,
         hyperparameters,
       },

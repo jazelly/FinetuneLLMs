@@ -7,7 +7,7 @@ import { reqBody } from "../utils/http";
 import { Datasets } from "../models/datasets";
 import { Jobs } from "../models/jobs";
 import { v4 } from "uuid";
-import Trainer from "../models/trainer.internal";
+import Trainer, { TrainerResponseBase } from "../models/trainer.internal";
 import { IDataset } from "../models/schema/datasets.type";
 import {
   BASE_MODELS,
@@ -93,31 +93,37 @@ function jobEndpoints(app) {
     "/job",
     [validatedRequest, flexUserRoleValid([ROLES.all])],
     async (req, res) => {
-      const { datasetId, trainingMethod, baseModel, hyperparameters } =
+      const { datasetName, trainingMethod, baseModel, hyperparameters } =
         reqBody(req);
 
       const metaString = JSON.stringify(hyperparameters);
       const datasetEntities = await Datasets.readBy({
-        id: parseInt(datasetId),
+        name: datasetName,
       });
+
+      let datasetEntity = datasetEntities.length ? datasetEntities[0] : {
+        name: datasetName,
+      }
+ 
 
       // forward to trainer
       const trainerResponse = await Trainer.submitJobToTrainer({
         trainingMethod,
         baseModel,
-        hyperparameters,
-        dataset: datasetEntities[0] as IDataset,
+        // hyperparameters, TODO: make hyper configurable
+        dataset: datasetEntity,
       });
 
       console.log("trainerResponse", trainerResponse);
 
-      if ((trainerResponse as any).message === "noop") return res.json(201);
+      if (trainerResponse.message === "noop") return res.json(201);
 
       // persist the job to Database
-      const name = `${trainingMethod}-${baseModel}-${datasetId}_${v4()}`;
+      const name = `${trainingMethod}-${baseModel}-${datasetName}`;
       const result = await Jobs.create({
+        taskId: trainerResponse.data!.task_id,
         name,
-        datasetId,
+        datasetName,
         trainingMethod,
         baseModel,
         hyperparameters: metaString,
