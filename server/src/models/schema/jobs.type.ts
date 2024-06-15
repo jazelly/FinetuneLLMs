@@ -1,5 +1,5 @@
 export interface IJobCreate {
-  taskId: string;
+  taskId?: string;
   name: string;
   userId?: number;
   baseModel: string;

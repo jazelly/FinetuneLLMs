@@ -4,8 +4,6 @@ import os
 import time
 import uuid
 
-from django.conf import settings
-
 from trainer_api.utils.errors import InvalidArgumentError
 from trainer_api.utils.constants import (
     BASE_MODELS,
@@ -38,6 +36,7 @@ class Task:
         if self.dataset is None:
             raise InvalidArgumentError(source=None, message="Missing dataset")
         self.training_args = kwargs.get("training_args")
+        self.ws = kwargs.get("ws")
 
     def run(self):
         if (
@@ -67,7 +66,15 @@ class Task:
     def _consume_logs_from_subprocess(self, process):
         for pipe in (process.stdout, process.stderr):
             for line in iter(pipe.readline, b""):
-                print(line)
+                if len(line) > 0:
+                    print(f"for ws: {line}")
+                    self.ws.send_message_to_client_sync(
+                        client_id=self.ws.scope["client"][1],
+                        responseJson={
+                            "message": line,
+                            "type": "log",
+                        },
+                    )
 
     def __str__(self):
         return f"[Task] method: {self.method if hasattr(self, 'method') else 'None'} training | model: {self.model if hasattr(self, 'model') else 'None'}"

@@ -3,7 +3,7 @@ import { request } from "undici";
 import type { Dispatcher } from "undici" 
 
 export interface TrainerResponseBase {
-  status: "success" | "error";
+  status: "success" | "failed" | "error"; // 200, 400, 500
   message: string;
   data?: Record<string, any>;
 }

@@ -2,7 +2,7 @@ import logging
 import sys
 
 
-def get_stream_logger(name, prefix, level=logging.INFO):
+def get_stream_logger(name: str, prefix: str, level=logging.INFO):
     # Create a custom logger
     logger = logging.getLogger(name)
     logger.setLevel(level)

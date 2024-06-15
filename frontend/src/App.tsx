@@ -68,25 +68,25 @@ export default function App() {
   const [trainerSocket, setTrainerSocket] = useState<WebSocket | null>(null);
   // establish websocket with trainer
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8000/training/job/");
+    const ws = new WebSocket("ws://localhost:8000/training/job/");
 
-    socket.onopen = () => {
+    ws.onopen = () => {
       console.log("WebSocket connection established");
     };
 
-    socket.onmessage = (event) => {
+    ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log("Received message: ", data.message);
     };
 
-    socket.onclose = () => {
+    ws.onclose = () => {
       console.log("WebSocket connection closed");
     };
 
-    setTrainerSocket(socket);
+    setTrainerSocket(ws);
 
     return () => {
-      socket.close();
+      ws.close();
     };
   }, []);
 

@@ -33,7 +33,7 @@ const FinetunePanel = ({
     if (!jobOptions) return;
 
     // validate selections
-    if (!baseModel || !trainingMethod || !datasetJson.name || !datasetJson.id) {
+    if (!baseModel || !trainingMethod || !datasetJson.name) {
       setSubmitJobError(
         "Must select a combination of mode, method and dataset"
       );
@@ -42,29 +42,33 @@ const FinetunePanel = ({
 
     clearSubmitJobError();
 
-    console.log("Submitting", {
-      baseModel,
-      trainingMethod,
-      datasetId: datasetJson.id,
-      hyperparameters: jobOptions.hyperparameters,
-    });
     const resp = await Job.submitJob({
       baseModel,
       trainingMethod,
-      datasetId: datasetJson.id,
+      datasetName: datasetJson.name,
       hyperparameters: jobOptions.hyperparameters,
     });
 
-    if (resp.data === 201)
-      setSubmitJobError("Trainer didn't respond to this request");
-    else if (!resp.success || (resp.success === true && !resp.data.id))
+    console.log("resp", resp)
+  
+    if (!resp.success || (resp.success === true && !resp.data.id)) {
       setSubmitJobError("An error occurred when submitting the job");
-    else {
-      console.log("send to trainer");
-      sendMessageToTrainer("submitted a job");
-      navigate(`/job/${resp.data.id}`, { replace: true });
+      return
     }
-
+    
+    console.log("send to ws", resp.data);
+    sendMessageToTrainer(JSON.stringify({
+      type: "start",
+      message: "submitted a job",
+      data: {
+        baseModel,
+        trainingMethod,
+        datasetName: datasetJson.name,
+        hyperparameters: jobOptions.hyperparameters,
+      },
+    }));
+    navigate(`/job/${resp.data.id}`, { replace: true });
+    
     return;
   };
 

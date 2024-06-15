@@ -87,7 +87,10 @@ function jobEndpoints(app) {
   );
 
   /**
-   * Create a job
+   * Create a job record in DB
+   * The job created is incomplete as we cannot know the taskId
+   * This simply creates a log so that other requests can look up on that
+   * NOTE: we do not trigger a worker job here. It's triggered by client
    */
   app.post(
     "/job",
@@ -97,31 +100,10 @@ function jobEndpoints(app) {
         reqBody(req);
 
       const metaString = JSON.stringify(hyperparameters);
-      const datasetEntities = await Datasets.readBy({
-        name: datasetName,
-      });
-
-      let datasetEntity = datasetEntities.length ? datasetEntities[0] : {
-        name: datasetName,
-      }
- 
-
-      // forward to trainer
-      const trainerResponse = await Trainer.submitJobToTrainer({
-        trainingMethod,
-        baseModel,
-        // hyperparameters, TODO: make hyper configurable
-        dataset: datasetEntity,
-      });
-
-      console.log("trainerResponse", trainerResponse);
-
-      if (trainerResponse.message === "noop") return res.json(201);
 
       // persist the job to Database
       const name = `${trainingMethod}-${baseModel}-${datasetName}`;
       const result = await Jobs.create({
-        taskId: trainerResponse.data!.task_id,
         name,
         datasetName,
         trainingMethod,

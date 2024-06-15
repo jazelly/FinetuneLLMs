@@ -1,24 +1,130 @@
-from channels.generic.websocket import WebsocketConsumer
 import json
+from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from trainer_api.scheduler.task import Task
+from trainer_api.scheduler.worker import Worker
+from trainer_api.utils.constants import BASE_MODELS, TRAINING_METHODS
+from trainer_api.utils import logging
+
+training_consumer_logger = logging.get_stream_logger(
+    "trainer_api.ws.consumers", "TrainingConsumer"
+)
 
 
-class TrainerConsumer(WebsocketConsumer):
-    clients = {}
+class TrainingConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        training_consumer_logger.info(
+            f"----------NEW CONNECT COMING-----------------------"
+        )
+        training_consumer_logger.info(f"[SCOPE]: {self.scope}")
+        client_port = self.scope["client"][1]
+        await self.channel_layer.group_add(str(client_port), self.channel_name)
 
-    def connect(self):
-        self.accept()
-        # Store the client identifier (e.g., user ID) associated with the WebSocket connection
-        self.identifier = self.scope[
-            "user"
-        ].id  # Example: using user ID as the identifier
-        self.clients[self.identifier] = self
+        # Accept the WebSocket connection
+        await self.accept()
 
-    def disconnect(self, close_code):
-        # Remove the client from the mapping when it disconnects
-        del self.clients[self.identifier]
+        training_consumer_logger.info(
+            f"Client connected: {self.scope['client']} with channel name {self.channel_name}"
+        )
 
-    def send_message_to_client(self, event):
-        # Send message to a specific client
-        client_id = event["client_id"]
-        message = event["message"]
-        self.clients[client_id].send(text_data=json.dumps(message))
+    async def disconnect(self, close_code):
+        # Clean up when the WebSocket closes
+        client_port = self.scope["client"][1]
+        training_consumer_logger.info(
+            f"Client disaconnected: {self.scope['client']} disconnected with {self.channel_name} | Close Code: {close_code}"
+        )
+        await self.channel_layer.group_discard(str(client_port), self.channel_name)
+
+    async def receive(self, text_data):
+        """
+        Handle any incoming message from client. Here we define 2 cases
+        1. request for starting a job
+        2. any other cases
+        These cases are differentiated by the text_data_json["type"]
+
+        We respond to client once we get the message, and follow the HTTP format
+        """
+        text_data_json = json.loads(text_data)
+
+        type = text_data_json.get("type")
+        message = text_data_json.get("message")
+        data = text_data_json.get("data")
+
+        training_consumer_logger.info(
+            f"Received message from {self.scope['client'][1]}: {type} | {message} | {data}"
+        )
+
+        if type == "start":
+
+            if (
+                not data
+                or data.get("baseModel") not in BASE_MODELS
+                or data.get("datasetName") is None
+                or data.get("trainingMethod")
+                not in map(lambda m: m["name"], TRAINING_METHODS)
+            ):
+                training_consumer_logger.warning(
+                    f"Client requested for {type.upper()}, but did not give valid data"
+                )
+                await self.send(
+                    text_data=json.dumps(
+                        {
+                            "status": "failed",
+                            "code": 400,
+                            "message": f"Client requested for {type.upper()}, but did not give valid data",
+                        }
+                    )
+                )
+                return
+
+            try:
+                # schedule the task and repond immediately
+                training_consumer_logger.info("[Worker] Submitting task")
+                worker = Worker()
+
+                t = Task(
+                    method=data["trainingMethod"],
+                    model=data["baseModel"],
+                    dataset=data["datasetName"],
+                    ws=self,
+                )
+                worker.submit(t)
+
+                await self.send(
+                    text_data=json.dumps(
+                        {
+                            "status": "success",
+                            "code": 200,
+                            "message": f"Added task {t.id} to queue",
+                            "data": {
+                                "task_id": str(t.id),
+                            },
+                        }
+                    )
+                )
+            except Exception as e:
+                training_consumer_logger.error(e)
+                await self.send(
+                    text_data=json.dumps(
+                        {
+                            "status": "error",
+                            "code": 500,
+                            "message": f"An error occurred: {e}",
+                        }
+                    )
+                )
+
+    async def send_message_to_client(self, client_id, responseJson):
+        channel_layer = get_channel_layer()
+        training_consumer_logger.info(f"Sending message to {client_id}: {responseJson}")
+        await channel_layer.group_send(
+            str(client_id), {"type": "targeted", **responseJson}
+        )
+
+    def send_message_to_client_sync(self, client_id, responseJson):
+        channel_layer = get_channel_layer()
+        training_consumer_logger.info(f"Sending message to {client_id}: {responseJson}")
+        async_to_sync(channel_layer.group_send)(
+            client_id, {"type": "targeted", **responseJson}
+        )

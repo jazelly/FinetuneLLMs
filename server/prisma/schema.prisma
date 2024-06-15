@@ -290,7 +290,7 @@ model datasets {
 
 model jobs {
   id              Int      @id @default(autoincrement())
-  taskId          String
+  taskId          String?
   name            String
   userId          Int?
   baseModel       String

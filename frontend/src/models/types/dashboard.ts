@@ -15,7 +15,7 @@ export interface IDataset {
 export interface JobCreate {
   baseModel: string;
   trainingMethod: string;
-  datasetId: number;
+  datasetName: string;
   hyperparameters: Record<string, string | number | boolean>;
 }
 

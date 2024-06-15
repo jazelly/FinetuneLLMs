@@ -9,6 +9,7 @@ from typing import Dict, List
 import uuid
 
 from trainer.settings import BASE_DIR
+from trainer_api.utils.logging import get_stream_logger
 from trainer_api.utils.constants import (
     LOG_DIR,
     MAX_IDLE_TIME,
@@ -31,6 +32,12 @@ def singleton(cls):
     return get_instance
 
 
+worker_manager_logger = get_stream_logger(
+    "trainer_api.scheduler.worker", "WorkerManager"
+)
+worker_thread_logger = get_stream_logger("trainer_api.scheduler.worker", "WorkerThread")
+
+
 @singleton
 class Worker:
     """
@@ -50,7 +57,6 @@ class Worker:
         )
         self.max_thread = ~~kwargs["max_thread"] if "max_thread" in kwargs else 1
 
-        manager = Manager()
         self.thread_map: Dict[int, WorkerThread] = {}
 
         # a representation of idle thread queue, a flag ttaso tell if we should spawn new thread
@@ -80,11 +86,13 @@ class Worker:
         if total number of workers have exceeded max number, return None
         """
         if self._idle_semaphore.acquire(timeout=0):
-            print(f"the worker is already working on the task, no spawning")
+            worker_manager_logger.info(
+                f"the worker is already working on the task, no spawning"
+            )
             return
 
         if len(self.thread_map) < self.max_thread:
-            print(f"spawning a new worker, as no one is available")
+            worker_manager_logger.info(f"spawning a new worker, as no one is available")
             t = WorkerThread(self)
             t.daemon = True
             t.start()
@@ -114,14 +122,14 @@ class WorkerThread(threading.Thread):
     def run(self):
         # prepare the log file
         log_filename = datetime.now().strftime("%Y%m%d_%H%M%S_worker")
-        log_filename += f"_{self.id}"
+        log_filename += f"_{self.id}.txt"
 
         log_path = os.path.join(LOG_DIR, log_filename)
         os.makedirs(LOG_DIR, exist_ok=True)
 
         with open(log_path, "w+") as log:
-            print(f"[Worker_{self.id}] A worker thread started")
-            log.write(f"[Worker_{self.id}] A worker thread started")
+            worker_thread_logger.info(f"|{self.id}| A worker thread started")
+            log.write(f"|{self.id}| A worker thread started")
             if self.worker_instance.task_queue.length == 0:
                 print("[Worker] Nothing in queue, finished")
                 log.write("[Worker] Nothing in queue, finished")
