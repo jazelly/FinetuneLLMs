@@ -1,23 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
-import FinetunePanel from "@/components/FinetunePanel.component";
-import DivResizeHandle from "@/components/DivResizeHandle.component";
-import { ResizableBox } from "react-resizable";
-import type { ResizeHandle } from "react-resizable";
-import "react-resizable/css/styles.css";
-import DashboardModel from "../models/dashboard";
-import { AllJobOptions } from "@/models/types/dashboard";
-import { useParams } from "react-router-dom";
-import DetailPanel from "@/components/DetailPanel.component";
-import MetaPanel from "@/components/MetaPanel.component";
+import React, { useEffect, useRef, useState } from 'react';
+import FinetunePanel from '@/components/FinetunePanel.component';
+import DivResizeHandle from '@/components/DivResizeHandle.component';
+import { ResizableBox } from 'react-resizable';
+import type { ResizeHandle } from 'react-resizable';
+import 'react-resizable/css/styles.css';
+import DashboardModel from '../models/dashboard';
+import { AllJobOptions } from '@/models/types/dashboard';
+import { useParams } from 'react-router-dom';
+import DetailPanel from '@/components/DetailPanel.component';
+import MetaPanel from '@/components/MetaPanel.component';
 
-const Dashboard = ({ trainerSocket }) => {
+const Dashboard = () => {
   const { jobId } = useParams();
-
-  const sendMessageToTrainer = (msg: string) => {
-    if (trainerSocket && msg) {
-      trainerSocket.send(msg);
-    }
-  };
 
   const [jobOptions, setJobOptions] = useState<AllJobOptions | undefined>(
     undefined
@@ -100,7 +94,7 @@ const Dashboard = ({ trainerSocket }) => {
   };
 
   const handleHyperparametersChange = (
-    hyperparameters: AllJobOptions["hyperparameters"]
+    hyperparameters: AllJobOptions['hyperparameters']
   ) => {
     setJobOptions({
       ...jobOptions!,
@@ -118,7 +112,7 @@ const Dashboard = ({ trainerSocket }) => {
         width={leftWidth}
         height={containerRef.current?.offsetHeight ?? containerHeight}
         axis="x"
-        resizeHandles={isRightCollapsed ? [] : ["e"]}
+        resizeHandles={isRightCollapsed ? [] : ['e']}
         handle={(handleAxis: ResizeHandle, ref) => (
           <DivResizeHandle
             className={`handle-${handleAxis} div-handle div-handle-drag-horizontal`}
@@ -138,15 +132,12 @@ const Dashboard = ({ trainerSocket }) => {
             width={leftWidth}
             height={topHeight}
             axis="y"
-            resizeHandles={isBottomCollapsed ? [] : ["s"]}
+            resizeHandles={isBottomCollapsed ? [] : ['s']}
             onResize={handleTopResize}
             minConstraints={[leftWidth, minHeightTop]} // width and height
             maxConstraints={[leftWidth, maxHeightTop]}
           >
-            <FinetunePanel
-              jobOptions={jobOptions}
-              sendMessageToTrainer={sendMessageToTrainer}
-            />
+            <FinetunePanel jobOptions={jobOptions} />
           </ResizableBox>
           <div className="flex-1 bg-white"> Bottom </div>
         </div>

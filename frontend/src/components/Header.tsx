@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import paths from "../utils/paths";
+import React, { useState } from 'react';
+import paths from '../utils/paths';
 import {
   BookOpen,
   DiscordLogo,
@@ -11,7 +11,7 @@ import {
   Info,
   LinkSimple,
   FileArrowUp,
-} from "@phosphor-icons/react";
+} from '@phosphor-icons/react';
 
 export const MAX_ICONS = 3;
 export const ICON_COMPONENTS = {
@@ -49,7 +49,7 @@ function Header({ showUploadModal }: { showUploadModal: () => void }) {
           onClick={showUploadModal}
         >
           <FileArrowUp
-            weight={uploadHover ? "fill" : "bold"}
+            weight={uploadHover ? 'fill' : 'bold'}
             size={24}
             color="#737b85"
           />
@@ -68,7 +68,7 @@ function Header({ showUploadModal }: { showUploadModal: () => void }) {
           aria-label="Find me on Github"
         >
           <GithubLogo
-            weight={githubHover ? "fill" : "bold"}
+            weight={githubHover ? 'fill' : 'bold'}
             size={24}
             color="#737b85"
           />

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { CaretDown, CaretUp } from "@phosphor-icons/react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useRef, useState } from 'react';
+import { CaretDown, CaretUp } from '@phosphor-icons/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export interface Dropdown {
   options: readonly string[];
@@ -18,7 +18,7 @@ const Dropdown = ({
   onSelect,
 }: Dropdown) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<string>("");
+  const [selectedItem, setSelectedItem] = useState<string>('');
 
   const dropdownRef = useRef<HTMLInputElement>(null);
 
@@ -29,9 +29,9 @@ const Dropdown = ({
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -70,7 +70,7 @@ const Dropdown = ({
         </div>
       )}
       <div
-        className={`relative h-10 mt-1 w-full ${!disabled && "cursor-pointer"}`}
+        className={`relative h-10 mt-1 w-full ${!disabled && 'cursor-pointer'}`}
         onClick={toggleDropdown}
         ref={dropdownRef}
       >
@@ -97,7 +97,7 @@ const Dropdown = ({
               exit={{ opacity: 0, maxHeight: 0 }}
               transition={{ duration: 0.3 }}
               className="absolute z-50 left-0 w-full bg-white border rounded shadow overflow-hidden"
-              style={{ top: "100%" }}
+              style={{ top: '100%' }}
             >
               {options.length === 0 ? (
                 <motion.li className="px-4 py-2 text-gray-400 cursor-not-allowed">

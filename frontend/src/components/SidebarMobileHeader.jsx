@@ -36,7 +36,7 @@ export default function SidebarMobileHeader() {
             src={logo}
             alt="Logo"
             className="block mx-auto h-6 w-auto"
-            style={{ maxHeight: "40px", objectFit: "contain" }}
+            style={{ maxHeight: '40px', objectFit: 'contain' }}
           />
         </div>
         <div className="w-12"></div>
@@ -50,8 +50,8 @@ export default function SidebarMobileHeader() {
         <div
           className={`${
             showBgOverlay
-              ? "transition-all opacity-1"
-              : "transition-none opacity-0"
+              ? 'transition-all opacity-1'
+              : 'transition-none opacity-0'
           }  duration-500 fixed top-0 left-0 ${USER_BACKGROUND_COLOR} bg-opacity-75 w-screen h-screen`}
           onClick={() => setShowSidebar(false)}
         />
@@ -66,7 +66,7 @@ export default function SidebarMobileHeader() {
                   src={logo}
                   alt="Logo"
                   className="rounded w-full max-h-[40px]"
-                  style={{ objectFit: "contain" }}
+                  style={{ objectFit: 'contain' }}
                 />
               </div>
 
@@ -78,11 +78,11 @@ export default function SidebarMobileHeader() {
             <div className="h-full flex flex-col w-full justify-between pt-4 overflow-y-hidden ">
               <div className="h-auto md:sidebar-items">
                 <div
-                  style={{ height: "calc(100vw - -3rem)" }}
+                  style={{ height: 'calc(100vw - -3rem)' }}
                   className=" flex flex-col gap-y-4 pb-8 overflow-y-scroll no-scroll"
                 >
                   <div className="flex gap-x-2 items-center justify-between">
-                    {(!user || user?.role !== "default") && (
+                    {(!user || user?.role !== 'default') && (
                       <button className="flex flex-grow w-[75%] h-[44px] gap-x-2 py-[5px] px-4 bg-white rounded-lg text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300">
                         <Plus className="h-5 w-5" />
                       </button>

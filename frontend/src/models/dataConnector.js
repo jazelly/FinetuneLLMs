@@ -1,14 +1,14 @@
-import { API_BASE } from "@/utils/constants";
-import { baseHeaders } from "@/utils/request";
-import showToast from "@/utils/toast";
+import { API_BASE } from '@/utils/constants';
+import { baseHeaders } from '@/utils/request';
+import showToast from '@/utils/toast';
 
 const DataConnector = {
   github: {
     branches: async ({ repo, accessToken }) => {
       return await fetch(`${API_BASE}/ext/github/branches`, {
-        method: "POST",
+        method: 'POST',
         headers: baseHeaders(),
-        cache: "force-cache",
+        cache: 'force-cache',
         body: JSON.stringify({ repo, accessToken }),
       })
         .then((res) => res.json())
@@ -21,13 +21,13 @@ const DataConnector = {
         })
         .catch((e) => {
           console.error(e);
-          showToast(e.message, "error");
+          showToast(e.message, 'error');
           return { branches: [], error: e.message };
         });
     },
     collect: async function ({ repo, accessToken, branch, ignorePaths = [] }) {
       return await fetch(`${API_BASE}/ext/github/repo`, {
-        method: "POST",
+        method: 'POST',
         headers: baseHeaders(),
         body: JSON.stringify({ repo, accessToken, branch, ignorePaths }),
       })
@@ -45,7 +45,7 @@ const DataConnector = {
   youtube: {
     transcribe: async ({ url }) => {
       return await fetch(`${API_BASE}/ext/youtube/transcript`, {
-        method: "POST",
+        method: 'POST',
         headers: baseHeaders(),
         body: JSON.stringify({ url }),
       })
@@ -63,7 +63,7 @@ const DataConnector = {
   websiteDepth: {
     scrape: async ({ url, depth, maxLinks }) => {
       return await fetch(`${API_BASE}/ext/website-depth`, {
-        method: "POST",
+        method: 'POST',
         headers: baseHeaders(),
         body: JSON.stringify({ url, depth, maxLinks }),
       })
@@ -82,7 +82,7 @@ const DataConnector = {
   confluence: {
     collect: async function ({ pageUrl, username, accessToken }) {
       return await fetch(`${API_BASE}/ext/confluence`, {
-        method: "POST",
+        method: 'POST',
         headers: baseHeaders(),
         body: JSON.stringify({
           pageUrl,

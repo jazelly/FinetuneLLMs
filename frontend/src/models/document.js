@@ -1,10 +1,10 @@
-import { API_BASE } from "@/utils/constants";
-import { baseHeaders } from "@/utils/request";
+import { API_BASE } from '@/utils/constants';
+import { baseHeaders } from '@/utils/request';
 
 const Document = {
   createFolder: async (name) => {
     return await fetch(`${API_BASE}/document/create-folder`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify({ name }),
     })
@@ -23,7 +23,7 @@ const Document = {
     };
 
     return await fetch(`${API_BASE}/document/move-files`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify(data),
     })
@@ -36,7 +36,7 @@ const Document = {
 
   uploadOneDatasetByChunk: async (datasetChunk) => {
     const response = await fetch(`${API_BASE}/document/upload-by-chunk`, {
-      method: "POST",
+      method: 'POST',
       body: datasetChunk,
     });
 
@@ -45,7 +45,7 @@ const Document = {
 
   saveDatasetFromHF: async (link) => {
     const response = await fetch(`${API_BASE}/document/save-from-hf`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ link }),
     });
 
@@ -54,7 +54,7 @@ const Document = {
 
   readRemoteDatasets: async () => {
     const response = await fetch(`${API_BASE}/document/remote/all`, {
-      method: "GET",
+      method: 'GET',
     });
 
     return response.json();

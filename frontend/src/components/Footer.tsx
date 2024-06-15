@@ -1,5 +1,5 @@
-import System from "@/models/system";
-import paths from "@/utils/paths";
+import System from '@/models/system';
+import paths from '@/utils/paths';
 import {
   BookOpen,
   DiscordLogo,
@@ -11,9 +11,9 @@ import {
   Info,
   LinkSimple,
   UploadSimple,
-} from "@phosphor-icons/react";
-import React from "react";
-import SettingsButton from "./SettingsButton";
+} from '@phosphor-icons/react';
+import React from 'react';
+import SettingsButton from './SettingsButton';
 
 export const MAX_ICONS = 3;
 export const ICON_COMPONENTS = {

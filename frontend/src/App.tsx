@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { ContextWrapper } from "@/AuthContext";
+import { ContextWrapper } from "@/contexts/AuthContext";
 import PrivateRoute, { AdminRoute } from "@/components/PrivateRoute";
 
 import { ManagerRoute } from "@/components/ManagerRoute";
@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "@/pages/Login";
 import { isMobile } from "react-device-detect";
-import { LogoProvider } from "./LogoContext";
+import { LogoProvider } from "@/contexts/LogoContext";
 import Sidebar from "@/components/Sidebar";
 import Header from "./components/Header";
 import UploadDatasets, {
@@ -65,31 +65,6 @@ export default function App() {
     hideModal: hideUploadModal,
   } = useUploadDatasetsModal();
 
-  const [trainerSocket, setTrainerSocket] = useState<WebSocket | null>(null);
-  // establish websocket with trainer
-  useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8000/training/job/");
-
-    ws.onopen = () => {
-      console.log("WebSocket connection established");
-    };
-
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log("Received message: ", data.message);
-    };
-
-    ws.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
-
-    setTrainerSocket(ws);
-
-    return () => {
-      ws.close();
-    };
-  }, []);
-
   return (
     <Suspense fallback={<div />}>
       <ContextWrapper>
@@ -123,7 +98,6 @@ export default function App() {
                     path="/job/:jobId"
                     element={
                       <PrivateRoute
-                        trainerSocket={trainerSocket}
                         Component={Dashboard}
                       />
                     }
@@ -140,48 +114,7 @@ export default function App() {
                     path="/settings"
                     element={<AdminRoute Component={GeneralLLMPreference} />}
                   />
-                  <Route
-                    path="/settings/llm-preference"
-                    element={<AdminRoute Component={GeneralLLMPreference} />}
-                  />
-                  <Route
-                    path="/settings/transcription-preference"
-                    element={
-                      <AdminRoute Component={GeneralTranscriptionPreference} />
-                    }
-                  />
-                  <Route
-                    path="/settings/audio-preference"
-                    element={<AdminRoute Component={GeneralAudioPreference} />}
-                  />
-                  <Route
-                    path="/settings/embedding-preference"
-                    element={
-                      <AdminRoute Component={GeneralEmbeddingPreference} />
-                    }
-                  />
-                  <Route
-                    path="/settings/text-splitter-preference"
-                    element={
-                      <AdminRoute Component={EmbeddingTextSplitterPreference} />
-                    }
-                  />
-                  <Route
-                    path="/settings/vector-database"
-                    element={<AdminRoute Component={GeneralVectorDatabase} />}
-                  />
-                  <Route
-                    path="/settings/event-logs"
-                    element={<AdminRoute Component={AdminLogs} />}
-                  />
-                  <Route
-                    path="/settings/embed-config"
-                    element={<AdminRoute Component={EmbedConfigSetup} />}
-                  />
-                  <Route
-                    path="/settings/embed-chats"
-                    element={<AdminRoute Component={EmbedChats} />}
-                  />
+                  
                   {/* Manager */}
                   <Route
                     path="/settings/security"

@@ -1,19 +1,19 @@
-import { API_BASE } from "@/utils/constants";
-import { baseHeaders } from "@/utils/request";
-import { JobCreate } from "./types/dashboard";
+import { API_BASE } from '@/utils/constants';
+import { baseHeaders } from '@/utils/request';
+import { JobCreate } from './types/dashboard';
 
 const Job = {
   submitJob: async (jobOptions: JobCreate) => {
     try {
       const resp = await fetch(`${API_BASE}/job`, {
-        method: "POST",
+        method: 'POST',
         headers: baseHeaders(),
         body: JSON.stringify(jobOptions),
       });
 
       const data = await resp.json();
 
-      console.log("res", data);
+      console.log('res', data);
       return { success: true, data };
     } catch (error: any) {
       console.error(error);
@@ -24,7 +24,7 @@ const Job = {
   getJobDetails: async (jobId: string) => {
     try {
       const resp = await fetch(`${API_BASE}/job/${jobId}`, {
-        method: "GET",
+        method: 'GET',
         headers: baseHeaders(),
       });
 

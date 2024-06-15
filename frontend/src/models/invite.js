@@ -1,9 +1,9 @@
-import { API_BASE } from "@/utils/constants";
+import { API_BASE } from '@/utils/constants';
 
 const Invite = {
   checkInvite: async (inviteCode) => {
     return await fetch(`${API_BASE}/invite/${inviteCode}`, {
-      method: "GET",
+      method: 'GET',
     })
       .then((res) => res.json())
       .catch((e) => {
@@ -13,7 +13,7 @@ const Invite = {
   },
   acceptInvite: async (inviteCode, newUserInfo = {}) => {
     return await fetch(`${API_BASE}/invite/${inviteCode}`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(newUserInfo),
     })
       .then((res) => res.json())

@@ -1,9 +1,9 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { FullScreenLoader } from "./Preloader";
-import paths from "@/utils/paths";
-import { userFromStorage } from "@/utils/request";
-import useAuthenticated from "@/hooks/useAuthenticated";
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { FullScreenLoader } from './Preloader';
+import paths from '@/utils/paths';
+import { userFromStorage } from '@/utils/request';
+import useAuthenticated from '@/hooks/useAuthenticated';
 
 // Allows only admin to access the route and if in single user mode,
 // allows all users to access the route
@@ -12,7 +12,7 @@ export function AdminRoute({ Component }) {
   if (isAuthd === null) return <FullScreenLoader />;
 
   const user = userFromStorage();
-  return isAuthd && (user?.role === "admin" || !multiUserMode) ? (
+  return isAuthd && (user?.role === 'admin' || !multiUserMode) ? (
     <Component />
   ) : (
     <Navigate to={paths.home()} />

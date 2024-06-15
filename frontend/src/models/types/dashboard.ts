@@ -22,6 +22,7 @@ export interface JobCreate {
 export interface IJobDetail extends JobCreate {
   id: string;
   status: string;
+  taskId?: string;
 }
 
 export interface TrainingMethod {

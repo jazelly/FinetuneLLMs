@@ -1,49 +1,49 @@
-import { API_BASE } from "./constants";
+import { API_BASE } from './constants';
 
 export default {
   home: () => {
-    return "/";
+    return '/';
   },
   login: (noTry = false) => {
-    return `/login${noTry ? "?nt=1" : ""}`;
+    return `/login${noTry ? '?nt=1' : ''}`;
   },
   onboarding: {
     home: () => {
-      return "/onboarding";
+      return '/onboarding';
     },
     survey: () => {
-      return "/onboarding/survey";
+      return '/onboarding/survey';
     },
     llmPreference: () => {
-      return "/onboarding/llm-preference";
+      return '/onboarding/llm-preference';
     },
     embeddingPreference: () => {
-      return "/onboarding/embedding-preference";
+      return '/onboarding/embedding-preference';
     },
     userSetup: () => {
-      return "/onboarding/user-setup";
+      return '/onboarding/user-setup';
     },
     dataHandling: () => {
-      return "/onboarding/data-handling";
+      return '/onboarding/data-handling';
     },
     createWorkspace: () => {
-      return "/onboarding/create-workspace";
+      return '/onboarding/create-workspace';
     },
   },
   github: () => {
-    return "https://github.com/jazelly/FinetuneLLMs";
+    return 'https://github.com/jazelly/FinetuneLLMs';
   },
   uploadDatasets: () => {
-    return "/upload"
+    return '/upload';
   },
   discord: () => {
-    return "https://discord.com/invite/6UyHPeGZAC";
+    return 'https://discord.com/invite/6UyHPeGZAC';
   },
   docs: () => {
-    return "https://docs.useanything.com";
+    return 'https://docs.useanything.com';
   },
   hosting: () => {
-    return "https://my.mintplexlabs.com/aio-checkout?product=anythingllm";
+    return 'https://my.mintplexlabs.com/aio-checkout?product=anythingllm';
   },
   workspace: {
     chat: (slug) => {
@@ -81,38 +81,38 @@ export default {
       return `/settings/workspaces`;
     },
     chats: () => {
-      return "/settings/workspace-chats";
+      return '/settings/workspace-chats';
     },
     llmPreference: () => {
-      return "/settings/llm-preference";
+      return '/settings/llm-preference';
     },
     transcriptionPreference: () => {
-      return "/settings/transcription-preference";
+      return '/settings/transcription-preference';
     },
     audioPreference: () => {
-      return "/settings/audio-preference";
+      return '/settings/audio-preference';
     },
     embedder: {
-      modelPreference: () => "/settings/embedding-preference",
-      chunkingPreference: () => "/settings/text-splitter-preference",
+      modelPreference: () => '/settings/embedding-preference',
+      chunkingPreference: () => '/settings/text-splitter-preference',
     },
     embeddingPreference: () => {
-      return "/settings/embedding-preference";
+      return '/settings/embedding-preference';
     },
     security: () => {
-      return "/settings/security";
+      return '/settings/security';
     },
     appearance: () => {
-      return "/settings/appearance";
+      return '/settings/appearance';
     },
     apiKeys: () => {
-      return "/settings/api-keys";
+      return '/settings/api-keys';
     },
     logs: () => {
-      return "/settings/event-logs";
+      return '/settings/event-logs';
     },
     privacy: () => {
-      return "/settings/privacy";
+      return '/settings/privacy';
     },
     embedSetup: () => {
       return `/settings/embed-config`;

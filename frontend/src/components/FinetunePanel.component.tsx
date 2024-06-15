@@ -1,32 +1,29 @@
-import React, { useState } from "react";
-import Dropdown from "./Dropdown.component";
-import { AllJobOptions, IDataset } from "@/models/types/dashboard";
-import { CaretCircleDoubleRight } from "@phosphor-icons/react";
-import Job from "@/models/job.model";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import Dropdown from './Dropdown.component';
+import { AllJobOptions, IDataset } from '@/models/types/dashboard';
+import { CaretCircleDoubleRight } from '@phosphor-icons/react';
+import Job from '@/models/job.model';
+import { useNavigate } from 'react-router-dom';
+import useWebSocket from '@/hooks/useWebSocket';
 
 export interface FinetunePanelProps {
   jobOptions: AllJobOptions | undefined;
-  sendMessageToTrainer: (msg: string) => void;
   runningJobId?: string;
 }
 
-const FinetunePanel = ({
-  jobOptions,
-  sendMessageToTrainer,
-  runningJobId,
-}: FinetunePanelProps) => {
+const FinetunePanel = ({ jobOptions, runningJobId }: FinetunePanelProps) => {
+  const { trainerSocket, sendMessageToTrainer } = useWebSocket();
   const [submitHovered, setSubmitHovered] = useState(false);
-  const [submitJobError, setSubmitJobError] = useState("");
+  const [submitJobError, setSubmitJobError] = useState('');
 
-  const [baseModel, setBaseModel] = useState("");
-  const [trainingMethod, setTrainingMethod] = useState("");
+  const [baseModel, setBaseModel] = useState('');
+  const [trainingMethod, setTrainingMethod] = useState('');
   const [datasetJson, setDatasetJson] = useState<Record<string, any>>({});
 
   const navigate = useNavigate();
 
   const clearSubmitJobError = () => {
-    if (submitJobError !== "") setSubmitJobError("");
+    if (submitJobError !== '') setSubmitJobError('');
   };
 
   const handleSubmitJob = async () => {
@@ -35,7 +32,7 @@ const FinetunePanel = ({
     // validate selections
     if (!baseModel || !trainingMethod || !datasetJson.name) {
       setSubmitJobError(
-        "Must select a combination of mode, method and dataset"
+        'Must select a combination of mode, method and dataset'
       );
       return;
     }
@@ -49,26 +46,28 @@ const FinetunePanel = ({
       hyperparameters: jobOptions.hyperparameters,
     });
 
-    console.log("resp", resp)
-  
+    console.log('resp', resp);
+
     if (!resp.success || (resp.success === true && !resp.data.id)) {
-      setSubmitJobError("An error occurred when submitting the job");
-      return
+      setSubmitJobError('An error occurred when submitting the job');
+      return;
     }
-    
-    console.log("send to ws", resp.data);
-    sendMessageToTrainer(JSON.stringify({
-      type: "start",
-      message: "submitted a job",
-      data: {
-        baseModel,
-        trainingMethod,
-        datasetName: datasetJson.name,
-        hyperparameters: jobOptions.hyperparameters,
-      },
-    }));
+
+    console.log('send to ws', resp.data);
+    sendMessageToTrainer(
+      JSON.stringify({
+        type: 'start',
+        message: 'submitted a job',
+        data: {
+          baseModel,
+          trainingMethod,
+          datasetName: datasetJson.name,
+          hyperparameters: jobOptions.hyperparameters,
+        },
+      })
+    );
     navigate(`/job/${resp.data.id}`, { replace: true });
-    
+
     return;
   };
 
@@ -88,17 +87,17 @@ const FinetunePanel = ({
           className="flex items-center justify-center gap-x-2 w-32 lg:w-48 transition-all duration-300 p-2 rounded-lg shadow-sm border border-transparent cursor-pointer"
           aria-label="Upload your datasets"
           onClick={handleSubmitJob}
-          style={{ backgroundColor: "#0aa8ff" }}
+          style={{ backgroundColor: '#0aa8ff' }}
         >
           <span className={`text-white`}>Submit</span>
           <CaretCircleDoubleRight
-            weight={submitHovered ? "fill" : "bold"}
+            weight={submitHovered ? 'fill' : 'bold'}
             size={24}
             color="#ffffff"
           />
         </div>
       </div>
-      {submitJobError !== "" && (
+      {submitJobError !== '' && (
         <div className="text-red-500 text-sm italic">{submitJobError}</div>
       )}
       <Dropdown

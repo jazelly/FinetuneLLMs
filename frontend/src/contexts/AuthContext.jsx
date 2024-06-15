@@ -1,5 +1,5 @@
-import React, { useState, createContext } from "react";
-import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from "@/utils/constants";
+import React, { useState, createContext } from 'react';
+import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from '@/utils/constants';
 
 export const AuthContext = createContext(null);
 export function ContextWrapper(props) {
@@ -11,7 +11,7 @@ export function ContextWrapper(props) {
   });
 
   const [actions] = useState({
-    updateUser: (user, authToken = "") => {
+    updateUser: (user, authToken = '') => {
       localStorage.setItem(AUTH_USER, JSON.stringify(user));
       localStorage.setItem(AUTH_TOKEN, authToken);
       setStore({ user, authToken });

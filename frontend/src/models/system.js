@@ -1,11 +1,11 @@
-import { API_BASE, AUTH_TIMESTAMP, fullApiUrl } from "@/utils/constants";
-import { baseHeaders, safeJsonParse } from "@/utils/request";
-import DataConnector from "./dataConnector";
+import { API_BASE, AUTH_TIMESTAMP, fullApiUrl } from '@/utils/constants';
+import { baseHeaders, safeJsonParse } from '@/utils/request';
+import DataConnector from './dataConnector';
 
 const System = {
   cacheKeys: {
-    footerIcons: "anythingllm_footer_links",
-    supportEmail: "anythingllm_support_email",
+    footerIcons: 'anythingllm_footer_links',
+    supportEmail: 'anythingllm_support_email',
   },
   ping: async function () {
     return await fetch(`${API_BASE}/ping`)
@@ -15,12 +15,12 @@ const System = {
   },
   totalIndexes: async function (slug = null) {
     const url = new URL(`${fullApiUrl()}/system/system-vectors`);
-    if (!!slug) url.searchParams.append("slug", encodeURIComponent(slug));
+    if (!!slug) url.searchParams.append('slug', encodeURIComponent(slug));
     return await fetch(url.toString(), {
       headers: baseHeaders(),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not find indexes.");
+        if (!res.ok) throw new Error('Could not find indexes.');
         return res.json();
       })
       .then((res) => res.vectorCount)
@@ -29,7 +29,7 @@ const System = {
   keys: async function () {
     return await fetch(`${API_BASE}/setup-complete`)
       .then((res) => {
-        if (!res.ok) throw new Error("Could not find setup information.");
+        if (!res.ok) throw new Error('Could not find setup information.');
         return res.json();
       })
       .then((res) => res.results)
@@ -40,7 +40,7 @@ const System = {
       headers: baseHeaders(),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not find setup information.");
+        if (!res.ok) throw new Error('Could not find setup information.');
         return res.json();
       })
       .then((res) => res.localFiles)
@@ -65,11 +65,11 @@ const System = {
   },
   requestToken: async function (body) {
     return await fetch(`${API_BASE}/request-token`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ ...body }),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not validate login.");
+        if (!res.ok) throw new Error('Could not validate login.');
         return res.json();
       })
       .then((res) => res)
@@ -79,14 +79,14 @@ const System = {
   },
   recoverAccount: async function (username, recoveryCodes) {
     return await fetch(`${API_BASE}/system/recover-account`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify({ username, recoveryCodes }),
     })
       .then(async (res) => {
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.message || "Error recovering account.");
+          throw new Error(data.message || 'Error recovering account.');
         }
         return data;
       })
@@ -97,14 +97,14 @@ const System = {
   },
   resetPassword: async function (token, newPassword, confirmPassword) {
     return await fetch(`${API_BASE}/system/reset-password`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify({ token, newPassword, confirmPassword }),
     })
       .then(async (res) => {
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.message || "Error resetting password.");
+          throw new Error(data.message || 'Error resetting password.');
         }
         return data;
       })
@@ -131,7 +131,7 @@ const System = {
   },
   updateSystem: async (data) => {
     return await fetch(`${API_BASE}/system/update-env`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify(data),
     })
@@ -143,7 +143,7 @@ const System = {
   },
   updateSystemPassword: async (data) => {
     return await fetch(`${API_BASE}/system/update-password`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify(data),
     })
@@ -155,7 +155,7 @@ const System = {
   },
   setupMultiUser: async (data) => {
     return await fetch(`${API_BASE}/system/enable-multi-user`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify(data),
     })
@@ -167,7 +167,7 @@ const System = {
   },
   isMultiUserMode: async () => {
     return await fetch(`${API_BASE}/system/multi-user-mode`, {
-      method: "GET",
+      method: 'GET',
       headers: baseHeaders(),
     })
       .then((res) => res.json())
@@ -179,7 +179,7 @@ const System = {
   },
   deleteDocument: async (name) => {
     return await fetch(`${API_BASE}/system/remove-document`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: baseHeaders(),
       body: JSON.stringify({ name }),
     })
@@ -191,7 +191,7 @@ const System = {
   },
   deleteDocuments: async (names = []) => {
     return await fetch(`${API_BASE}/system/remove-documents`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: baseHeaders(),
       body: JSON.stringify({ names }),
     })
@@ -203,7 +203,7 @@ const System = {
   },
   deleteFolder: async (name) => {
     return await fetch(`${API_BASE}/system/remove-folder`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: baseHeaders(),
       body: JSON.stringify({ name }),
     })
@@ -215,12 +215,12 @@ const System = {
   },
   uploadLogo: async function (formData) {
     return await fetch(`${API_BASE}/system/upload-logo`, {
-      method: "POST",
+      method: 'POST',
       body: formData,
       headers: baseHeaders(),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Error uploading logo.");
+        if (!res.ok) throw new Error('Error uploading logo.');
         return { success: true, error: null };
       })
       .catch((e) => {
@@ -240,8 +240,8 @@ const System = {
     const { footerData, error } = await fetch(
       `${API_BASE}/system/footer-data`,
       {
-        method: "GET",
-        cache: "no-cache",
+        method: 'GET',
+        cache: 'no-cache',
         headers: baseHeaders(),
       }
     )
@@ -263,8 +263,8 @@ const System = {
   fetchSupportEmail: async function () {
     const cache = window.localStorage.getItem(this.cacheKeys.supportEmail);
     const { email, lastFetched } = cache
-      ? safeJsonParse(cache, { email: "", lastFetched: 0 })
-      : { email: "", lastFetched: 0 };
+      ? safeJsonParse(cache, { email: '', lastFetched: 0 })
+      : { email: '', lastFetched: 0 };
 
     if (!!email && Date.now() - lastFetched < 3_600_000)
       return { email: email, error: null };
@@ -272,18 +272,18 @@ const System = {
     const { supportEmail, error } = await fetch(
       `${API_BASE}/system/support-email`,
       {
-        method: "GET",
-        cache: "no-cache",
+        method: 'GET',
+        cache: 'no-cache',
         headers: baseHeaders(),
       }
     )
       .then((res) => res.json())
       .catch((e) => {
         console.log(e);
-        return { email: "", error: e.message };
+        return { email: '', error: e.message };
       });
 
-    if (!supportEmail || !!error) return { email: "", error: null };
+    if (!supportEmail || !!error) return { email: '', error: null };
     window.localStorage.setItem(
       this.cacheKeys.supportEmail,
       JSON.stringify({ email: supportEmail, lastFetched: Date.now() })
@@ -292,12 +292,12 @@ const System = {
   },
   fetchLogo: async function () {
     return await fetch(`${API_BASE}/system/logo`, {
-      method: "GET",
-      cache: "no-cache",
+      method: 'GET',
+      cache: 'no-cache',
     })
       .then((res) => {
         if (res.ok && res.status !== 204) return res.blob();
-        throw new Error("Failed to fetch logo!");
+        throw new Error('Failed to fetch logo!');
       })
       .then((blob) => URL.createObjectURL(blob))
       .catch((e) => {
@@ -308,11 +308,11 @@ const System = {
 
   isDefaultLogo: async function () {
     return await fetch(`${API_BASE}/system/is-default-logo`, {
-      method: "GET",
-      cache: "no-cache",
+      method: 'GET',
+      cache: 'no-cache',
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to get is default logo!");
+        if (!res.ok) throw new Error('Failed to get is default logo!');
         return res.json();
       })
       .then((res) => res?.isDefaultLogo)
@@ -327,7 +327,7 @@ const System = {
     })
       .then((res) => {
         if (res.ok) return { success: true, error: null };
-        throw new Error("Error removing logo!");
+        throw new Error('Error removing logo!');
       })
       .catch((e) => {
         console.log(e);
@@ -336,12 +336,12 @@ const System = {
   },
   getCanDeleteWorkspaces: async function () {
     return await fetch(`${API_BASE}/system/can-delete-workspaces`, {
-      method: "GET",
-      cache: "no-cache",
+      method: 'GET',
+      cache: 'no-cache',
       headers: baseHeaders(),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not fetch can delete workspaces.");
+        if (!res.ok) throw new Error('Could not fetch can delete workspaces.');
         return res.json();
       })
       .then((res) => res?.canDelete)
@@ -352,12 +352,12 @@ const System = {
   },
   getWelcomeMessages: async function () {
     return await fetch(`${API_BASE}/system/welcome-messages`, {
-      method: "GET",
-      cache: "no-cache",
+      method: 'GET',
+      cache: 'no-cache',
       headers: baseHeaders(),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not fetch welcome messages.");
+        if (!res.ok) throw new Error('Could not fetch welcome messages.');
         return res.json();
       })
       .then((res) => res.welcomeMessages)
@@ -368,13 +368,13 @@ const System = {
   },
   setWelcomeMessages: async function (messages) {
     return fetch(`${API_BASE}/system/set-welcome-messages`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify({ messages }),
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error(res.statusText || "Error setting welcome messages.");
+          throw new Error(res.statusText || 'Error setting welcome messages.');
         }
         return { success: true, ...res.json() };
       })
@@ -385,12 +385,12 @@ const System = {
   },
   getApiKeys: async function () {
     return fetch(`${API_BASE}/system/api-keys`, {
-      method: "GET",
+      method: 'GET',
       headers: baseHeaders(),
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error(res.statusText || "Error fetching api key.");
+          throw new Error(res.statusText || 'Error fetching api key.');
         }
         return res.json();
       })
@@ -401,12 +401,12 @@ const System = {
   },
   generateApiKey: async function () {
     return fetch(`${API_BASE}/system/generate-api-key`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error(res.statusText || "Error generating api key.");
+          throw new Error(res.statusText || 'Error generating api key.');
         }
         return res.json();
       })
@@ -417,7 +417,7 @@ const System = {
   },
   deleteApiKey: async function () {
     return fetch(`${API_BASE}/system/api-key`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: baseHeaders(),
     })
       .then((res) => res.ok)
@@ -428,7 +428,7 @@ const System = {
   },
   customModels: async function (provider, apiKey = null, basePath = null) {
     return fetch(`${API_BASE}/system/custom-models`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify({
         provider,
@@ -438,7 +438,7 @@ const System = {
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error(res.statusText || "Error finding custom models.");
+          throw new Error(res.statusText || 'Error finding custom models.');
         }
         return res.json();
       })
@@ -449,7 +449,7 @@ const System = {
   },
   chats: async (offset = 0) => {
     return await fetch(`${API_BASE}/system/workspace-chats`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify({ offset }),
     })
@@ -461,7 +461,7 @@ const System = {
   },
   eventLogs: async (offset = 0) => {
     return await fetch(`${API_BASE}/system/event-logs`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify({ offset }),
     })
@@ -473,7 +473,7 @@ const System = {
   },
   clearEventLogs: async () => {
     return await fetch(`${API_BASE}/system/event-logs`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: baseHeaders(),
     })
       .then((res) => res.json())
@@ -484,7 +484,7 @@ const System = {
   },
   deleteChat: async (chatId) => {
     return await fetch(`${API_BASE}/system/workspace-chats/${chatId}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: baseHeaders(),
     })
       .then((res) => res.json())
@@ -493,11 +493,11 @@ const System = {
         return { success: false, error: e.message };
       });
   },
-  exportChats: async (type = "csv") => {
+  exportChats: async (type = 'csv') => {
     const url = new URL(`${fullApiUrl()}/system/export-chats`);
-    url.searchParams.append("type", encodeURIComponent(type));
+    url.searchParams.append('type', encodeURIComponent(type));
     return await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: baseHeaders(),
     })
       .then((res) => {
@@ -511,7 +511,7 @@ const System = {
   },
   updateUser: async (data) => {
     return await fetch(`${API_BASE}/system/user`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify(data),
     })
@@ -524,11 +524,11 @@ const System = {
 
   getSlashCommandPresets: async function () {
     return await fetch(`${API_BASE}/system/slash-command-presets`, {
-      method: "GET",
+      method: 'GET',
       headers: baseHeaders(),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not fetch slash command presets.");
+        if (!res.ok) throw new Error('Could not fetch slash command presets.');
         return res.json();
       })
       .then((res) => res.presets)
@@ -540,12 +540,12 @@ const System = {
 
   createSlashCommandPreset: async function (presetData) {
     return await fetch(`${API_BASE}/system/slash-command-presets`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify(presetData),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not create slash command preset.");
+        if (!res.ok) throw new Error('Could not create slash command preset.');
         return res.json();
       })
       .then((res) => {
@@ -559,29 +559,29 @@ const System = {
 
   updateSlashCommandPreset: async function (presetId, presetData) {
     return await fetch(`${API_BASE}/system/slash-command-presets/${presetId}`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify(presetData),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not update slash command preset.");
+        if (!res.ok) throw new Error('Could not update slash command preset.');
         return res.json();
       })
       .then((res) => {
         return { preset: res.preset, error: null };
       })
       .catch((e) => {
-        return { preset: null, error: "Failed to update this command." };
+        return { preset: null, error: 'Failed to update this command.' };
       });
   },
 
   deleteSlashCommandPreset: async function (presetId) {
     return await fetch(`${API_BASE}/system/slash-command-presets/${presetId}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: baseHeaders(),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not delete slash command preset.");
+        if (!res.ok) throw new Error('Could not delete slash command preset.');
         return true;
       })
       .catch((e) => {

@@ -1,11 +1,10 @@
-import { createContext, useEffect, useState } from "react";
-import FinetuneLLMs from "./media/logo/FinetuneLLMs_transparent.png";
-import System from "./models/system";
+import { createContext, useEffect, useState } from 'react';
+import FinetuneLLMs from '@/media/logo/FinetuneLLMs_transparent.png';
 
 export const LogoContext = createContext();
 
 export function LogoProvider({ children }) {
-  const [logo, setLogo] = useState("");
+  const [logo, setLogo] = useState('');
 
   useEffect(() => {
     setLogo(FinetuneLLMs);

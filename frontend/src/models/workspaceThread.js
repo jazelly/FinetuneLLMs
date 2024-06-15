@@ -1,15 +1,15 @@
-import { ABORT_STREAM_EVENT } from "@/utils/chat";
-import { API_BASE } from "@/utils/constants";
-import { baseHeaders } from "@/utils/request";
-import { fetchEventSource } from "@microsoft/fetch-event-source";
-import { v4 } from "uuid";
+import { ABORT_STREAM_EVENT } from '@/utils/chat';
+import { API_BASE } from '@/utils/constants';
+import { baseHeaders } from '@/utils/request';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { v4 } from 'uuid';
 
 const WorkspaceThread = {
   all: async function (workspaceSlug) {
     const { threads } = await fetch(
       `${API_BASE}/workspace/${workspaceSlug}/threads`,
       {
-        method: "GET",
+        method: 'GET',
         headers: baseHeaders(),
       }
     )
@@ -24,7 +24,7 @@ const WorkspaceThread = {
     const { thread, error } = await fetch(
       `${API_BASE}/workspace/${workspaceSlug}/thread/new`,
       {
-        method: "POST",
+        method: 'POST',
         headers: baseHeaders(),
       }
     )
@@ -39,7 +39,7 @@ const WorkspaceThread = {
     const { thread, message } = await fetch(
       `${API_BASE}/workspace/${workspaceSlug}/thread/${threadSlug}/update`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(data),
         headers: baseHeaders(),
       }
@@ -55,7 +55,7 @@ const WorkspaceThread = {
     return await fetch(
       `${API_BASE}/workspace/${workspaceSlug}/thread/${threadSlug}`,
       {
-        method: "DELETE",
+        method: 'DELETE',
         headers: baseHeaders(),
       }
     )
@@ -66,7 +66,7 @@ const WorkspaceThread = {
     return await fetch(
       `${API_BASE}/workspace/${workspaceSlug}/thread-bulk-delete`,
       {
-        method: "DELETE",
+        method: 'DELETE',
         body: JSON.stringify({ slugs: threadSlugs }),
         headers: baseHeaders(),
       }
@@ -78,7 +78,7 @@ const WorkspaceThread = {
     const history = await fetch(
       `${API_BASE}/workspace/${workspaceSlug}/thread/${threadSlug}/chats`,
       {
-        method: "GET",
+        method: 'GET',
         headers: baseHeaders(),
       }
     )
@@ -100,13 +100,13 @@ const WorkspaceThread = {
     // The backend response abort handling is done in each LLM's handleStreamResponse.
     window.addEventListener(ABORT_STREAM_EVENT, () => {
       ctrl.abort();
-      handleChat({ id: v4(), type: "stopGeneration" });
+      handleChat({ id: v4(), type: 'stopGeneration' });
     });
 
     await fetchEventSource(
       `${API_BASE}/workspace/${workspaceSlug}/thread/${threadSlug}/stream-chat`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({ message }),
         headers: baseHeaders(),
         signal: ctrl.signal,
@@ -121,25 +121,25 @@ const WorkspaceThread = {
           ) {
             handleChat({
               id: v4(),
-              type: "abort",
+              type: 'abort',
               textResponse: null,
               sources: [],
               close: true,
               error: `An error occurred while streaming response. Code ${response.status}`,
             });
             ctrl.abort();
-            throw new Error("Invalid Status code response.");
+            throw new Error('Invalid Status code response.');
           } else {
             handleChat({
               id: v4(),
-              type: "abort",
+              type: 'abort',
               textResponse: null,
               sources: [],
               close: true,
               error: `An error occurred while streaming response. Unknown Error.`,
             });
             ctrl.abort();
-            throw new Error("Unknown error");
+            throw new Error('Unknown error');
           }
         },
         async onmessage(msg) {
@@ -151,7 +151,7 @@ const WorkspaceThread = {
         onerror(err) {
           handleChat({
             id: v4(),
-            type: "abort",
+            type: 'abort',
             textResponse: null,
             sources: [],
             close: true,
