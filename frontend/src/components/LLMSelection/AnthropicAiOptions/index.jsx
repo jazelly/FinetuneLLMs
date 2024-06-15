@@ -11,7 +11,7 @@ export default function AnthropicAiOptions({ settings }) {
             name="AnthropicApiKey"
             className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
             placeholder="Anthropic Claude-2 API Key"
-            defaultValue={settings?.AnthropicApiKey ? "*".repeat(20) : ""}
+            defaultValue={settings?.AnthropicApiKey ? '*'.repeat(20) : ''}
             required={true}
             autoComplete="off"
             spellCheck={false}
@@ -25,17 +25,17 @@ export default function AnthropicAiOptions({ settings }) {
             </label>
             <select
               name="AnthropicModelPref"
-              defaultValue={settings?.AnthropicModelPref || "claude-2"}
+              defaultValue={settings?.AnthropicModelPref || 'claude-2'}
               required={true}
               className="bg-zinc-900 border-gray-500 text-white text-sm rounded-lg block w-full p-2.5"
             >
               {[
-                "claude-instant-1.2",
-                "claude-2.0",
-                "claude-2.1",
-                "claude-3-haiku-20240307",
-                "claude-3-opus-20240229",
-                "claude-3-sonnet-20240229",
+                'claude-instant-1.2',
+                'claude-2.0',
+                'claude-2.1',
+                'claude-3-haiku-20240307',
+                'claude-3-opus-20240229',
+                'claude-3-sonnet-20240229',
               ].map((model) => {
                 return (
                   <option key={model} value={model}>

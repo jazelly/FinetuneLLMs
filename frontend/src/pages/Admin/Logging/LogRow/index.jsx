@@ -1,5 +1,5 @@
-import { CaretDown, CaretUp } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import { CaretDown, CaretUp } from '@phosphor-icons/react';
+import { useEffect, useState } from 'react';
 
 export default function LogRow({ log }) {
   const [expanded, setExpanded] = useState(false);
@@ -18,7 +18,7 @@ export default function LogRow({ log }) {
   }, [log.metadata]);
 
   const handleRowClick = () => {
-    if (log.metadata !== "{}") {
+    if (log.metadata !== '{}') {
       setExpanded(!expanded);
     }
   };
@@ -28,7 +28,7 @@ export default function LogRow({ log }) {
       <tr
         onClick={handleRowClick}
         className={`bg-transparent text-white text-opacity-80 text-sm font-medium ${
-          hasMetadata ? "cursor-pointer hover:bg-white/5" : ""
+          hasMetadata ? 'cursor-pointer hover:bg-white/5' : ''
         }`}
       >
         <EventBadge event={log.event} />
@@ -85,13 +85,13 @@ const EventMetadata = ({ metadata, expanded = false }) => {
 };
 
 const EventBadge = ({ event }) => {
-  let colorTheme = { bg: "bg-sky-600/20", text: "text-sky-400 " };
-  if (event.includes("update"))
-    colorTheme = { bg: "bg-yellow-600/20", text: "text-yellow-400 " };
-  if (event.includes("failed_") || event.includes("deleted"))
-    colorTheme = { bg: "bg-red-600/20", text: "text-red-400 " };
-  if (event === "login_event")
-    colorTheme = { bg: "bg-green-600/20", text: "text-green-400 " };
+  let colorTheme = { bg: 'bg-sky-600/20', text: 'text-sky-400 ' };
+  if (event.includes('update'))
+    colorTheme = { bg: 'bg-yellow-600/20', text: 'text-yellow-400 ' };
+  if (event.includes('failed_') || event.includes('deleted'))
+    colorTheme = { bg: 'bg-red-600/20', text: 'text-red-400 ' };
+  if (event === 'login_event')
+    colorTheme = { bg: 'bg-green-600/20', text: 'text-green-400 ' };
 
   return (
     <td className="px-6 py-4 font-medium whitespace-nowrap text-white flex items-center">

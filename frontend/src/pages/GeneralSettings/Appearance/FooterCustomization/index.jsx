@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import showToast from "@/utils/toast";
-import { safeJsonParse } from "@/utils/request";
-import NewIconForm from "./NewIconForm";
-import Admin from "@/models/admin";
-import System from "@/models/system";
+import React, { useState, useEffect } from 'react';
+import showToast from '@/utils/toast';
+import { safeJsonParse } from '@/utils/request';
+import NewIconForm from './NewIconForm';
+import Admin from '@/models/admin';
+import System from '@/models/system';
 
 export default function FooterCustomization() {
   const [footerIcons, setFooterIcons] = useState(Array(3).fill(null));
@@ -31,7 +31,7 @@ export default function FooterCustomization() {
     });
 
     if (!success) {
-      showToast(`Failed to update footer icons - ${error}`, "error", {
+      showToast(`Failed to update footer icons - ${error}`, 'error', {
         clear: true,
       });
       return;
@@ -39,7 +39,7 @@ export default function FooterCustomization() {
 
     window.localStorage.removeItem(System.cacheKeys.footerIcons);
     setFooterIcons(updatedIcons);
-    showToast("Successfully updated footer icons.", "success", { clear: true });
+    showToast('Successfully updated footer icons.', 'success', { clear: true });
   };
 
   const handleRemoveIcon = (index) => {

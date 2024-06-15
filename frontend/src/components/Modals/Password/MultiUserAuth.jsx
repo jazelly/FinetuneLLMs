@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import System from "../../../models/system";
-import { AUTH_TOKEN, AUTH_USER } from "../../../utils/constants";
-import paths from "../../../utils/paths";
-import showToast from "@/utils/toast";
-import ModalWrapper from "@/components/ModalWrapper";
-import { useModal } from "@/hooks/useModal";
-import RecoveryCodeModal from "@/components/Modals/DisplayRecoveryCodeModal";
+import React, { useEffect, useState } from 'react';
+import System from '../../../models/system';
+import { AUTH_TOKEN, AUTH_USER } from '../../../utils/constants';
+import paths from '../../../utils/paths';
+import showToast from '@/utils/toast';
+import ModalWrapper from '@/components/ModalWrapper';
+import { useModal } from '@/hooks/useModal';
+import RecoveryCodeModal from '@/components/Modals/DisplayRecoveryCodeModal';
 
 const RecoveryForm = ({ onSubmit, setShowRecoveryForm }) => {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
   const [recoveryCodeInputs, setRecoveryCodeInputs] = useState(
-    Array(2).fill("")
+    Array(2).fill('')
   );
 
   const handleRecoveryCodeChange = (index, value) => {
@@ -22,7 +22,7 @@ const RecoveryForm = ({ onSubmit, setShowRecoveryForm }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const recoveryCodes = recoveryCodeInputs.filter(
-      (code) => code.trim() !== ""
+      (code) => code.trim() !== ''
     );
     onSubmit(username, recoveryCodes);
   };
@@ -98,8 +98,8 @@ const RecoveryForm = ({ onSubmit, setShowRecoveryForm }) => {
 };
 
 const ResetPasswordForm = ({ onSubmit }) => {
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -212,16 +212,16 @@ export default function MultiUserAuth() {
     );
 
     if (success && resetToken) {
-      window.localStorage.setItem("resetToken", resetToken);
+      window.localStorage.setItem('resetToken', resetToken);
       setShowRecoveryForm(false);
       setShowResetPasswordForm(true);
     } else {
-      showToast(error, "error", { clear: true });
+      showToast(error, 'error', { clear: true });
     }
   };
 
   const handleResetSubmit = async (newPassword, confirmPassword) => {
-    const resetToken = window.localStorage.getItem("resetToken");
+    const resetToken = window.localStorage.getItem('resetToken');
 
     if (resetToken) {
       const { success, error } = await System.resetPassword(
@@ -231,14 +231,14 @@ export default function MultiUserAuth() {
       );
 
       if (success) {
-        window.localStorage.removeItem("resetToken");
+        window.localStorage.removeItem('resetToken');
         setShowResetPasswordForm(false);
-        showToast("Password reset successful", "success", { clear: true });
+        showToast('Password reset successful', 'success', { clear: true });
       } else {
-        showToast(error, "error", { clear: true });
+        showToast(error, 'error', { clear: true });
       }
     } else {
-      showToast("Invalid reset token", "error", { clear: true });
+      showToast('Invalid reset token', 'error', { clear: true });
     }
   };
 
@@ -311,7 +311,7 @@ export default function MultiUserAuth() {
               type="submit"
               className="md:text-[#46C8FF] md:bg-transparent text-[#222628] text-sm font-bold focus:ring-4 focus:outline-none rounded-md border-[1.5px] border-[#46C8FF] md:h-[34px] h-[48px] md:hover:text-white md:hover:bg-[#46C8FF] bg-[#46C8FF] focus:z-10 w-full"
             >
-              {loading ? "Validating..." : "Login"}
+              {loading ? 'Validating...' : 'Login'}
             </button>
             <button
               type="button"

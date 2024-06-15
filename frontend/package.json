@@ -8,7 +8,7 @@
     "start": "vite --open",
     "dev": "NODE_ENV=development vite --debug --host=0.0.0.0",
     "build": "vite build",
-    "lint": "yarn prettier --write ./src",
+    "lint": "npx prettier --write ./src",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
-import Sidebar from "@/components/SettingsSidebar";
-import { isMobile } from "react-device-detect";
-import showToast from "@/utils/toast";
-import System from "@/models/system";
-import paths from "@/utils/paths";
-import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from "@/utils/constants";
-import PreLoader from "@/components/Preloader";
-import CTAButton from "@/components/CTAButton";
+import { useEffect, useState } from 'react';
+import Sidebar from '@/components/SettingsSidebar';
+import { isMobile } from 'react-device-detect';
+import showToast from '@/utils/toast';
+import System from '@/models/system';
+import paths from '@/utils/paths';
+import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from '@/utils/constants';
+import PreLoader from '@/components/Preloader';
+import CTAButton from '@/components/CTAButton';
 
 export default function GeneralSecurity() {
   return (
     <div className="w-screen h-screen overflow-hidden bg-main flex">
       <Sidebar />
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+        style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
         className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
       >
         <MultiUserMode />
@@ -37,13 +37,13 @@ function MultiUserMode() {
     if (useMultiUserMode) {
       const form = new FormData(e.target);
       const data = {
-        username: form.get("username"),
-        password: form.get("password"),
+        username: form.get('username'),
+        password: form.get('password'),
       };
 
       const { success, error } = await System.setupMultiUser(data);
       if (success) {
-        showToast("Multi-User mode enabled successfully.", "success");
+        showToast('Multi-User mode enabled successfully.', 'success');
         setSaving(false);
         setTimeout(() => {
           window.localStorage.removeItem(AUTH_USER);
@@ -54,7 +54,7 @@ function MultiUserMode() {
         return;
       }
 
-      showToast(`Failed to enable Multi-User mode: ${error}`, "error");
+      showToast(`Failed to enable Multi-User mode: ${error}`, 'error');
       setSaving(false);
       return;
     }
@@ -104,7 +104,7 @@ function MultiUserMode() {
               onClick={() => handleSubmit()}
               className="mt-3 mr-0 -mb-20 z-10"
             >
-              {saving ? "Saving..." : "Save changes"}
+              {saving ? 'Saving...' : 'Save changes'}
             </CTAButton>
           </div>
         )}
@@ -116,8 +116,8 @@ function MultiUserMode() {
                 <div className="">
                   <label className="mb-2.5 block font-medium text-white">
                     {multiUserModeEnabled
-                      ? "Multi-User Mode is Enabled"
-                      : "Enable Multi-User Mode"}
+                      ? 'Multi-User Mode is Enabled'
+                      : 'Enable Multi-User Mode'}
                   </label>
 
                   <label className="relative inline-flex cursor-pointer items-center">
@@ -151,7 +151,7 @@ function MultiUserMode() {
                         required={true}
                         autoComplete="off"
                         disabled={multiUserModeEnabled}
-                        defaultValue={multiUserModeEnabled ? "********" : ""}
+                        defaultValue={multiUserModeEnabled ? '********' : ''}
                       />
                     </div>
                     <div className="mt-4 w-80">
@@ -169,7 +169,7 @@ function MultiUserMode() {
                         minLength={8}
                         required={true}
                         autoComplete="off"
-                        defaultValue={multiUserModeEnabled ? "********" : ""}
+                        defaultValue={multiUserModeEnabled ? '********' : ''}
                       />
                     </div>
                   </div>
@@ -203,10 +203,10 @@ function PasswordProtection() {
     if (multiUserModeEnabled) return false;
     const form = new FormData(e.target);
 
-    if (!PW_REGEX.test(form.get("password"))) {
+    if (!PW_REGEX.test(form.get('password'))) {
       showToast(
         `Your password has restricted characters in it. Allowed symbols are _,-,!,@,$,%,^,&,*,(,),;`,
-        "error"
+        'error'
       );
       setSaving(false);
       return;
@@ -216,12 +216,12 @@ function PasswordProtection() {
     setHasChanges(false);
     const data = {
       usePassword,
-      newPassword: form.get("password"),
+      newPassword: form.get('password'),
     };
 
     const { success, error } = await System.updateSystemPassword(data);
     if (success) {
-      showToast("Your page will refresh in a few seconds.", "success");
+      showToast('Your page will refresh in a few seconds.', 'success');
       setSaving(false);
       setTimeout(() => {
         window.localStorage.removeItem(AUTH_USER);
@@ -231,7 +231,7 @@ function PasswordProtection() {
       }, 3_000);
       return;
     } else {
-      showToast(`Failed to update password: ${error}`, "error");
+      showToast(`Failed to update password: ${error}`, 'error');
       setSaving(false);
     }
   };
@@ -283,7 +283,7 @@ function PasswordProtection() {
               onClick={() => handleSubmit()}
               className="mt-3 mr-0 -mb-20 z-10"
             >
-              {saving ? "Saving..." : "Save changes"}
+              {saving ? 'Saving...' : 'Save changes'}
             </CTAButton>
           </div>
         )}
@@ -324,7 +324,7 @@ function PasswordProtection() {
                         minLength={8}
                         required={true}
                         autoComplete="off"
-                        defaultValue={usePassword ? "********" : ""}
+                        defaultValue={usePassword ? '********' : ''}
                       />
                     </div>
                   </div>

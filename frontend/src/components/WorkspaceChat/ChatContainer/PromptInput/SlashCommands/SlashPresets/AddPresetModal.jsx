@@ -1,25 +1,25 @@
-import { useState } from "react";
-import { X } from "@phosphor-icons/react";
-import ModalWrapper from "@/components/ModalWrapper";
-import { CMD_REGEX } from ".";
+import { useState } from 'react';
+import { X } from '@phosphor-icons/react';
+import ModalWrapper from '@/components/ModalWrapper';
+import { CMD_REGEX } from '.';
 
 export default function AddPresetModal({ isOpen, onClose, onSave }) {
-  const [command, setCommand] = useState("");
+  const [command, setCommand] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = new FormData(e.target);
-    const sanitizedCommand = command.replace(CMD_REGEX, "");
+    const sanitizedCommand = command.replace(CMD_REGEX, '');
     const saved = await onSave({
       command: `/${sanitizedCommand}`,
-      prompt: form.get("prompt"),
-      description: form.get("description"),
+      prompt: form.get('prompt'),
+      description: form.get('description'),
     });
-    if (saved) setCommand("");
+    if (saved) setCommand('');
   };
 
   const handleCommandChange = (e) => {
-    const value = e.target.value.replace(CMD_REGEX, "");
+    const value = e.target.value.replace(CMD_REGEX, '');
     setCommand(value);
   };
 

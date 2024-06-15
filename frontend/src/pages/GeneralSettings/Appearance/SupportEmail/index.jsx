@@ -1,21 +1,21 @@
-import useUser from "@/hooks/useUser";
-import Admin from "@/models/admin";
-import System from "@/models/system";
-import showToast from "@/utils/toast";
-import { useEffect, useState } from "react";
+import useUser from '@/hooks/useUser';
+import Admin from '@/models/admin';
+import System from '@/models/system';
+import showToast from '@/utils/toast';
+import { useEffect, useState } from 'react';
 
 export default function SupportEmail() {
   const { user } = useUser();
   const [loading, setLoading] = useState(true);
   const [hasChanges, setHasChanges] = useState(false);
-  const [supportEmail, setSupportEmail] = useState("");
-  const [originalEmail, setOriginalEmail] = useState("");
+  const [supportEmail, setSupportEmail] = useState('');
+  const [originalEmail, setOriginalEmail] = useState('');
 
   useEffect(() => {
     const fetchSupportEmail = async () => {
       const supportEmail = await System.fetchSupportEmail();
-      setSupportEmail(supportEmail.email || "");
-      setOriginalEmail(supportEmail.email || "");
+      setSupportEmail(supportEmail.email || '');
+      setOriginalEmail(supportEmail.email || '');
       setLoading(false);
     };
     fetchSupportEmail();
@@ -26,7 +26,7 @@ export default function SupportEmail() {
     let support_email = newValue;
     if (newValue === null) {
       const form = new FormData(e.target);
-      support_email = form.get("supportEmail");
+      support_email = form.get('supportEmail');
     }
 
     const { success, error } = await Admin.updateSystemPreferences({
@@ -34,10 +34,10 @@ export default function SupportEmail() {
     });
 
     if (!success) {
-      showToast(`Failed to update support email: ${error}`, "error");
+      showToast(`Failed to update support email: ${error}`, 'error');
       return;
     } else {
-      showToast("Successfully updated support email.", "success");
+      showToast('Successfully updated support email.', 'success');
       window.localStorage.removeItem(System.cacheKeys.supportEmail);
       setSupportEmail(support_email);
       setOriginalEmail(support_email);
@@ -73,10 +73,10 @@ export default function SupportEmail() {
           onChange={handleChange}
           value={supportEmail}
         />
-        {originalEmail !== "" && (
+        {originalEmail !== '' && (
           <button
             type="button"
-            onClick={(e) => updateSupportEmail(e, "")}
+            onClick={(e) => updateSupportEmail(e, '')}
             className="mt-4 text-white text-base font-medium hover:text-opacity-60"
           >
             Clear

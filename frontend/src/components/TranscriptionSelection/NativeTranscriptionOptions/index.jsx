@@ -1,4 +1,4 @@
-import { Gauge } from "@phosphor-icons/react";
+import { Gauge } from '@phosphor-icons/react';
 export default function NativeTranscriptionOptions() {
   return (
     <div className="w-full flex flex-col gap-y-4">

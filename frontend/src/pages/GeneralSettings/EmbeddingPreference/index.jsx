@@ -1,82 +1,82 @@
-import React, { useEffect, useState, useRef } from "react";
-import Sidebar from "@/components/SettingsSidebar";
-import { isMobile } from "react-device-detect";
-import System from "@/models/system";
-import showToast from "@/utils/toast";
-import FinetuneLLMsIcon from "@/media/logo/anything-llm-icon.png";
-import OpenAiLogo from "@/media/llmprovider/openai.png";
-import AzureOpenAiLogo from "@/media/llmprovider/azure.png";
-import LocalAiLogo from "@/media/llmprovider/localai.png";
-import OllamaLogo from "@/media/llmprovider/ollama.png";
-import LMStudioLogo from "@/media/llmprovider/lmstudio.png";
-import CohereLogo from "@/media/llmprovider/cohere.png";
-import PreLoader from "@/components/Preloader";
-import ChangeWarningModal from "@/components/ChangeWarning";
-import OpenAiOptions from "@/components/EmbeddingSelection/OpenAiOptions";
-import AzureAiOptions from "@/components/EmbeddingSelection/AzureAiOptions";
-import LocalAiOptions from "@/components/EmbeddingSelection/LocalAiOptions";
-import NativeEmbeddingOptions from "@/components/EmbeddingSelection/NativeEmbeddingOptions";
-import OllamaEmbeddingOptions from "@/components/EmbeddingSelection/OllamaOptions";
-import LMStudioEmbeddingOptions from "@/components/EmbeddingSelection/LMStudioOptions";
-import CohereEmbeddingOptions from "@/components/EmbeddingSelection/CohereOptions";
+import React, { useEffect, useState, useRef } from 'react';
+import Sidebar from '@/components/SettingsSidebar';
+import { isMobile } from 'react-device-detect';
+import System from '@/models/system';
+import showToast from '@/utils/toast';
+import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import OpenAiLogo from '@/media/llmprovider/openai.png';
+import AzureOpenAiLogo from '@/media/llmprovider/azure.png';
+import LocalAiLogo from '@/media/llmprovider/localai.png';
+import OllamaLogo from '@/media/llmprovider/ollama.png';
+import LMStudioLogo from '@/media/llmprovider/lmstudio.png';
+import CohereLogo from '@/media/llmprovider/cohere.png';
+import PreLoader from '@/components/Preloader';
+import ChangeWarningModal from '@/components/ChangeWarning';
+import OpenAiOptions from '@/components/EmbeddingSelection/OpenAiOptions';
+import AzureAiOptions from '@/components/EmbeddingSelection/AzureAiOptions';
+import LocalAiOptions from '@/components/EmbeddingSelection/LocalAiOptions';
+import NativeEmbeddingOptions from '@/components/EmbeddingSelection/NativeEmbeddingOptions';
+import OllamaEmbeddingOptions from '@/components/EmbeddingSelection/OllamaOptions';
+import LMStudioEmbeddingOptions from '@/components/EmbeddingSelection/LMStudioOptions';
+import CohereEmbeddingOptions from '@/components/EmbeddingSelection/CohereOptions';
 
-import EmbedderItem from "@/components/EmbeddingSelection/EmbedderItem";
-import { CaretUpDown, MagnifyingGlass, X } from "@phosphor-icons/react";
-import { useModal } from "@/hooks/useModal";
-import ModalWrapper from "@/components/ModalWrapper";
-import CTAButton from "@/components/CTAButton";
+import EmbedderItem from '@/components/EmbeddingSelection/EmbedderItem';
+import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
+import { useModal } from '@/hooks/useModal';
+import ModalWrapper from '@/components/ModalWrapper';
+import CTAButton from '@/components/CTAButton';
 
 const EMBEDDERS = [
   {
-    name: "FinetuneLLMs Embedder",
-    value: "native",
+    name: 'FinetuneLLMs Embedder',
+    value: 'native',
     logo: FinetuneLLMsIcon,
     options: (settings) => <NativeEmbeddingOptions settings={settings} />,
     description:
-      "Use the built-in embedding provider for FinetuneLLMs. Zero setup!",
+      'Use the built-in embedding provider for FinetuneLLMs. Zero setup!',
   },
   {
-    name: "OpenAI",
-    value: "openai",
+    name: 'OpenAI',
+    value: 'openai',
     logo: OpenAiLogo,
     options: (settings) => <OpenAiOptions settings={settings} />,
-    description: "The standard option for most non-commercial use.",
+    description: 'The standard option for most non-commercial use.',
   },
   {
-    name: "Azure OpenAI",
-    value: "azure",
+    name: 'Azure OpenAI',
+    value: 'azure',
     logo: AzureOpenAiLogo,
     options: (settings) => <AzureAiOptions settings={settings} />,
-    description: "The enterprise option of OpenAI hosted on Azure services.",
+    description: 'The enterprise option of OpenAI hosted on Azure services.',
   },
   {
-    name: "Local AI",
-    value: "localai",
+    name: 'Local AI',
+    value: 'localai',
     logo: LocalAiLogo,
     options: (settings) => <LocalAiOptions settings={settings} />,
-    description: "Run embedding models locally on your own machine.",
+    description: 'Run embedding models locally on your own machine.',
   },
   {
-    name: "Ollama",
-    value: "ollama",
+    name: 'Ollama',
+    value: 'ollama',
     logo: OllamaLogo,
     options: (settings) => <OllamaEmbeddingOptions settings={settings} />,
-    description: "Run embedding models locally on your own machine.",
+    description: 'Run embedding models locally on your own machine.',
   },
   {
-    name: "LM Studio",
-    value: "lmstudio",
+    name: 'LM Studio',
+    value: 'lmstudio',
     logo: LMStudioLogo,
     options: (settings) => <LMStudioEmbeddingOptions settings={settings} />,
     description:
-      "Discover, download, and run thousands of cutting edge LLMs in a few clicks.",
+      'Discover, download, and run thousands of cutting edge LLMs in a few clicks.',
   },
   {
-    name: "Cohere",
-    value: "cohere",
+    name: 'Cohere',
+    value: 'cohere',
     logo: CohereLogo,
     options: (settings) => <CohereEmbeddingOptions settings={settings} />,
-    description: "Run powerful embedding models from Cohere.",
+    description: 'Run powerful embedding models from Cohere.',
   },
 ];
 
@@ -87,7 +87,7 @@ export default function GeneralEmbeddingPreference() {
   const [hasCachedEmbeddings, setHasCachedEmbeddings] = useState(false);
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredEmbedders, setFilteredEmbedders] = useState([]);
   const [selectedEmbedder, setSelectedEmbedder] = useState(null);
   const [searchMenuOpen, setSearchMenuOpen] = useState(false);
@@ -96,7 +96,7 @@ export default function GeneralEmbeddingPreference() {
 
   function embedderModelChanged(formEl) {
     try {
-      const newModel = new FormData(formEl).get("EmbeddingModelPref") ?? null;
+      const newModel = new FormData(formEl).get('EmbeddingModelPref') ?? null;
       if (newModel === null) return false;
       return settings?.EmbeddingModelPref !== newModel;
     } catch (error) {
@@ -121,7 +121,7 @@ export default function GeneralEmbeddingPreference() {
 
   const handleSaveSettings = async () => {
     setSaving(true);
-    const form = document.getElementById("embedding-form");
+    const form = document.getElementById('embedding-form');
     const settingsData = {};
     const formData = new FormData(form);
     settingsData.EmbeddingEngine = selectedEmbedder;
@@ -129,10 +129,10 @@ export default function GeneralEmbeddingPreference() {
 
     const { error } = await System.updateSystem(settingsData);
     if (error) {
-      showToast(`Failed to save embedding settings: ${error}`, "error");
+      showToast(`Failed to save embedding settings: ${error}`, 'error');
       setHasChanges(true);
     } else {
-      showToast("Embedding preferences saved successfully.", "success");
+      showToast('Embedding preferences saved successfully.', 'success');
       setHasChanges(false);
     }
     setSaving(false);
@@ -140,7 +140,7 @@ export default function GeneralEmbeddingPreference() {
   };
 
   const updateChoice = (selection) => {
-    setSearchQuery("");
+    setSearchQuery('');
     setSelectedEmbedder(selection);
     setSearchMenuOpen(false);
     setHasChanges(true);
@@ -148,8 +148,8 @@ export default function GeneralEmbeddingPreference() {
 
   const handleXButton = () => {
     if (searchQuery.length > 0) {
-      setSearchQuery("");
-      if (searchInputRef.current) searchInputRef.current.value = "";
+      setSearchQuery('');
+      if (searchInputRef.current) searchInputRef.current.value = '';
     } else {
       setSearchMenuOpen(!searchMenuOpen);
     }
@@ -159,7 +159,7 @@ export default function GeneralEmbeddingPreference() {
     async function fetchKeys() {
       const _settings = await System.keys();
       setSettings(_settings);
-      setSelectedEmbedder(_settings?.EmbeddingEngine || "native");
+      setSelectedEmbedder(_settings?.EmbeddingEngine || 'native');
       setHasEmbeddings(_settings?.HasExistingEmbeddings || false);
       setHasCachedEmbeddings(_settings?.HasCachedEmbeddings || false);
       setLoading(false);
@@ -183,7 +183,7 @@ export default function GeneralEmbeddingPreference() {
       <Sidebar />
       {loading ? (
         <div
-          style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+          style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <div className="w-full h-full flex justify-center items-center">
@@ -192,7 +192,7 @@ export default function GeneralEmbeddingPreference() {
         </div>
       ) : (
         <div
-          style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+          style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <form
@@ -223,7 +223,7 @@ export default function GeneralEmbeddingPreference() {
                     onClick={() => handleSubmit()}
                     className="mt-3 mr-0 -mb-14 z-10"
                   >
-                    {saving ? "Saving..." : "Save changes"}
+                    {saving ? 'Saving...' : 'Save changes'}
                   </CTAButton>
                 )}
               </div>
@@ -255,7 +255,7 @@ export default function GeneralEmbeddingPreference() {
                           onChange={(e) => setSearchQuery(e.target.value)}
                           ref={searchInputRef}
                           onKeyDown={(e) => {
-                            if (e.key === "Enter") e.preventDefault();
+                            if (e.key === 'Enter') e.preventDefault();
                           }}
                         />
                         <X

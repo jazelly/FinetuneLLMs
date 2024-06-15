@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { default as WorkspaceChatContainer } from "@/components/WorkspaceChat";
-import { useParams } from "react-router-dom";
-import Workspace from "@/models/workspace";
-import PasswordModal, { usePasswordModal } from "@/components/Modals/Password";
-import { FullScreenLoader } from "@/components/Preloader";
+import React, { useEffect, useState } from 'react';
+import { default as WorkspaceChatContainer } from '@/components/WorkspaceChat';
+import { useParams } from 'react-router-dom';
+import Workspace from '@/models/workspace';
+import PasswordModal, { usePasswordModal } from '@/components/Modals/Password';
+import { FullScreenLoader } from '@/components/Preloader';
 
 export default function WorkspaceChat() {
   const { loading, requiresAuth, mode } = usePasswordModal();

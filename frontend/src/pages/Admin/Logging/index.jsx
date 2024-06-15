@@ -1,18 +1,18 @@
-import Sidebar from "@/components/SettingsSidebar";
-import useQuery from "@/hooks/useQuery";
-import System from "@/models/system";
-import { useEffect, useState } from "react";
-import { isMobile } from "react-device-detect";
-import * as Skeleton from "react-loading-skeleton";
-import LogRow from "./LogRow";
-import showToast from "@/utils/toast";
-import CTAButton from "@/components/CTAButton";
+import Sidebar from '@/components/SettingsSidebar';
+import useQuery from '@/hooks/useQuery';
+import System from '@/models/system';
+import { useEffect, useState } from 'react';
+import { isMobile } from 'react-device-detect';
+import * as Skeleton from 'react-loading-skeleton';
+import LogRow from './LogRow';
+import showToast from '@/utils/toast';
+import CTAButton from '@/components/CTAButton';
 
 export default function AdminLogs() {
   const query = useQuery();
   const [loading, setLoading] = useState(true);
   const [logs, setLogs] = useState([]);
-  const [offset, setOffset] = useState(Number(query.get("offset") || 0));
+  const [offset, setOffset] = useState(Number(query.get('offset') || 0));
   const [canNext, setCanNext] = useState(false);
 
   useEffect(() => {
@@ -28,18 +28,18 @@ export default function AdminLogs() {
   const handleResetLogs = async () => {
     if (
       !window.confirm(
-        "Are you sure you want to clear all event logs? This action is irreversible."
+        'Are you sure you want to clear all event logs? This action is irreversible.'
       )
     )
       return;
     const { success, error } = await System.clearEventLogs();
     if (success) {
-      showToast("Event logs cleared successfully.", "success");
+      showToast('Event logs cleared successfully.', 'success');
       setLogs([]);
       setCanNext(false);
       setOffset(0);
     } else {
-      showToast(`Failed to clear logs: ${error}`, "error");
+      showToast(`Failed to clear logs: ${error}`, 'error');
     }
   };
 
@@ -55,7 +55,7 @@ export default function AdminLogs() {
     <div className="w-screen h-screen overflow-hidden bg-main flex">
       <Sidebar />
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+        style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
         className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
       >
         <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
@@ -129,7 +129,7 @@ function LogsContainer({
               Occurred At
             </th>
             <th scope="col" className="px-6 py-3 rounded-tr-lg">
-              {" "}
+              {' '}
             </th>
           </tr>
         </thead>

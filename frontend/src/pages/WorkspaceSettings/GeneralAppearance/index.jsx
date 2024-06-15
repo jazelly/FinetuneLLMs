@@ -1,11 +1,11 @@
-import Workspace from "@/models/workspace";
-import { castToType } from "@/utils/types";
-import showToast from "@/utils/toast";
-import { useEffect, useRef, useState } from "react";
-import VectorCount from "./VectorCount";
-import WorkspaceName from "./WorkspaceName";
-import SuggestedChatMessages from "./SuggestedChatMessages";
-import DeleteWorkspace from "./DeleteWorkspace";
+import Workspace from '@/models/workspace';
+import { castToType } from '@/utils/types';
+import showToast from '@/utils/toast';
+import { useEffect, useRef, useState } from 'react';
+import VectorCount from './VectorCount';
+import WorkspaceName from './WorkspaceName';
+import SuggestedChatMessages from './SuggestedChatMessages';
+import DeleteWorkspace from './DeleteWorkspace';
 
 export default function GeneralInfo({ slug }) {
   const [workspace, setWorkspace] = useState(null);
@@ -34,9 +34,9 @@ export default function GeneralInfo({ slug }) {
       data
     );
     if (!!updatedWorkspace) {
-      showToast("Workspace updated!", "success", { clear: true });
+      showToast('Workspace updated!', 'success', { clear: true });
     } else {
-      showToast(`Error: ${message}`, "error", { clear: true });
+      showToast(`Error: ${message}`, 'error', { clear: true });
     }
     setSaving(false);
     setHasChanges(false);
@@ -61,7 +61,7 @@ export default function GeneralInfo({ slug }) {
             type="submit"
             className="transition-all w-fit duration-300 border border-slate-200 px-5 py-2.5 rounded-lg text-white text-sm items-center flex gap-x-2 hover:bg-slate-200 hover:text-slate-800 focus:ring-gray-800"
           >
-            {saving ? "Updating..." : "Update workspace"}
+            {saving ? 'Updating...' : 'Update workspace'}
           </button>
         )}
       </form>

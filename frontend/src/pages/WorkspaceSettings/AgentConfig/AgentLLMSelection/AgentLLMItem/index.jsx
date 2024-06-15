@@ -1,12 +1,12 @@
 // This component differs from the main LLMItem in that it shows if a provider is
 // "ready for use" and if not - will then highjack the click handler to show a modal
 // of the provider options that must be saved to continue.
-import { createPortal } from "react-dom";
-import ModalWrapper from "@/components/ModalWrapper";
-import { useModal } from "@/hooks/useModal";
-import { X } from "@phosphor-icons/react";
-import System from "@/models/system";
-import showToast from "@/utils/toast";
+import { createPortal } from 'react-dom';
+import ModalWrapper from '@/components/ModalWrapper';
+import { useModal } from '@/hooks/useModal';
+import { X } from '@phosphor-icons/react';
+import System from '@/models/system';
+import showToast from '@/utils/toast';
 
 export default function WorkspaceLLM({
   llm,
@@ -36,7 +36,7 @@ export default function WorkspaceLLM({
       <div
         onClick={handleProviderSelection}
         className={`w-full p-2 rounded-md hover:cursor-pointer hover:bg-white/10 ${
-          checked ? "bg-white/10" : ""
+          checked ? 'bg-white/10' : ''
         }`}
       >
         <input
@@ -89,7 +89,7 @@ function SetupProvider({
     for (var [key, value] of form.entries()) data[key] = value;
     const { error } = await System.updateSystem(data);
     if (error) {
-      showToast(`Failed to save ${LLMOption.name} settings: ${error}`, "error");
+      showToast(`Failed to save ${LLMOption.name} settings: ${error}`, 'error');
       return;
     }
 
@@ -146,6 +146,6 @@ function SetupProvider({
         </div>
       </div>
     </ModalWrapper>,
-    document.getElementById("workspace-agent-settings-container")
+    document.getElementById('workspace-agent-settings-container')
   );
 }

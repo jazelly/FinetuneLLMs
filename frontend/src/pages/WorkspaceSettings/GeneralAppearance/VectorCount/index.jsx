@@ -1,6 +1,6 @@
-import PreLoader from "@/components/Preloader";
-import System from "@/models/system";
-import { useEffect, useState } from "react";
+import PreLoader from '@/components/Preloader';
+import System from '@/models/system';
+import { useEffect, useState } from 'react';
 
 export default function VectorCount({ reload, workspace }) {
   const [totalVectors, setTotalVectors] = useState(null);

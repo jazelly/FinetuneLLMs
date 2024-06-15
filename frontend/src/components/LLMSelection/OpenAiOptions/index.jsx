@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import System from "@/models/system";
+import { useState, useEffect } from 'react';
+import System from '@/models/system';
 
 export default function OpenAiOptions({ settings }) {
   const [inputValue, setInputValue] = useState(settings?.OpenAiKey);
@@ -16,7 +16,7 @@ export default function OpenAiOptions({ settings }) {
           name="OpenAiKey"
           className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
           placeholder="OpenAI API Key"
-          defaultValue={settings?.OpenAiKey ? "*".repeat(20) : ""}
+          defaultValue={settings?.OpenAiKey ? '*'.repeat(20) : ''}
           required={true}
           autoComplete="off"
           spellCheck={false}
@@ -39,8 +39,8 @@ function OpenAIModelSelection({ apiKey, settings }) {
     async function findCustomModels() {
       setLoading(true);
       const { models } = await System.customModels(
-        "openai",
-        typeof apiKey === "boolean" ? null : apiKey
+        'openai',
+        typeof apiKey === 'boolean' ? null : apiKey
       );
 
       if (models?.length > 0) {

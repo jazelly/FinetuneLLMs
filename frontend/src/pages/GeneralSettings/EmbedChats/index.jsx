@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import Sidebar from "@/components/SettingsSidebar";
-import { isMobile } from "react-device-detect";
-import * as Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import useQuery from "@/hooks/useQuery";
-import ChatRow from "./ChatRow";
-import Embed from "@/models/embed";
+import { useEffect, useState } from 'react';
+import Sidebar from '@/components/SettingsSidebar';
+import { isMobile } from 'react-device-detect';
+import * as Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import useQuery from '@/hooks/useQuery';
+import ChatRow from './ChatRow';
+import Embed from '@/models/embed';
 
 export default function EmbedChats() {
   // TODO [FEAT]: Add export of embed chats
@@ -13,7 +13,7 @@ export default function EmbedChats() {
     <div className="w-screen h-screen overflow-hidden bg-main flex">
       <Sidebar />
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+        style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
         className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
       >
         <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[86px] md:py-6 py-16">
@@ -39,7 +39,7 @@ function ChatsContainer() {
   const query = useQuery();
   const [loading, setLoading] = useState(true);
   const [chats, setChats] = useState([]);
-  const [offset, setOffset] = useState(Number(query.get("offset") || 0));
+  const [offset, setOffset] = useState(Number(query.get('offset') || 0));
   const [canNext, setCanNext] = useState(false);
 
   const handlePrevious = () => {
@@ -98,7 +98,7 @@ function ChatsContainer() {
               Sent At
             </th>
             <th scope="col" className="px-6 py-3 rounded-tr-lg">
-              {" "}
+              {' '}
             </th>
           </tr>
         </thead>
@@ -115,7 +115,7 @@ function ChatsContainer() {
           className="px-4 py-2 rounded-lg border border-slate-200 text-slate-200 text-sm items-center flex gap-x-2 hover:bg-slate-200 hover:text-slate-800 disabled:invisible"
           disabled={offset === 0}
         >
-          {" "}
+          {' '}
           Previous Page
         </button>
         <button

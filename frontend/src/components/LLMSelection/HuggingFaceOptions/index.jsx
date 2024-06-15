@@ -27,7 +27,7 @@ export default function HuggingFaceOptions({ settings }) {
             className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
             placeholder="HuggingFace Access Token"
             defaultValue={
-              settings?.HuggingFaceLLMAccessToken ? "*".repeat(20) : ""
+              settings?.HuggingFaceLLMAccessToken ? '*'.repeat(20) : ''
             }
             required={true}
             autoComplete="off"

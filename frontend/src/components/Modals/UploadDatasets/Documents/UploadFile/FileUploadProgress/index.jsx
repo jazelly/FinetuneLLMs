@@ -1,9 +1,9 @@
-import React, { useState, useEffect, memo } from "react";
-import truncate from "truncate";
-import { CheckCircle, XCircle } from "@phosphor-icons/react";
-import { humanFileSize, milliToHms } from "../../../../../../utils/numbers";
-import PreLoader from "../../../../../Preloader";
-import Document from "@/models/document";
+import React, { useState, useEffect, memo } from 'react';
+import truncate from 'truncate';
+import { CheckCircle, XCircle } from '@phosphor-icons/react';
+import { humanFileSize, milliToHms } from '../../../../../../utils/numbers';
+import PreLoader from '../../../../../Preloader';
+import Document from '@/models/document';
 
 const CHUNK_SIZE = 100000; // bytes
 
@@ -19,8 +19,8 @@ function FileUploadProgressComponent({
   setLoadingMessage,
 }) {
   const [timerMs, setTimerMs] = useState(10);
-  const [status, setStatus] = useState("pending");
-  const [error, setError] = useState("");
+  const [status, setStatus] = useState('pending');
+  const [error, setError] = useState('');
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   const fadeOut = (cb) => {
@@ -38,14 +38,14 @@ function FileUploadProgressComponent({
   useEffect(() => {
     async function uploadFile() {
       setLoading(true);
-      setLoadingMessage("Uploading file...");
+      setLoadingMessage('Uploading file...');
       const start = Number(new Date());
 
       const timer = setInterval(() => {
         setTimerMs(Number(new Date()) - start);
       }, 100);
 
-      console.log("file", file);
+      console.log('file', file);
 
       const fileSize = file.size;
       const totalChunks = Math.ceil(fileSize / CHUNK_SIZE);
@@ -57,11 +57,11 @@ function FileUploadProgressComponent({
         const chunk = file.slice(start, end);
 
         const formData = new FormData();
-        formData.append("file", chunk, file.name);
-        formData.append("chunkIndex", chunkIndex);
-        formData.append("totalChunks", totalChunks);
+        formData.append('file', chunk, file.name);
+        formData.append('chunkIndex', chunkIndex);
+        formData.append('totalChunks', totalChunks);
 
-        console.log("Uploading chunk: ", chunkIndex);
+        console.log('Uploading chunk: ', chunkIndex);
         response = await Document.uploadOneDatasetByChunk(formData);
         console.log(`chunk ${chunkIndex}`, response);
         if (response.status !== 200) {
@@ -70,16 +70,16 @@ function FileUploadProgressComponent({
       }
 
       if (response.status !== 200) {
-        setStatus("failed");
+        setStatus('failed');
         onUploadError(response.error);
         setError(response.error);
       } else {
-        setStatus("complete");
+        setStatus('complete');
         onUploadSuccess();
       }
 
       setLoading(false);
-      setLoadingMessage("");
+      setLoadingMessage('');
       clearInterval(timer);
 
       // Begin fadeout timer to clear uploader queue.
@@ -94,7 +94,7 @@ function FileUploadProgressComponent({
     return (
       <div
         className={`${
-          isFadingOut ? "file-upload-fadeout" : "file-upload"
+          isFadingOut ? 'file-upload-fadeout' : 'file-upload'
         } h-14 px-2 py-2 flex items-center gap-x-4 rounded-lg bg-white/5 border border-white/40`}
       >
         <div className="w-6 h-6 flex-shrink-0">
@@ -110,11 +110,11 @@ function FileUploadProgressComponent({
     );
   }
 
-  if (status === "failed") {
+  if (status === 'failed') {
     return (
       <div
         className={`${
-          isFadingOut ? "file-upload-fadeout" : "file-upload"
+          isFadingOut ? 'file-upload-fadeout' : 'file-upload'
         } h-14 px-2 py-2 flex items-center gap-x-4 rounded-lg bg-white/5 border border-white/40 overflow-y-auto`}
       >
         <div className="w-6 h-6 flex-shrink-0">
@@ -133,11 +133,11 @@ function FileUploadProgressComponent({
   return (
     <div
       className={`${
-        isFadingOut ? "file-upload-fadeout" : "file-upload"
+        isFadingOut ? 'file-upload-fadeout' : 'file-upload'
       } h-14 px-2 py-2 flex items-center gap-x-4 rounded-lg bg-white/5 border border-white/40`}
     >
       <div className="w-6 h-6 flex-shrink-0">
-        {status !== "complete" ? (
+        {status !== 'complete' ? (
           <div className="flex items-center justify-center">
             <PreLoader size="6" />
           </div>

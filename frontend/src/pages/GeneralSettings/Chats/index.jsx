@@ -1,44 +1,44 @@
-import { useEffect, useRef, useState } from "react";
-import Sidebar from "@/components/SettingsSidebar";
-import { isMobile } from "react-device-detect";
-import * as Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import useQuery from "@/hooks/useQuery";
-import ChatRow from "./ChatRow";
-import showToast from "@/utils/toast";
-import System from "@/models/system";
-import { CaretDown, Download } from "@phosphor-icons/react";
-import { saveAs } from "file-saver";
+import { useEffect, useRef, useState } from 'react';
+import Sidebar from '@/components/SettingsSidebar';
+import { isMobile } from 'react-device-detect';
+import * as Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import useQuery from '@/hooks/useQuery';
+import ChatRow from './ChatRow';
+import showToast from '@/utils/toast';
+import System from '@/models/system';
+import { CaretDown, Download } from '@phosphor-icons/react';
+import { saveAs } from 'file-saver';
 
 const exportOptions = {
   csv: {
-    name: "CSV",
-    mimeType: "text/csv",
-    fileExtension: "csv",
+    name: 'CSV',
+    mimeType: 'text/csv',
+    fileExtension: 'csv',
     filenameFunc: () => {
       return `anythingllm-chats-${new Date().toLocaleDateString()}`;
     },
   },
   json: {
-    name: "JSON",
-    mimeType: "application/json",
-    fileExtension: "json",
+    name: 'JSON',
+    mimeType: 'application/json',
+    fileExtension: 'json',
     filenameFunc: () => {
       return `anythingllm-chats-${new Date().toLocaleDateString()}`;
     },
   },
   jsonl: {
-    name: "JSONL",
-    mimeType: "application/jsonl",
-    fileExtension: "jsonl",
+    name: 'JSONL',
+    mimeType: 'application/jsonl',
+    fileExtension: 'jsonl',
     filenameFunc: () => {
       return `anythingllm-chats-${new Date().toLocaleDateString()}-lines`;
     },
   },
   jsonAlpaca: {
-    name: "JSON (Alpaca)",
-    mimeType: "application/json",
-    fileExtension: "json",
+    name: 'JSON (Alpaca)',
+    mimeType: 'application/json',
+    fileExtension: 'json',
     filenameFunc: () => {
       return `anythingllm-chats-${new Date().toLocaleDateString()}-alpaca`;
     },
@@ -56,9 +56,9 @@ export default function WorkspaceChats() {
         exportOptions[exportType];
       const blob = new Blob([chats], { type: mimeType });
       saveAs(blob, `${filenameFunc()}.${fileExtension}`);
-      showToast(`Chats exported successfully as ${name}.`, "success");
+      showToast(`Chats exported successfully as ${name}.`, 'success');
     } else {
-      showToast("Failed to export chats.", "error");
+      showToast('Failed to export chats.', 'error');
     }
   };
 
@@ -77,9 +77,9 @@ export default function WorkspaceChats() {
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -87,7 +87,7 @@ export default function WorkspaceChats() {
     <div className="w-screen h-screen overflow-hidden bg-main flex">
       <Sidebar />
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+        style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
         className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
       >
         <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
@@ -109,7 +109,7 @@ export default function WorkspaceChats() {
                 <div
                   ref={menuRef}
                   className={`${
-                    showMenu ? "slide-down" : "slide-up hidden"
+                    showMenu ? 'slide-down' : 'slide-up hidden'
                   } z-20 w-fit rounded-lg absolute top-full right-0 bg-[#2C2F36] mt-2 shadow-md`}
                 >
                   <div className="py-2">
@@ -145,7 +145,7 @@ function ChatsContainer() {
   const query = useQuery();
   const [loading, setLoading] = useState(true);
   const [chats, setChats] = useState([]);
-  const [offset, setOffset] = useState(Number(query.get("offset") || 0));
+  const [offset, setOffset] = useState(Number(query.get('offset') || 0));
   const [canNext, setCanNext] = useState(false);
 
   const handlePrevious = () => {
@@ -207,7 +207,7 @@ function ChatsContainer() {
               Sent At
             </th>
             <th scope="col" className="px-6 py-3 rounded-tr-lg">
-              {" "}
+              {' '}
             </th>
           </tr>
         </thead>
@@ -224,7 +224,7 @@ function ChatsContainer() {
           className="px-4 py-2 rounded-lg border border-slate-200 text-slate-200 text-sm items-center flex gap-x-2 hover:bg-slate-200 hover:text-slate-800 disabled:invisible"
           disabled={offset === 0}
         >
-          {" "}
+          {' '}
           Previous Page
         </button>
         <button

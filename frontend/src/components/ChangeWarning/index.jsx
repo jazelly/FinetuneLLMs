@@ -1,7 +1,7 @@
-import { Warning } from "@phosphor-icons/react";
+import { Warning } from '@phosphor-icons/react';
 
 export default function ChangeWarningModal({
-  warningText = "",
+  warningText = '',
   onClose,
   onConfirm,
 }) {

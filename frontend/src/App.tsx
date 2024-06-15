@@ -1,60 +1,60 @@
-import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import { ContextWrapper } from "@/contexts/AuthContext";
-import PrivateRoute, { AdminRoute } from "@/components/PrivateRoute";
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { ContextWrapper } from '@/contexts/AuthContext';
+import PrivateRoute, { AdminRoute } from '@/components/PrivateRoute';
 
-import { ManagerRoute } from "@/components/ManagerRoute";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Login from "@/pages/Login";
-import { isMobile } from "react-device-detect";
-import { LogoProvider } from "@/contexts/LogoContext";
-import Sidebar from "@/components/Sidebar";
-import Header from "./components/Header";
+import { ManagerRoute } from '@/components/ManagerRoute';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Login from '@/pages/Login';
+import { isMobile } from 'react-device-detect';
+import { LogoProvider } from '@/contexts/LogoContext';
+import Sidebar from '@/components/Sidebar';
+import Header from './components/Header';
 import UploadDatasets, {
   useUploadDatasetsModal,
-} from "@/components/Modals/UploadDatasets";
+} from '@/components/Modals/UploadDatasets';
 
-const DefaultChat = lazy(() => import("@/pages/DefaultChat"));
-const InvitePage = lazy(() => import("@/pages/Invite"));
+const DefaultChat = lazy(() => import('@/pages/DefaultChat'));
+const InvitePage = lazy(() => import('@/pages/Invite'));
 // const WorkspaceChat = lazy(() => import("@/pages/WorkspaceChat")); // TODO: integarte to testing field
-const Dashboard = lazy(() => import("@/pages/Dashboard.page"));
-const AdminUsers = lazy(() => import("@/pages/Admin/Users"));
-const AdminInvites = lazy(() => import("@/pages/Admin/Invitations"));
-const AdminWorkspaces = lazy(() => import("@/pages/Admin/Workspaces"));
-const AdminSystem = lazy(() => import("@/pages/Admin/System"));
-const AdminLogs = lazy(() => import("@/pages/Admin/Logging"));
-const GeneralChats = lazy(() => import("@/pages/GeneralSettings/Chats"));
+const Dashboard = lazy(() => import('@/pages/Dashboard.page'));
+const AdminUsers = lazy(() => import('@/pages/Admin/Users'));
+const AdminInvites = lazy(() => import('@/pages/Admin/Invitations'));
+const AdminWorkspaces = lazy(() => import('@/pages/Admin/Workspaces'));
+const AdminSystem = lazy(() => import('@/pages/Admin/System'));
+const AdminLogs = lazy(() => import('@/pages/Admin/Logging'));
+const GeneralChats = lazy(() => import('@/pages/GeneralSettings/Chats'));
 const GeneralAppearance = lazy(
-  () => import("@/pages/GeneralSettings/Appearance")
+  () => import('@/pages/GeneralSettings/Appearance')
 );
-const GeneralApiKeys = lazy(() => import("@/pages/GeneralSettings/ApiKeys"));
+const GeneralApiKeys = lazy(() => import('@/pages/GeneralSettings/ApiKeys'));
 const GeneralLLMPreference = lazy(
-  () => import("@/pages/GeneralSettings/LLMPreference")
+  () => import('@/pages/GeneralSettings/LLMPreference')
 );
 const GeneralTranscriptionPreference = lazy(
-  () => import("@/pages/GeneralSettings/TranscriptionPreference")
+  () => import('@/pages/GeneralSettings/TranscriptionPreference')
 );
 const GeneralAudioPreference = lazy(
-  () => import("@/pages/GeneralSettings/AudioPreference")
+  () => import('@/pages/GeneralSettings/AudioPreference')
 );
 const GeneralEmbeddingPreference = lazy(
-  () => import("@/pages/GeneralSettings/EmbeddingPreference")
+  () => import('@/pages/GeneralSettings/EmbeddingPreference')
 );
 const EmbeddingTextSplitterPreference = lazy(
-  () => import("@/pages/GeneralSettings/EmbeddingTextSplitterPreference")
+  () => import('@/pages/GeneralSettings/EmbeddingTextSplitterPreference')
 );
 const GeneralVectorDatabase = lazy(
-  () => import("@/pages/GeneralSettings/VectorDatabase")
+  () => import('@/pages/GeneralSettings/VectorDatabase')
 );
-const GeneralSecurity = lazy(() => import("@/pages/GeneralSettings/Security"));
+const GeneralSecurity = lazy(() => import('@/pages/GeneralSettings/Security'));
 
 const EmbedConfigSetup = lazy(
-  () => import("@/pages/GeneralSettings/EmbedConfigs")
+  () => import('@/pages/GeneralSettings/EmbedConfigs')
 );
-const EmbedChats = lazy(() => import("@/pages/GeneralSettings/EmbedChats"));
+const EmbedChats = lazy(() => import('@/pages/GeneralSettings/EmbedChats'));
 const PrivacyAndData = lazy(
-  () => import("@/pages/GeneralSettings/PrivacyAndData")
+  () => import('@/pages/GeneralSettings/PrivacyAndData')
 );
 
 export default function App() {
@@ -96,11 +96,7 @@ export default function App() {
                   />
                   <Route
                     path="/job/:jobId"
-                    element={
-                      <PrivateRoute
-                        Component={Dashboard}
-                      />
-                    }
+                    element={<PrivateRoute Component={Dashboard} />}
                   />
                   <Route
                     path="/logs"
@@ -114,7 +110,7 @@ export default function App() {
                     path="/settings"
                     element={<AdminRoute Component={GeneralLLMPreference} />}
                   />
-                  
+
                   {/* Manager */}
                   <Route
                     path="/settings/security"

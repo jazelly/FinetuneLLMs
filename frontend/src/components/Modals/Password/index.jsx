@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import System from "../../../models/system";
-import SingleUserAuth from "./SingleUserAuth";
-import MultiUserAuth from "./MultiUserAuth";
+import React, { useState, useEffect } from 'react';
+import System from '../../../models/system';
+import SingleUserAuth from './SingleUserAuth';
+import MultiUserAuth from './MultiUserAuth';
 import {
   AUTH_TOKEN,
   AUTH_USER,
   AUTH_TIMESTAMP,
-} from "../../../utils/constants";
-import useLogo from "../../../hooks/useLogo";
-import illustration from "@/media/illustrations/login-illustration.svg";
-import loginLogo from "@/media/illustrations/login-logo.svg";
+} from '../../../utils/constants';
+import useLogo from '../../../hooks/useLogo';
+import illustration from '@/media/illustrations/login-illustration.svg';
+import loginLogo from '@/media/illustrations/login-logo.svg';
 
-export default function PasswordModal({ mode = "single" }) {
+export default function PasswordModal({ mode = 'single' }) {
   const { logo: _initLogo } = useLogo();
   return (
     <div className="fixed top-0 left-0 right-0 z-50 w-full overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-[#25272C] flex flex-col md:flex-row items-center justify-center">
@@ -21,9 +21,9 @@ export default function PasswordModal({ mode = "single" }) {
     radial-gradient(circle at center, transparent 40%, black 100%),
     linear-gradient(180deg, #85F8FF 0%, #65A6F2 100%)
   `,
-          width: "575px",
-          filter: "blur(150px)",
-          opacity: "0.4",
+          width: '575px',
+          filter: 'blur(150px)',
+          opacity: '0.4',
         }}
         className="absolute left-0 top-0 z-0 h-full w-full"
       />
@@ -38,11 +38,11 @@ export default function PasswordModal({ mode = "single" }) {
         <img
           src={loginLogo}
           className={`mb-8 w-[84px] h-[84px] absolute  ${
-            mode === "single" ? "md:top-50" : "md:top-36"
+            mode === 'single' ? 'md:top-50' : 'md:top-36'
           } top-44 z-30`}
           alt="logo"
         />
-        {mode === "single" ? <SingleUserAuth /> : <MultiUserAuth />}
+        {mode === 'single' ? <SingleUserAuth /> : <MultiUserAuth />}
       </div>
     </div>
   );
@@ -52,7 +52,7 @@ export function usePasswordModal(notry = false) {
   const [auth, setAuth] = useState({
     loading: true,
     requiresAuth: false,
-    mode: "single",
+    mode: 'single',
   });
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export function usePasswordModal(notry = false) {
         setAuth({
           loading: false,
           requiresAuth: false,
-          mode: "multi",
+          mode: 'multi',
         });
         return;
       }
@@ -79,7 +79,7 @@ export function usePasswordModal(notry = false) {
             setAuth({
               loading: false,
               requiresAuth: true,
-              mode: "multi",
+              mode: 'multi',
             });
             window.localStorage.removeItem(AUTH_USER);
             window.localStorage.removeItem(AUTH_TOKEN);
@@ -89,7 +89,7 @@ export function usePasswordModal(notry = false) {
             setAuth({
               loading: false,
               requiresAuth: false,
-              mode: "multi",
+              mode: 'multi',
             });
             return;
           }
@@ -97,7 +97,7 @@ export function usePasswordModal(notry = false) {
           setAuth({
             loading: false,
             requiresAuth: true,
-            mode: "multi",
+            mode: 'multi',
           });
           return;
         }
@@ -109,7 +109,7 @@ export function usePasswordModal(notry = false) {
           setAuth({
             loading: false,
             requiresAuth: false,
-            mode: "single",
+            mode: 'single',
           });
           return;
         }
@@ -121,7 +121,7 @@ export function usePasswordModal(notry = false) {
             setAuth({
               loading: false,
               requiresAuth: true,
-              mode: "single",
+              mode: 'single',
             });
             window.localStorage.removeItem(AUTH_TOKEN);
             window.localStorage.removeItem(AUTH_USER);
@@ -131,7 +131,7 @@ export function usePasswordModal(notry = false) {
             setAuth({
               loading: false,
               requiresAuth: false,
-              mode: "single",
+              mode: 'single',
             });
             return;
           }
@@ -139,7 +139,7 @@ export function usePasswordModal(notry = false) {
           setAuth({
             loading: false,
             requiresAuth: true,
-            mode: "single",
+            mode: 'single',
           });
           return;
         }

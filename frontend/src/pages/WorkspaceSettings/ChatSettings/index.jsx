@@ -1,14 +1,14 @@
-import System from "@/models/system";
-import Workspace from "@/models/workspace";
-import showToast from "@/utils/toast";
-import { castToType } from "@/utils/types";
-import { useEffect, useRef, useState } from "react";
-import ChatHistorySettings from "./ChatHistorySettings";
-import ChatPromptSettings from "./ChatPromptSettings";
-import ChatTemperatureSettings from "./ChatTemperatureSettings";
-import ChatModeSelection from "./ChatModeSelection";
-import WorkspaceLLMSelection from "./WorkspaceLLMSelection";
-import ChatQueryRefusalResponse from "./ChatQueryRefusalResponse";
+import System from '@/models/system';
+import Workspace from '@/models/workspace';
+import showToast from '@/utils/toast';
+import { castToType } from '@/utils/types';
+import { useEffect, useRef, useState } from 'react';
+import ChatHistorySettings from './ChatHistorySettings';
+import ChatPromptSettings from './ChatPromptSettings';
+import ChatTemperatureSettings from './ChatTemperatureSettings';
+import ChatModeSelection from './ChatModeSelection';
+import WorkspaceLLMSelection from './WorkspaceLLMSelection';
+import ChatQueryRefusalResponse from './ChatQueryRefusalResponse';
 
 export default function ChatSettings({ workspace }) {
   const [settings, setSettings] = useState({});
@@ -35,9 +35,9 @@ export default function ChatSettings({ workspace }) {
       data
     );
     if (!!updatedWorkspace) {
-      showToast("Workspace updated!", "success", { clear: true });
+      showToast('Workspace updated!', 'success', { clear: true });
     } else {
-      showToast(`Error: ${message}`, "error", { clear: true });
+      showToast(`Error: ${message}`, 'error', { clear: true });
     }
     setSaving(false);
     setHasChanges(false);
@@ -84,7 +84,7 @@ export default function ChatSettings({ workspace }) {
             form="chat-settings-form"
             className="w-fit transition-all duration-300 border border-slate-200 px-5 py-2.5 rounded-lg text-white text-sm items-center flex gap-x-2 hover:bg-slate-200 hover:text-slate-800 focus:ring-gray-800"
           >
-            {saving ? "Updating..." : "Update workspace"}
+            {saving ? 'Updating...' : 'Update workspace'}
           </button>
         )}
       </form>

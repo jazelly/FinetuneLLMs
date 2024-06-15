@@ -11,7 +11,7 @@ export default function OpenAiOptions({ settings }) {
             name="OpenAiKey"
             className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
             placeholder="OpenAI API Key"
-            defaultValue={settings?.OpenAiKey ? "*".repeat(20) : ""}
+            defaultValue={settings?.OpenAiKey ? '*'.repeat(20) : ''}
             required={true}
             autoComplete="off"
             spellCheck={false}
@@ -28,9 +28,9 @@ export default function OpenAiOptions({ settings }) {
           >
             <optgroup label="Available embedding models">
               {[
-                "text-embedding-ada-002",
-                "text-embedding-3-small",
-                "text-embedding-3-large",
+                'text-embedding-ada-002',
+                'text-embedding-3-small',
+                'text-embedding-3-large',
               ].map((model) => {
                 return (
                   <option

@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { titleCase } from "text-case";
-import Admin from "@/models/admin";
-import { Trash } from "@phosphor-icons/react";
+import { useEffect, useRef, useState } from 'react';
+import { titleCase } from 'text-case';
+import Admin from '@/models/admin';
+import { Trash } from '@phosphor-icons/react';
 
 export default function InviteRow({ invite }) {
   const rowRef = useRef(null);
@@ -15,9 +15,9 @@ export default function InviteRow({ invite }) {
     )
       return false;
     if (rowRef?.current) {
-      rowRef.current.children[0].innerText = "Disabled";
+      rowRef.current.children[0].innerText = 'Disabled';
     }
-    setStatus("disabled");
+    setStatus('disabled');
     await Admin.disableInvite(invite.id);
   };
   const copyInviteLink = () => {
@@ -49,22 +49,22 @@ export default function InviteRow({ invite }) {
         </td>
         <td className="px-6 py-4">
           {invite.claimedBy
-            ? invite.claimedBy?.username || "deleted user"
-            : "--"}
+            ? invite.claimedBy?.username || 'deleted user'
+            : '--'}
         </td>
         <td className="px-6 py-4">
-          {invite.createdBy?.username || "deleted user"}
+          {invite.createdBy?.username || 'deleted user'}
         </td>
         <td className="px-6 py-4">{invite.createdAt}</td>
         <td className="px-6 py-4 flex items-center gap-x-6">
-          {status === "pending" && (
+          {status === 'pending' && (
             <>
               <button
                 onClick={copyInviteLink}
                 disabled={copied}
                 className="font-medium text-blue-300 rounded-lg hover:text-white hover:text-opacity-60 hover:underline"
               >
-                {copied ? "Copied" : "Copy Invite Link"}
+                {copied ? 'Copied' : 'Copy Invite Link'}
               </button>
               <td className="px-6 py-4 flex items-center gap-x-6">
                 <button

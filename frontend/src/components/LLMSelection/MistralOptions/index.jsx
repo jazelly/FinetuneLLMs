@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import System from "@/models/system";
+import { useState, useEffect } from 'react';
+import System from '@/models/system';
 
 export default function MistralOptions({ settings }) {
   const [inputValue, setInputValue] = useState(settings?.MistralApiKey);
@@ -16,7 +16,7 @@ export default function MistralOptions({ settings }) {
           name="MistralApiKey"
           className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
           placeholder="Mistral API Key"
-          defaultValue={settings?.MistralApiKey ? "*".repeat(20) : ""}
+          defaultValue={settings?.MistralApiKey ? '*'.repeat(20) : ''}
           required={true}
           autoComplete="off"
           spellCheck={false}
@@ -44,8 +44,8 @@ function MistralModelSelection({ apiKey, settings }) {
       }
       setLoading(true);
       const { models } = await System.customModels(
-        "mistral",
-        typeof apiKey === "boolean" ? null : apiKey
+        'mistral',
+        typeof apiKey === 'boolean' ? null : apiKey
       );
       setCustomModels(models || []);
       setLoading(false);
@@ -66,8 +66,8 @@ function MistralModelSelection({ apiKey, settings }) {
         >
           <option disabled={true} selected={true}>
             {!!apiKey
-              ? "-- loading available models --"
-              : "-- waiting for API key --"}
+              ? '-- loading available models --'
+              : '-- waiting for API key --'}
           </option>
         </select>
       </div>

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { X } from "@phosphor-icons/react";
-import Admin from "@/models/admin";
-import paths from "@/utils/paths";
-import { userFromStorage } from "@/utils/request";
-import System from "@/models/system";
+import React, { useEffect, useState } from 'react';
+import { X } from '@phosphor-icons/react';
+import Admin from '@/models/admin';
+import paths from '@/utils/paths';
+import { userFromStorage } from '@/utils/request';
+import System from '@/models/system';
 
 export default function NewApiKeyModal({ closeModal }) {
   const [apiKey, setApiKey] = useState(null);
@@ -101,7 +101,7 @@ export default function NewApiKeyModal({ closeModal }) {
                 disabled={copied}
                 className="w-full transition-all duration-300 border border-slate-200 px-4 py-2 rounded-lg text-white text-sm items-center flex gap-x-2 hover:bg-slate-200 hover:text-slate-800 focus:ring-gray-800 text-center justify-center"
               >
-                {copied ? "Copied API key" : "Copy API key"}
+                {copied ? 'Copied API key' : 'Copy API key'}
               </button>
             )}
           </div>

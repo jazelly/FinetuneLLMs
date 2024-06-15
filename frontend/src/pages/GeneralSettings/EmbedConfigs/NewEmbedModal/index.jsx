@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { X } from "@phosphor-icons/react";
-import Workspace from "@/models/workspace";
-import { TagsInput } from "react-tag-input-component";
-import Embed from "@/models/embed";
+import React, { useEffect, useState } from 'react';
+import { X } from '@phosphor-icons/react';
+import Workspace from '@/models/workspace';
+import { TagsInput } from 'react-tag-input-component';
+import Embed from '@/models/embed';
 
 export function enforceSubmissionSchema(form) {
   const data = {};
   for (var [key, value] of form.entries()) {
     if (!value || value === null) continue;
     data[key] = value;
-    if (value === "on") data[key] = true;
+    if (value === 'on') data[key] = true;
   }
 
   // Always set value on nullable keys since empty or off will not send anything from form element.
-  if (!data.hasOwnProperty("allowlist_domains")) data.allowlist_domains = null;
-  if (!data.hasOwnProperty("allow_model_override"))
+  if (!data.hasOwnProperty('allowlist_domains')) data.allowlist_domains = null;
+  if (!data.hasOwnProperty('allow_model_override'))
     data.allow_model_override = false;
-  if (!data.hasOwnProperty("allow_temperature_override"))
+  if (!data.hasOwnProperty('allow_temperature_override'))
     data.allow_temperature_override = false;
-  if (!data.hasOwnProperty("allow_prompt_override"))
+  if (!data.hasOwnProperty('allow_prompt_override'))
     data.allow_prompt_override = false;
   return data;
 }
@@ -90,7 +90,7 @@ export default function NewEmbedModal({ closeModal }) {
                 publish on your website with a simple
                 <code className="bg-stone-800 text-white mx-1 px-1 rounded-sm">
                   &lt;script&gt;
-                </code>{" "}
+                </code>{' '}
                 tag.
               </p>
             </div>
@@ -162,7 +162,7 @@ export const WorkspaceSelection = ({ defaultValue = null }) => {
 };
 
 export const ChatModeSelection = ({ defaultValue = null }) => {
-  const [chatMode, setChatMode] = useState(defaultValue ?? "query");
+  const [chatMode, setChatMode] = useState(defaultValue ?? 'query');
 
   return (
     <div>
@@ -184,20 +184,20 @@ export const ChatModeSelection = ({ defaultValue = null }) => {
       <div className="mt-2 gap-y-3 flex flex-col">
         <label
           className={`transition-all duration-300 w-full h-11 p-2.5 bg-white/10 rounded-lg flex justify-start items-center gap-2.5 cursor-pointer border border-transparent ${
-            chatMode === "chat" ? "border-white border-opacity-40" : ""
+            chatMode === 'chat' ? 'border-white border-opacity-40' : ''
           } hover:border-white/60`}
         >
           <input
             type="radio"
             name="chat_mode"
-            value={"chat"}
-            checked={chatMode === "chat"}
+            value={'chat'}
+            checked={chatMode === 'chat'}
             onChange={(e) => setChatMode(e.target.value)}
             className="hidden"
           />
           <div
             className={`w-4 h-4 rounded-full border-2 border-white mr-2 ${
-              chatMode === "chat" ? "bg-white" : ""
+              chatMode === 'chat' ? 'bg-white' : ''
             }`}
           ></div>
           <div className="text-white text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
@@ -206,20 +206,20 @@ export const ChatModeSelection = ({ defaultValue = null }) => {
         </label>
         <label
           className={`transition-all duration-300 w-full h-11 p-2.5 bg-white/10 rounded-lg flex justify-start items-center gap-2.5 cursor-pointer border border-transparent ${
-            chatMode === "query" ? "border-white border-opacity-40" : ""
+            chatMode === 'query' ? 'border-white border-opacity-40' : ''
           } hover:border-white/60`}
         >
           <input
             type="radio"
             name="chat_mode"
-            value={"query"}
-            checked={chatMode === "query"}
+            value={'query'}
+            checked={chatMode === 'query'}
             onChange={(e) => setChatMode(e.target.value)}
             className="hidden"
           />
           <div
             className={`w-4 h-4 rounded-full border-2 border-white mr-2 ${
-              chatMode === "query" ? "bg-white" : ""
+              chatMode === 'query' ? 'bg-white' : ''
             }`}
           ></div>
           <div className="text-white text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
@@ -237,7 +237,7 @@ export const PermittedDomains = ({ defaultValue = [] }) => {
     const validDomains = data
       .map((input) => {
         let url = input;
-        if (!url.includes("http://") && !url.includes("https://"))
+        if (!url.includes('http://') && !url.includes('https://'))
           url = `https://${url}`;
         try {
           new URL(url);
@@ -266,15 +266,15 @@ export const PermittedDomains = ({ defaultValue = [] }) => {
           Leaving this empty means anyone can use your embed on any site.
         </p>
       </div>
-      <input type="hidden" name="allowlist_domains" value={domains.join(",")} />
+      <input type="hidden" name="allowlist_domains" value={domains.join(',')} />
       <TagsInput
         value={domains}
         onChange={handleChange}
         placeholder="https://mysite.com, https://useanything.com"
         classNames={{
-          tag: "bg-blue-300/10 text-zinc-800 m-1",
+          tag: 'bg-blue-300/10 text-zinc-800 m-1',
           input:
-            "flex bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white p-2.5",
+            'flex bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white p-2.5',
         }}
       />
     </div>

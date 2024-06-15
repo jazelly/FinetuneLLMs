@@ -10,7 +10,7 @@ export default function GroqAiOptions({ settings }) {
           name="GroqApiKey"
           className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
           placeholder="Groq API Key"
-          defaultValue={settings?.GroqApiKey ? "*".repeat(20) : ""}
+          defaultValue={settings?.GroqApiKey ? '*'.repeat(20) : ''}
           required={true}
           autoComplete="off"
           spellCheck={false}
@@ -24,15 +24,15 @@ export default function GroqAiOptions({ settings }) {
           </label>
           <select
             name="GroqModelPref"
-            defaultValue={settings?.GroqModelPref || "llama3-8b-8192"}
+            defaultValue={settings?.GroqModelPref || 'llama3-8b-8192'}
             required={true}
             className="bg-zinc-900 border-gray-500 text-white text-sm rounded-lg block w-full p-2.5"
           >
             {[
-              "mixtral-8x7b-32768",
-              "llama3-8b-8192",
-              "llama3-70b-8192",
-              "gemma-7b-it",
+              'mixtral-8x7b-32768',
+              'llama3-8b-8192',
+              'llama3-70b-8192',
+              'gemma-7b-it',
             ].map((model) => {
               return (
                 <option key={model} value={model}>

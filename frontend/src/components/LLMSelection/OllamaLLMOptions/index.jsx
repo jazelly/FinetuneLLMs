@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import System from "@/models/system";
+import { useEffect, useState } from 'react';
+import System from '@/models/system';
 
 export default function OllamaLLMOptions({ settings }) {
   const [basePathValue, setBasePathValue] = useState(
@@ -65,7 +65,7 @@ function OllamaLLMModelSelection({ settings, basePath = null }) {
         return;
       }
       setLoading(true);
-      const { models } = await System.customModels("ollama", null, basePath);
+      const { models } = await System.customModels('ollama', null, basePath);
       setCustomModels(models || []);
       setLoading(false);
     }
@@ -85,8 +85,8 @@ function OllamaLLMModelSelection({ settings, basePath = null }) {
         >
           <option disabled={true} selected={true}>
             {!!basePath
-              ? "-- loading available models --"
-              : "-- waiting for URL --"}
+              ? '-- loading available models --'
+              : '-- waiting for URL --'}
           </option>
         </select>
       </div>

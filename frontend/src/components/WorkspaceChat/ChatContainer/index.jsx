@@ -1,21 +1,21 @@
-import { useState, useEffect } from "react";
-import ChatHistory from "./ChatHistory";
-import PromptInput, { PROMPT_INPUT_EVENT } from "./PromptInput";
-import Workspace from "@/models/workspace";
-import handleChat, { ABORT_STREAM_EVENT } from "@/utils/chat";
-import { isMobile } from "react-device-detect";
-import SidebarMobileHeader from "../../SidebarMobileHeader";
-import { useParams } from "react-router-dom";
-import { v4 } from "uuid";
+import { useState, useEffect } from 'react';
+import ChatHistory from './ChatHistory';
+import PromptInput, { PROMPT_INPUT_EVENT } from './PromptInput';
+import Workspace from '@/models/workspace';
+import handleChat, { ABORT_STREAM_EVENT } from '@/utils/chat';
+import { isMobile } from 'react-device-detect';
+import SidebarMobileHeader from '../../SidebarMobileHeader';
+import { useParams } from 'react-router-dom';
+import { v4 } from 'uuid';
 import handleSocketResponse, {
   websocketURI,
   AGENT_SESSION_END,
   AGENT_SESSION_START,
-} from "@/utils/chat/agent";
+} from '@/utils/chat/agent';
 
 export default function ChatContainer({ workspace, knownHistory = [] }) {
   const { threadSlug = null } = useParams();
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [loadingResponse, setLoadingResponse] = useState(false);
   const [chatHistory, setChatHistory] = useState(knownHistory);
   const [socketId, setSocketId] = useState(null);
@@ -28,7 +28,7 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
 
   // Emit an update to the state of the prompt input without directly
   // passing a prop in so that it does not re-render constantly.
-  function setMessageEmit(messageContent = "") {
+  function setMessageEmit(messageContent = '') {
     setMessage(messageContent);
     window.dispatchEvent(
       new CustomEvent(PROMPT_INPUT_EVENT, { detail: messageContent })
@@ -37,14 +37,14 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!message || message === "") return false;
+    if (!message || message === '') return false;
 
     const prevChatHistory = [
       ...chatHistory,
-      { content: message, role: "user" },
+      { content: message, role: 'user' },
       {
-        content: "",
-        role: "assistant",
+        content: '',
+        role: 'assistant',
         pending: true,
         userMessage: message,
         animate: true,
@@ -52,7 +52,7 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
     ];
 
     setChatHistory(prevChatHistory);
-    setMessageEmit("");
+    setMessageEmit('');
     setLoadingResponse(true);
   };
 
@@ -65,7 +65,7 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
   };
 
   const sendCommand = async (command, submit = false, history = []) => {
-    if (!command || command === "") return false;
+    if (!command || command === '') return false;
     if (!submit) {
       setMessageEmit(command);
       return;
@@ -77,8 +77,8 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
       prevChatHistory = [
         ...history,
         {
-          content: "",
-          role: "assistant",
+          content: '',
+          role: 'assistant',
           pending: true,
           userMessage: command,
           animate: true,
@@ -87,10 +87,10 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
     } else {
       prevChatHistory = [
         ...chatHistory,
-        { content: command, role: "user" },
+        { content: command, role: 'user' },
         {
-          content: "",
-          role: "assistant",
+          content: '',
+          role: 'assistant',
           pending: true,
           userMessage: command,
           animate: true,
@@ -99,7 +99,7 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
     }
 
     setChatHistory(prevChatHistory);
-    setMessageEmit("");
+    setMessageEmit('');
     setLoadingResponse(true);
   };
 
@@ -115,7 +115,7 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
         if (!promptMessage || !promptMessage?.userMessage) return false;
         websocket.send(
           JSON.stringify({
-            type: "awaitingFeedback",
+            type: 'awaitingFeedback',
             feedback: promptMessage?.userMessage,
           })
         );
@@ -172,27 +172,27 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
           websocket.close();
         });
 
-        socket.addEventListener("message", (event) => {
+        socket.addEventListener('message', (event) => {
           setLoadingResponse(true);
           try {
             handleSocketResponse(event, setChatHistory);
           } catch (e) {
-            console.error("Failed to parse data");
+            console.error('Failed to parse data');
             window.dispatchEvent(new CustomEvent(AGENT_SESSION_END));
             socket.close();
           }
           setLoadingResponse(false);
         });
 
-        socket.addEventListener("close", (_event) => {
+        socket.addEventListener('close', (_event) => {
           window.dispatchEvent(new CustomEvent(AGENT_SESSION_END));
           setChatHistory((prev) => [
             ...prev.filter((msg) => !!msg.content),
             {
               uuid: v4(),
-              type: "statusResponse",
-              content: "Agent session complete.",
-              role: "assistant",
+              type: 'statusResponse',
+              content: 'Agent session complete.',
+              role: 'assistant',
               sources: [],
               closed: true,
               error: null,
@@ -211,9 +211,9 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
           ...prev.filter((msg) => !!msg.content),
           {
             uuid: v4(),
-            type: "abort",
+            type: 'abort',
             content: e.message,
-            role: "assistant",
+            role: 'assistant',
             sources: [],
             closed: true,
             error: e.message,
@@ -231,7 +231,7 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
 
   return (
     <div
-      style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+      style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
       className="transition-all duration-500 relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll border-2 border-outline"
     >
       {isMobile && <SidebarMobileHeader />}

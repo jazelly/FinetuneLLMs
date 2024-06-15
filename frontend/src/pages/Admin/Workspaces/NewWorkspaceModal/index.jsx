@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { X } from "@phosphor-icons/react";
-import Admin from "@/models/admin";
+import React, { useState } from 'react';
+import { X } from '@phosphor-icons/react';
+import Admin from '@/models/admin';
 
 export default function NewWorkspaceModal({ closeModal }) {
   const [error, setError] = useState(null);
@@ -8,7 +8,7 @@ export default function NewWorkspaceModal({ closeModal }) {
     setError(null);
     e.preventDefault();
     const form = new FormData(e.target);
-    const { workspace, error } = await Admin.newWorkspace(form.get("name"));
+    const { workspace, error } = await Admin.newWorkspace(form.get('name'));
     if (!!workspace) window.location.reload();
     setError(error);
   };

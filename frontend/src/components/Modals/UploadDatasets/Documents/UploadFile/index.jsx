@@ -1,12 +1,12 @@
-import { CloudArrowUp } from "@phosphor-icons/react";
-import { useState } from "react";
-import showToast from "../../../../../utils/toast";
-import { useDropzone } from "react-dropzone";
-import { v4 } from "uuid";
-import FileUploadProgress from "./FileUploadProgress";
-import debounce from "lodash.debounce";
-import { isHFDatasetLinkValid } from "../../../../../utils/misc";
-import Document from "@/models/document";
+import { CloudArrowUp } from '@phosphor-icons/react';
+import { useState } from 'react';
+import showToast from '../../../../../utils/toast';
+import { useDropzone } from 'react-dropzone';
+import { v4 } from 'uuid';
+import FileUploadProgress from './FileUploadProgress';
+import debounce from 'lodash.debounce';
+import { isHFDatasetLinkValid } from '../../../../../utils/misc';
+import Document from '@/models/document';
 
 export default function UploadFile({
   fetchDatasets,
@@ -15,46 +15,46 @@ export default function UploadFile({
 }) {
   const [files, setFiles] = useState([]);
   const [fetchingUrl, setFetchingUrl] = useState(false);
-  const [hfLinkError, setHFLinkError] = useState("");
+  const [hfLinkError, setHFLinkError] = useState('');
 
   const onLinkInputChange = () => {
-    if (!!hfLinkError) setHFLinkError("");
+    if (!!hfLinkError) setHFLinkError('');
   };
 
   const handleScrapeHFLink = async (e) => {
     e.preventDefault();
     const formEl = e.target;
     const form = new FormData(formEl);
-    const link = form.get("link");
+    const link = form.get('link');
 
     if (!isHFDatasetLinkValid(link)) {
-      setHFLinkError("Must be a huggingface dataset link");
+      setHFLinkError('Must be a huggingface dataset link');
       return;
     }
 
     setLoading(true);
     setLoadingMessage(
-      "Fetching dataset info \n Note this does not necessarily download the dataset..."
+      'Fetching dataset info \n Note this does not necessarily download the dataset...'
     );
     setFetchingUrl(true);
 
-    console.log("link", link);
+    console.log('link', link);
     const response = await Document.saveDatasetFromHF(link);
 
-    if (response.message !== "dataset saved") {
-      showToast(`Error uploading link: ${response.error}`, "error");
+    if (response.message !== 'dataset saved') {
+      showToast(`Error uploading link: ${response.error}`, 'error');
     } else {
       fetchDatasets();
       const configSplits = response.configSplit;
-      console.log("configSplit", configSplits);
+      console.log('configSplit', configSplits);
       let toastMessage =
-        "Found and saved the following configuration and split: \n";
+        'Found and saved the following configuration and split: \n';
       for (const configSplit of configSplits) {
         const configSplitJson = JSON.parse(configSplit);
         toastMessage += `${configSplitJson.config}-${configSplitJson.split}; \n`;
       }
 
-      showToast(toastMessage, "success");
+      showToast(toastMessage, 'success');
       formEl.reset();
     }
 
@@ -88,7 +88,7 @@ export default function UploadFile({
     onDrop,
   });
 
-  console.log("files", files);
+  console.log('files', files);
 
   return (
     <div>
@@ -137,9 +137,9 @@ export default function UploadFile({
             onChange={onLinkInputChange}
             className={`disabled:bg-zinc-600 disabled:text-slate-300 bg-zinc-900 text-white placeholder:text-white/20 
             text-sm rounded-lg ${
-              !!hfLinkError && "border ring-red-500 border-red-500"
+              !!hfLinkError && 'border ring-red-500 border-red-500'
             } focus:ring-blue-500 focus:border-blue-500 block w-3/4 p-2.5`}
-            placeholder={"https://huggingface.co/datasets/xxx/xxx"}
+            placeholder={'https://huggingface.co/datasets/xxx/xxx'}
             autoComplete="off"
           />
           <button
@@ -148,7 +148,7 @@ export default function UploadFile({
             className={`disabled:bg-white/20 disabled:text-slate-300 disabled:border-slate-400 disabled:cursor-wait
              bg bg-transparent hover:bg-slate-200 hover:text-slate-800 w-auto border border-white text-sm text-white p-2.5 rounded-lg`}
           >
-            {fetchingUrl ? "Fetching..." : "Fetch website"}
+            {fetchingUrl ? 'Fetching...' : 'Fetch website'}
           </button>
         </form>
         {!!hfLinkError && (

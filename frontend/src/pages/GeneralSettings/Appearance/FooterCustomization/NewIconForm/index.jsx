@@ -1,17 +1,17 @@
-import { ICON_COMPONENTS } from "@/components/Footer";
-import React, { useEffect, useRef, useState } from "react";
-import { Plus, X } from "@phosphor-icons/react";
+import { ICON_COMPONENTS } from '@/components/Footer';
+import React, { useEffect, useRef, useState } from 'react';
+import { Plus, X } from '@phosphor-icons/react';
 
 export default function NewIconForm({ icon, url, onSave, onRemove }) {
-  const [selectedIcon, setSelectedIcon] = useState(icon || "Plus");
-  const [selectedUrl, setSelectedUrl] = useState(url || "");
+  const [selectedIcon, setSelectedIcon] = useState(icon || 'Plus');
+  const [selectedUrl, setSelectedUrl] = useState(url || '');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    setSelectedIcon(icon || "Plus");
-    setSelectedUrl(url || "");
+    setSelectedIcon(icon || 'Plus');
+    setSelectedUrl(url || '');
     setIsEdited(false);
   }, [icon, url]);
 
@@ -22,13 +22,13 @@ export default function NewIconForm({ icon, url, onSave, onRemove }) {
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [dropdownRef]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (selectedIcon !== "Plus" && selectedUrl) {
+    if (selectedIcon !== 'Plus' && selectedUrl) {
       onSave(selectedIcon, selectedUrl);
       setIsEdited(false);
     }
@@ -36,8 +36,8 @@ export default function NewIconForm({ icon, url, onSave, onRemove }) {
 
   const handleRemove = () => {
     onRemove();
-    setSelectedIcon("Plus");
-    setSelectedUrl("");
+    setSelectedIcon('Plus');
+    setSelectedUrl('');
     setIsEdited(false);
   };
 
@@ -60,8 +60,8 @@ export default function NewIconForm({ icon, url, onSave, onRemove }) {
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
           {React.createElement(ICON_COMPONENTS[selectedIcon] || Plus, {
-            className: "h-5 w-5 text-white",
-            weight: selectedIcon === "Plus" ? "bold" : "fill",
+            className: 'h-5 w-5 text-white',
+            weight: selectedIcon === 'Plus' ? 'bold' : 'fill',
           })}
         </div>
         {isDropdownOpen && (
@@ -74,8 +74,8 @@ export default function NewIconForm({ icon, url, onSave, onRemove }) {
                 onClick={() => handleIconChange(iconName)}
               >
                 {React.createElement(ICON_COMPONENTS[iconName], {
-                  className: "h-5 w-5 text-white",
-                  weight: "fill",
+                  className: 'h-5 w-5 text-white',
+                  weight: 'fill',
                 })}
               </button>
             ))}
@@ -90,7 +90,7 @@ export default function NewIconForm({ icon, url, onSave, onRemove }) {
         className="bg-zinc-900 text-white placeholder-white/20 text-sm rounded-md p-2.5 w-[300px] h-[32px]"
         required
       />
-      {selectedIcon !== "Plus" && (
+      {selectedIcon !== 'Plus' && (
         <>
           {isEdited ? (
             <button

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { SpeakerHigh, PauseCircle } from "@phosphor-icons/react";
-import { Tooltip } from "react-tooltip";
+import React, { useEffect, useState } from 'react';
+import { SpeakerHigh, PauseCircle } from '@phosphor-icons/react';
+import { Tooltip } from 'react-tooltip';
 
 export default function NativeTTSMessage({ message }) {
   const [speaking, setSpeaking] = useState(false);
   const [supported, setSupported] = useState(false);
   useEffect(() => {
-    setSupported("speechSynthesis" in window);
+    setSupported('speechSynthesis' in window);
   }, []);
 
   function endSpeechUtterance() {
@@ -27,7 +27,7 @@ export default function NativeTTSMessage({ message }) {
 
     if (window.speechSynthesis.speaking && !speaking) return;
     const utterance = new SpeechSynthesisUtterance(message);
-    utterance.addEventListener("end", endSpeechUtterance);
+    utterance.addEventListener('end', endSpeechUtterance);
     window.speechSynthesis.speak(utterance);
     setSpeaking(true);
   }
@@ -39,10 +39,10 @@ export default function NativeTTSMessage({ message }) {
         onClick={speakMessage}
         data-tooltip-id="message-to-speech"
         data-tooltip-content={
-          speaking ? "Pause TTS speech of message" : "TTS Speak message"
+          speaking ? 'Pause TTS speech of message' : 'TTS Speak message'
         }
         className="border-none text-zinc-300"
-        aria-label={speaking ? "Pause speech" : "Speak message"}
+        aria-label={speaking ? 'Pause speech' : 'Speak message'}
       >
         {speaking ? (
           <PauseCircle size={18} className="mb-1" />

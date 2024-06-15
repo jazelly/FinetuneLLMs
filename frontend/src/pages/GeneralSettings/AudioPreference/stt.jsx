@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
-import System from "@/models/system";
-import showToast from "@/utils/toast";
-import LLMItem from "@/components/LLMSelection/LLMItem";
-import { CaretUpDown, MagnifyingGlass, X } from "@phosphor-icons/react";
-import CTAButton from "@/components/CTAButton";
-import FinetuneLLMsIcon from "@/media/logo/anything-llm-icon.png";
-import BrowserNative from "@/components/SpeechToText/BrowserNative";
+import React, { useEffect, useState, useRef } from 'react';
+import System from '@/models/system';
+import showToast from '@/utils/toast';
+import LLMItem from '@/components/LLMSelection/LLMItem';
+import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
+import CTAButton from '@/components/CTAButton';
+import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import BrowserNative from '@/components/SpeechToText/BrowserNative';
 
 const PROVIDERS = [
   {
-    name: "System native",
-    value: "native",
+    name: 'System native',
+    value: 'native',
     logo: FinetuneLLMsIcon,
     options: (settings) => <BrowserNative settings={settings} />,
     description: "Uses your browser's built in STT service if supported.",
@@ -20,10 +20,10 @@ const PROVIDERS = [
 export default function SpeechToTextProvider({ settings }) {
   const [saving, setSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredProviders, setFilteredProviders] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState(
-    settings?.SpeechToTextProvider || "native"
+    settings?.SpeechToTextProvider || 'native'
   );
   const [searchMenuOpen, setSearchMenuOpen] = useState(false);
   const searchInputRef = useRef(null);
@@ -39,16 +39,16 @@ export default function SpeechToTextProvider({ settings }) {
     setSaving(true);
 
     if (error) {
-      showToast(`Failed to save preferences: ${error}`, "error");
+      showToast(`Failed to save preferences: ${error}`, 'error');
     } else {
-      showToast("Speech-to-text preferences saved successfully.", "success");
+      showToast('Speech-to-text preferences saved successfully.', 'success');
     }
     setSaving(false);
     setHasChanges(!!error);
   };
 
   const updateProviderChoice = (selection) => {
-    setSearchQuery("");
+    setSearchQuery('');
     setSelectedProvider(selection);
     setSearchMenuOpen(false);
     setHasChanges(true);
@@ -56,8 +56,8 @@ export default function SpeechToTextProvider({ settings }) {
 
   const handleXButton = () => {
     if (searchQuery.length > 0) {
-      setSearchQuery("");
-      if (searchInputRef.current) searchInputRef.current.value = "";
+      setSearchQuery('');
+      if (searchInputRef.current) searchInputRef.current.value = '';
     } else {
       setSearchMenuOpen(!searchMenuOpen);
     }
@@ -96,7 +96,7 @@ export default function SpeechToTextProvider({ settings }) {
               onClick={() => handleSubmit()}
               className="mt-3 mr-0 -mb-14 z-10"
             >
-              {saving ? "Saving..." : "Save changes"}
+              {saving ? 'Saving...' : 'Save changes'}
             </CTAButton>
           )}
         </div>
@@ -126,7 +126,7 @@ export default function SpeechToTextProvider({ settings }) {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     ref={searchInputRef}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") e.preventDefault();
+                      if (e.key === 'Enter') e.preventDefault();
                     }}
                   />
                   <X

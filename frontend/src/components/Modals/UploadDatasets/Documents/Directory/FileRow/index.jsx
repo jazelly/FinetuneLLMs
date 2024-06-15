@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { formatDate, middleTruncate } from "@/utils/directories";
-import { File } from "@phosphor-icons/react";
-import debounce from "lodash.debounce";
+import { useState } from 'react';
+import { formatDate, middleTruncate } from '@/utils/directories';
+import { File } from '@phosphor-icons/react';
+import debounce from 'lodash.debounce';
 
 export default function FileRow({ file, selected, toggleSelection }) {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -21,7 +21,7 @@ export default function FileRow({ file, selected, toggleSelection }) {
     <tr
       onClick={() => toggleSelection(file)}
       className={`text-white/80 text-xs grid grid-cols-12 py-2 pl-3.5 pr-8 hover:bg-sky-500/20 cursor-pointer file-row ${
-        selected ? "selected" : ""
+        selected ? 'selected' : ''
       }`}
     >
       <div className="pl-2 col-span-6 flex gap-x-[4px] items-center">

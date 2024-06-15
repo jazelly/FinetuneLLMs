@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
-import { isMobile } from "react-device-detect";
-import Sidebar from "@/components/SettingsSidebar";
-import System from "@/models/system";
-import PreLoader from "@/components/Preloader";
-import SpeechToTextProvider from "./stt";
-import TextToSpeechProvider from "./tts";
+import React, { useEffect, useState, useRef } from 'react';
+import { isMobile } from 'react-device-detect';
+import Sidebar from '@/components/SettingsSidebar';
+import System from '@/models/system';
+import PreLoader from '@/components/Preloader';
+import SpeechToTextProvider from './stt';
+import TextToSpeechProvider from './tts';
 
 export default function AudioPreference() {
   const [settings, setSettings] = useState(null);
@@ -24,7 +24,7 @@ export default function AudioPreference() {
       <Sidebar />
       {loading ? (
         <div
-          style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+          style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <div className="w-full h-full flex justify-center items-center">
@@ -33,7 +33,7 @@ export default function AudioPreference() {
         </div>
       ) : (
         <div
-          style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+          style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <SpeechToTextProvider settings={settings} />

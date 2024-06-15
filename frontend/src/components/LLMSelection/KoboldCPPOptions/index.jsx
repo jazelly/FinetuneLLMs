@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import System from "@/models/system";
+import { useState, useEffect } from 'react';
+import System from '@/models/system';
 
 export default function KoboldCPPOptions({ settings }) {
   const [basePathValue, setBasePathValue] = useState(
@@ -53,13 +53,13 @@ function KoboldCPPModelSelection({ settings, basePath = null }) {
 
   useEffect(() => {
     async function findCustomModels() {
-      if (!basePath || !basePath.includes("/v1")) {
+      if (!basePath || !basePath.includes('/v1')) {
         setCustomModels([]);
         setLoading(false);
         return;
       }
       setLoading(true);
-      const { models } = await System.customModels("koboldcpp", null, basePath);
+      const { models } = await System.customModels('koboldcpp', null, basePath);
       setCustomModels(models || []);
       setLoading(false);
     }
@@ -78,9 +78,9 @@ function KoboldCPPModelSelection({ settings, basePath = null }) {
           className="bg-zinc-900 border-gray-500 text-white text-sm rounded-lg block w-full p-2.5"
         >
           <option disabled={true} selected={true}>
-            {basePath?.includes("/v1")
-              ? "-- loading available models --"
-              : "-- waiting for URL --"}
+            {basePath?.includes('/v1')
+              ? '-- loading available models --'
+              : '-- waiting for URL --'}
           </option>
         </select>
       </div>

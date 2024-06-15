@@ -1,20 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import illustration from "@/media/illustrations/create-workspace.png";
-import paths from "@/utils/paths";
-import showToast from "@/utils/toast";
-import { useNavigate } from "react-router-dom";
-import Workspace from "@/models/workspace";
+import React, { useEffect, useRef, useState } from 'react';
+import illustration from '@/media/illustrations/create-workspace.png';
+import paths from '@/utils/paths';
+import showToast from '@/utils/toast';
+import { useNavigate } from 'react-router-dom';
+import Workspace from '@/models/workspace';
 
-const TITLE = "Create your first workspace";
+const TITLE = 'Create your first workspace';
 const DESCRIPTION =
-  "Create your first workspace and get started with FinetuneLLMs.";
+  'Create your first workspace and get started with FinetuneLLMs.';
 
 export default function CreateWorkspace({
   setHeader,
   setForwardBtn,
   setBackBtn,
 }) {
-  const [workspaceName, setWorkspaceName] = useState("");
+  const [workspaceName, setWorkspaceName] = useState('');
   const navigate = useNavigate();
   const createWorkspaceRef = useRef();
 
@@ -35,18 +35,18 @@ export default function CreateWorkspace({
     e.preventDefault();
     const form = new FormData(e.target);
     const { workspace, error } = await Workspace.new({
-      name: form.get("name"),
+      name: form.get('name'),
       onboardingComplete: true,
     });
     if (!!workspace) {
       showToast(
-        "Workspace created successfully! Taking you to home...",
-        "success"
+        'Workspace created successfully! Taking you to home...',
+        'success'
       );
       await new Promise((resolve) => setTimeout(resolve, 1000));
       navigate(paths.home());
     } else {
-      showToast(`Failed to create workspace: ${error}`, "error");
+      showToast(`Failed to create workspace: ${error}`, 'error');
     }
   };
 
@@ -65,7 +65,7 @@ export default function CreateWorkspace({
     >
       <img src={illustration} alt="Create workspace" />
       <div className="flex flex-col gap-y-4 w-full max-w-[600px]">
-        {" "}
+        {' '}
         <div className="w-full mt-4">
           <label
             htmlFor="name"

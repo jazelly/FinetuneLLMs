@@ -18,7 +18,7 @@ export default function OpenAiTextToSpeechOptions({ settings }) {
           name="TTSOpenAIKey"
           className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
           placeholder="OpenAI API Key"
-          defaultValue={apiKey ? "*".repeat(20) : ""}
+          defaultValue={apiKey ? '*'.repeat(20) : ''}
           required={true}
           autoComplete="off"
           spellCheck={false}
@@ -30,10 +30,10 @@ export default function OpenAiTextToSpeechOptions({ settings }) {
         </label>
         <select
           name="TTSOpenAIVoiceModel"
-          defaultValue={settings?.TTSOpenAIVoiceModel ?? "alloy"}
+          defaultValue={settings?.TTSOpenAIVoiceModel ?? 'alloy'}
           className="bg-zinc-900 border-gray-500 text-white text-sm rounded-lg block w-full p-2.5"
         >
-          {["alloy", "echo", "fable", "onyx", "nova", "shimmer"].map(
+          {['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'].map(
             (voice) => {
               return <option value={voice}>{toProperCase(voice)}</option>;
             }

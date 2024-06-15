@@ -1,5 +1,5 @@
-import System from "@/models/system";
-import { useState, useEffect } from "react";
+import System from '@/models/system';
+import { useState, useEffect } from 'react';
 
 export default function OpenRouterOptions({ settings }) {
   return (
@@ -13,7 +13,7 @@ export default function OpenRouterOptions({ settings }) {
           name="OpenRouterApiKey"
           className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
           placeholder="OpenRouter API Key"
-          defaultValue={settings?.OpenRouterApiKey ? "*".repeat(20) : ""}
+          defaultValue={settings?.OpenRouterApiKey ? '*'.repeat(20) : ''}
           required={true}
           autoComplete="off"
           spellCheck={false}
@@ -33,7 +33,7 @@ function OpenRouterModelSelection({ settings }) {
   useEffect(() => {
     async function findCustomModels() {
       setLoading(true);
-      const { models } = await System.customModels("openrouter");
+      const { models } = await System.customModels('openrouter');
       if (models?.length > 0) {
         const modelsByOrganization = models.reduce((acc, model) => {
           acc[model.organization] = acc[model.organization] || [];

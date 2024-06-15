@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { FullScreenLoader } from "@/components/Preloader";
-import Invite from "@/models/invite";
-import NewUserModal from "./NewUserModal";
-import ModalWrapper from "@/components/ModalWrapper";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { FullScreenLoader } from '@/components/Preloader';
+import Invite from '@/models/invite';
+import NewUserModal from './NewUserModal';
+import ModalWrapper from '@/components/ModalWrapper';
 
 export default function InvitePage() {
   const { code } = useParams();
   const [result, setResult] = useState({
-    status: "loading",
+    status: 'loading',
     message: null,
   });
 
@@ -16,21 +16,21 @@ export default function InvitePage() {
     async function checkInvite() {
       if (!code) {
         setResult({
-          status: "invalid",
-          message: "No invite code provided.",
+          status: 'invalid',
+          message: 'No invite code provided.',
         });
         return;
       }
       const { invite, error } = await Invite.checkInvite(code);
       setResult({
-        status: invite ? "valid" : "invalid",
+        status: invite ? 'valid' : 'invalid',
         message: error,
       });
     }
     checkInvite();
   }, []);
 
-  if (result.status === "loading") {
+  if (result.status === 'loading') {
     return (
       <div className="w-screen h-screen overflow-hidden bg-main flex">
         <FullScreenLoader />
@@ -38,7 +38,7 @@ export default function InvitePage() {
     );
   }
 
-  if (result.status === "invalid") {
+  if (result.status === 'invalid') {
     return (
       <div className="w-screen h-screen overflow-hidden bg-main flex items-center justify-center">
         <p className="text-red-400 text-lg">{result.message}</p>

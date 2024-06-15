@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import Sidebar from "@/components/SettingsSidebar";
-import { isMobile } from "react-device-detect";
-import * as Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { UserPlus } from "@phosphor-icons/react";
-import Admin from "@/models/admin";
-import UserRow from "./UserRow";
-import useUser from "@/hooks/useUser";
-import NewUserModal from "./NewUserModal";
-import { useModal } from "@/hooks/useModal";
-import ModalWrapper from "@/components/ModalWrapper";
-import CTAButton from "@/components/CTAButton";
+import { useEffect, useState } from 'react';
+import Sidebar from '@/components/SettingsSidebar';
+import { isMobile } from 'react-device-detect';
+import * as Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import { UserPlus } from '@phosphor-icons/react';
+import Admin from '@/models/admin';
+import UserRow from './UserRow';
+import useUser from '@/hooks/useUser';
+import NewUserModal from './NewUserModal';
+import { useModal } from '@/hooks/useModal';
+import ModalWrapper from '@/components/ModalWrapper';
+import CTAButton from '@/components/CTAButton';
 
 export default function AdminUsers() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -19,7 +19,7 @@ export default function AdminUsers() {
     <div className="w-screen h-screen overflow-hidden bg-main flex">
       <Sidebar />
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+        style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
         className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
       >
         <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
@@ -90,7 +90,7 @@ function UsersContainer() {
             Date Added
           </th>
           <th scope="col" className="px-6 py-3 rounded-tr-lg">
-            {" "}
+            {' '}
           </th>
         </tr>
       </thead>
@@ -105,17 +105,17 @@ function UsersContainer() {
 
 const ROLE_HINT = {
   default: [
-    "Can only send chats with workspaces they are added to by admin or managers.",
-    "Cannot modify any settings at all.",
+    'Can only send chats with workspaces they are added to by admin or managers.',
+    'Cannot modify any settings at all.',
   ],
   manager: [
-    "Can view, create, and delete any workspaces and modify workspace-specific settings.",
-    "Can create, update and invite new users to the instance.",
-    "Cannot modify LLM, vectorDB, embedding, or other connections.",
+    'Can view, create, and delete any workspaces and modify workspace-specific settings.',
+    'Can create, update and invite new users to the instance.',
+    'Cannot modify LLM, vectorDB, embedding, or other connections.',
   ],
   admin: [
-    "Highest user level privilege.",
-    "Can see and do everything across the system.",
+    'Highest user level privilege.',
+    'Can see and do everything across the system.',
   ],
 };
 
@@ -124,7 +124,7 @@ export function RoleHintDisplay({ role }) {
     <div className="flex flex-col gap-y-1 py-1 pb-4">
       <p className="text-sm font-medium text-white">Permissions</p>
       <ul className="flex flex-col gap-y-1 list-disc px-4">
-        {ROLE_HINT[role ?? "default"].map((hints, i) => {
+        {ROLE_HINT[role ?? 'default'].map((hints, i) => {
           return (
             <li key={i} className="text-xs text-white/60">
               {hints}

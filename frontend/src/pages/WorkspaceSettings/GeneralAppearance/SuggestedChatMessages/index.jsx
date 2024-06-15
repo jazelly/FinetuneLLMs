@@ -1,13 +1,13 @@
-import PreLoader from "@/components/Preloader";
-import Workspace from "@/models/workspace";
-import showToast from "@/utils/toast";
-import { useEffect, useState } from "react";
-import { Plus, X } from "@phosphor-icons/react";
+import PreLoader from '@/components/Preloader';
+import Workspace from '@/models/workspace';
+import showToast from '@/utils/toast';
+import { useEffect, useState } from 'react';
+import { Plus, X } from '@phosphor-icons/react';
 
 export default function SuggestedChatMessages({ slug }) {
   const [suggestedMessages, setSuggestedMessages] = useState([]);
   const [editingIndex, setEditingIndex] = useState(-1);
-  const [newMessage, setNewMessage] = useState({ heading: "", message: "" });
+  const [newMessage, setNewMessage] = useState({ heading: '', message: '' });
   const [hasChanges, setHasChanges] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -31,22 +31,22 @@ export default function SuggestedChatMessages({ slug }) {
       validMessages
     );
     if (!success) {
-      showToast(`Failed to update welcome messages: ${error}`, "error");
+      showToast(`Failed to update welcome messages: ${error}`, 'error');
       return;
     }
-    showToast("Successfully updated welcome messages.", "success");
+    showToast('Successfully updated welcome messages.', 'success');
     setHasChanges(false);
   };
 
   const addMessage = () => {
     setEditingIndex(-1);
     if (suggestedMessages.length >= 4) {
-      showToast("Maximum of 4 messages allowed.", "warning");
+      showToast('Maximum of 4 messages allowed.', 'warning');
       return;
     }
     const defaultMessage = {
-      heading: "Explain to me",
-      message: "the benefits of FinetuneLLMs",
+      heading: 'Explain to me',
+      message: 'the benefits of FinetuneLLMs',
     };
     setNewMessage(defaultMessage);
     setSuggestedMessages([...suggestedMessages, { ...defaultMessage }]);
@@ -126,7 +126,7 @@ export default function SuggestedChatMessages({ slug }) {
               key={index}
               onClick={(e) => startEditing(e, index)}
               className={`text-left p-2.5 border rounded-xl w-full border-white/20 bg-main hover:bg-workspace-item-selected-gradient ${
-                editingIndex === index ? "border-sky-400" : ""
+                editingIndex === index ? 'border-sky-400' : ''
               }`}
             >
               <p className="font-semibold">{suggestion.heading}</p>

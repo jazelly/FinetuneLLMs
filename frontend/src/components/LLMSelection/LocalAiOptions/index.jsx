@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Info } from "@phosphor-icons/react";
-import paths from "@/utils/paths";
-import System from "@/models/system";
+import { useEffect, useState } from 'react';
+import { Info } from '@phosphor-icons/react';
+import paths from '@/utils/paths';
+import System from '@/models/system';
 
 export default function LocalAiOptions({ settings, showAlert = false }) {
   const [basePathValue, setBasePathValue] = useState(settings?.LocalAiBasePath);
@@ -76,7 +76,7 @@ export default function LocalAiOptions({ settings, showAlert = false }) {
         <div className="flex flex-col w-60">
           <div className="flex flex-col gap-y-1 mb-4">
             <label className="text-white text-sm font-semibold flex items-center gap-x-2">
-              Local AI API Key{" "}
+              Local AI API Key{' '}
               <p className="!text-xs !italic !font-thin">optional</p>
             </label>
           </div>
@@ -86,7 +86,7 @@ export default function LocalAiOptions({ settings, showAlert = false }) {
             name="LocalAiApiKey"
             className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
             placeholder="sk-mysecretkey"
-            defaultValue={settings?.LocalAiApiKey ? "*".repeat(20) : ""}
+            defaultValue={settings?.LocalAiApiKey ? '*'.repeat(20) : ''}
             autoComplete="off"
             spellCheck={false}
             onChange={(e) => setApiKeyValue(e.target.value)}
@@ -104,15 +104,15 @@ function LocalAIModelSelection({ settings, basePath = null, apiKey = null }) {
 
   useEffect(() => {
     async function findCustomModels() {
-      if (!basePath || !basePath.includes("/v1")) {
+      if (!basePath || !basePath.includes('/v1')) {
         setCustomModels([]);
         setLoading(false);
         return;
       }
       setLoading(true);
       const { models } = await System.customModels(
-        "localai",
-        typeof apiKey === "boolean" ? null : apiKey,
+        'localai',
+        typeof apiKey === 'boolean' ? null : apiKey,
         basePath
       );
       setCustomModels(models || []);
@@ -133,9 +133,9 @@ function LocalAIModelSelection({ settings, basePath = null, apiKey = null }) {
           className="bg-zinc-900 border-gray-500 text-white text-sm rounded-lg block w-full p-2.5"
         >
           <option disabled={true} selected={true}>
-            {basePath?.includes("/v1")
-              ? "-- loading available models --"
-              : "-- waiting for URL --"}
+            {basePath?.includes('/v1')
+              ? '-- loading available models --'
+              : '-- waiting for URL --'}
           </option>
         </select>
       </div>

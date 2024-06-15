@@ -1,8 +1,8 @@
-import EditingChatBubble from "@/components/EditingChatBubble";
-import System from "@/models/system";
-import showToast from "@/utils/toast";
-import { Plus } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import EditingChatBubble from '@/components/EditingChatBubble';
+import System from '@/models/system';
+import showToast from '@/utils/toast';
+import { Plus } from '@phosphor-icons/react';
+import { useEffect, useState } from 'react';
 
 export default function CustomMessages() {
   const [hasChanges, setHasChanges] = useState(false);
@@ -17,15 +17,15 @@ export default function CustomMessages() {
   }, []);
 
   const addMessage = (type) => {
-    if (type === "user") {
+    if (type === 'user') {
       setMessages([
         ...messages,
-        { user: "Double click to edit...", response: "" },
+        { user: 'Double click to edit...', response: '' },
       ]);
     } else {
       setMessages([
         ...messages,
-        { user: "", response: "Double click to edit..." },
+        { user: '', response: 'Double click to edit...' },
       ]);
     }
   };
@@ -45,10 +45,10 @@ export default function CustomMessages() {
   const handleMessageSave = async () => {
     const { success, error } = await System.setWelcomeMessages(messages);
     if (!success) {
-      showToast(`Failed to update welcome messages: ${error}`, "error");
+      showToast(`Failed to update welcome messages: ${error}`, 'error');
       return;
     }
-    showToast("Successfully updated welcome messages.", "success");
+    showToast('Successfully updated welcome messages.', 'success');
     setHasChanges(false);
   };
 
@@ -88,19 +88,19 @@ export default function CustomMessages() {
         <div className="flex gap-4 mt-12 justify-between pb-[15px]">
           <button
             className="self-end text-white hover:text-white/60 transition"
-            onClick={() => addMessage("response")}
+            onClick={() => addMessage('response')}
           >
             <div className="flex items-center justify-start text-sm font-normal -ml-2">
               <Plus className="m-2" size={16} weight="bold" />
               <span className="leading-5">
-                New <span className="font-bold italic mr-1">system</span>{" "}
+                New <span className="font-bold italic mr-1">system</span>{' '}
                 message
               </span>
             </div>
           </button>
           <button
             className="self-end text-white hover:text-white/60 transition"
-            onClick={() => addMessage("user")}
+            onClick={() => addMessage('user')}
           >
             <div className="flex items-center justify-start text-sm font-normal">
               <Plus className="m-2" size={16} weight="bold" />

@@ -4,7 +4,7 @@ export default function SearchProviderItem({ provider, checked, onClick }) {
     <div
       onClick={onClick}
       className={`w-full p-2 rounded-md hover:cursor-pointer hover:bg-white/10 ${
-        checked ? "bg-white/10" : ""
+        checked ? 'bg-white/10' : ''
       }`}
     >
       <input

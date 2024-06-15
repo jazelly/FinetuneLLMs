@@ -1,20 +1,20 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 import SlashCommandsButton, {
   SlashCommands,
   useSlashCommands,
-} from "./SlashCommands";
-import { isMobile } from "react-device-detect";
-import debounce from "lodash.debounce";
-import { PaperPlaneRight } from "@phosphor-icons/react";
-import StopGenerationButton from "./StopGenerationButton";
+} from './SlashCommands';
+import { isMobile } from 'react-device-detect';
+import debounce from 'lodash.debounce';
+import { PaperPlaneRight } from '@phosphor-icons/react';
+import StopGenerationButton from './StopGenerationButton';
 import AvailableAgentsButton, {
   AvailableAgents,
   useAvailableAgents,
-} from "./AgentMenu";
-import TextSizeButton from "./TextSizeMenu";
-import SpeechToText from "./SpeechToText";
+} from './AgentMenu';
+import TextSizeButton from './TextSizeMenu';
+import SpeechToText from './SpeechToText';
 
-export const PROMPT_INPUT_EVENT = "set_prompt_input";
+export const PROMPT_INPUT_EVENT = 'set_prompt_input';
 export default function PromptInput({
   submit,
   onChange,
@@ -22,7 +22,7 @@ export default function PromptInput({
   buttonDisabled,
   sendCommand,
 }) {
-  const [promptInput, setPromptInput] = useState("");
+  const [promptInput, setPromptInput] = useState('');
   const { showAgents, setShowAgents } = useAvailableAgents();
   const { showSlashCommand, setShowSlashCommand } = useSlashCommands();
   const formRef = useRef(null);
@@ -33,7 +33,7 @@ export default function PromptInput({
   // via an event cycle. Otherwise, using message as a prop leads to a re-render every
   // change on the input.
   function handlePromptUpdate(e) {
-    setPromptInput(e?.detail ?? "");
+    setPromptInput(e?.detail ?? '');
   }
 
   useEffect(() => {
@@ -57,20 +57,20 @@ export default function PromptInput({
 
   const resetTextAreaHeight = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = 'auto';
     }
   };
 
   const checkForSlash = (e) => {
     const input = e.target.value;
-    if (input === "/") setShowSlashCommand(true);
+    if (input === '/') setShowSlashCommand(true);
     if (showSlashCommand) setShowSlashCommand(false);
     return;
   };
 
   const checkForAt = (e) => {
     const input = e.target.value;
-    if (input === "@") return setShowAgents(true);
+    if (input === '@') return setShowAgents(true);
     if (showAgents) return setShowAgents(false);
   };
 
@@ -85,7 +85,7 @@ export default function PromptInput({
   const adjustTextArea = (event) => {
     if (isMobile) return false;
     const element = event.target;
-    element.style.height = "auto";
+    element.style.height = 'auto';
     element.style.height = `${element.scrollHeight}px`;
   };
 
@@ -131,7 +131,7 @@ export default function PromptInput({
                 }}
                 value={promptInput}
                 className="cursor-text max-h-[100px] md:min-h-[40px] mx-2 md:mx-0 py-2 w-full text-[16px] md:text-md text-white bg-transparent placeholder:text-white/60 resize-none active:outline-none focus:outline-none flex-grow"
-                placeholder={"Send a message"}
+                placeholder={'Send a message'}
               />
               {buttonDisabled ? (
                 <StopGenerationButton />

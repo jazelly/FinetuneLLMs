@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { X } from "@phosphor-icons/react";
-import ModalWrapper from "@/components/ModalWrapper";
-import { CMD_REGEX } from ".";
+import { useState } from 'react';
+import { X } from '@phosphor-icons/react';
+import ModalWrapper from '@/components/ModalWrapper';
+import { CMD_REGEX } from '.';
 
 export default function EditPresetModal({
   isOpen,
@@ -10,29 +10,29 @@ export default function EditPresetModal({
   onDelete,
   preset,
 }) {
-  const [command, setCommand] = useState(preset?.command?.slice(1) || "");
+  const [command, setCommand] = useState(preset?.command?.slice(1) || '');
   const [deleting, setDeleting] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = new FormData(e.target);
-    const sanitizedCommand = command.replace(CMD_REGEX, "");
+    const sanitizedCommand = command.replace(CMD_REGEX, '');
     onSave({
       id: preset.id,
       command: `/${sanitizedCommand}`,
-      prompt: form.get("prompt"),
-      description: form.get("description"),
+      prompt: form.get('prompt'),
+      description: form.get('description'),
     });
   };
 
   const handleCommandChange = (e) => {
-    const value = e.target.value.replace(CMD_REGEX, "");
+    const value = e.target.value.replace(CMD_REGEX, '');
     setCommand(value);
   };
 
   const handleDelete = async () => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this preset?"
+      'Are you sure you want to delete this preset?'
     );
     if (!confirmDelete) return;
 
@@ -122,7 +122,7 @@ export default function EditPresetModal({
                 type="button"
                 className="px-4 py-2 rounded-lg text-red-500 hover:bg-red-500/25 transition-all duration-300 disabled:opacity-50"
               >
-                {deleting ? "Deleting..." : "Delete Preset"}
+                {deleting ? 'Deleting...' : 'Delete Preset'}
               </button>
             </div>
             <div className="flex space-x-2">

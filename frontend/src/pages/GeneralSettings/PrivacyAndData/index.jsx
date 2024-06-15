@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import Sidebar from "@/components/SettingsSidebar";
-import { isMobile } from "react-device-detect";
-import showToast from "@/utils/toast";
-import System from "@/models/system";
-import PreLoader from "@/components/Preloader";
+import { useEffect, useState } from 'react';
+import Sidebar from '@/components/SettingsSidebar';
+import { isMobile } from 'react-device-detect';
+import showToast from '@/utils/toast';
+import System from '@/models/system';
+import PreLoader from '@/components/Preloader';
 import {
   EMBEDDING_ENGINE_PRIVACY,
   LLM_SELECTION_PRIVACY,
   VECTOR_DB_PRIVACY,
-} from "@/pages/OnboardingFlow/Steps/DataHandling";
+} from '@/pages/OnboardingFlow/Steps/DataHandling';
 
 export default function PrivacyAndDataHandling() {
   const [settings, setSettings] = useState({});
@@ -28,7 +28,7 @@ export default function PrivacyAndDataHandling() {
     <div className="w-screen h-screen overflow-hidden bg-main flex">
       <Sidebar />
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+        style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
         className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
       >
         <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
@@ -62,9 +62,9 @@ export default function PrivacyAndDataHandling() {
 }
 
 function ThirdParty({ settings }) {
-  const llmChoice = settings?.LLMProvider || "openai";
-  const embeddingEngine = settings?.EmbeddingEngine || "openai";
-  const vectorDb = settings?.VectorDB || "lancedb";
+  const llmChoice = settings?.LLMProvider || 'openai';
+  const embeddingEngine = settings?.EmbeddingEngine || 'openai';
+  const vectorDb = settings?.VectorDB || 'lancedb';
 
   return (
     <div className="py-8 w-full flex items-start justify-center flex-col gap-y-6 border-b-2 border-white/10">

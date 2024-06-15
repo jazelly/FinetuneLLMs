@@ -1,20 +1,20 @@
-import { useRef, useState } from "react";
-import { titleCase } from "text-case";
-import Admin from "@/models/admin";
-import EditUserModal from "./EditUserModal";
-import showToast from "@/utils/toast";
-import { useModal } from "@/hooks/useModal";
-import ModalWrapper from "@/components/ModalWrapper";
+import { useRef, useState } from 'react';
+import { titleCase } from 'text-case';
+import Admin from '@/models/admin';
+import EditUserModal from './EditUserModal';
+import showToast from '@/utils/toast';
+import { useModal } from '@/hooks/useModal';
+import ModalWrapper from '@/components/ModalWrapper';
 
 const ModMap = {
-  admin: ["admin", "manager", "default"],
-  manager: ["manager", "default"],
+  admin: ['admin', 'manager', 'default'],
+  manager: ['manager', 'default'],
   default: [],
 };
 
 export default function UserRow({ currUser, user }) {
   const rowRef = useRef(null);
-  const canModify = ModMap[currUser?.role || "default"].includes(user.role);
+  const canModify = ModMap[currUser?.role || 'default'].includes(user.role);
   const [suspended, setSuspended] = useState(user.suspended === 1);
   const { isOpen, openModal, closeModal } = useModal();
   const handleSuspend = async () => {
@@ -28,11 +28,11 @@ export default function UserRow({ currUser, user }) {
     const { success, error } = await Admin.updateUser(user.id, {
       suspended: suspended ? 0 : 1,
     });
-    if (!success) showToast(error, "error", { clear: true });
+    if (!success) showToast(error, 'error', { clear: true });
     if (success) {
       showToast(
-        `User ${!suspended ? "has been suspended" : "is no longer suspended"}.`,
-        "success",
+        `User ${!suspended ? 'has been suspended' : 'is no longer suspended'}.`,
+        'success',
         { clear: true }
       );
       setSuspended(!suspended);
@@ -46,10 +46,10 @@ export default function UserRow({ currUser, user }) {
     )
       return false;
     const { success, error } = await Admin.deleteUser(user.id);
-    if (!success) showToast(error, "error", { clear: true });
+    if (!success) showToast(error, 'error', { clear: true });
     if (success) {
       rowRef?.current?.remove();
-      showToast("User deleted from system.", "success", { clear: true });
+      showToast('User deleted from system.', 'success', { clear: true });
     }
   };
 
@@ -79,7 +79,7 @@ export default function UserRow({ currUser, user }) {
                 onClick={handleSuspend}
                 className="text-sm font-medium text-white/80 hover:text-orange-300 rounded-lg px-2 py-1 hover:bg-white hover:bg-opacity-10"
               >
-                {suspended ? "Unsuspend" : "Suspend"}
+                {suspended ? 'Unsuspend' : 'Suspend'}
               </button>
               <button
                 onClick={handleDelete}

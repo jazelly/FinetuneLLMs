@@ -2,7 +2,7 @@ export function GoogleSearchOptions({ settings }) {
   return (
     <>
       <p className="text-sm text-white/60 my-2">
-        You can get a free search engine & API key{" "}
+        You can get a free search engine & API key{' '}
         <a
           href="https://programmablesearchengine.google.com/controlpanel/create"
           target="_blank"
@@ -37,7 +37,7 @@ export function GoogleSearchOptions({ settings }) {
             className="border-none bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
             placeholder="Google Search Engine API Key"
             defaultValue={
-              settings?.AgentGoogleSearchEngineKey ? "*".repeat(20) : ""
+              settings?.AgentGoogleSearchEngineKey ? '*'.repeat(20) : ''
             }
             required={true}
             autoComplete="off"
@@ -53,7 +53,7 @@ export function SerperDotDevOptions({ settings }) {
   return (
     <>
       <p className="text-sm text-white/60 my-2">
-        You can get a free API key{" "}
+        You can get a free API key{' '}
         <a
           href="https://serper.dev"
           target="_blank"
@@ -72,7 +72,7 @@ export function SerperDotDevOptions({ settings }) {
             name="env::AgentSerperApiKey"
             className="border-none bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
             placeholder="Serper.dev API Key"
-            defaultValue={settings?.AgentSerperApiKey ? "*".repeat(20) : ""}
+            defaultValue={settings?.AgentSerperApiKey ? '*'.repeat(20) : ''}
             required={true}
             autoComplete="off"
             spellCheck={false}

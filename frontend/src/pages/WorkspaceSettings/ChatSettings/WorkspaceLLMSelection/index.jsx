@@ -1,20 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import FinetuneLLMsIcon from "@/media/logo/anything-llm-icon.png";
-import WorkspaceLLMItem from "./WorkspaceLLMItem";
-import { AVAILABLE_LLM_PROVIDERS } from "@/pages/GeneralSettings/LLMPreference";
-import { CaretUpDown, MagnifyingGlass, X } from "@phosphor-icons/react";
-import ChatModelSelection from "../ChatModelSelection";
+import React, { useEffect, useRef, useState } from 'react';
+import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import WorkspaceLLMItem from './WorkspaceLLMItem';
+import { AVAILABLE_LLM_PROVIDERS } from '@/pages/GeneralSettings/LLMPreference';
+import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
+import ChatModelSelection from '../ChatModelSelection';
 
 // Some providers can only be associated with a single model.
 // In that case there is no selection to be made so we can just move on.
-const NO_MODEL_SELECTION = ["default", "huggingface", "generic-openai"];
-const DISABLED_PROVIDERS = ["azure", "lmstudio", "native"];
+const NO_MODEL_SELECTION = ['default', 'huggingface', 'generic-openai'];
+const DISABLED_PROVIDERS = ['azure', 'lmstudio', 'native'];
 const LLM_DEFAULT = {
-  name: "System default",
-  value: "default",
+  name: 'System default',
+  value: 'default',
   logo: FinetuneLLMsIcon,
   options: () => <React.Fragment />,
-  description: "Use the system LLM preference for this workspace.",
+  description: 'Use the system LLM preference for this workspace.',
   requiredConfig: [],
 };
 
@@ -29,14 +29,14 @@ export default function WorkspaceLLMSelection({
 }) {
   const [filteredLLMs, setFilteredLLMs] = useState([]);
   const [selectedLLM, setSelectedLLM] = useState(
-    workspace?.chatProvider ?? "default"
+    workspace?.chatProvider ?? 'default'
   );
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [searchMenuOpen, setSearchMenuOpen] = useState(false);
   const searchInputRef = useRef(null);
 
   function updateLLMChoice(selection) {
-    setSearchQuery("");
+    setSearchQuery('');
     setSelectedLLM(selection);
     setSearchMenuOpen(false);
     setHasChanges(true);
@@ -44,8 +44,8 @@ export default function WorkspaceLLMSelection({
 
   function handleXButton() {
     if (searchQuery.length > 0) {
-      setSearchQuery("");
-      if (searchInputRef.current) searchInputRef.current.value = "";
+      setSearchQuery('');
+      if (searchInputRef.current) searchInputRef.current.value = '';
     } else {
       setSearchMenuOpen(!searchMenuOpen);
     }
@@ -97,7 +97,7 @@ export default function WorkspaceLLMSelection({
                   onChange={(e) => setSearchQuery(e.target.value)}
                   ref={searchInputRef}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") e.preventDefault();
+                    if (e.key === 'Enter') e.preventDefault();
                   }}
                 />
                 <X

@@ -1,16 +1,16 @@
-import System from "@/models/system";
-import showToast from "@/utils/toast";
-import React, { useState, useEffect, useRef } from "react";
-import debounce from "lodash.debounce";
-import paths from "@/utils/paths";
-import { useNavigate } from "react-router-dom";
-import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from "@/utils/constants";
+import System from '@/models/system';
+import showToast from '@/utils/toast';
+import React, { useState, useEffect, useRef } from 'react';
+import debounce from 'lodash.debounce';
+import paths from '@/utils/paths';
+import { useNavigate } from 'react-router-dom';
+import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from '@/utils/constants';
 
-const TITLE = "User Setup";
-const DESCRIPTION = "Configure your user settings.";
+const TITLE = 'User Setup';
+const DESCRIPTION = 'Configure your user settings.';
 
 export default function UserSetup({ setHeader, setForwardBtn, setBackBtn }) {
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState('');
   const [singleUserPasswordValid, setSingleUserPasswordValid] = useState(false);
   const [multiUserLoginValid, setMultiUserLoginValid] = useState(false);
   const [enablePassword, setEnablePassword] = useState(false);
@@ -19,11 +19,11 @@ export default function UserSetup({ setHeader, setForwardBtn, setBackBtn }) {
   const navigate = useNavigate();
 
   function handleForward() {
-    if (selectedOption === "just_me" && enablePassword) {
+    if (selectedOption === 'just_me' && enablePassword) {
       justMeSubmitRef.current?.click();
-    } else if (selectedOption === "just_me" && !enablePassword) {
+    } else if (selectedOption === 'just_me' && !enablePassword) {
       navigate(paths.onboarding.dataHandling());
-    } else if (selectedOption === "my_team") {
+    } else if (selectedOption === 'my_team') {
       myTeamSubmitRef.current?.click();
     }
   }
@@ -34,9 +34,9 @@ export default function UserSetup({ setHeader, setForwardBtn, setBackBtn }) {
 
   useEffect(() => {
     let isDisabled = true;
-    if (selectedOption === "just_me") {
+    if (selectedOption === 'just_me') {
       isDisabled = !singleUserPasswordValid;
-    } else if (selectedOption === "my_team") {
+    } else if (selectedOption === 'my_team') {
       isDisabled = !multiUserLoginValid;
     }
 
@@ -60,28 +60,28 @@ export default function UserSetup({ setHeader, setForwardBtn, setBackBtn }) {
         </div>
         <div className="flex flex-col md:flex-row gap-6 w-full justify-center">
           <button
-            onClick={() => setSelectedOption("just_me")}
+            onClick={() => setSelectedOption('just_me')}
             className={`${
-              selectedOption === "just_me"
-                ? "text-sky-400 border-sky-400/70"
-                : "text-white border-white/40"
+              selectedOption === 'just_me'
+                ? 'text-sky-400 border-sky-400/70'
+                : 'text-white border-white/40'
             } min-w-[230px] h-11 p-4 rounded-[10px] border-2  justify-center items-center gap-[100px] inline-flex hover:border-sky-400/70 hover:text-sky-400 transition-all duration-300`}
           >
             <div className="text-center text-sm font-bold">Just me</div>
           </button>
           <button
-            onClick={() => setSelectedOption("my_team")}
+            onClick={() => setSelectedOption('my_team')}
             className={`${
-              selectedOption === "my_team"
-                ? "text-sky-400 border-sky-400/70"
-                : "text-white border-white/40"
+              selectedOption === 'my_team'
+                ? 'text-sky-400 border-sky-400/70'
+                : 'text-white border-white/40'
             } min-w-[230px] h-11 p-4 rounded-[10px] border-2  justify-center items-center gap-[100px] inline-flex hover:border-sky-400/70 hover:text-sky-400 transition-all duration-300`}
           >
             <div className="text-center text-sm font-bold">My team</div>
           </button>
         </div>
       </div>
-      {selectedOption === "just_me" && (
+      {selectedOption === 'just_me' && (
         <JustMe
           setSingleUserPasswordValid={setSingleUserPasswordValid}
           enablePassword={enablePassword}
@@ -90,7 +90,7 @@ export default function UserSetup({ setHeader, setForwardBtn, setBackBtn }) {
           navigate={navigate}
         />
       )}
-      {selectedOption === "my_team" && (
+      {selectedOption === 'my_team' && (
         <MyTeam
           setMultiUserLoginValid={setMultiUserLoginValid}
           myTeamSubmitRef={myTeamSubmitRef}
@@ -109,25 +109,25 @@ const JustMe = ({
   navigate,
 }) => {
   const [itemSelected, setItemSelected] = useState(false);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const { error } = await System.updateSystemPassword({
       usePassword: true,
-      newPassword: formData.get("password"),
+      newPassword: formData.get('password'),
     });
 
     if (error) {
-      showToast(`Failed to set password: ${error}`, "error");
+      showToast(`Failed to set password: ${error}`, 'error');
       return;
     }
 
     // Auto-request token with password that was just set so they
     // are not redirected to login after completion.
     const { token } = await System.requestToken({
-      password: formData.get("password"),
+      password: formData.get('password'),
     });
     window.localStorage.removeItem(AUTH_USER);
     window.localStorage.removeItem(AUTH_TIMESTAMP);
@@ -169,8 +169,8 @@ const JustMe = ({
             onClick={handleYes}
             className={`${
               enablePassword && itemSelected
-                ? "text-sky-400 border-sky-400/70"
-                : "text-white border-white/40"
+                ? 'text-sky-400 border-sky-400/70'
+                : 'text-white border-white/40'
             } min-w-[230px] h-11 p-4 rounded-[10px] border-2  justify-center items-center gap-[100px] inline-flex hover:border-sky-400/70 hover:text-sky-400 transition-all duration-300`}
           >
             <div className="text-center text-sm font-bold">Yes</div>
@@ -179,8 +179,8 @@ const JustMe = ({
             onClick={handleNo}
             className={`${
               !enablePassword && itemSelected
-                ? "text-sky-400 border-sky-400/70"
-                : "text-white border-white/40"
+                ? 'text-sky-400 border-sky-400/70'
+                : 'text-white border-white/40'
             } min-w-[230px] h-11 p-4 rounded-[10px] border-2  justify-center items-center gap-[100px] inline-flex hover:border-sky-400/70 hover:text-sky-400 transition-all duration-300`}
           >
             <div className="text-center text-sm font-bold">No</div>
@@ -210,7 +210,7 @@ const JustMe = ({
               <i>
                 It's important to save this password because there is no
                 recovery method.
-              </i>{" "}
+              </i>{' '}
             </div>
             <button
               type="submit"
@@ -226,20 +226,20 @@ const JustMe = ({
 };
 
 const MyTeam = ({ setMultiUserLoginValid, myTeamSubmitRef, navigate }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     const data = {
-      username: formData.get("username"),
-      password: formData.get("password"),
+      username: formData.get('username'),
+      password: formData.get('password'),
     };
     const { success, error } = await System.setupMultiUser(data);
     if (!success) {
-      showToast(`Error: ${error}`, "error");
+      showToast(`Error: ${error}`, 'error');
       return;
     }
 

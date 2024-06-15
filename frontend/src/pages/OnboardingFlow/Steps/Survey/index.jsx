@@ -1,25 +1,25 @@
-import { COMPLETE_QUESTIONNAIRE } from "@/utils/constants";
-import paths from "@/utils/paths";
-import { CheckCircle } from "@phosphor-icons/react";
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { COMPLETE_QUESTIONNAIRE } from '@/utils/constants';
+import paths from '@/utils/paths';
+import { CheckCircle } from '@phosphor-icons/react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const TITLE = "Welcome to FinetuneLLMs";
-const DESCRIPTION = "Help us make FinetuneLLMs built for your needs. Optional.";
+const TITLE = 'Welcome to FinetuneLLMs';
+const DESCRIPTION = 'Help us make FinetuneLLMs built for your needs. Optional.';
 
 async function sendQuestionnaire({ email, useCase, comment }) {
   if (import.meta.env.DEV) {
-    console.log("sendQuestionnaire", { email, useCase, comment });
+    console.log('sendQuestionnaire', { email, useCase, comment });
     return;
   }
 
   return fetch(`https://onboarding-wxich7363q-uc.a.run.app`, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({
       email,
       useCase,
       comment,
-      sourceId: "0VRjqHh6Vukqi0x0Vd0n/m8JuT7k8nOz",
+      sourceId: '0VRjqHh6Vukqi0x0Vd0n/m8JuT7k8nOz',
     }),
   })
     .then(() => {
@@ -32,7 +32,7 @@ async function sendQuestionnaire({ email, useCase, comment }) {
 }
 
 export default function Survey({ setHeader, setForwardBtn, setBackBtn }) {
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState('');
   const formRef = useRef(null);
   const navigate = useNavigate();
   const submitRef = useRef(null);
@@ -52,9 +52,9 @@ export default function Survey({ setHeader, setForwardBtn, setBackBtn }) {
     // via the requestSubmit() handler
     const formData = new FormData(formRef.current);
     if (
-      !!formData.get("email") ||
-      !!formData.get("use_case") ||
-      !!formData.get("comment")
+      !!formData.get('email') ||
+      !!formData.get('use_case') ||
+      !!formData.get('comment')
     ) {
       formRef.current.requestSubmit();
       return;
@@ -83,9 +83,9 @@ export default function Survey({ setHeader, setForwardBtn, setBackBtn }) {
     const formData = new FormData(form);
 
     await sendQuestionnaire({
-      email: formData.get("email"),
-      useCase: formData.get("use_case") || "other",
-      comment: formData.get("comment") || null,
+      email: formData.get('email'),
+      useCase: formData.get('use_case') || 'other',
+      comment: formData.get('comment') || null,
     });
 
     navigate(paths.onboarding.createWorkspace());
@@ -96,7 +96,7 @@ export default function Survey({ setHeader, setForwardBtn, setBackBtn }) {
       <form onSubmit={handleSubmit} ref={formRef} className="">
         <div className="md:min-w-[400px]">
           <label htmlFor="email" className="text-white text-base font-medium">
-            What's your email?{" "}
+            What's your email?{' '}
           </label>
           <input
             name="email"
@@ -112,25 +112,25 @@ export default function Survey({ setHeader, setForwardBtn, setBackBtn }) {
             className="text-white text-base font-medium"
             htmlFor="use_case"
           >
-            What will you use FinetuneLLMs for?{" "}
+            What will you use FinetuneLLMs for?{' '}
           </label>
           <div className="mt-2 gap-y-3 flex flex-col">
             <label
               className={`transition-all duration-300 w-full h-11 p-2.5 bg-white/10 rounded-lg flex justify-start items-center gap-2.5 cursor-pointer border border-transparent ${
-                selectedOption === "job" ? "border-white border-opacity-40" : ""
+                selectedOption === 'job' ? 'border-white border-opacity-40' : ''
               } hover:border-white/60`}
             >
               <input
                 type="radio"
                 name="use_case"
-                value={"job"}
-                checked={selectedOption === "job"}
+                value={'job'}
+                checked={selectedOption === 'job'}
                 onChange={(e) => setSelectedOption(e.target.value)}
                 className="hidden"
               />
               <div
                 className={`w-4 h-4 rounded-full border-2 border-white mr-2 ${
-                  selectedOption === "job" ? "bg-white" : ""
+                  selectedOption === 'job' ? 'bg-white' : ''
                 }`}
               ></div>
               <div className="text-white text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
@@ -139,22 +139,22 @@ export default function Survey({ setHeader, setForwardBtn, setBackBtn }) {
             </label>
             <label
               className={`transition-all duration-300 w-full h-11 p-2.5 bg-white/10 rounded-lg flex justify-start items-center gap-2.5 cursor-pointer border border-transparent ${
-                selectedOption === "personal"
-                  ? "border-white border-opacity-40"
-                  : ""
+                selectedOption === 'personal'
+                  ? 'border-white border-opacity-40'
+                  : ''
               } hover:border-white/60`}
             >
               <input
                 type="radio"
                 name="use_case"
-                value={"personal"}
-                checked={selectedOption === "personal"}
+                value={'personal'}
+                checked={selectedOption === 'personal'}
                 onChange={(e) => setSelectedOption(e.target.value)}
                 className="hidden"
               />
               <div
                 className={`w-4 h-4 rounded-full border-2 border-white mr-2 ${
-                  selectedOption === "personal" ? "bg-white" : ""
+                  selectedOption === 'personal' ? 'bg-white' : ''
                 }`}
               ></div>
               <div className="text-white text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
@@ -163,22 +163,22 @@ export default function Survey({ setHeader, setForwardBtn, setBackBtn }) {
             </label>
             <label
               className={`transition-all duration-300 w-full h-11 p-2.5 bg-white/10 rounded-lg flex justify-start items-center gap-2.5 cursor-pointer border border-transparent ${
-                selectedOption === "other"
-                  ? "border-white border-opacity-40"
-                  : ""
+                selectedOption === 'other'
+                  ? 'border-white border-opacity-40'
+                  : ''
               } hover:border-white/60`}
             >
               <input
                 type="radio"
                 name="use_case"
-                value={"other"}
-                checked={selectedOption === "other"}
+                value={'other'}
+                checked={selectedOption === 'other'}
                 onChange={(e) => setSelectedOption(e.target.value)}
                 className="hidden"
               />
               <div
                 className={`w-4 h-4 rounded-full border-2 border-white mr-2 ${
-                  selectedOption === "other" ? "bg-white" : ""
+                  selectedOption === 'other' ? 'bg-white' : ''
                 }`}
               ></div>
               <div className="text-white text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
@@ -190,7 +190,7 @@ export default function Survey({ setHeader, setForwardBtn, setBackBtn }) {
 
         <div className="mt-8">
           <label htmlFor="comment" className="text-white text-base font-medium">
-            Any comments for the team?{" "}
+            Any comments for the team?{' '}
             <span className="text-neutral-400 text-base font-light">
               (Optional)
             </span>

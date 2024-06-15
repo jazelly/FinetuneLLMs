@@ -1,4 +1,4 @@
-import { useIsAgentSessionActive } from "@/utils/chat/agent";
+import { useIsAgentSessionActive } from '@/utils/chat/agent';
 
 export default function EndAgentSession({ setShowing, sendCommand }) {
   const isActiveAgentSession = useIsAgentSessionActive();
@@ -8,7 +8,7 @@ export default function EndAgentSession({ setShowing, sendCommand }) {
     <button
       onClick={() => {
         setShowing(false);
-        sendCommand("/exit", true);
+        sendCommand('/exit', true);
       }}
       className="w-full hover:cursor-pointer hover:bg-zinc-700 px-2 py-2 rounded-xl flex flex-col justify-start"
     >

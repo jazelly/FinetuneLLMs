@@ -1,8 +1,8 @@
-import truncate from "truncate";
-import { X, Trash } from "@phosphor-icons/react";
-import System from "@/models/system";
-import ModalWrapper from "@/components/ModalWrapper";
-import { useModal } from "@/hooks/useModal";
+import truncate from 'truncate';
+import { X, Trash } from '@phosphor-icons/react';
+import System from '@/models/system';
+import ModalWrapper from '@/components/ModalWrapper';
+import { useModal } from '@/hooks/useModal';
 
 export default function ChatRow({ chat, onDelete }) {
   const {

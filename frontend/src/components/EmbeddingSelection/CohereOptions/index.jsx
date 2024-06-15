@@ -11,7 +11,7 @@ export default function CohereEmbeddingOptions({ settings }) {
             name="CohereApiKey"
             className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
             placeholder="Cohere API Key"
-            defaultValue={settings?.CohereApiKey ? "*".repeat(20) : ""}
+            defaultValue={settings?.CohereApiKey ? '*'.repeat(20) : ''}
             required={true}
             autoComplete="off"
             spellCheck={false}
@@ -28,13 +28,13 @@ export default function CohereEmbeddingOptions({ settings }) {
           >
             <optgroup label="Available embedding models">
               {[
-                "embed-english-v3.0",
-                "embed-multilingual-v3.0",
-                "embed-english-light-v3.0",
-                "embed-multilingual-light-v3.0",
-                "embed-english-v2.0",
-                "embed-english-light-v2.0",
-                "embed-multilingual-v2.0",
+                'embed-english-v3.0',
+                'embed-multilingual-v3.0',
+                'embed-english-light-v3.0',
+                'embed-multilingual-light-v3.0',
+                'embed-english-v2.0',
+                'embed-english-light-v2.0',
+                'embed-multilingual-v2.0',
               ].map((model) => {
                 return (
                   <option

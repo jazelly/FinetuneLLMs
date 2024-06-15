@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import SlashCommandIcon from "./icons/slash-commands-icon.svg";
-import { Tooltip } from "react-tooltip";
-import ResetCommand from "./reset";
-import EndAgentSession from "./endAgentSession";
-import SlashPresets from "./SlashPresets";
+import { useEffect, useRef, useState } from 'react';
+import SlashCommandIcon from './icons/slash-commands-icon.svg';
+import { Tooltip } from 'react-tooltip';
+import ResetCommand from './reset';
+import EndAgentSession from './endAgentSession';
+import SlashPresets from './SlashPresets';
 
 export default function SlashCommandsButton({ showing, setShowSlashCommand }) {
   return (
@@ -13,7 +13,7 @@ export default function SlashCommandsButton({ showing, setShowSlashCommand }) {
       data-tooltip-content="View all available slash commands for chatting."
       onClick={() => setShowSlashCommand(!showing)}
       className={`flex justify-center items-center opacity-60 hover:opacity-100 cursor-pointer ${
-        showing ? "!opacity-100" : ""
+        showing ? '!opacity-100' : ''
       }`}
     >
       <img
@@ -36,13 +36,13 @@ export function SlashCommands({ showing, setShowing, sendCommand }) {
   useEffect(() => {
     function listenForOutsideClick() {
       if (!showing || !cmdRef.current) return false;
-      document.addEventListener("click", closeIfOutside);
+      document.addEventListener('click', closeIfOutside);
     }
     listenForOutsideClick();
   }, [showing, cmdRef.current]);
 
   const closeIfOutside = ({ target }) => {
-    if (target.id === "slash-cmd-btn") return;
+    if (target.id === 'slash-cmd-btn') return;
     const isOutside = !cmdRef?.current?.contains(target);
     if (!isOutside) return;
     setShowing(false);

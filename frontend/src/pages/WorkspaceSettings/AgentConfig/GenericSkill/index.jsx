@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 export default function GenericSkill({
   title,
   description,
@@ -16,7 +16,7 @@ export default function GenericSkill({
           </label>
           <label
             className={`border-none relative inline-flex items-center mt-2 ${
-              disabled ? "cursor-not-allowed" : "cursor-pointer"
+              disabled ? 'cursor-not-allowed' : 'cursor-pointer'
             }`}
           >
             <input

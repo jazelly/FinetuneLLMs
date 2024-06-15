@@ -1,7 +1,7 @@
-import showToast from "@/utils/toast";
-import { DownloadSimple, Key } from "@phosphor-icons/react";
-import { saveAs } from "file-saver";
-import { useState } from "react";
+import showToast from '@/utils/toast';
+import { DownloadSimple, Key } from '@phosphor-icons/react';
+import { saveAs } from 'file-saver';
+import { useState } from 'react';
 
 export default function RecoveryCodeModal({
   recoveryCodes,
@@ -11,8 +11,8 @@ export default function RecoveryCodeModal({
   const [downloadClicked, setDownloadClicked] = useState(false);
 
   const downloadRecoveryCodes = () => {
-    const blob = new Blob([recoveryCodes.join("\n")], { type: "text/plain" });
-    saveAs(blob, "recovery_codes.txt");
+    const blob = new Blob([recoveryCodes.join('\n')], { type: 'text/plain' });
+    saveAs(blob, 'recovery_codes.txt');
     setDownloadClicked(true);
   };
 
@@ -24,8 +24,8 @@ export default function RecoveryCodeModal({
   };
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(recoveryCodes.join(",\n")).then(() => {
-      showToast("Recovery codes copied to clipboard", "success", {
+    navigator.clipboard.writeText(recoveryCodes.join(',\n')).then(() => {
+      showToast('Recovery codes copied to clipboard', 'success', {
         clear: true,
       });
     });
@@ -46,7 +46,7 @@ export default function RecoveryCodeModal({
         <div className="mt-4">
           <p className="text-sm text-white flex flex-col">
             In order to reset your password in the future, you will need these
-            recovery codes. Download or copy your recovery codes to save them.{" "}
+            recovery codes. Download or copy your recovery codes to save them.{' '}
             <br />
             <b className="mt-4">These recovery codes are only shown once!</b>
           </p>
@@ -72,7 +72,7 @@ export default function RecoveryCodeModal({
           onClick={downloadClicked ? handleClose : downloadRecoveryCodes}
         >
           {downloadClicked ? (
-            "Close"
+            'Close'
           ) : (
             <>
               <DownloadSimple weight="bold" size={18} />

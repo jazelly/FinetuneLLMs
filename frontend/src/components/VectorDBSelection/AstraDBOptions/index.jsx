@@ -28,7 +28,7 @@ export default function AstraDBOptions({ settings }) {
             className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
             placeholder="AstraCS:..."
             defaultValue={
-              settings?.AstraDBApplicationToken ? "*".repeat(20) : ""
+              settings?.AstraDBApplicationToken ? '*'.repeat(20) : ''
             }
             required={true}
             autoComplete="off"

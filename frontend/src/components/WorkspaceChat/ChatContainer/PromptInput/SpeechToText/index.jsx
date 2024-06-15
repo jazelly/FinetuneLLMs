@@ -1,10 +1,10 @@
-import { useEffect } from "react";
-import { Microphone } from "@phosphor-icons/react";
-import { Tooltip } from "react-tooltip";
-import _regeneratorRuntime from "regenerator-runtime";
+import { useEffect } from 'react';
+import { Microphone } from '@phosphor-icons/react';
+import { Tooltip } from 'react-tooltip';
+import _regeneratorRuntime from 'regenerator-runtime';
 import SpeechRecognition, {
   useSpeechRecognition,
-} from "react-speech-recognition";
+} from 'react-speech-recognition';
 
 let timeout;
 const SILENCE_INTERVAL = 3_200; // wait in seconds of silence before closing.
@@ -23,7 +23,7 @@ export default function SpeechToText({ sendCommand }) {
   function startSTTSession() {
     if (!isMicrophoneAvailable) {
       alert(
-        "FinetuneLLMs does not have access to microphone. Please enable for this site to use this feature."
+        'FinetuneLLMs does not have access to microphone. Please enable for this site to use this feature.'
       );
       return;
     }
@@ -31,7 +31,7 @@ export default function SpeechToText({ sendCommand }) {
     resetTranscript();
     SpeechRecognition.startListening({
       continuous: browserSupportsContinuousListening,
-      language: window?.navigator?.language ?? "en-US",
+      language: window?.navigator?.language ?? 'en-US',
     });
   }
 
@@ -64,7 +64,7 @@ export default function SpeechToText({ sendCommand }) {
       aria-label="Speak your prompt"
       onClick={listening ? endTTSSession : startSTTSession}
       className={`relative flex justify-center items-center opacity-60 hover:opacity-100 cursor-pointer ${
-        !!listening ? "!opacity-100" : ""
+        !!listening ? '!opacity-100' : ''
       }`}
     >
       <Microphone

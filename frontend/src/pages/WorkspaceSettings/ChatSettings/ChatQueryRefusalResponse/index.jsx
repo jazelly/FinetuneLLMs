@@ -1,4 +1,4 @@
-import { chatQueryRefusalResponse } from "@/utils/chat";
+import { chatQueryRefusalResponse } from '@/utils/chat';
 
 export default function ChatQueryRefusalResponse({ workspace, setHasChanges }) {
   return (
@@ -8,7 +8,7 @@ export default function ChatQueryRefusalResponse({ workspace, setHasChanges }) {
           Query mode refusal response
         </label>
         <p className="text-white text-opacity-60 text-xs font-medium py-1.5">
-          When in <code className="bg-zinc-900 p-0.5 rounded-sm">query</code>{" "}
+          When in <code className="bg-zinc-900 p-0.5 rounded-sm">query</code>{' '}
           mode, you may want to return a custom refusal response when no context
           is found.
         </p>

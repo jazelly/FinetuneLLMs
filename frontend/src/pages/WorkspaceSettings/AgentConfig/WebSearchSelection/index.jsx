@@ -1,38 +1,38 @@
-import React, { useEffect, useRef, useState } from "react";
-import FinetuneLLMsIcon from "@/media/logo/anything-llm-icon.png";
-import GoogleSearchIcon from "./icons/google.png";
-import SerperDotDevIcon from "./icons/serper.png";
-import { CaretUpDown, MagnifyingGlass, X } from "@phosphor-icons/react";
-import SearchProviderItem from "./SearchProviderItem";
+import React, { useEffect, useRef, useState } from 'react';
+import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import GoogleSearchIcon from './icons/google.png';
+import SerperDotDevIcon from './icons/serper.png';
+import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
+import SearchProviderItem from './SearchProviderItem';
 import {
   SerperDotDevOptions,
   GoogleSearchOptions,
-} from "./SearchProviderOptions";
+} from './SearchProviderOptions';
 
 const SEARCH_PROVIDERS = [
   {
-    name: "Please make a selection",
-    value: "none",
+    name: 'Please make a selection',
+    value: 'none',
     logo: FinetuneLLMsIcon,
     options: () => <React.Fragment />,
     description:
-      "Web search will be disabled until a provider and keys are provided.",
+      'Web search will be disabled until a provider and keys are provided.',
   },
   {
-    name: "Google Search Engine",
-    value: "google-search-engine",
+    name: 'Google Search Engine',
+    value: 'google-search-engine',
     logo: GoogleSearchIcon,
     options: (settings) => <GoogleSearchOptions settings={settings} />,
     description:
-      "Web search powered by a custom Google Search Engine. Free for 100 queries per day.",
+      'Web search powered by a custom Google Search Engine. Free for 100 queries per day.',
   },
   {
-    name: "Serper.dev",
-    value: "serper-dot-dev",
+    name: 'Serper.dev',
+    value: 'serper-dot-dev',
     logo: SerperDotDevIcon,
     options: (settings) => <SerperDotDevOptions settings={settings} />,
     description:
-      "Serper.dev web-search. Free account with a 2,500 calls, but then paid.",
+      'Serper.dev web-search. Free account with a 2,500 calls, but then paid.',
   },
 ];
 
@@ -44,20 +44,20 @@ export default function AgentWebSearchSelection({
 }) {
   const searchInputRef = useRef(null);
   const [filteredResults, setFilteredResults] = useState([]);
-  const [selectedProvider, setSelectedProvider] = useState("none");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedProvider, setSelectedProvider] = useState('none');
+  const [searchQuery, setSearchQuery] = useState('');
   const [searchMenuOpen, setSearchMenuOpen] = useState(false);
 
   function updateChoice(selection) {
-    setSearchQuery("");
+    setSearchQuery('');
     setSelectedProvider(selection);
     setSearchMenuOpen(false);
   }
 
   function handleXButton() {
     if (searchQuery.length > 0) {
-      setSearchQuery("");
-      if (searchInputRef.current) searchInputRef.current.value = "";
+      setSearchQuery('');
+      if (searchInputRef.current) searchInputRef.current.value = '';
     } else {
       setSearchMenuOpen(!searchMenuOpen);
     }
@@ -71,7 +71,7 @@ export default function AgentWebSearchSelection({
   }, [searchQuery, selectedProvider]);
 
   useEffect(() => {
-    setSelectedProvider(settings?.preferences?.agent_search_provider ?? "none");
+    setSelectedProvider(settings?.preferences?.agent_search_provider ?? 'none');
   }, [settings?.preferences?.agent_search_provider]);
 
   const selectedSearchProviderObject = SEARCH_PROVIDERS.find(
@@ -134,7 +134,7 @@ export default function AgentWebSearchSelection({
                     onChange={(e) => setSearchQuery(e.target.value)}
                     ref={searchInputRef}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") e.preventDefault();
+                      if (e.key === 'Enter') e.preventDefault();
                     }}
                   />
                   <X
@@ -183,7 +183,7 @@ export default function AgentWebSearchSelection({
             </button>
           )}
         </div>
-        {selectedProvider !== "none" && (
+        {selectedProvider !== 'none' && (
           <div className="mt-4 flex flex-col gap-y-1">
             {selectedSearchProviderObject.options(settings)}
           </div>

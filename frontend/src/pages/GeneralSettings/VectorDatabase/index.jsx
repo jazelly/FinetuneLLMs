@@ -1,30 +1,30 @@
-import React, { useState, useEffect, useRef } from "react";
-import Sidebar from "@/components/SettingsSidebar";
-import { isMobile } from "react-device-detect";
-import System from "@/models/system";
-import showToast from "@/utils/toast";
-import ChromaLogo from "@/media/vectordbs/chroma.png";
-import PineconeLogo from "@/media/vectordbs/pinecone.png";
-import LanceDbLogo from "@/media/vectordbs/lancedb.png";
-import WeaviateLogo from "@/media/vectordbs/weaviate.png";
-import QDrantLogo from "@/media/vectordbs/qdrant.png";
-import MilvusLogo from "@/media/vectordbs/milvus.png";
-import ZillizLogo from "@/media/vectordbs/zilliz.png";
-import AstraDBLogo from "@/media/vectordbs/astraDB.png";
-import PreLoader from "@/components/Preloader";
-import ChangeWarningModal from "@/components/ChangeWarning";
-import { CaretUpDown, MagnifyingGlass, X } from "@phosphor-icons/react";
-import LanceDBOptions from "@/components/VectorDBSelection/LanceDBOptions";
-import PineconeDBOptions from "@/components/VectorDBSelection/PineconeDBOptions";
-import QDrantDBOptions from "@/components/VectorDBSelection/QDrantDBOptions";
-import WeaviateDBOptions from "@/components/VectorDBSelection/WeaviateDBOptions";
-import VectorDBItem from "@/components/VectorDBSelection/VectorDBItem";
-import MilvusDBOptions from "@/components/VectorDBSelection/MilvusDBOptions";
-import ZillizCloudOptions from "@/components/VectorDBSelection/ZillizCloudOptions";
-import { useModal } from "@/hooks/useModal";
-import ModalWrapper from "@/components/ModalWrapper";
-import AstraDBOptions from "@/components/VectorDBSelection/AstraDBOptions";
-import CTAButton from "@/components/CTAButton";
+import React, { useState, useEffect, useRef } from 'react';
+import Sidebar from '@/components/SettingsSidebar';
+import { isMobile } from 'react-device-detect';
+import System from '@/models/system';
+import showToast from '@/utils/toast';
+import ChromaLogo from '@/media/vectordbs/chroma.png';
+import PineconeLogo from '@/media/vectordbs/pinecone.png';
+import LanceDbLogo from '@/media/vectordbs/lancedb.png';
+import WeaviateLogo from '@/media/vectordbs/weaviate.png';
+import QDrantLogo from '@/media/vectordbs/qdrant.png';
+import MilvusLogo from '@/media/vectordbs/milvus.png';
+import ZillizLogo from '@/media/vectordbs/zilliz.png';
+import AstraDBLogo from '@/media/vectordbs/astraDB.png';
+import PreLoader from '@/components/Preloader';
+import ChangeWarningModal from '@/components/ChangeWarning';
+import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
+import LanceDBOptions from '@/components/VectorDBSelection/LanceDBOptions';
+import PineconeDBOptions from '@/components/VectorDBSelection/PineconeDBOptions';
+import QDrantDBOptions from '@/components/VectorDBSelection/QDrantDBOptions';
+import WeaviateDBOptions from '@/components/VectorDBSelection/WeaviateDBOptions';
+import VectorDBItem from '@/components/VectorDBSelection/VectorDBItem';
+import MilvusDBOptions from '@/components/VectorDBSelection/MilvusDBOptions';
+import ZillizCloudOptions from '@/components/VectorDBSelection/ZillizCloudOptions';
+import { useModal } from '@/hooks/useModal';
+import ModalWrapper from '@/components/ModalWrapper';
+import AstraDBOptions from '@/components/VectorDBSelection/AstraDBOptions';
+import CTAButton from '@/components/CTAButton';
 
 export default function GeneralVectorDatabase() {
   const [saving, setSaving] = useState(false);
@@ -32,7 +32,7 @@ export default function GeneralVectorDatabase() {
   const [hasEmbeddings, setHasEmbeddings] = useState(false);
   const [settings, setSettings] = useState({});
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredVDBs, setFilteredVDBs] = useState([]);
   const [selectedVDB, setSelectedVDB] = useState(null);
   const [searchMenuOpen, setSearchMenuOpen] = useState(false);
@@ -50,7 +50,7 @@ export default function GeneralVectorDatabase() {
 
   const handleSaveSettings = async () => {
     setSaving(true);
-    const form = document.getElementById("vectordb-form");
+    const form = document.getElementById('vectordb-form');
     const settingsData = {};
     const formData = new FormData(form);
     settingsData.VectorDB = selectedVDB;
@@ -58,10 +58,10 @@ export default function GeneralVectorDatabase() {
 
     const { error } = await System.updateSystem(settingsData);
     if (error) {
-      showToast(`Failed to save vector database settings: ${error}`, "error");
+      showToast(`Failed to save vector database settings: ${error}`, 'error');
       setHasChanges(true);
     } else {
-      showToast("Vector database preferences saved successfully.", "success");
+      showToast('Vector database preferences saved successfully.', 'success');
       setHasChanges(false);
     }
     setSaving(false);
@@ -69,7 +69,7 @@ export default function GeneralVectorDatabase() {
   };
 
   const updateVectorChoice = (selection) => {
-    setSearchQuery("");
+    setSearchQuery('');
     setSelectedVDB(selection);
     setSearchMenuOpen(false);
     setHasChanges(true);
@@ -77,8 +77,8 @@ export default function GeneralVectorDatabase() {
 
   const handleXButton = () => {
     if (searchQuery.length > 0) {
-      setSearchQuery("");
-      if (searchInputRef.current) searchInputRef.current.value = "";
+      setSearchQuery('');
+      if (searchInputRef.current) searchInputRef.current.value = '';
     } else {
       setSearchMenuOpen(!searchMenuOpen);
     }
@@ -88,7 +88,7 @@ export default function GeneralVectorDatabase() {
     async function fetchKeys() {
       const _settings = await System.keys();
       setSettings(_settings);
-      setSelectedVDB(_settings?.VectorDB || "lancedb");
+      setSelectedVDB(_settings?.VectorDB || 'lancedb');
       setHasEmbeddings(_settings?.HasExistingEmbeddings || false);
       setLoading(false);
     }
@@ -104,56 +104,56 @@ export default function GeneralVectorDatabase() {
 
   const VECTOR_DBS = [
     {
-      name: "LanceDB",
-      value: "lancedb",
+      name: 'LanceDB',
+      value: 'lancedb',
       logo: LanceDbLogo,
       options: <LanceDBOptions />,
       description:
-        "100% local vector DB that runs on the same instance as FinetuneLLMs.",
+        '100% local vector DB that runs on the same instance as FinetuneLLMs.',
     },
     {
-      name: "Pinecone",
-      value: "pinecone",
+      name: 'Pinecone',
+      value: 'pinecone',
       logo: PineconeLogo,
       options: <PineconeDBOptions settings={settings} />,
-      description: "100% cloud-based vector database for enterprise use cases.",
+      description: '100% cloud-based vector database for enterprise use cases.',
     },
     {
-      name: "Zilliz Cloud",
-      value: "zilliz",
+      name: 'Zilliz Cloud',
+      value: 'zilliz',
       logo: ZillizLogo,
       options: <ZillizCloudOptions settings={settings} />,
       description:
-        "Cloud hosted vector database built for enterprise with SOC 2 compliance.",
+        'Cloud hosted vector database built for enterprise with SOC 2 compliance.',
     },
     {
-      name: "QDrant",
-      value: "qdrant",
+      name: 'QDrant',
+      value: 'qdrant',
       logo: QDrantLogo,
       options: <QDrantDBOptions settings={settings} />,
-      description: "Open source local and distributed cloud vector database.",
+      description: 'Open source local and distributed cloud vector database.',
     },
     {
-      name: "Weaviate",
-      value: "weaviate",
+      name: 'Weaviate',
+      value: 'weaviate',
       logo: WeaviateLogo,
       options: <WeaviateDBOptions settings={settings} />,
       description:
-        "Open source local and cloud hosted multi-modal vector database.",
+        'Open source local and cloud hosted multi-modal vector database.',
     },
     {
-      name: "Milvus",
-      value: "milvus",
+      name: 'Milvus',
+      value: 'milvus',
       logo: MilvusLogo,
       options: <MilvusDBOptions settings={settings} />,
-      description: "Open-source, highly scalable, and blazing fast.",
+      description: 'Open-source, highly scalable, and blazing fast.',
     },
     {
-      name: "AstraDB",
-      value: "astra",
+      name: 'AstraDB',
+      value: 'astra',
       logo: AstraDBLogo,
       options: <AstraDBOptions settings={settings} />,
-      description: "Vector Search for Real-world GenAI.",
+      description: 'Vector Search for Real-world GenAI.',
     },
   ];
 
@@ -164,7 +164,7 @@ export default function GeneralVectorDatabase() {
       <Sidebar />
       {loading ? (
         <div
-          style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+          style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <div className="w-full h-full flex justify-center items-center">
@@ -173,7 +173,7 @@ export default function GeneralVectorDatabase() {
         </div>
       ) : (
         <div
-          style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+          style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <form
@@ -200,7 +200,7 @@ export default function GeneralVectorDatabase() {
                     onClick={() => handleSubmit()}
                     className="mt-3 mr-0 -mb-14 z-10"
                   >
-                    {saving ? "Saving..." : "Save changes"}
+                    {saving ? 'Saving...' : 'Save changes'}
                   </CTAButton>
                 )}
               </div>
@@ -232,7 +232,7 @@ export default function GeneralVectorDatabase() {
                           onChange={(e) => setSearchQuery(e.target.value)}
                           ref={searchInputRef}
                           onKeyDown={(e) => {
-                            if (e.key === "Enter") e.preventDefault();
+                            if (e.key === 'Enter') e.preventDefault();
                           }}
                         />
                         <X

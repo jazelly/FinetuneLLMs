@@ -1,170 +1,170 @@
-import PreLoader from "@/components/Preloader";
-import System from "@/models/system";
-import FinetuneLLMsIcon from "@/media/logo/anything-llm-icon.png";
-import OpenAiLogo from "@/media/llmprovider/openai.png";
-import GenericOpenAiLogo from "@/media/llmprovider/generic-openai.png";
-import AzureOpenAiLogo from "@/media/llmprovider/azure.png";
-import AnthropicLogo from "@/media/llmprovider/anthropic.png";
-import GeminiLogo from "@/media/llmprovider/gemini.png";
-import OllamaLogo from "@/media/llmprovider/ollama.png";
-import TogetherAILogo from "@/media/llmprovider/togetherai.png";
-import LMStudioLogo from "@/media/llmprovider/lmstudio.png";
-import LocalAiLogo from "@/media/llmprovider/localai.png";
-import MistralLogo from "@/media/llmprovider/mistral.jpeg";
-import HuggingFaceLogo from "@/media/llmprovider/huggingface.png";
-import PerplexityLogo from "@/media/llmprovider/perplexity.png";
-import OpenRouterLogo from "@/media/llmprovider/openrouter.jpeg";
-import GroqLogo from "@/media/llmprovider/groq.png";
-import KoboldCPPLogo from "@/media/llmprovider/koboldcpp.png";
-import TextGenWebUILogo from "@/media/llmprovider/text-generation-webui.png";
-import CohereLogo from "@/media/llmprovider/cohere.png";
-import ZillizLogo from "@/media/vectordbs/zilliz.png";
-import AstraDBLogo from "@/media/vectordbs/astraDB.png";
-import ChromaLogo from "@/media/vectordbs/chroma.png";
-import PineconeLogo from "@/media/vectordbs/pinecone.png";
-import LanceDbLogo from "@/media/vectordbs/lancedb.png";
-import WeaviateLogo from "@/media/vectordbs/weaviate.png";
-import QDrantLogo from "@/media/vectordbs/qdrant.png";
-import MilvusLogo from "@/media/vectordbs/milvus.png";
-import React, { useState, useEffect } from "react";
-import paths from "@/utils/paths";
-import { useNavigate } from "react-router-dom";
+import PreLoader from '@/components/Preloader';
+import System from '@/models/system';
+import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import OpenAiLogo from '@/media/llmprovider/openai.png';
+import GenericOpenAiLogo from '@/media/llmprovider/generic-openai.png';
+import AzureOpenAiLogo from '@/media/llmprovider/azure.png';
+import AnthropicLogo from '@/media/llmprovider/anthropic.png';
+import GeminiLogo from '@/media/llmprovider/gemini.png';
+import OllamaLogo from '@/media/llmprovider/ollama.png';
+import TogetherAILogo from '@/media/llmprovider/togetherai.png';
+import LMStudioLogo from '@/media/llmprovider/lmstudio.png';
+import LocalAiLogo from '@/media/llmprovider/localai.png';
+import MistralLogo from '@/media/llmprovider/mistral.jpeg';
+import HuggingFaceLogo from '@/media/llmprovider/huggingface.png';
+import PerplexityLogo from '@/media/llmprovider/perplexity.png';
+import OpenRouterLogo from '@/media/llmprovider/openrouter.jpeg';
+import GroqLogo from '@/media/llmprovider/groq.png';
+import KoboldCPPLogo from '@/media/llmprovider/koboldcpp.png';
+import TextGenWebUILogo from '@/media/llmprovider/text-generation-webui.png';
+import CohereLogo from '@/media/llmprovider/cohere.png';
+import ZillizLogo from '@/media/vectordbs/zilliz.png';
+import AstraDBLogo from '@/media/vectordbs/astraDB.png';
+import ChromaLogo from '@/media/vectordbs/chroma.png';
+import PineconeLogo from '@/media/vectordbs/pinecone.png';
+import LanceDbLogo from '@/media/vectordbs/lancedb.png';
+import WeaviateLogo from '@/media/vectordbs/weaviate.png';
+import QDrantLogo from '@/media/vectordbs/qdrant.png';
+import MilvusLogo from '@/media/vectordbs/milvus.png';
+import React, { useState, useEffect } from 'react';
+import paths from '@/utils/paths';
+import { useNavigate } from 'react-router-dom';
 
-const TITLE = "Data Handling & Privacy";
+const TITLE = 'Data Handling & Privacy';
 const DESCRIPTION =
-  "We are committed to transparency and control when it comes to your personal data.";
+  'We are committed to transparency and control when it comes to your personal data.';
 export const LLM_SELECTION_PRIVACY = {
   openai: {
-    name: "OpenAI",
+    name: 'OpenAI',
     description: [
-      "Your chats will not be used for training",
-      "Your prompts and document text used in response creation are visible to OpenAI",
+      'Your chats will not be used for training',
+      'Your prompts and document text used in response creation are visible to OpenAI',
     ],
     logo: OpenAiLogo,
   },
   azure: {
-    name: "Azure OpenAI",
+    name: 'Azure OpenAI',
     description: [
-      "Your chats will not be used for training",
-      "Your text and embedding text are not visible to OpenAI or Microsoft",
+      'Your chats will not be used for training',
+      'Your text and embedding text are not visible to OpenAI or Microsoft',
     ],
     logo: AzureOpenAiLogo,
   },
   anthropic: {
-    name: "Anthropic",
+    name: 'Anthropic',
     description: [
-      "Your chats will not be used for training",
-      "Your prompts and document text used in response creation are visible to Anthropic",
+      'Your chats will not be used for training',
+      'Your prompts and document text used in response creation are visible to Anthropic',
     ],
     logo: AnthropicLogo,
   },
   gemini: {
-    name: "Google Gemini",
+    name: 'Google Gemini',
     description: [
-      "Your chats are de-identified and used in training",
-      "Your prompts and document text used in response creation are visible to Google",
+      'Your chats are de-identified and used in training',
+      'Your prompts and document text used in response creation are visible to Google',
     ],
     logo: GeminiLogo,
   },
   lmstudio: {
-    name: "LMStudio",
+    name: 'LMStudio',
     description: [
-      "Your model and chats are only accessible on the server running LMStudio",
+      'Your model and chats are only accessible on the server running LMStudio',
     ],
     logo: LMStudioLogo,
   },
   localai: {
-    name: "LocalAI",
+    name: 'LocalAI',
     description: [
-      "Your model and chats are only accessible on the server running LocalAI",
+      'Your model and chats are only accessible on the server running LocalAI',
     ],
     logo: LocalAiLogo,
   },
   ollama: {
-    name: "Ollama",
+    name: 'Ollama',
     description: [
-      "Your model and chats are only accessible on the machine running Ollama models",
+      'Your model and chats are only accessible on the machine running Ollama models',
     ],
     logo: OllamaLogo,
   },
   native: {
-    name: "Custom Llama Model",
+    name: 'Custom Llama Model',
     description: [
-      "Your model and chats are only accessible on this FinetuneLLMs instance",
+      'Your model and chats are only accessible on this FinetuneLLMs instance',
     ],
     logo: FinetuneLLMsIcon,
   },
   togetherai: {
-    name: "TogetherAI",
+    name: 'TogetherAI',
     description: [
-      "Your chats will not be used for training",
-      "Your prompts and document text used in response creation are visible to TogetherAI",
+      'Your chats will not be used for training',
+      'Your prompts and document text used in response creation are visible to TogetherAI',
     ],
     logo: TogetherAILogo,
   },
   mistral: {
-    name: "Mistral",
+    name: 'Mistral',
     description: [
-      "Your prompts and document text used in response creation are visible to Mistral",
+      'Your prompts and document text used in response creation are visible to Mistral',
     ],
     logo: MistralLogo,
   },
   huggingface: {
-    name: "HuggingFace",
+    name: 'HuggingFace',
     description: [
-      "Your prompts and document text used in response are sent to your HuggingFace managed endpoint",
+      'Your prompts and document text used in response are sent to your HuggingFace managed endpoint',
     ],
     logo: HuggingFaceLogo,
   },
   perplexity: {
-    name: "Perplexity AI",
+    name: 'Perplexity AI',
     description: [
-      "Your chats will not be used for training",
-      "Your prompts and document text used in response creation are visible to Perplexity AI",
+      'Your chats will not be used for training',
+      'Your prompts and document text used in response creation are visible to Perplexity AI',
     ],
     logo: PerplexityLogo,
   },
   openrouter: {
-    name: "OpenRouter",
+    name: 'OpenRouter',
     description: [
-      "Your chats will not be used for training",
-      "Your prompts and document text used in response creation are visible to OpenRouter",
+      'Your chats will not be used for training',
+      'Your prompts and document text used in response creation are visible to OpenRouter',
     ],
     logo: OpenRouterLogo,
   },
   groq: {
-    name: "Groq",
+    name: 'Groq',
     description: [
-      "Your chats will not be used for training",
-      "Your prompts and document text used in response creation are visible to Groq",
+      'Your chats will not be used for training',
+      'Your prompts and document text used in response creation are visible to Groq',
     ],
     logo: GroqLogo,
   },
   koboldcpp: {
-    name: "KoboldCPP",
+    name: 'KoboldCPP',
     description: [
-      "Your model and chats are only accessible on the server running KoboldCPP",
+      'Your model and chats are only accessible on the server running KoboldCPP',
     ],
     logo: KoboldCPPLogo,
   },
   textgenwebui: {
-    name: "Oobabooga Web UI",
+    name: 'Oobabooga Web UI',
     description: [
-      "Your model and chats are only accessible on the server running the Oobabooga Text Generation Web UI",
+      'Your model and chats are only accessible on the server running the Oobabooga Text Generation Web UI',
     ],
     logo: TextGenWebUILogo,
   },
-  "generic-openai": {
-    name: "Generic OpenAI compatible service",
+  'generic-openai': {
+    name: 'Generic OpenAI compatible service',
     description: [
-      "Data is shared according to the terms of service applicable with your generic endpoint provider.",
+      'Data is shared according to the terms of service applicable with your generic endpoint provider.',
     ],
     logo: GenericOpenAiLogo,
   },
   cohere: {
-    name: "Cohere",
+    name: 'Cohere',
     description: [
-      "Data is shared according to the terms of service of cohere.com and your localities privacy laws.",
+      'Data is shared according to the terms of service of cohere.com and your localities privacy laws.',
     ],
     logo: CohereLogo,
   },
@@ -172,52 +172,52 @@ export const LLM_SELECTION_PRIVACY = {
 
 export const VECTOR_DB_PRIVACY = {
   pinecone: {
-    name: "Pinecone",
+    name: 'Pinecone',
     description: [
       "Your vectors and document text are stored on Pinecone's servers",
-      "Access to your data is managed by Pinecone",
+      'Access to your data is managed by Pinecone',
     ],
     logo: PineconeLogo,
   },
   qdrant: {
-    name: "Qdrant",
+    name: 'Qdrant',
     description: [
-      "Your vectors and document text are stored on your Qdrant instance (cloud or self-hosted)",
+      'Your vectors and document text are stored on your Qdrant instance (cloud or self-hosted)',
     ],
     logo: QDrantLogo,
   },
   weaviate: {
-    name: "Weaviate",
+    name: 'Weaviate',
     description: [
-      "Your vectors and document text are stored on your Weaviate instance (cloud or self-hosted)",
+      'Your vectors and document text are stored on your Weaviate instance (cloud or self-hosted)',
     ],
     logo: WeaviateLogo,
   },
   milvus: {
-    name: "Milvus",
+    name: 'Milvus',
     description: [
-      "Your vectors and document text are stored on your Milvus instance (cloud or self-hosted)",
+      'Your vectors and document text are stored on your Milvus instance (cloud or self-hosted)',
     ],
     logo: MilvusLogo,
   },
   zilliz: {
-    name: "Zilliz Cloud",
+    name: 'Zilliz Cloud',
     description: [
-      "Your vectors and document text are stored on your Zilliz cloud cluster.",
+      'Your vectors and document text are stored on your Zilliz cloud cluster.',
     ],
     logo: ZillizLogo,
   },
   astra: {
-    name: "AstraDB",
+    name: 'AstraDB',
     description: [
-      "Your vectors and document text are stored on your cloud AstraDB database.",
+      'Your vectors and document text are stored on your cloud AstraDB database.',
     ],
     logo: AstraDBLogo,
   },
   lancedb: {
-    name: "LanceDB",
+    name: 'LanceDB',
     description: [
-      "Your vectors and document text are stored privately on this instance of FinetuneLLMs",
+      'Your vectors and document text are stored privately on this instance of FinetuneLLMs',
     ],
     logo: LanceDbLogo,
   },
@@ -225,63 +225,63 @@ export const VECTOR_DB_PRIVACY = {
 
 export const EMBEDDING_ENGINE_PRIVACY = {
   native: {
-    name: "FinetuneLLMs Embedder",
+    name: 'FinetuneLLMs Embedder',
     description: [
-      "Your document text is embedded privately on this instance of FinetuneLLMs",
+      'Your document text is embedded privately on this instance of FinetuneLLMs',
     ],
     logo: FinetuneLLMsIcon,
   },
   openai: {
-    name: "OpenAI",
+    name: 'OpenAI',
     description: [
-      "Your document text is sent to OpenAI servers",
-      "Your documents are not used for training",
+      'Your document text is sent to OpenAI servers',
+      'Your documents are not used for training',
     ],
     logo: OpenAiLogo,
   },
   azure: {
-    name: "Azure OpenAI",
+    name: 'Azure OpenAI',
     description: [
-      "Your document text is sent to your Microsoft Azure service",
-      "Your documents are not used for training",
+      'Your document text is sent to your Microsoft Azure service',
+      'Your documents are not used for training',
     ],
     logo: AzureOpenAiLogo,
   },
   localai: {
-    name: "LocalAI",
+    name: 'LocalAI',
     description: [
-      "Your document text is embedded privately on the server running LocalAI",
+      'Your document text is embedded privately on the server running LocalAI',
     ],
     logo: LocalAiLogo,
   },
   ollama: {
-    name: "Ollama",
+    name: 'Ollama',
     description: [
-      "Your document text is embedded privately on the server running Ollama",
+      'Your document text is embedded privately on the server running Ollama',
     ],
     logo: OllamaLogo,
   },
   lmstudio: {
-    name: "LMStudio",
+    name: 'LMStudio',
     description: [
-      "Your document text is embedded privately on the server running LMStudio",
+      'Your document text is embedded privately on the server running LMStudio',
     ],
     logo: LMStudioLogo,
   },
   cohere: {
-    name: "Cohere",
+    name: 'Cohere',
     description: [
-      "Data is shared according to the terms of service of cohere.com and your localities privacy laws.",
+      'Data is shared according to the terms of service of cohere.com and your localities privacy laws.',
     ],
     logo: CohereLogo,
   },
 };
 
 export default function DataHandling({ setHeader, setForwardBtn, setBackBtn }) {
-  const [llmChoice, setLLMChoice] = useState("openai");
+  const [llmChoice, setLLMChoice] = useState('openai');
   const [loading, setLoading] = useState(true);
-  const [vectorDb, setVectorDb] = useState("pinecone");
-  const [embeddingEngine, setEmbeddingEngine] = useState("openai");
+  const [vectorDb, setVectorDb] = useState('pinecone');
+  const [embeddingEngine, setEmbeddingEngine] = useState('openai');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -290,9 +290,9 @@ export default function DataHandling({ setHeader, setForwardBtn, setBackBtn }) {
     setBackBtn({ showing: false, disabled: false, onClick: handleBack });
     async function fetchKeys() {
       const _settings = await System.keys();
-      setLLMChoice(_settings?.LLMProvider || "openai");
-      setVectorDb(_settings?.VectorDB || "lancedb");
-      setEmbeddingEngine(_settings?.EmbeddingEngine || "openai");
+      setLLMChoice(_settings?.LLMProvider || 'openai');
+      setVectorDb(_settings?.VectorDB || 'lancedb');
+      setEmbeddingEngine(_settings?.EmbeddingEngine || 'openai');
 
       setLoading(false);
     }

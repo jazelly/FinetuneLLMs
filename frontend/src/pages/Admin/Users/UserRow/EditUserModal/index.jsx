@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { X } from "@phosphor-icons/react";
-import Admin from "@/models/admin";
-import { RoleHintDisplay } from "../..";
+import React, { useState } from 'react';
+import { X } from '@phosphor-icons/react';
+import Admin from '@/models/admin';
+import { RoleHintDisplay } from '../..';
 
 export default function EditUserModal({ currentUser, user, closeModal }) {
   const [role, setRole] = useState(user.role);
@@ -89,7 +89,7 @@ export default function EditUserModal({ currentUser, user, closeModal }) {
                 >
                   <option value="default">Default</option>
                   <option value="manager">Manager</option>
-                  {currentUser?.role === "admin" && (
+                  {currentUser?.role === 'admin' && (
                     <option value="admin">Administrator</option>
                   )}
                 </select>

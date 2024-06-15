@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import Sidebar from "@/components/SettingsSidebar";
-import { isMobile } from "react-device-detect";
-import Admin from "@/models/admin";
-import showToast from "@/utils/toast";
-import CTAButton from "@/components/CTAButton";
+import { useEffect, useState } from 'react';
+import Sidebar from '@/components/SettingsSidebar';
+import { isMobile } from 'react-device-detect';
+import Admin from '@/models/admin';
+import showToast from '@/utils/toast';
+import CTAButton from '@/components/CTAButton';
 
 export default function AdminSystem() {
   const [saving, setSaving] = useState(false);
@@ -24,7 +24,7 @@ export default function AdminSystem() {
     });
     setSaving(false);
     setHasChanges(false);
-    showToast("System preferences updated successfully.", "success");
+    showToast('System preferences updated successfully.', 'success');
   };
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function AdminSystem() {
     <div className="w-screen h-screen overflow-hidden bg-main flex">
       <Sidebar />
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+        style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
         className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
       >
         <form
@@ -66,7 +66,7 @@ export default function AdminSystem() {
           {hasChanges && (
             <div className="flex justify-end">
               <CTAButton onClick={handleSubmit} className="mt-3 mr-0">
-                {saving ? "Saving..." : "Save changes"}
+                {saving ? 'Saving...' : 'Save changes'}
               </CTAButton>
             </div>
           )}

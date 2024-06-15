@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import Admin from "@/models/admin";
-import showToast from "@/utils/toast";
-import { Trash } from "@phosphor-icons/react";
-import { userFromStorage } from "@/utils/request";
-import System from "@/models/system";
+import { useEffect, useRef, useState } from 'react';
+import Admin from '@/models/admin';
+import showToast from '@/utils/toast';
+import { Trash } from '@phosphor-icons/react';
+import { userFromStorage } from '@/utils/request';
+import System from '@/models/system';
 
 export default function ApiKeyRow({ apiKey }) {
   const rowRef = useRef(null);
@@ -22,13 +22,13 @@ export default function ApiKeyRow({ apiKey }) {
     const user = userFromStorage();
     const Model = !!user ? Admin : System;
     await Model.deleteApiKey(apiKey.id);
-    showToast("API Key permanently deleted", "info");
+    showToast('API Key permanently deleted', 'info');
   };
 
   const copyApiKey = () => {
     if (!apiKey) return false;
     window.navigator.clipboard.writeText(apiKey.secret);
-    showToast("API Key copied to clipboard", "success");
+    showToast('API Key copied to clipboard', 'success');
     setCopied(true);
   };
 
@@ -52,7 +52,7 @@ export default function ApiKeyRow({ apiKey }) {
           {apiKey.secret}
         </td>
         <td className="px-6 py-4 text-center">
-          {apiKey.createdBy?.username || "--"}
+          {apiKey.createdBy?.username || '--'}
         </td>
         <td className="px-6 py-4">{apiKey.createdAt}</td>
         <td className="px-6 py-4 flex items-center gap-x-6">
@@ -61,7 +61,7 @@ export default function ApiKeyRow({ apiKey }) {
             disabled={copied}
             className="font-medium text-blue-300 rounded-lg hover:text-white hover:text-opacity-60 hover:underline"
           >
-            {copied ? "Copied" : "Copy API Key"}
+            {copied ? 'Copied' : 'Copy API Key'}
           </button>
           <button
             onClick={handleDelete}

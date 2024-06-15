@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import paths from "@/utils/paths";
-import useLogo from "@/hooks/useLogo";
+import React, { useEffect, useRef, useState } from 'react';
+import paths from '@/utils/paths';
+import useLogo from '@/hooks/useLogo';
 import {
   EnvelopeSimple,
   SquaresFour,
@@ -22,12 +22,12 @@ import {
   EyeSlash,
   SplitVertical,
   Microphone,
-} from "@phosphor-icons/react";
-import useUser from "@/hooks/useUser";
-import { USER_BACKGROUND_COLOR } from "@/utils/constants";
-import { isMobile } from "react-device-detect";
-import Footer from "../Footer";
-import { Link } from "react-router-dom";
+} from '@phosphor-icons/react';
+import useUser from '@/hooks/useUser';
+import { USER_BACKGROUND_COLOR } from '@/utils/constants';
+import { isMobile } from 'react-device-detect';
+import Footer from '../Footer';
+import { Link } from 'react-router-dom';
 
 export default function SettingsSidebar() {
   const { logo } = useLogo();
@@ -49,7 +49,7 @@ export default function SettingsSidebar() {
     handleBg();
   }, [showSidebar]);
 
-  console.log("isMobile", isMobile);
+  console.log('isMobile', isMobile);
   if (isMobile) {
     return (
       <>
@@ -65,7 +65,7 @@ export default function SettingsSidebar() {
               src={logo}
               alt="Logo"
               className="block mx-auto h-6 w-auto"
-              style={{ maxHeight: "40px", objectFit: "contain" }}
+              style={{ maxHeight: '40px', objectFit: 'contain' }}
             />
           </div>
           <div className="w-12"></div>
@@ -79,8 +79,8 @@ export default function SettingsSidebar() {
           <div
             className={`${
               showBgOverlay
-                ? "transition-all opacity-1"
-                : "transition-none opacity-0"
+                ? 'transition-all opacity-1'
+                : 'transition-none opacity-0'
             }  duration-500 fixed top-0 left-0 ${USER_BACKGROUND_COLOR} bg-opacity-75 w-screen h-screen`}
             onClick={() => setShowSidebar(false)}
           />
@@ -96,7 +96,7 @@ export default function SettingsSidebar() {
                     src={logo}
                     alt="Logo"
                     className="rounded w-full max-h-[40px]"
-                    style={{ objectFit: "contain" }}
+                    style={{ objectFit: 'contain' }}
                   />
                 </div>
                 <div className="flex gap-x-2 items-center text-slate-500 shrink-0">
@@ -135,12 +135,12 @@ export default function SettingsSidebar() {
           src={logo}
           alt="Logo"
           className="rounded h-[24px]"
-          style={{ objectFit: "contain" }}
+          style={{ objectFit: 'contain' }}
         />
       </Link>
       <div
         ref={sidebarRef}
-        style={{ height: "calc(100% - 76px)" }}
+        style={{ height: 'calc(100% - 76px)' }}
         className="transition-all duration-500 relative m-[16px] rounded-[16px] bg-main border-2 border-outline min-w-[250px] p-[10px]"
       >
         <div className="w-full h-full flex flex-col overflow-x-hidden items-between min-w-[235px]">
@@ -196,12 +196,12 @@ const Option = ({
           hover:bg-workspace-item-selected-gradient hover:text-white hover:font-medium
           ${
             isActive
-              ? "bg-menu-item-selected-gradient font-medium border-outline text-white"
-              : "hover:bg-menu-item-selected-gradient text-zinc-200"
+              ? 'bg-menu-item-selected-gradient font-medium border-outline text-white'
+              : 'hover:bg-menu-item-selected-gradient text-zinc-200'
           }
         `}
         >
-          {React.cloneElement(icon, { weight: isActive ? "fill" : "regular" })}
+          {React.cloneElement(icon, { weight: isActive ? 'fill' : 'regular' })}
           <p className="text-sm leading-loose whitespace-nowrap overflow-hidden ">
             {btnText}
           </p>
@@ -210,7 +210,7 @@ const Option = ({
       {!!subOptions && (isActive || hasActiveChild) && (
         <div
           className={`ml-4 ${
-            hasActiveChild ? "" : "border-l-2 border-slate-400"
+            hasActiveChild ? '' : 'border-l-2 border-slate-400'
           } rounded-r-lg`}
         >
           {subOptions}
@@ -227,28 +227,28 @@ const SidebarOptions = ({ user = null }) => (
       btnText="System Preferences"
       icon={<SquaresFour className="h-5 w-5 flex-shrink-0" />}
       user={user}
-      allowedRole={["admin", "manager"]}
+      allowedRole={['admin', 'manager']}
     />
     <Option
       href={paths.settings.invites()}
       btnText="Invitation"
       icon={<EnvelopeSimple className="h-5 w-5 flex-shrink-0" />}
       user={user}
-      allowedRole={["admin", "manager"]}
+      allowedRole={['admin', 'manager']}
     />
     <Option
       href={paths.settings.users()}
       btnText="Users"
       icon={<Users className="h-5 w-5 flex-shrink-0" />}
       user={user}
-      allowedRole={["admin", "manager"]}
+      allowedRole={['admin', 'manager']}
     />
     <Option
       href={paths.settings.workspaces()}
       btnText="Workspaces"
       icon={<BookOpen className="h-5 w-5 flex-shrink-0" />}
       user={user}
-      allowedRole={["admin", "manager"]}
+      allowedRole={['admin', 'manager']}
     />
     <Option
       href={paths.settings.chats()}
@@ -256,7 +256,7 @@ const SidebarOptions = ({ user = null }) => (
       icon={<ChatCenteredText className="h-5 w-5 flex-shrink-0" />}
       user={user}
       flex={true}
-      allowedRole={["admin", "manager"]}
+      allowedRole={['admin', 'manager']}
     />
     <Option
       href={paths.settings.appearance()}
@@ -264,7 +264,7 @@ const SidebarOptions = ({ user = null }) => (
       icon={<Eye className="h-5 w-5 flex-shrink-0" />}
       user={user}
       flex={true}
-      allowedRole={["admin", "manager"]}
+      allowedRole={['admin', 'manager']}
     />
     <Option
       href={paths.settings.apiKeys()}
@@ -272,7 +272,7 @@ const SidebarOptions = ({ user = null }) => (
       icon={<Key className="h-5 w-5 flex-shrink-0" />}
       user={user}
       flex={true}
-      allowedRole={["admin"]}
+      allowedRole={['admin']}
     />
     <Option
       href={paths.settings.llmPreference()}
@@ -280,7 +280,7 @@ const SidebarOptions = ({ user = null }) => (
       icon={<ChatText className="h-5 w-5 flex-shrink-0" />}
       user={user}
       flex={true}
-      allowedRole={["admin"]}
+      allowedRole={['admin']}
     />
     <Option
       href={paths.settings.audioPreference()}
@@ -288,7 +288,7 @@ const SidebarOptions = ({ user = null }) => (
       icon={<Microphone className="h-5 w-5 flex-shrink-0" />}
       user={user}
       flex={true}
-      allowedRole={["admin"]}
+      allowedRole={['admin']}
     />
     <Option
       href={paths.settings.transcriptionPreference()}
@@ -296,7 +296,7 @@ const SidebarOptions = ({ user = null }) => (
       icon={<ClosedCaptioning className="h-5 w-5 flex-shrink-0" />}
       user={user}
       flex={true}
-      allowedRole={["admin"]}
+      allowedRole={['admin']}
     />
     <Option
       href={paths.settings.embedder.modelPreference()}
@@ -305,7 +305,7 @@ const SidebarOptions = ({ user = null }) => (
       icon={<FileCode className="h-5 w-5 flex-shrink-0" />}
       user={user}
       flex={true}
-      allowedRole={["admin"]}
+      allowedRole={['admin']}
       subOptions={
         <>
           <Option
@@ -314,7 +314,7 @@ const SidebarOptions = ({ user = null }) => (
             icon={<SplitVertical className="h-5 w-5 flex-shrink-0" />}
             user={user}
             flex={true}
-            allowedRole={["admin"]}
+            allowedRole={['admin']}
           />
         </>
       }
@@ -326,7 +326,7 @@ const SidebarOptions = ({ user = null }) => (
       icon={<CodeBlock className="h-5 w-5 flex-shrink-0" />}
       user={user}
       flex={true}
-      allowedRole={["admin"]}
+      allowedRole={['admin']}
       subOptions={
         <>
           <Option
@@ -335,7 +335,7 @@ const SidebarOptions = ({ user = null }) => (
             icon={<Barcode className="h-5 w-5 flex-shrink-0" />}
             user={user}
             flex={true}
-            allowedRole={["admin"]}
+            allowedRole={['admin']}
           />
         </>
       }
@@ -346,7 +346,7 @@ const SidebarOptions = ({ user = null }) => (
       icon={<Lock className="h-5 w-5 flex-shrink-0" />}
       user={user}
       flex={true}
-      allowedRole={["admin", "manager"]}
+      allowedRole={['admin', 'manager']}
       hidden={user?.role}
     />
     <Option
@@ -355,7 +355,7 @@ const SidebarOptions = ({ user = null }) => (
       icon={<Notepad className="h-5 w-5 flex-shrink-0" />}
       user={user}
       flex={true}
-      allowedRole={["admin"]}
+      allowedRole={['admin']}
     />
     <Option
       href={paths.settings.privacy()}
@@ -363,7 +363,7 @@ const SidebarOptions = ({ user = null }) => (
       icon={<EyeSlash className="h-5 w-5 flex-shrink-0" />}
       user={user}
       flex={true}
-      allowedRole={["admin"]}
+      allowedRole={['admin']}
     />
   </>
 );

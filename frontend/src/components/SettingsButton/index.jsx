@@ -1,6 +1,6 @@
-import paths from "@/utils/paths";
-import { Wrench } from "@phosphor-icons/react";
-import { Link } from "react-router-dom";
+import paths from '@/utils/paths';
+import { Wrench } from '@phosphor-icons/react';
+import { Link } from 'react-router-dom';
 
 export default function SettingsButton() {
   return (

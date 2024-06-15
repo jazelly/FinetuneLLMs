@@ -41,7 +41,7 @@ export default function MilvusDBOptions({ settings }) {
             name="MilvusPassword"
             className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
             placeholder="password"
-            defaultValue={settings?.MilvusPassword ? "*".repeat(20) : ""}
+            defaultValue={settings?.MilvusPassword ? '*'.repeat(20) : ''}
             autoComplete="off"
             spellCheck={false}
           />

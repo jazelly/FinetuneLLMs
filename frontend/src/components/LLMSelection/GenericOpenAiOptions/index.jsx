@@ -25,7 +25,7 @@ export default function GenericOpenAiOptions({ settings }) {
           name="GenericOpenAiKey"
           className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
           placeholder="Generic service API Key"
-          defaultValue={settings?.GenericOpenAiKey ? "*".repeat(20) : ""}
+          defaultValue={settings?.GenericOpenAiKey ? '*'.repeat(20) : ''}
           required={false}
           autoComplete="off"
           spellCheck={false}

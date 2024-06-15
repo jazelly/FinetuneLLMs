@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { X } from "@phosphor-icons/react";
-import Admin from "@/models/admin";
-import { userFromStorage } from "@/utils/request";
-import { RoleHintDisplay } from "..";
+import React, { useState } from 'react';
+import { X } from '@phosphor-icons/react';
+import Admin from '@/models/admin';
+import { userFromStorage } from '@/utils/request';
+import { RoleHintDisplay } from '..';
 
 export default function NewUserModal({ closeModal }) {
   const [error, setError] = useState(null);
-  const [role, setRole] = useState("default");
+  const [role, setRole] = useState('default');
   const handleCreate = async (e) => {
     setError(null);
     e.preventDefault();
@@ -82,13 +82,13 @@ export default function NewUserModal({ closeModal }) {
                 <select
                   name="role"
                   required={true}
-                  defaultValue={"default"}
+                  defaultValue={'default'}
                   onChange={(e) => setRole(e.target.value)}
                   className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white border-gray-500 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="default">Default</option>
                   <option value="manager">Manager </option>
-                  {user?.role === "admin" && (
+                  {user?.role === 'admin' && (
                     <option value="admin">Administrator</option>
                   )}
                 </select>

@@ -1,7 +1,7 @@
-import { useRef } from "react";
-import Admin from "@/models/admin";
-import paths from "@/utils/paths";
-import { LinkSimple, Trash } from "@phosphor-icons/react";
+import { useRef } from 'react';
+import Admin from '@/models/admin';
+import paths from '@/utils/paths';
+import { LinkSimple, Trash } from '@phosphor-icons/react';
 
 export default function WorkspaceRow({ workspace, users }) {
   const rowRef = useRef(null);

@@ -1,13 +1,13 @@
-import UploadFile from "../UploadFile";
-import PreLoader from "@/components/Preloader";
-import { useEffect, useState } from "react";
-import FileRow from "./FileRow";
-import System from "@/models/system";
-import { Plus, Trash } from "@phosphor-icons/react";
-import Document from "@/models/document";
-import showToast from "@/utils/toast";
-import FolderSelectionPopup from "./FolderSelectionPopup";
-import MoveToFolderIcon from "./MoveToFolderIcon";
+import UploadFile from '../UploadFile';
+import PreLoader from '@/components/Preloader';
+import { useEffect, useState } from 'react';
+import FileRow from './FileRow';
+import System from '@/models/system';
+import { Plus, Trash } from '@phosphor-icons/react';
+import Document from '@/models/document';
+import showToast from '@/utils/toast';
+import FolderSelectionPopup from './FolderSelectionPopup';
+import MoveToFolderIcon from './MoveToFolderIcon';
 
 function Directory({
   files,
@@ -21,7 +21,7 @@ function Directory({
   loadingMessage,
 }) {
   const [amountSelected, setAmountSelected] = useState(0);
-  const [newFolderName, setNewFolderName] = useState("");
+  const [newFolderName, setNewFolderName] = useState('');
   const [showNewFolderInput, setShowNewFolderInput] = useState(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function Directory({
   const toggleSelection = (item) => {
     setSelectedItems((prevSelectedItems) => {
       const newSelectedItems = { ...prevSelectedItems };
-      if (item.type === "folder") {
+      if (item.type === 'folder') {
         // select all files in the folder
         if (newSelectedItems[item.name]) {
           delete newSelectedItems[item.name];
@@ -55,7 +55,7 @@ function Directory({
 
   // check if item is selected based on selectedItems state
   const isSelected = (id, item) => {
-    if (item && item.type === "folder") {
+    if (item && item.type === 'folder') {
       if (!selectedItems[item.name]) {
         return false;
       }
@@ -70,10 +70,10 @@ function Directory({
   };
 
   const confirmNewFolder = async () => {
-    if (newFolderName.trim() !== "") {
+    if (newFolderName.trim() !== '') {
       const newFolder = {
         name: newFolderName,
-        type: "folder",
+        type: 'folder',
         items: [],
       };
 
@@ -86,7 +86,7 @@ function Directory({
         });
       }
 
-      setNewFolderName("");
+      setNewFolderName('');
       setShowNewFolderInput(false);
     }
   };

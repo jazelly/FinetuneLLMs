@@ -1,18 +1,18 @@
-import useLogo from "@/hooks/useLogo";
-import System from "@/models/system";
-import showToast from "@/utils/toast";
-import { useEffect, useRef, useState } from "react";
-import { Plus } from "@phosphor-icons/react";
+import useLogo from '@/hooks/useLogo';
+import System from '@/models/system';
+import showToast from '@/utils/toast';
+import { useEffect, useRef, useState } from 'react';
+import { Plus } from '@phosphor-icons/react';
 
 export default function CustomLogo() {
   const { logo: _initLogo, setLogo: _setLogo } = useLogo();
-  const [logo, setLogo] = useState("");
+  const [logo, setLogo] = useState('');
   const [isDefaultLogo, setIsDefaultLogo] = useState(true);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     async function logoInit() {
-      setLogo(_initLogo || "");
+      setLogo(_initLogo || '');
       const _isDefaultLogo = await System.isDefaultLogo();
       setIsDefaultLogo(_isDefaultLogo);
     }
@@ -27,10 +27,10 @@ export default function CustomLogo() {
     setLogo(objectURL);
 
     const formData = new FormData();
-    formData.append("logo", file);
+    formData.append('logo', file);
     const { success, error } = await System.uploadLogo(formData);
     if (!success) {
-      showToast(`Failed to upload logo: ${error}`, "error");
+      showToast(`Failed to upload logo: ${error}`, 'error');
       setLogo(_initLogo);
       return;
     }
@@ -38,18 +38,18 @@ export default function CustomLogo() {
     const logoURL = await System.fetchLogo();
     _setLogo(logoURL);
 
-    showToast("Image uploaded successfully.", "success");
+    showToast('Image uploaded successfully.', 'success');
     setIsDefaultLogo(false);
   };
 
   const handleRemoveLogo = async () => {
-    setLogo("");
+    setLogo('');
     setIsDefaultLogo(true);
 
     const { success, error } = await System.removeCustomLogo();
     if (!success) {
-      console.error("Failed to remove logo:", error);
-      showToast(`Failed to remove logo: ${error}`, "error");
+      console.error('Failed to remove logo:', error);
+      showToast(`Failed to remove logo: ${error}`, 'error');
       const logoURL = await System.fetchLogo();
       setLogo(logoURL);
       setIsDefaultLogo(false);
@@ -59,7 +59,7 @@ export default function CustomLogo() {
     const logoURL = await System.fetchLogo();
     _setLogo(logoURL);
 
-    showToast("Image successfully removed.", "success");
+    showToast('Image successfully removed.', 'success');
   };
 
   const triggerFileInputClick = () => {

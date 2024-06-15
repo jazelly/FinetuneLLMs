@@ -1,23 +1,23 @@
-import React, { useEffect, useState, useRef } from "react";
-import { isMobile } from "react-device-detect";
-import Sidebar from "@/components/SettingsSidebar";
-import System from "@/models/system";
-import showToast from "@/utils/toast";
-import PreLoader from "@/components/Preloader";
-import OpenAiLogo from "@/media/llmprovider/openai.png";
-import FinetuneLLMsIcon from "@/media/logo/anything-llm-icon.png";
-import OpenAiWhisperOptions from "@/components/TranscriptionSelection/OpenAiOptions";
-import NativeTranscriptionOptions from "@/components/TranscriptionSelection/NativeTranscriptionOptions";
-import LLMItem from "@/components/LLMSelection/LLMItem";
-import { CaretUpDown, MagnifyingGlass, X } from "@phosphor-icons/react";
-import CTAButton from "@/components/CTAButton";
+import React, { useEffect, useState, useRef } from 'react';
+import { isMobile } from 'react-device-detect';
+import Sidebar from '@/components/SettingsSidebar';
+import System from '@/models/system';
+import showToast from '@/utils/toast';
+import PreLoader from '@/components/Preloader';
+import OpenAiLogo from '@/media/llmprovider/openai.png';
+import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import OpenAiWhisperOptions from '@/components/TranscriptionSelection/OpenAiOptions';
+import NativeTranscriptionOptions from '@/components/TranscriptionSelection/NativeTranscriptionOptions';
+import LLMItem from '@/components/LLMSelection/LLMItem';
+import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
+import CTAButton from '@/components/CTAButton';
 
 export default function TranscriptionModelPreference() {
   const [saving, setSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredProviders, setFilteredProviders] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState(null);
   const [searchMenuOpen, setSearchMenuOpen] = useState(false);
@@ -34,16 +34,16 @@ export default function TranscriptionModelPreference() {
     setSaving(true);
 
     if (error) {
-      showToast(`Failed to save preferences: ${error}`, "error");
+      showToast(`Failed to save preferences: ${error}`, 'error');
     } else {
-      showToast("Transcription preferences saved successfully.", "success");
+      showToast('Transcription preferences saved successfully.', 'success');
     }
     setSaving(false);
     setHasChanges(!!error);
   };
 
   const updateProviderChoice = (selection) => {
-    setSearchQuery("");
+    setSearchQuery('');
     setSelectedProvider(selection);
     setSearchMenuOpen(false);
     setHasChanges(true);
@@ -51,8 +51,8 @@ export default function TranscriptionModelPreference() {
 
   const handleXButton = () => {
     if (searchQuery.length > 0) {
-      setSearchQuery("");
-      if (searchInputRef.current) searchInputRef.current.value = "";
+      setSearchQuery('');
+      if (searchInputRef.current) searchInputRef.current.value = '';
     } else {
       setSearchMenuOpen(!searchMenuOpen);
     }
@@ -62,7 +62,7 @@ export default function TranscriptionModelPreference() {
     async function fetchKeys() {
       const _settings = await System.keys();
       setSettings(_settings);
-      setSelectedProvider(_settings?.WhisperProvider || "local");
+      setSelectedProvider(_settings?.WhisperProvider || 'local');
       setLoading(false);
     }
     fetchKeys();
@@ -70,19 +70,19 @@ export default function TranscriptionModelPreference() {
 
   const PROVIDERS = [
     {
-      name: "OpenAI",
-      value: "openai",
+      name: 'OpenAI',
+      value: 'openai',
       logo: OpenAiLogo,
       options: <OpenAiWhisperOptions settings={settings} />,
       description:
-        "Leverage the OpenAI Whisper-large model using your API key.",
+        'Leverage the OpenAI Whisper-large model using your API key.',
     },
     {
-      name: "FinetuneLLMs Built-In",
-      value: "local",
+      name: 'FinetuneLLMs Built-In',
+      value: 'local',
       logo: FinetuneLLMsIcon,
       options: <NativeTranscriptionOptions settings={settings} />,
-      description: "Run a built-in whisper model on this instance privately.",
+      description: 'Run a built-in whisper model on this instance privately.',
     },
   ];
 
@@ -102,7 +102,7 @@ export default function TranscriptionModelPreference() {
       <Sidebar />
       {loading ? (
         <div
-          style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+          style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <div className="w-full h-full flex justify-center items-center">
@@ -111,7 +111,7 @@ export default function TranscriptionModelPreference() {
         </div>
       ) : (
         <div
-          style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+          style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <form onSubmit={handleSubmit} className="flex w-full">
@@ -135,7 +135,7 @@ export default function TranscriptionModelPreference() {
                     onClick={() => handleSubmit()}
                     className="mt-3 mr-0 -mb-14 z-10"
                   >
-                    {saving ? "Saving..." : "Save changes"}
+                    {saving ? 'Saving...' : 'Save changes'}
                   </CTAButton>
                 )}
               </div>
@@ -167,7 +167,7 @@ export default function TranscriptionModelPreference() {
                           onChange={(e) => setSearchQuery(e.target.value)}
                           ref={searchInputRef}
                           onKeyDown={(e) => {
-                            if (e.key === "Enter") e.preventDefault();
+                            if (e.key === 'Enter') e.preventDefault();
                           }}
                         />
                         <X

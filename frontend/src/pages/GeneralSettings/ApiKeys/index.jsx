@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-import Sidebar from "@/components/SettingsSidebar";
-import { isMobile } from "react-device-detect";
-import * as Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { PlusCircle } from "@phosphor-icons/react";
-import Admin from "@/models/admin";
-import ApiKeyRow from "./ApiKeyRow";
-import NewApiKeyModal from "./NewApiKeyModal";
-import paths from "@/utils/paths";
-import { userFromStorage } from "@/utils/request";
-import System from "@/models/system";
-import ModalWrapper from "@/components/ModalWrapper";
-import { useModal } from "@/hooks/useModal";
-import CTAButton from "@/components/CTAButton";
+import { useEffect, useState } from 'react';
+import Sidebar from '@/components/SettingsSidebar';
+import { isMobile } from 'react-device-detect';
+import * as Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import { PlusCircle } from '@phosphor-icons/react';
+import Admin from '@/models/admin';
+import ApiKeyRow from './ApiKeyRow';
+import NewApiKeyModal from './NewApiKeyModal';
+import paths from '@/utils/paths';
+import { userFromStorage } from '@/utils/request';
+import System from '@/models/system';
+import ModalWrapper from '@/components/ModalWrapper';
+import { useModal } from '@/hooks/useModal';
+import CTAButton from '@/components/CTAButton';
 
 export default function AdminApiKeys() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -21,7 +21,7 @@ export default function AdminApiKeys() {
     <div className="w-screen h-screen overflow-hidden bg-main flex">
       <Sidebar />
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+        style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
         className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
       >
         <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
@@ -101,7 +101,7 @@ function ApiKeysContainer() {
             Created
           </th>
           <th scope="col" className="px-6 py-3 rounded-tr-lg">
-            {" "}
+            {' '}
           </th>
         </tr>
       </thead>

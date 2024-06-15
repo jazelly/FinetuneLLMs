@@ -1,10 +1,10 @@
-import React from "react";
-import Jazzicon from "../UserIcon";
-import { userFromStorage } from "@/utils/request";
-import { AI_BACKGROUND_COLOR, USER_BACKGROUND_COLOR } from "@/utils/constants";
+import React from 'react';
+import Jazzicon from '../UserIcon';
+import { userFromStorage } from '@/utils/request';
+import { AI_BACKGROUND_COLOR, USER_BACKGROUND_COLOR } from '@/utils/constants';
 
 export default function ChatBubble({ message, type, popMsg }) {
-  const isUser = type === "user";
+  const isUser = type === 'user';
   const backgroundColor = isUser ? USER_BACKGROUND_COLOR : AI_BACKGROUND_COLOR;
 
   return (
@@ -15,7 +15,7 @@ export default function ChatBubble({ message, type, popMsg }) {
         <div className="flex gap-x-5">
           <Jazzicon
             size={36}
-            user={{ uid: isUser ? userFromStorage()?.username : "system" }}
+            user={{ uid: isUser ? userFromStorage()?.username : 'system' }}
             role={type}
           />
 

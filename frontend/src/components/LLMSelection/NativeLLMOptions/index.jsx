@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Flask } from "@phosphor-icons/react";
-import System from "@/models/system";
+import { useEffect, useState } from 'react';
+import { Flask } from '@phosphor-icons/react';
+import System from '@/models/system';
 
 export default function NativeLLMOptions({ settings }) {
   return (
@@ -27,7 +27,7 @@ function NativeModelSelection({ settings }) {
   useEffect(() => {
     async function findCustomModels() {
       setLoading(true);
-      const { models } = await System.customModels("native-llm", null, null);
+      const { models } = await System.customModels('native-llm', null, null);
       setCustomModels(models || []);
       setLoading(false);
     }

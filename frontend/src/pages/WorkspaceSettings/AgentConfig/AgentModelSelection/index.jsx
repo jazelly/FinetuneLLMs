@@ -1,12 +1,12 @@
 import useGetProviderModels, {
   DISABLED_PROVIDERS,
-} from "@/hooks/useGetProvidersModels";
+} from '@/hooks/useGetProvidersModels';
 
 // These models do NOT support function calling
-function supportedModel(provider, model = "") {
-  if (provider !== "openai") return true;
+function supportedModel(provider, model = '') {
+  if (provider !== 'openai') return true;
   return (
-    ["gpt-3.5-turbo-0301", "gpt-4-turbo-2024-04-09", "gpt-4-turbo"].includes(
+    ['gpt-3.5-turbo-0301', 'gpt-4-turbo-2024-04-09', 'gpt-4-turbo'].includes(
       model
     ) === false
   );

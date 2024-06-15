@@ -10,7 +10,7 @@ export default function LLMItem({
     <div
       onClick={() => onClick(value)}
       className={`w-full p-2 rounded-md hover:cursor-pointer hover:bg-white/10 ${
-        checked ? "bg-white/10" : ""
+        checked ? 'bg-white/10' : ''
       }`}
     >
       <input

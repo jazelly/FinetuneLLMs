@@ -1,11 +1,11 @@
-import ModalWrapper from "@/components/ModalWrapper";
-import { useModal } from "@/hooks/useModal";
-import Admin from "@/models/admin";
-import { useEffect, useState } from "react";
-import * as Skeleton from "react-loading-skeleton";
-import AddMemberModal from "./AddMemberModal";
-import WorkspaceMemberRow from "./WorkspaceMemberRow";
-import CTAButton from "@/components/CTAButton";
+import ModalWrapper from '@/components/ModalWrapper';
+import { useModal } from '@/hooks/useModal';
+import Admin from '@/models/admin';
+import { useEffect, useState } from 'react';
+import * as Skeleton from 'react-loading-skeleton';
+import AddMemberModal from './AddMemberModal';
+import WorkspaceMemberRow from './WorkspaceMemberRow';
+import CTAButton from '@/components/CTAButton';
 
 export default function Members({ workspace }) {
   const [loading, setLoading] = useState(true);
@@ -60,7 +60,7 @@ export default function Members({ workspace }) {
               Date Added
             </th>
             <th scope="col" className="px-6 py-3 rounded-tr-lg">
-              {" "}
+              {' '}
             </th>
           </tr>
         </thead>

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import System from "../../../../models/system";
-import showToast from "../../../../utils/toast";
-import Directory from "./Directory";
-import Document from "@/models/document";
+import { useEffect, useState } from 'react';
+import System from '../../../../models/system';
+import showToast from '../../../../utils/toast';
+import Directory from './Directory';
+import Document from '@/models/document';
 
 // OpenAI Cost per token
 // ref: https://openai.com/pricing#:~:text=%C2%A0/%201K%20tokens-,Embedding%20models,-Build%20advanced%20search
@@ -12,7 +12,7 @@ export default function DocumentSettings({ systemSettings }) {
   const [loading, setLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState({});
   const [hasChanges, setHasChanges] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("");
+  const [loadingMessage, setLoadingMessage] = useState('');
 
   async function fetchDatasets() {
     setLoading(true);

@@ -1,14 +1,14 @@
-import System from "@/models/system";
-import Workspace from "@/models/workspace";
-import showToast from "@/utils/toast";
-import { castToType } from "@/utils/types";
-import { useEffect, useRef, useState } from "react";
-import AgentLLMSelection from "./AgentLLMSelection";
-import AgentWebSearchSelection from "./WebSearchSelection";
-import GenericSkill from "./GenericSkill";
-import Admin from "@/models/admin";
-import * as Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import System from '@/models/system';
+import Workspace from '@/models/workspace';
+import showToast from '@/utils/toast';
+import { castToType } from '@/utils/types';
+import { useEffect, useRef, useState } from 'react';
+import AgentLLMSelection from './AgentLLMSelection';
+import AgentWebSearchSelection from './WebSearchSelection';
+import GenericSkill from './GenericSkill';
+import Admin from '@/models/admin';
+import * as Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function WorkspaceAgentConfiguration({ workspace }) {
   const [settings, setSettings] = useState({});
@@ -40,14 +40,14 @@ export default function WorkspaceAgentConfiguration({ workspace }) {
 
     const form = new FormData(formEl.current);
     for (var [key, value] of form.entries()) {
-      if (key.startsWith("system::")) {
-        const [_, label] = key.split("system::");
+      if (key.startsWith('system::')) {
+        const [_, label] = key.split('system::');
         data.system[label] = String(value);
         continue;
       }
 
-      if (key.startsWith("env::")) {
-        const [_, label] = key.split("env::");
+      if (key.startsWith('env::')) {
+        const [_, label] = key.split('env::');
         data.env[label] = String(value);
         continue;
       }
@@ -63,16 +63,16 @@ export default function WorkspaceAgentConfiguration({ workspace }) {
     await System.updateSystem(data.env);
 
     if (!!updatedWorkspace) {
-      showToast("Workspace updated!", "success", { clear: true });
+      showToast('Workspace updated!', 'success', { clear: true });
     } else {
-      showToast(`Error: ${message}`, "error", { clear: true });
+      showToast(`Error: ${message}`, 'error', { clear: true });
     }
 
     setSaving(false);
     setHasChanges(false);
   };
 
-  function toggleAgentSkill(skillName = "") {
+  function toggleAgentSkill(skillName = '') {
     setAgentSkills((prev) => {
       return prev.includes(skillName)
         ? prev.filter((name) => name !== skillName)
@@ -106,7 +106,7 @@ export default function WorkspaceAgentConfiguration({ workspace }) {
             form="agent-settings-form"
             className="w-fit transition-all duration-300 border border-slate-200 px-5 py-2.5 rounded-lg text-white text-sm items-center flex gap-x-2 hover:bg-slate-200 hover:text-slate-800 focus:ring-gray-800"
           >
-            {saving ? "Updating agent..." : "Update workspace agent"}
+            {saving ? 'Updating agent...' : 'Update workspace agent'}
           </button>
         )}
       </form>
@@ -159,7 +159,7 @@ function AvailableAgentSkills({ skills, settings, toggleAgentSkill }) {
       <input
         name="system::default_agent_skills"
         type="hidden"
-        value={skills.join(",")}
+        value={skills.join(',')}
       />
       <div className="flex flex-col gap-y-3">
         <GenericSkill
@@ -189,7 +189,7 @@ function AvailableAgentSkills({ skills, settings, toggleAgentSkill }) {
           skill="create-chart"
           settings={settings}
           toggleSkill={toggleAgentSkill}
-          enabled={skills.includes("create-chart")}
+          enabled={skills.includes('create-chart')}
         />
         <GenericSkill
           title="Generate & save files to browser"
@@ -197,13 +197,13 @@ function AvailableAgentSkills({ skills, settings, toggleAgentSkill }) {
           skill="save-file-to-browser"
           settings={settings}
           toggleSkill={toggleAgentSkill}
-          enabled={skills.includes("save-file-to-browser")}
+          enabled={skills.includes('save-file-to-browser')}
         />
         <AgentWebSearchSelection
           skill="web-browsing"
           settings={settings}
           toggleSkill={toggleAgentSkill}
-          enabled={skills.includes("web-browsing")}
+          enabled={skills.includes('web-browsing')}
         />
       </div>
     </div>

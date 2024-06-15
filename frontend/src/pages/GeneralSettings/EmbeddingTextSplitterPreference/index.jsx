@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import Sidebar from "@/components/SettingsSidebar";
-import { isMobile } from "react-device-detect";
-import PreLoader from "@/components/Preloader";
-import CTAButton from "@/components/CTAButton";
-import Admin from "@/models/admin";
-import showToast from "@/utils/toast";
-import { nFormatter, numberWithCommas } from "@/utils/numbers";
+import React, { useEffect, useState } from 'react';
+import Sidebar from '@/components/SettingsSidebar';
+import { isMobile } from 'react-device-detect';
+import PreLoader from '@/components/Preloader';
+import CTAButton from '@/components/CTAButton';
+import Admin from '@/models/admin';
+import showToast from '@/utils/toast';
+import { nFormatter, numberWithCommas } from '@/utils/numbers';
 
 function isNullOrNaN(value) {
   if (value === null) return true;
@@ -23,12 +23,12 @@ export default function EmbeddingTextSplitterPreference() {
     const form = new FormData(e.target);
 
     if (
-      Number(form.get("text_splitter_chunk_overlap")) >=
-      Number(form.get("text_splitter_chunk_size"))
+      Number(form.get('text_splitter_chunk_overlap')) >=
+      Number(form.get('text_splitter_chunk_size'))
     ) {
       showToast(
-        "Chunk overlap cannot be larger or equal to chunk size.",
-        "error"
+        'Chunk overlap cannot be larger or equal to chunk size.',
+        'error'
       );
       return;
     }
@@ -36,19 +36,19 @@ export default function EmbeddingTextSplitterPreference() {
     setSaving(true);
     await Admin.updateSystemPreferences({
       text_splitter_chunk_size: isNullOrNaN(
-        form.get("text_splitter_chunk_size")
+        form.get('text_splitter_chunk_size')
       )
         ? 1000
-        : Number(form.get("text_splitter_chunk_size")),
+        : Number(form.get('text_splitter_chunk_size')),
       text_splitter_chunk_overlap: isNullOrNaN(
-        form.get("text_splitter_chunk_overlap")
+        form.get('text_splitter_chunk_overlap')
       )
         ? 1000
-        : Number(form.get("text_splitter_chunk_overlap")),
+        : Number(form.get('text_splitter_chunk_overlap')),
     });
     setSaving(false);
     setHasChanges(false);
-    showToast("Text chunking strategy settings saved.", "success");
+    showToast('Text chunking strategy settings saved.', 'success');
   };
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function EmbeddingTextSplitterPreference() {
       <Sidebar />
       {loading ? (
         <div
-          style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+          style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <div className="w-full h-full flex justify-center items-center">
@@ -74,7 +74,7 @@ export default function EmbeddingTextSplitterPreference() {
         </div>
       ) : (
         <div
-          style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+          style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <form
@@ -97,14 +97,14 @@ export default function EmbeddingTextSplitterPreference() {
                   splitting works and it's side effects.
                 </p>
                 <p className="text-xs leading-[18px] font-semibold text-white/80">
-                  Changes here will only apply to{" "}
+                  Changes here will only apply to{' '}
                   <i>newly embedded documents</i>, not existing documents.
                 </p>
               </div>
               <div className="w-full justify-end flex">
                 {hasChanges && (
                   <CTAButton className="mt-3 mr-0 -mb-14 z-10">
-                    {saving ? "Saving..." : "Save changes"}
+                    {saving ? 'Saving...' : 'Save changes'}
                   </CTAButton>
                 )}
               </div>
@@ -137,7 +137,7 @@ export default function EmbeddingTextSplitterPreference() {
                     autoComplete="off"
                   />
                   <p className="text-xs text-white/40">
-                    Embed model maximum length is{" "}
+                    Embed model maximum length is{' '}
                     {numberWithCommas(settings?.max_embed_chunk_size || 1000)}.
                   </p>
                 </div>

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { X } from "@phosphor-icons/react";
-import Admin from "@/models/admin";
-import Workspace from "@/models/workspace";
+import React, { useEffect, useState } from 'react';
+import { X } from '@phosphor-icons/react';
+import Admin from '@/models/admin';
+import Workspace from '@/models/workspace';
 
 export default function NewInviteModal({ closeModal }) {
   const [invite, setInvite] = useState(null);
@@ -87,7 +87,7 @@ export default function NewInviteModal({ closeModal }) {
               )}
               <p className="text-white text-xs md:text-sm">
                 After creation you will be able to copy the invite and send it
-                to a new user where they can create an account as the{" "}
+                to a new user where they can create an account as the{' '}
                 <b>default</b> role and automatically be added to workspaces
                 selected.
               </p>
@@ -150,7 +150,7 @@ export default function NewInviteModal({ closeModal }) {
                 disabled={copied}
                 className="w-full transition-all duration-300 border border-slate-200 px-4 py-2 rounded-lg text-white text-sm items-center flex gap-x-2 hover:bg-slate-200 hover:text-slate-800 focus:ring-gray-800 text-center justify-center"
               >
-                {copied ? "Copied Link" : "Copy Invite Link"}
+                {copied ? 'Copied Link' : 'Copy Invite Link'}
               </button>
             )}
           </div>
@@ -166,7 +166,7 @@ function WorkspaceOption({ workspace, selected, toggleSelection }) {
       type="button"
       onClick={() => toggleSelection(workspace.id)}
       className={`transition-all duration-300 w-full h-11 p-2.5 bg-white/10 rounded-lg flex justify-start items-center gap-2.5 cursor-pointer border border-transparent ${
-        selected ? "border-white border-opacity-40" : "border-none "
+        selected ? 'border-white border-opacity-40' : 'border-none '
       } hover:border-white/60`}
     >
       <input
@@ -178,7 +178,7 @@ function WorkspaceOption({ workspace, selected, toggleSelection }) {
       />
       <div
         className={`w-4 h-4 rounded-full border-2 border-white mr-2 ${
-          selected ? "bg-white" : ""
+          selected ? 'bg-white' : ''
         }`}
       ></div>
       <div className="text-white text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">

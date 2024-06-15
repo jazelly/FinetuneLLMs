@@ -1,5 +1,5 @@
-import System from "@/models/system";
-import { useState, useEffect } from "react";
+import System from '@/models/system';
+import { useState, useEffect } from 'react';
 
 export default function TogetherAiOptions({ settings }) {
   return (
@@ -13,7 +13,7 @@ export default function TogetherAiOptions({ settings }) {
           name="TogetherAiApiKey"
           className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
           placeholder="Together AI API Key"
-          defaultValue={settings?.TogetherAiApiKey ? "*".repeat(20) : ""}
+          defaultValue={settings?.TogetherAiApiKey ? '*'.repeat(20) : ''}
           required={true}
           autoComplete="off"
           spellCheck={false}
@@ -32,7 +32,7 @@ function TogetherAiModelSelection({ settings }) {
   useEffect(() => {
     async function findCustomModels() {
       setLoading(true);
-      const { models } = await System.customModels("togetherai");
+      const { models } = await System.customModels('togetherai');
 
       if (models?.length > 0) {
         const modelsByOrganization = models.reduce((acc, model) => {

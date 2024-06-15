@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Sidebar from "@/components/Sidebar";
-import Workspace from "@/models/workspace";
-import PasswordModal, { usePasswordModal } from "@/components/Modals/Password";
-import { isMobile } from "react-device-detect";
-import { FullScreenLoader } from "@/components/Preloader";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import Sidebar from '@/components/Sidebar';
+import Workspace from '@/models/workspace';
+import PasswordModal, { usePasswordModal } from '@/components/Modals/Password';
+import { isMobile } from 'react-device-detect';
+import { FullScreenLoader } from '@/components/Preloader';
 import {
   ArrowUUpLeft,
   ChatText,
@@ -12,20 +12,20 @@ import {
   Robot,
   User,
   Wrench,
-} from "@phosphor-icons/react";
-import paths from "@/utils/paths";
-import { Link } from "react-router-dom";
-import { NavLink } from "react-router-dom";
-import GeneralAppearance from "./GeneralAppearance";
-import ChatSettings from "./ChatSettings";
-import VectorDatabase from "./VectorDatabase";
-import Members from "./Members";
-import useUser from "@/hooks/useUser";
+} from '@phosphor-icons/react';
+import paths from '@/utils/paths';
+import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import GeneralAppearance from './GeneralAppearance';
+import ChatSettings from './ChatSettings';
+import VectorDatabase from './VectorDatabase';
+import Members from './Members';
+import useUser from '@/hooks/useUser';
 
 const TABS = {
-  "general-appearance": GeneralAppearance,
-  "chat-settings": ChatSettings,
-  "vector-database": VectorDatabase,
+  'general-appearance': GeneralAppearance,
+  'chat-settings': ChatSettings,
+  'vector-database': VectorDatabase,
   members: Members,
 };
 
@@ -72,7 +72,7 @@ function ShowWorkspaceChat() {
     <div className="w-screen h-screen overflow-hidden bg-main flex">
       {!isMobile && <Sidebar />}
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+        style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
         className="transition-all duration-500 relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll border-2 border-outline"
       >
         <div className="flex gap-x-10 pt-6 pb-4 ml-16 mr-8 border-b-2 border-white border-opacity-10">
@@ -96,7 +96,7 @@ function ShowWorkspaceChat() {
             title="Members"
             icon={<User className="h-6 w-6" />}
             to={paths.workspace.settings.members(slug)}
-            visible={["admin", "manager"].includes(user?.role)}
+            visible={['admin', 'manager'].includes(user?.role)}
           />
         </div>
         <div className="px-16 py-6">
@@ -115,9 +115,9 @@ function TabItem({ title, icon, to, visible = true }) {
       className={({ isActive }) =>
         `${
           isActive
-            ? "text-sky-400 pb-4 border-b-[4px] -mb-[19px] border-sky-400"
-            : "text-white/60 hover:text-sky-400"
-        } ` + " flex gap-x-2 items-center font-medium"
+            ? 'text-sky-400 pb-4 border-b-[4px] -mb-[19px] border-sky-400'
+            : 'text-white/60 hover:text-sky-400'
+        } ` + ' flex gap-x-2 items-center font-medium'
       }
     >
       {icon}

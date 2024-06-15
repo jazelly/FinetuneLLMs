@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { CheckCircle, CopySimple, X } from "@phosphor-icons/react";
-import showToast from "@/utils/toast";
-import hljs from "highlight.js";
-import "highlight.js/styles/github-dark-dimmed.min.css";
+import React, { useState } from 'react';
+import { CheckCircle, CopySimple, X } from '@phosphor-icons/react';
+import showToast from '@/utils/toast';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github-dark-dimmed.min.css';
 
 export default function CodeSnippetModal({ embed, closeModal }) {
   return (
@@ -51,7 +51,7 @@ const ScriptTag = ({ embed }) => {
     setTimeout(() => {
       setCopied(false);
     }, 2500);
-    showToast("Snippet copied to clipboard!", "success", { clear: true });
+    showToast('Snippet copied to clipboard!', 'success', { clear: true });
   };
 
   return (
@@ -74,7 +74,7 @@ const ScriptTag = ({ embed }) => {
           className="flex w-full text-left flex-col gap-y-1 pr-6 pl-4 whitespace-pre-line"
           dangerouslySetInnerHTML={{
             __html: hljs.highlight(snippet, {
-              language: "html",
+              language: 'html',
               ignoreIllegals: true,
             }).value,
           }}

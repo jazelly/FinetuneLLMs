@@ -1,24 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
-import FinetuneLLMsIcon from "@/media/logo/anything-llm-icon.png";
-import AgentLLMItem from "./AgentLLMItem";
-import { AVAILABLE_LLM_PROVIDERS } from "@/pages/GeneralSettings/LLMPreference";
-import { CaretUpDown, Gauge, MagnifyingGlass, X } from "@phosphor-icons/react";
-import AgentModelSelection from "../AgentModelSelection";
+import React, { useEffect, useRef, useState } from 'react';
+import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import AgentLLMItem from './AgentLLMItem';
+import { AVAILABLE_LLM_PROVIDERS } from '@/pages/GeneralSettings/LLMPreference';
+import { CaretUpDown, Gauge, MagnifyingGlass, X } from '@phosphor-icons/react';
+import AgentModelSelection from '../AgentModelSelection';
 
 const ENABLED_PROVIDERS = [
-  "openai",
-  "anthropic",
-  "lmstudio",
-  "ollama",
-  "localai",
-  "groq",
-  "azure",
-  "koboldcpp",
-  "togetherai",
-  "openrouter",
-  "mistral",
-  "perplexity",
-  "textgenwebui",
+  'openai',
+  'anthropic',
+  'lmstudio',
+  'ollama',
+  'localai',
+  'groq',
+  'azure',
+  'koboldcpp',
+  'togetherai',
+  'openrouter',
+  'mistral',
+  'perplexity',
+  'textgenwebui',
   // TODO: More agent support.
   // "generic-openai", // Need to support text-input for agent model input for this to be enabled.
   // "cohere",         // Has tool calling and will need to build explicit support
@@ -26,23 +26,23 @@ const ENABLED_PROVIDERS = [
   // "gemini",         // Too rate limited and broken in several ways to use for agents.
 ];
 const WARN_PERFORMANCE = [
-  "lmstudio",
-  "groq",
-  "azure",
-  "koboldcpp",
-  "ollama",
-  "localai",
-  "openrouter",
-  "generic-openai",
-  "textgenwebui",
+  'lmstudio',
+  'groq',
+  'azure',
+  'koboldcpp',
+  'ollama',
+  'localai',
+  'openrouter',
+  'generic-openai',
+  'textgenwebui',
 ];
 
 const LLM_DEFAULT = {
-  name: "Please make a selection",
-  value: "none",
+  name: 'Please make a selection',
+  value: 'none',
   logo: FinetuneLLMsIcon,
   options: () => <React.Fragment />,
-  description: "Agents will not work until a valid selection is made.",
+  description: 'Agents will not work until a valid selection is made.',
   requiredConfig: [],
 };
 
@@ -60,14 +60,14 @@ export default function AgentLLMSelection({
 }) {
   const [filteredLLMs, setFilteredLLMs] = useState([]);
   const [selectedLLM, setSelectedLLM] = useState(
-    workspace?.agentProvider ?? "none"
+    workspace?.agentProvider ?? 'none'
   );
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [searchMenuOpen, setSearchMenuOpen] = useState(false);
   const searchInputRef = useRef(null);
 
   function updateLLMChoice(selection) {
-    setSearchQuery("");
+    setSearchQuery('');
     setSelectedLLM(selection);
     setSearchMenuOpen(false);
     setHasChanges(true);
@@ -75,8 +75,8 @@ export default function AgentLLMSelection({
 
   function handleXButton() {
     if (searchQuery.length > 0) {
-      setSearchQuery("");
-      if (searchInputRef.current) searchInputRef.current.value = "";
+      setSearchQuery('');
+      if (searchInputRef.current) searchInputRef.current.value = '';
     } else {
       setSearchMenuOpen(!searchMenuOpen);
     }
@@ -141,7 +141,7 @@ export default function AgentLLMSelection({
                   onChange={(e) => setSearchQuery(e.target.value)}
                   ref={searchInputRef}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") e.preventDefault();
+                    if (e.key === 'Enter') e.preventDefault();
                   }}
                 />
                 <X
@@ -192,7 +192,7 @@ export default function AgentLLMSelection({
           </button>
         )}
       </div>
-      {selectedLLM !== "none" && (
+      {selectedLLM !== 'none' && (
         <div className="mt-4 flex flex-col gap-y-1">
           <AgentModelSelection
             provider={selectedLLM}

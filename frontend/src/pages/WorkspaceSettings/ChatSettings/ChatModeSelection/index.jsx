@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState } from 'react';
 export default function ChatModeSelection({ workspace, setHasChanges }) {
-  const [chatMode, setChatMode] = useState(workspace?.chatMode || "chat");
+  const [chatMode, setChatMode] = useState(workspace?.chatMode || 'chat');
 
   return (
     <div>
@@ -15,9 +15,9 @@ export default function ChatModeSelection({ workspace, setHasChanges }) {
           <input type="hidden" name="chatMode" value={chatMode} />
           <button
             type="button"
-            disabled={chatMode === "chat"}
+            disabled={chatMode === 'chat'}
             onClick={() => {
-              setChatMode("chat");
+              setChatMode('chat');
               setHasChanges(true);
             }}
             className="transition-bg duration-200 px-6 py-1 text-md text-white/60 disabled:text-white bg-transparent disabled:bg-[#687280] rounded-md"
@@ -26,9 +26,9 @@ export default function ChatModeSelection({ workspace, setHasChanges }) {
           </button>
           <button
             type="button"
-            disabled={chatMode === "query"}
+            disabled={chatMode === 'query'}
             onClick={() => {
-              setChatMode("query");
+              setChatMode('query');
               setHasChanges(true);
             }}
             className="transition-bg duration-200 px-6 py-1 text-md text-white/60 disabled:text-white bg-transparent disabled:bg-[#687280] rounded-md"
@@ -37,15 +37,15 @@ export default function ChatModeSelection({ workspace, setHasChanges }) {
           </button>
         </div>
         <p className="text-sm text-white/60">
-          {chatMode === "chat" ? (
+          {chatMode === 'chat' ? (
             <>
-              <b>Chat</b> will provide answers with the LLM's general knowledge{" "}
+              <b>Chat</b> will provide answers with the LLM's general knowledge{' '}
               <i className="font-semibold">and</i> document context that is
               found.
             </>
           ) : (
             <>
-              <b>Query</b> will provide answers{" "}
+              <b>Query</b> will provide answers{' '}
               <i className="font-semibold">only</i> if document context is
               found.
             </>

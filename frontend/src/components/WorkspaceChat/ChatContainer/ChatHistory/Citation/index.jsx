@@ -1,9 +1,9 @@
-import { memo, useState } from "react";
-import { v4 } from "uuid";
-import { decode as HTMLDecode } from "he";
-import truncate from "truncate";
-import ModalWrapper from "@/components/ModalWrapper";
-import { middleTruncate } from "@/utils/directories";
+import { memo, useState } from 'react';
+import { v4 } from 'uuid';
+import { decode as HTMLDecode } from 'he';
+import truncate from 'truncate';
+import ModalWrapper from '@/components/ModalWrapper';
+import { middleTruncate } from '@/utils/directories';
 import {
   CaretRight,
   FileText,
@@ -13,14 +13,14 @@ import {
   Link,
   X,
   YoutubeLogo,
-} from "@phosphor-icons/react";
-import { Tooltip } from "react-tooltip";
-import { toPercentString } from "@/utils/numbers";
+} from '@phosphor-icons/react';
+import { Tooltip } from 'react-tooltip';
+import { toPercentString } from '@/utils/numbers';
 
 function combineLikeSources(sources) {
   const combined = {};
   sources.forEach((source) => {
-    const { id, title, text, chunkSource = "", score = null } = source;
+    const { id, title, text, chunkSource = '', score = null } = source;
     if (combined.hasOwnProperty(title)) {
       combined[title].chunks.push({ id, text, chunkSource, score });
       combined[title].references += 1;
@@ -45,13 +45,13 @@ export default function Citations({ sources = [] }) {
       <button
         onClick={() => setOpen(!open)}
         className={`text-white/50 font-medium italic text-sm text-left ml-14 pt-2 ${
-          open ? "pb-2" : ""
+          open ? 'pb-2' : ''
         } hover:text-white/75 transition-all duration-300`}
       >
-        {open ? "Hide Citations" : "Show Citations"}
+        {open ? 'Hide Citations' : 'Show Citations'}
         <CaretRight
           className={`w-3.5 h-3.5 inline-block ml-1 transform transition-transform duration-300 ${
-            open ? "rotate-90" : ""
+            open ? 'rotate-90' : ''
           }`}
         />
       </button>
@@ -106,7 +106,7 @@ function SkeletonLine() {
           className="bg-white/20 rounded"
           style={{
             width: `${Math.random() * 150 + 50}px`,
-            height: "20px",
+            height: '20px',
           }}
         ></div>
       ))}
@@ -156,7 +156,7 @@ function CitationDetailModal({ source, onClose }) {
         </div>
         <div
           className="h-full w-full overflow-y-auto"
-          style={{ maxHeight: "calc(100vh - 200px)" }}
+          style={{ maxHeight: 'calc(100vh - 200px)' }}
         >
           <div className="p-6 space-y-2 flex-col">
             {[...Array(3)].map((_, idx) => (
@@ -206,41 +206,41 @@ function CitationDetailModal({ source, onClose }) {
 // which contain valid outbound links that can be clicked by the
 // user when viewing a citation. Optionally allows various icons
 // to show distinct types of sources.
-function parseChunkSource({ title = "", chunks = [] }) {
+function parseChunkSource({ title = '', chunks = [] }) {
   const nullResponse = {
     isUrl: false,
     text: null,
     href: null,
-    icon: "file",
+    icon: 'file',
   };
 
   if (
     !chunks.length ||
-    (!chunks[0].chunkSource.startsWith("link://") &&
-      !chunks[0].chunkSource.startsWith("confluence://"))
+    (!chunks[0].chunkSource.startsWith('link://') &&
+      !chunks[0].chunkSource.startsWith('confluence://'))
   )
     return nullResponse;
   try {
     const url = new URL(
-      chunks[0].chunkSource.split("link://")[1] ||
-        chunks[0].chunkSource.split("confluence://")[1]
+      chunks[0].chunkSource.split('link://')[1] ||
+        chunks[0].chunkSource.split('confluence://')[1]
     );
     let text = url.host + url.pathname;
-    let icon = "link";
+    let icon = 'link';
 
-    if (url.host.includes("youtube.com")) {
+    if (url.host.includes('youtube.com')) {
       text = title;
-      icon = "youtube";
+      icon = 'youtube';
     }
 
-    if (url.host.includes("github.com")) {
+    if (url.host.includes('github.com')) {
       text = title;
-      icon = "github";
+      icon = 'github';
     }
 
-    if (url.host.includes("atlassian.net")) {
+    if (url.host.includes('atlassian.net')) {
       text = title;
-      icon = "confluence";
+      icon = 'confluence';
     }
 
     return {

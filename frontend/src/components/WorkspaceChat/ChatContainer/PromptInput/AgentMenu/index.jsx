@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { Tooltip } from "react-tooltip";
-import { At, Flask, X } from "@phosphor-icons/react";
-import ModalWrapper from "@/components/ModalWrapper";
-import { useModal } from "@/hooks/useModal";
-import { useIsAgentSessionActive } from "@/utils/chat/agent";
+import { useEffect, useRef, useState } from 'react';
+import { Tooltip } from 'react-tooltip';
+import { At, Flask, X } from '@phosphor-icons/react';
+import ModalWrapper from '@/components/ModalWrapper';
+import { useModal } from '@/hooks/useModal';
+import { useIsAgentSessionActive } from '@/utils/chat/agent';
 
 export default function AvailableAgentsButton({ showing, setShowAgents }) {
   const agentSessionActive = useIsAgentSessionActive();
@@ -16,7 +16,7 @@ export default function AvailableAgentsButton({ showing, setShowAgents }) {
       aria-label="View all available agents you can use for chatting."
       onClick={() => setShowAgents(!showing)}
       className={`flex justify-center items-center opacity-60 hover:opacity-100 cursor-pointer ${
-        showing ? "!opacity-100" : ""
+        showing ? '!opacity-100' : ''
       }`}
     >
       <At className="w-6 h-6 pointer-events-none text-white" />
@@ -49,13 +49,13 @@ export function AvailableAgents({
   useEffect(() => {
     function listenForOutsideClick() {
       if (!showing || !formRef.current) return false;
-      document.addEventListener("click", closeIfOutside);
+      document.addEventListener('click', closeIfOutside);
     }
     listenForOutsideClick();
   }, [showing, formRef.current]);
 
   const closeIfOutside = ({ target }) => {
-    if (target.id === "agent-list-btn") return;
+    if (target.id === 'agent-list-btn') return;
     const isOutside = !formRef?.current?.contains(target);
     if (!isOutside) return;
     setShowing(false);
@@ -73,7 +73,7 @@ export function AvailableAgents({
             <button
               onClick={() => {
                 setShowing(false);
-                sendCommand("@agent ", false);
+                sendCommand('@agent ', false);
                 promptRef?.current?.focus();
               }}
               className="w-full hover:cursor-pointer hover:bg-zinc-700 px-2 py-2 rounded-xl flex flex-col justify-start group"
@@ -117,7 +117,7 @@ export function useAvailableAgents() {
   return { showAgents, setShowAgents };
 }
 
-const SEEN_FT_AGENT_MODAL = "anythingllm_seen_first_time_agent_modal";
+const SEEN_FT_AGENT_MODAL = 'anythingllm_seen_first_time_agent_modal';
 function FirstTimeAgentUser() {
   const { isOpen, openModal, closeModal } = useModal();
   useEffect(() => {
@@ -154,7 +154,7 @@ function FirstTimeAgentUser() {
           <div className="p-6 space-y-6 flex h-full w-full">
             <div className="w-full flex flex-col gap-y-4">
               <p className="text-white/80 text-xs md:text-sm">
-                Agents are your LLM, but with special abilities that{" "}
+                Agents are your LLM, but with special abilities that{' '}
                 <u>do something beyond chatting with your documents</u>.
                 <br />
                 <br />

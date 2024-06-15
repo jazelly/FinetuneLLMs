@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useIsAgentSessionActive } from "@/utils/chat/agent";
-import AddPresetModal from "./AddPresetModal";
-import EditPresetModal from "./EditPresetModal";
-import { useModal } from "@/hooks/useModal";
-import System from "@/models/system";
-import { DotsThree, Plus } from "@phosphor-icons/react";
-import showToast from "@/utils/toast";
+import { useEffect, useState } from 'react';
+import { useIsAgentSessionActive } from '@/utils/chat/agent';
+import AddPresetModal from './AddPresetModal';
+import EditPresetModal from './EditPresetModal';
+import { useModal } from '@/hooks/useModal';
+import System from '@/models/system';
+import { DotsThree, Plus } from '@phosphor-icons/react';
+import showToast from '@/utils/toast';
 
 export const CMD_REGEX = new RegExp(/[^a-zA-Z0-9_-]/g);
 export default function SlashPresets({ setShowing, sendCommand }) {
@@ -36,7 +36,7 @@ export default function SlashPresets({ setShowing, sendCommand }) {
   const handleSavePreset = async (preset) => {
     const { error } = await System.createSlashCommandPreset(preset);
     if (!!error) {
-      showToast(error, "error");
+      showToast(error, 'error');
       return false;
     }
 
@@ -57,7 +57,7 @@ export default function SlashPresets({ setShowing, sendCommand }) {
     );
 
     if (!!error) {
-      showToast(error, "error");
+      showToast(error, 'error');
       return;
     }
 

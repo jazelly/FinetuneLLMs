@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import System from "../../../models/system";
-import { AUTH_TOKEN } from "../../../utils/constants";
-import useLogo from "../../../hooks/useLogo";
-import paths from "../../../utils/paths";
-import ModalWrapper from "@/components/ModalWrapper";
-import { useModal } from "@/hooks/useModal";
-import RecoveryCodeModal from "@/components/Modals/DisplayRecoveryCodeModal";
+import React, { useEffect, useState } from 'react';
+import System from '../../../models/system';
+import { AUTH_TOKEN } from '../../../utils/constants';
+import useLogo from '../../../hooks/useLogo';
+import paths from '../../../utils/paths';
+import ModalWrapper from '@/components/ModalWrapper';
+import { useModal } from '@/hooks/useModal';
+import RecoveryCodeModal from '@/components/Modals/DisplayRecoveryCodeModal';
 
 export default function SingleUserAuth() {
   const [loading, setLoading] = useState(false);
@@ -98,7 +98,7 @@ export default function SingleUserAuth() {
               type="submit"
               className="md:text-[#46C8FF] md:bg-transparent text-[#222628] text-sm font-bold focus:ring-4 focus:outline-none rounded-md border-[1.5px] border-[#46C8FF] md:h-[34px] h-[48px] md:hover:text-white md:hover:bg-[#46C8FF] bg-[#46C8FF] focus:z-10 w-full"
             >
-              {loading ? "Validating..." : "Login"}
+              {loading ? 'Validating...' : 'Login'}
             </button>
           </div>
         </div>

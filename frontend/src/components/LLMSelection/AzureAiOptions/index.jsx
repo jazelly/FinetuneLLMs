@@ -27,7 +27,7 @@ export default function AzureAiOptions({ settings }) {
             name="AzureOpenAiKey"
             className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
             placeholder="Azure OpenAI API Key"
-            defaultValue={settings?.AzureOpenAiKey ? "*".repeat(20) : ""}
+            defaultValue={settings?.AzureOpenAiKey ? '*'.repeat(20) : ''}
             required={true}
             autoComplete="off"
             spellCheck={false}

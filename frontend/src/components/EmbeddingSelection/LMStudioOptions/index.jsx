@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import System from "@/models/system";
+import React, { useEffect, useState } from 'react';
+import System from '@/models/system';
 
 export default function LMStudioEmbeddingOptions({ settings }) {
   const [basePathValue, setBasePathValue] = useState(
@@ -55,13 +55,13 @@ function LMStudioModelSelection({ settings, basePath = null }) {
 
   useEffect(() => {
     async function findCustomModels() {
-      if (!basePath || !basePath.includes("/v1")) {
+      if (!basePath || !basePath.includes('/v1')) {
         setCustomModels([]);
         setLoading(false);
         return;
       }
       setLoading(true);
-      const { models } = await System.customModels("lmstudio", null, basePath);
+      const { models } = await System.customModels('lmstudio', null, basePath);
       setCustomModels(models || []);
       setLoading(false);
     }
@@ -80,9 +80,9 @@ function LMStudioModelSelection({ settings, basePath = null }) {
           className="bg-zinc-900 border-gray-500 text-white text-sm rounded-lg block w-full p-2.5"
         >
           <option disabled={true} selected={true}>
-            {basePath?.includes("/v1")
-              ? "-- loading available models --"
-              : "-- waiting for URL --"}
+            {basePath?.includes('/v1')
+              ? '-- loading available models --'
+              : '-- waiting for URL --'}
           </option>
         </select>
       </div>

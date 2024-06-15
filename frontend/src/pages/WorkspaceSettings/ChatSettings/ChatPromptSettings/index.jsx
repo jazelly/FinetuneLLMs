@@ -1,4 +1,4 @@
-import { chatPrompt } from "@/utils/chat";
+import { chatPrompt } from '@/utils/chat';
 
 export default function ChatPromptSettings({ workspace, setHasChanges }) {
   return (

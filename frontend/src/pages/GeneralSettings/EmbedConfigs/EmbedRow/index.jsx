@@ -1,13 +1,13 @@
-import { useRef, useState } from "react";
-import { DotsThreeOutline, LinkSimple } from "@phosphor-icons/react";
-import showToast from "@/utils/toast";
-import { useModal } from "@/hooks/useModal";
-import ModalWrapper from "@/components/ModalWrapper";
-import Embed from "@/models/embed";
-import paths from "@/utils/paths";
-import { nFormatter } from "@/utils/numbers";
-import EditEmbedModal from "./EditEmbedModal";
-import CodeSnippetModal from "./CodeSnippetModal";
+import { useRef, useState } from 'react';
+import { DotsThreeOutline, LinkSimple } from '@phosphor-icons/react';
+import showToast from '@/utils/toast';
+import { useModal } from '@/hooks/useModal';
+import ModalWrapper from '@/components/ModalWrapper';
+import Embed from '@/models/embed';
+import paths from '@/utils/paths';
+import { nFormatter } from '@/utils/numbers';
+import EditEmbedModal from './EditEmbedModal';
+import CodeSnippetModal from './CodeSnippetModal';
 
 export default function EmbedRow({ embed }) {
   const rowRef = useRef(null);
@@ -34,11 +34,11 @@ export default function EmbedRow({ embed }) {
     const { success, error } = await Embed.updateEmbed(embed.id, {
       enabled: !enabled,
     });
-    if (!success) showToast(error, "error", { clear: true });
+    if (!success) showToast(error, 'error', { clear: true });
     if (success) {
       showToast(
-        `Embed ${enabled ? "has been disabled" : "is active"}.`,
-        "success",
+        `Embed ${enabled ? 'has been disabled' : 'is active'}.`,
+        'success',
         { clear: true }
       );
       setEnabled(!enabled);
@@ -52,10 +52,10 @@ export default function EmbedRow({ embed }) {
     )
       return false;
     const { success, error } = await Embed.deleteEmbed(embed.id);
-    if (!success) showToast(error, "error", { clear: true });
+    if (!success) showToast(error, 'error', { clear: true });
     if (success) {
       rowRef?.current?.remove();
-      showToast("Embed deleted from system.", "success", { clear: true });
+      showToast('Embed deleted from system.', 'success', { clear: true });
     }
   };
 
@@ -102,7 +102,7 @@ export default function EmbedRow({ embed }) {
               onClick={handleSuspend}
               className="font-medium text-orange-600 dark:text-orange-300 px-2 py-1 rounded-lg hover:bg-orange-50 hover:dark:bg-orange-800 hover:dark:bg-opacity-20"
             >
-              {enabled ? "Disable" : "Enable"}
+              {enabled ? 'Disable' : 'Enable'}
             </button>
             <button
               onClick={handleDelete}

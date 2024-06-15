@@ -1,6 +1,6 @@
 function recommendedSettings(provider = null) {
   switch (provider) {
-    case "mistral":
+    case 'mistral':
       return { temp: 0 };
     default:
       return { temp: 0.7 };

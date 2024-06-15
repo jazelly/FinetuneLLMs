@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { X } from "@phosphor-icons/react";
+import React, { useState } from 'react';
+import { X } from '@phosphor-icons/react';
 import {
   BooleanInput,
   ChatModeSelection,
@@ -7,9 +7,9 @@ import {
   PermittedDomains,
   WorkspaceSelection,
   enforceSubmissionSchema,
-} from "../../NewEmbedModal";
-import Embed from "@/models/embed";
-import showToast from "@/utils/toast";
+} from '../../NewEmbedModal';
+import Embed from '@/models/embed';
+import showToast from '@/utils/toast';
 
 export default function EditEmbedModal({ embed, closeModal }) {
   const [error, setError] = useState(null);
@@ -21,7 +21,7 @@ export default function EditEmbedModal({ embed, closeModal }) {
     const data = enforceSubmissionSchema(form);
     const { success, error } = await Embed.updateEmbed(embed.id, data);
     if (success) {
-      showToast("Embed updated successfully.", "success", { clear: true });
+      showToast('Embed updated successfully.', 'success', { clear: true });
       setTimeout(() => {
         window.location.reload();
       }, 800);
@@ -94,7 +94,7 @@ export default function EditEmbedModal({ embed, closeModal }) {
                 publish on your website with a simple
                 <code className="bg-stone-800 text-white mx-1 px-1 rounded-sm">
                   &lt;script&gt;
-                </code>{" "}
+                </code>{' '}
                 tag.
               </p>
             </div>

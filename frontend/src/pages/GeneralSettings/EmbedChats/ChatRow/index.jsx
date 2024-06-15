@@ -1,9 +1,9 @@
-import truncate from "truncate";
-import { X, Trash, LinkSimple } from "@phosphor-icons/react";
-import ModalWrapper from "@/components/ModalWrapper";
-import { useModal } from "@/hooks/useModal";
-import paths from "@/utils/paths";
-import Embed from "@/models/embed";
+import truncate from 'truncate';
+import { X, Trash, LinkSimple } from '@phosphor-icons/react';
+import ModalWrapper from '@/components/ModalWrapper';
+import { useModal } from '@/hooks/useModal';
+import paths from '@/utils/paths';
+import Embed from '@/models/embed';
 
 export default function ChatRow({ chat, onDelete }) {
   const {
@@ -38,7 +38,7 @@ export default function ChatRow({ chat, onDelete }) {
             rel="noreferrer"
             className="text-white flex items-center hover:underline"
           >
-            <LinkSimple className="mr-2 w-5 h-5" />{" "}
+            <LinkSimple className="mr-2 w-5 h-5" />{' '}
             {chat.embed_config.workspace.name}
           </a>
         </td>

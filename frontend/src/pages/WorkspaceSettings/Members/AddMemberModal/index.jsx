@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { MagnifyingGlass, X } from "@phosphor-icons/react";
-import Admin from "@/models/admin";
-import showToast from "@/utils/toast";
+import React, { useState } from 'react';
+import { MagnifyingGlass, X } from '@phosphor-icons/react';
+import Admin from '@/models/admin';
+import showToast from '@/utils/toast';
 
 export default function AddMemberModal({ closeModal, workspace, users }) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedUsers, setSelectedUsers] = useState(workspace?.userIds || []);
 
   const handleUpdate = async (e) => {
@@ -14,12 +14,12 @@ export default function AddMemberModal({ closeModal, workspace, users }) {
       selectedUsers
     );
     if (success) {
-      showToast("Users updated successfully.", "success");
+      showToast('Users updated successfully.', 'success');
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     }
-    showToast(error, "error");
+    showToast(error, 'error');
   };
 
   const handleUserSelect = (userId) => {
@@ -56,8 +56,8 @@ export default function AddMemberModal({ closeModal, workspace, users }) {
     .filter((user) =>
       user.username.toLowerCase().includes(searchTerm.toLowerCase())
     )
-    .filter((user) => user.role !== "admin")
-    .filter((user) => user.role !== "manager");
+    .filter((user) => user.role !== 'admin')
+    .filter((user) => user.role !== 'manager');
 
   return (
     <div className="relative w-full max-w-[550px] max-h-full">

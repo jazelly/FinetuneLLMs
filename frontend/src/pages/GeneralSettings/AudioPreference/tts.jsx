@@ -1,34 +1,34 @@
-import React, { useEffect, useState, useRef } from "react";
-import System from "@/models/system";
-import showToast from "@/utils/toast";
-import LLMItem from "@/components/LLMSelection/LLMItem";
-import { CaretUpDown, MagnifyingGlass, X } from "@phosphor-icons/react";
-import CTAButton from "@/components/CTAButton";
-import OpenAiLogo from "@/media/llmprovider/openai.png";
-import FinetuneLLMsIcon from "@/media/logo/anything-llm-icon.png";
-import ElevenLabsIcon from "@/media/ttsproviders/elevenlabs.png";
-import BrowserNative from "@/components/TextToSpeech/BrowserNative";
-import OpenAiTTSOptions from "@/components/TextToSpeech/OpenAiOptions";
-import ElevenLabsTTSOptions from "@/components/TextToSpeech/ElevenLabsOptions";
+import React, { useEffect, useState, useRef } from 'react';
+import System from '@/models/system';
+import showToast from '@/utils/toast';
+import LLMItem from '@/components/LLMSelection/LLMItem';
+import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
+import CTAButton from '@/components/CTAButton';
+import OpenAiLogo from '@/media/llmprovider/openai.png';
+import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import ElevenLabsIcon from '@/media/ttsproviders/elevenlabs.png';
+import BrowserNative from '@/components/TextToSpeech/BrowserNative';
+import OpenAiTTSOptions from '@/components/TextToSpeech/OpenAiOptions';
+import ElevenLabsTTSOptions from '@/components/TextToSpeech/ElevenLabsOptions';
 
 const PROVIDERS = [
   {
-    name: "System native",
-    value: "native",
+    name: 'System native',
+    value: 'native',
     logo: FinetuneLLMsIcon,
     options: (settings) => <BrowserNative settings={settings} />,
     description: "Uses your browser's built in TTS service if supported.",
   },
   {
-    name: "OpenAI",
-    value: "openai",
+    name: 'OpenAI',
+    value: 'openai',
     logo: OpenAiLogo,
     options: (settings) => <OpenAiTTSOptions settings={settings} />,
     description: "Use OpenAI's text to speech voices.",
   },
   {
-    name: "ElevenLabs",
-    value: "elevenlabs",
+    name: 'ElevenLabs',
+    value: 'elevenlabs',
     logo: ElevenLabsIcon,
     options: (settings) => <ElevenLabsTTSOptions settings={settings} />,
     description: "Use ElevenLabs's text to speech voices and technology.",
@@ -38,10 +38,10 @@ const PROVIDERS = [
 export default function TextToSpeechProvider({ settings }) {
   const [saving, setSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredProviders, setFilteredProviders] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState(
-    settings?.TextToSpeechProvider || "native"
+    settings?.TextToSpeechProvider || 'native'
   );
   const [searchMenuOpen, setSearchMenuOpen] = useState(false);
   const searchInputRef = useRef(null);
@@ -57,16 +57,16 @@ export default function TextToSpeechProvider({ settings }) {
     setSaving(true);
 
     if (error) {
-      showToast(`Failed to save preferences: ${error}`, "error");
+      showToast(`Failed to save preferences: ${error}`, 'error');
     } else {
-      showToast("Text-to-speech preferences saved successfully.", "success");
+      showToast('Text-to-speech preferences saved successfully.', 'success');
     }
     setSaving(false);
     setHasChanges(!!error);
   };
 
   const updateProviderChoice = (selection) => {
-    setSearchQuery("");
+    setSearchQuery('');
     setSelectedProvider(selection);
     setSearchMenuOpen(false);
     setHasChanges(true);
@@ -74,8 +74,8 @@ export default function TextToSpeechProvider({ settings }) {
 
   const handleXButton = () => {
     if (searchQuery.length > 0) {
-      setSearchQuery("");
-      if (searchInputRef.current) searchInputRef.current.value = "";
+      setSearchQuery('');
+      if (searchInputRef.current) searchInputRef.current.value = '';
     } else {
       setSearchMenuOpen(!searchMenuOpen);
     }
@@ -114,7 +114,7 @@ export default function TextToSpeechProvider({ settings }) {
               onClick={() => handleSubmit()}
               className="mt-3 mr-0 -mb-14 z-10"
             >
-              {saving ? "Saving..." : "Save changes"}
+              {saving ? 'Saving...' : 'Save changes'}
             </CTAButton>
           )}
         </div>
@@ -144,7 +144,7 @@ export default function TextToSpeechProvider({ settings }) {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     ref={searchInputRef}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") e.preventDefault();
+                      if (e.key === 'Enter') e.preventDefault();
                     }}
                   />
                   <X

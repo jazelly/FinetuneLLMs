@@ -11,7 +11,7 @@ export default function CohereAiOptions({ settings }) {
             name="CohereApiKey"
             className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
             placeholder="Cohere API Key"
-            defaultValue={settings?.CohereApiKey ? "*".repeat(20) : ""}
+            defaultValue={settings?.CohereApiKey ? '*'.repeat(20) : ''}
             required={true}
             autoComplete="off"
             spellCheck={false}
@@ -23,17 +23,17 @@ export default function CohereAiOptions({ settings }) {
           </label>
           <select
             name="CohereModelPref"
-            defaultValue={settings?.CohereModelPref || "command-r"}
+            defaultValue={settings?.CohereModelPref || 'command-r'}
             required={true}
             className="bg-zinc-900 border-gray-500 text-white text-sm rounded-lg block w-full p-2.5"
           >
             {[
-              "command-r",
-              "command-r-plus",
-              "command",
-              "command-light",
-              "command-nightly",
-              "command-light-nightly",
+              'command-r',
+              'command-r-plus',
+              'command',
+              'command-light',
+              'command-nightly',
+              'command-light-nightly',
             ].map((model) => {
               return (
                 <option key={model} value={model}>
