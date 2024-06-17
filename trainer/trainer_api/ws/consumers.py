@@ -18,8 +18,9 @@ class TrainingConsumer(AsyncWebsocketConsumer):
             f"----------NEW CONNECT COMING-----------------------"
         )
         training_consumer_logger.info(f"[SCOPE]: {self.scope}")
-        client_port = self.scope["client"][1]
-        await self.channel_layer.group_add(str(client_port), self.channel_name)
+        # TODO: not use client_port as group name. Instead, use jobId/taskId
+        self.client_port = self.scope["client"][1]
+        await self.channel_layer.group_add(str(self.client_port), self.channel_name)
 
         # Accept the WebSocket connection
         await self.accept()
@@ -30,11 +31,10 @@ class TrainingConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Clean up when the WebSocket closes
-        client_port = self.scope["client"][1]
         training_consumer_logger.info(
             f"Client disaconnected: {self.scope['client']} disconnected with {self.channel_name} | Close Code: {close_code}"
         )
-        await self.channel_layer.group_discard(str(client_port), self.channel_name)
+        await self.channel_layer.group_discard(str(self.client_port), self.channel_name)
 
     async def receive(self, text_data):
         """
@@ -52,11 +52,10 @@ class TrainingConsumer(AsyncWebsocketConsumer):
         data = text_data_json.get("data")
 
         training_consumer_logger.info(
-            f"Received message from {self.scope['client'][1]}: {type} | {message} | {data}"
+            f"Received message for {self.client_port}: {type} | {message} | {data}"
         )
 
-        if type == "start":
-
+        if type == "command":
             if (
                 not data
                 or data.get("baseModel") not in BASE_MODELS
@@ -79,7 +78,7 @@ class TrainingConsumer(AsyncWebsocketConsumer):
                 return
 
             try:
-                # schedule the task and repond immediately
+                # schedule the task and respond immediately
                 training_consumer_logger.info("[Worker] Submitting task")
                 worker = Worker()
 
@@ -115,16 +114,29 @@ class TrainingConsumer(AsyncWebsocketConsumer):
                     )
                 )
 
-    async def send_message_to_client(self, client_id, responseJson):
+    async def send_job_update(self, event):
+        message = event["message"]
+        assert isinstance(message, str), "jon update must be str"
+
+        await self.send(text_data=message)
+
+    async def send_message_to_client(self, responseJson):
         channel_layer = get_channel_layer()
-        training_consumer_logger.info(f"Sending message to {client_id}: {responseJson}")
+        training_consumer_logger.info(
+            f"Sending message to {self.client_port}: {responseJson}"
+        )
         await channel_layer.group_send(
-            str(client_id), {"type": "targeted", **responseJson}
+            str(self.client_port),
+            {"type": "send_job_update", "message": responseJson},
         )
 
-    def send_message_to_client_sync(self, client_id, responseJson):
+    def send_message_to_client_sync(self, response):
+        assert isinstance(response, str), "response must be str"
         channel_layer = get_channel_layer()
-        training_consumer_logger.info(f"Sending message to {client_id}: {responseJson}")
+        training_consumer_logger.info(
+            f"Sending message to group {self.client_port}: {response}"
+        )
         async_to_sync(channel_layer.group_send)(
-            client_id, {"type": "targeted", **responseJson}
+            str(self.client_port),
+            {"type": "send_job_update", "message": response},
         )

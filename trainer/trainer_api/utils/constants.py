@@ -17,6 +17,7 @@ class WorkerStates(Enum):
 
 
 FINETUNE_SCRIPT_DIR = os.path.join(settings.BASE_DIR, "./trainer_api/finetune")
+FINETUNE_SCRIPT_PATH = os.path.join(FINETUNE_SCRIPT_DIR, "./sft.py")
 
 LOG_DIR = log_path = os.path.join(settings.BASE_DIR, "trainer_api/logs/")
 

@@ -1,3 +1,4 @@
+import json
 import subprocess
 import sys
 import os
@@ -7,12 +8,12 @@ import uuid
 from trainer_api.utils.errors import InvalidArgumentError
 from trainer_api.utils.constants import (
     BASE_MODELS,
-    FINETUNE_SCRIPT_DIR,
+    FINETUNE_SCRIPT_PATH,
     TRAINING_METHODS,
 )
 from trainer_api.utils import logging
 
-FINETUNE_SCRIPT_PATH = os.path.join(FINETUNE_SCRIPT_DIR, "./sft.py")
+logger = logging.get_stream_logger("trainer_api.scheduler.task", "Task")
 
 
 class Task:
@@ -54,27 +55,38 @@ class Task:
             process.wait()
 
     def _assemble_command(self):
-        r = ["python", FINETUNE_SCRIPT_PATH]
-        r.append("--model")
-        r.append(f"{self.model}")
-        r.append("--method")
-        r.append(f"{self.method}")
-        r.append("--dataset")
-        r.append(f"{self.dataset}")
+        r = [
+            "python",
+            FINETUNE_SCRIPT_PATH,
+            "--model",
+            self.model,
+            "--method",
+            self.method,
+            "--dataset",
+            self.dataset,
+        ]
         return r
 
     def _consume_logs_from_subprocess(self, process):
         for pipe in (process.stdout, process.stderr):
             for line in iter(pipe.readline, b""):
                 if len(line) > 0:
-                    print(f"for ws: {line}")
+                    logger.info(f"for ws: {line}")
                     self.ws.send_message_to_client_sync(
-                        client_id=self.ws.scope["client"][1],
-                        responseJson={
-                            "message": line,
-                            "type": "log",
-                        },
+                        response=json.dumps(
+                            {
+                                "type": "info",
+                                "message": "new log",
+                                "data": {
+                                    "task_id": str(self.id),
+                                    "log": line,
+                                },
+                                "code": 200,
+                            }
+                        ),
                     )
+                # else:
+                #     logger.warning(f"an empty line: {line}")
 
     def __str__(self):
         return f"[Task] method: {self.method if hasattr(self, 'method') else 'None'} training | model: {self.model if hasattr(self, 'model') else 'None'}"

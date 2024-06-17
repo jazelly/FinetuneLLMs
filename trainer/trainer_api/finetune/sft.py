@@ -408,6 +408,17 @@ def train(trainer, new_model=get_new_model_name()):
     # Save trained model
     trainer.model.save_pretrained(new_model)
 
+def save_trained_model():
+    # Reload model in FP16 and merge it with LoRA weights
+    base_model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        low_cpu_mem_usage=True,
+        return_dict=True,
+        torch_dtype=torch.float16,
+        device_map=device_map,
+    )
+    model = PeftModel.from_pretrained(base_model, new_model)
+    model = model.merge_and_unload()
 
 model = get_quantized_model(model_name, bnb_config, device_map)
 
@@ -468,7 +479,7 @@ pipe = pipeline(
     task="text-generation", model=model, tokenizer=tokenizer, max_length=200
 )
 result = pipe(f"<s>[INST] {prompt} [/INST]")
-print(result[0]["generated_text"])
+logger.info(result[0]["generated_text"])
 
 del model
 del pipe
@@ -479,19 +490,7 @@ gc.collect()
 gc.collect()
 
 
-def save_trained_model():
-    # Reload model in FP16 and merge it with LoRA weights
-    base_model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        low_cpu_mem_usage=True,
-        return_dict=True,
-        torch_dtype=torch.float16,
-        device_map=device_map,
-    )
-    model = PeftModel.from_pretrained(base_model, new_model)
-    model = model.merge_and_unload()
+if trainable:
+    save_trained_model()
 
-
-save_trained_model()
-
-saved_tokenizer = tokenizer.save_pretrained(new_model)
+    saved_tokenizer = tokenizer.save_pretrained(new_model)
