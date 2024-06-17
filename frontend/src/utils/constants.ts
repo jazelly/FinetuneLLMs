@@ -14,7 +14,17 @@ export const AI_BACKGROUND_COLOR = 'bg-historical-msg-system';
 
 export const HF_DATASET_LINK_BASE = 'https://huggingface.co/datasets/';
 
+export const BOTTOM_GAP = 0;
+export const HEADER_HEIGHT = 64;
+export const SIDEBAR_WIDTH = 64;
+export const RIGHT_GAP = 0;
+
 export function fullApiUrl() {
   if (API_BASE !== '/api') return API_BASE;
   return `${window.location.origin}/api`;
 }
+
+export const PERMALINK_DASHBOARD = {
+  url: '/',
+  name: 'Dashboard',
+};

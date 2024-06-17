@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import paths from '../utils/paths';
 import {
   BookOpen,
@@ -12,6 +12,8 @@ import {
   LinkSimple,
   FileArrowUp,
 } from '@phosphor-icons/react';
+import { PermalinksContext } from '@/contexts/Permalinks.context';
+import Permalinks from './Permalinks.component';
 
 export const MAX_ICONS = 3;
 export const ICON_COMPONENTS = {
@@ -32,7 +34,7 @@ function Header({ showUploadModal }: { showUploadModal: () => void }) {
 
   return (
     <div className="flex justify-between items-center pt-1 px-2 text-2xl h-full">
-      <div className="header-title">FinetuneLLMs</div>
+      <Permalinks />
       <div
         id="header-right-logo"
         className="flex justify-center space-x-6 mr-2"

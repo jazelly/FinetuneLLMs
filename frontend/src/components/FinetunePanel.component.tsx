@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
 import Dropdown from './Dropdown.component';
-import { AllJobOptions, IDataset } from '@/models/types/dashboard';
+import { AllJobOptions, IDataset } from '@/types/dashboard.type';
 import { CaretCircleDoubleRight } from '@phosphor-icons/react';
 import Job from '@/models/job.model';
 import { useNavigate } from 'react-router-dom';
 import useWebSocket from '@/hooks/useWebSocket';
-
+import type { TrainerPayload, TrainerResponseWS } from '@/types/dashboard.type';
+import JSONView from 'react-json-view';
 export interface FinetunePanelProps {
   jobOptions: AllJobOptions | undefined;
+  setJobOptions: any;
   runningJobId?: string;
 }
 
-const FinetunePanel = ({ jobOptions, runningJobId }: FinetunePanelProps) => {
-  const { trainerSocket, sendMessageToTrainer } = useWebSocket();
+const FinetunePanel = ({
+  jobOptions,
+  setJobOptions,
+  runningJobId,
+}: FinetunePanelProps) => {
+  const { sendMessage } = useWebSocket<TrainerPayload, TrainerResponseWS>();
   const [submitHovered, setSubmitHovered] = useState(false);
   const [submitJobError, setSubmitJobError] = useState('');
 
@@ -24,6 +30,23 @@ const FinetunePanel = ({ jobOptions, runningJobId }: FinetunePanelProps) => {
 
   const clearSubmitJobError = () => {
     if (submitJobError !== '') setSubmitJobError('');
+  };
+
+  const handleHyperparametersChange = (
+    hyperparameters: AllJobOptions['hyperparameters']
+  ) => {
+    setJobOptions({
+      ...jobOptions!,
+      hyperparameters,
+    });
+  };
+
+  // We cannot do strict typing for event or this handler
+  // See issue https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11508
+  const handleHyperparametersStringChange = (event) => {
+    console.log('event', event);
+    const newHyper = event.updated_src;
+    handleHyperparametersChange(newHyper);
   };
 
   const handleSubmitJob = async () => {
@@ -54,25 +77,23 @@ const FinetunePanel = ({ jobOptions, runningJobId }: FinetunePanelProps) => {
     }
 
     console.log('send to ws', resp.data);
-    sendMessageToTrainer(
-      JSON.stringify({
-        type: 'start',
-        message: 'submitted a job',
-        data: {
-          baseModel,
-          trainingMethod,
-          datasetName: datasetJson.name,
-          hyperparameters: jobOptions.hyperparameters,
-        },
-      })
-    );
+    sendMessage({
+      type: 'command',
+      message: 'submitted a job',
+      data: {
+        baseModel,
+        trainingMethod,
+        datasetName: datasetJson.name,
+        hyperparameters: jobOptions.hyperparameters,
+      },
+    });
     navigate(`/job/${resp.data.id}`, { replace: true });
 
     return;
   };
 
   return (
-    <div className="flex flex-col item-start bg-white border-b-2 border-r-2 px-4 py-3 gap-y-4 h-full">
+    <div className="flex flex-col item-start bg-main-white px-4 py-3 gap-y-4 h-full">
       <div className="flex justify-between">
         <div className="text-lg font-semibold text-main-title">
           Submit a finetuning job
@@ -127,6 +148,22 @@ const FinetunePanel = ({ jobOptions, runningJobId }: FinetunePanelProps) => {
         label="Dataset"
         disabled={!jobOptions}
       />
+
+      {jobOptions && (
+        <div
+          className={`flex flex-col item-start px-2 py-2 gap-y-4 h-full ${'bg-red'}`}
+        >
+          <div className="text-lg font-semibold text-main-title">
+            Training Hyperparameters
+          </div>
+          <JSONView
+            onEdit={handleHyperparametersStringChange}
+            src={jobOptions?.hyperparameters}
+            name="hyperparameters"
+            enableClipboard={true}
+          />
+        </div>
+      )}
     </div>
   );
 };

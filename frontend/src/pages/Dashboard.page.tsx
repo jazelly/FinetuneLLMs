@@ -1,14 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import FinetunePanel from '@/components/FinetunePanel.component';
 import DivResizeHandle from '@/components/DivResizeHandle.component';
 import { ResizableBox } from 'react-resizable';
 import type { ResizeHandle } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import DashboardModel from '../models/dashboard';
-import { AllJobOptions } from '@/models/types/dashboard';
+import type { AllJobOptions, JobDetail } from '@/types/dashboard.type';
 import { useParams } from 'react-router-dom';
 import DetailPanel from '@/components/DetailPanel.component';
-import MetaPanel from '@/components/MetaPanel.component';
+import Job from '@/models/job.model';
+import InferencePanel from '@/components/InferencePanel.component';
+import { PermalinksContext } from '@/contexts/Permalinks.context';
+import {
+  BOTTOM_GAP,
+  HEADER_HEIGHT,
+  PERMALINK_DASHBOARD,
+  RIGHT_GAP,
+  SIDEBAR_WIDTH,
+} from '@/utils/constants';
+
+const MIN_BOTTOM_HEIGHT = 100;
 
 const Dashboard = () => {
   const { jobId } = useParams();
@@ -17,7 +28,12 @@ const Dashboard = () => {
     undefined
   );
 
-  const [error, setError] = useState(null);
+  const [jobDetail, setJobDetail] = useState<JobDetail | undefined>(undefined);
+
+  const [jobDetailLoading, setJobDetailLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { setPermalinks } = useContext(PermalinksContext);
 
   useEffect(() => {
     const fetchJobOptions = async () => {
@@ -41,7 +57,31 @@ const Dashboard = () => {
     fetchJobOptions();
   }, []);
 
-  const initialLeftWidth = ((window.innerWidth - 42 - 16) * 3) / 5;
+  useEffect(() => {
+    const fetchJobDetail = async () => {
+      if (!jobId) {
+        setPermalinks([PERMALINK_DASHBOARD]);
+        return;
+      }
+
+      setJobDetailLoading(true);
+      const resp = await Job.getJobDetail(jobId);
+      if (!resp.success) {
+        setError(resp.error);
+      } else {
+        setJobDetail(resp.data);
+        setPermalinks([
+          PERMALINK_DASHBOARD,
+          { name: `Job ${jobId}`, url: `/job/${jobId}` },
+        ]);
+      }
+      setJobDetailLoading(false);
+    };
+
+    fetchJobDetail();
+  }, [jobId]);
+
+  const initialLeftWidth = ((window.innerWidth - 42 - 16) * 1) / 3; // 1/3 width for the left panel
   const initialTopHeight = ((window.innerHeight - 32 - 64) * 2) / 3; // 32 is the bottom gap, 64 is the top gap
 
   const [leftWidth, setLeftWidth] = useState(initialLeftWidth);
@@ -68,12 +108,11 @@ const Dashboard = () => {
     if (cb) cb(e);
   };
 
-  const containerHeight = window.innerHeight - 32 - 64;
-  const minHeightTop = 64 + 350; // 64 is the top header gap, 350 is the minimum height for panel
-  const minHeightBottom = 100;
-  const maxHeightTop = containerHeight - minHeightBottom;
-  const minWidthLeft = 42 + 200;
-  const maxWidthLeft = window.innerWidth - 32 - 330; // 32 is the right empty gap, 330 is the min width of detail panel
+  const containerHeight = window.innerHeight - BOTTOM_GAP - 64;
+  const minHeightTop = HEADER_HEIGHT + 350;
+  const maxHeightTop = containerHeight - MIN_BOTTOM_HEIGHT;
+  const minWidthLeft = SIDEBAR_WIDTH + 240;
+  const maxWidthLeft = window.innerWidth - RIGHT_GAP - 330; // 330 is the min width of detail panel
 
   const toggleRightCollapse = () => {
     if (isRightCollapsed) {
@@ -91,15 +130,6 @@ const Dashboard = () => {
       setTopHeight(containerRef.current!.offsetHeight);
     }
     setIsBottomCollapsed(!isBottomCollapsed);
-  };
-
-  const handleHyperparametersChange = (
-    hyperparameters: AllJobOptions['hyperparameters']
-  ) => {
-    setJobOptions({
-      ...jobOptions!,
-      hyperparameters,
-    });
   };
 
   return (
@@ -125,33 +155,37 @@ const Dashboard = () => {
         onResize={handleLeftResize}
         minConstraints={[minWidthLeft, Infinity]} // width and height
         maxConstraints={[maxWidthLeft, Infinity]}
-        className="flex"
+        className="flex h-full"
       >
-        <div className="flex flex-col p-10 h-full">
+        <div className="h-full w-full relative">
+          <FinetunePanel
+            jobOptions={jobOptions}
+            setJobOptions={setJobOptions}
+          />
+        </div>
+      </ResizableBox>
+      {!isRightCollapsed && (
+        <div className="flex-1 flex flex-col h-full">
           <ResizableBox
-            width={leftWidth}
             height={topHeight}
             axis="y"
             resizeHandles={isBottomCollapsed ? [] : ['s']}
             onResize={handleTopResize}
-            minConstraints={[leftWidth, minHeightTop]} // width and height
+            minConstraints={[leftWidth, minHeightTop]}
             maxConstraints={[leftWidth, maxHeightTop]}
+            className="border-b-1"
           >
-            <FinetunePanel jobOptions={jobOptions} />
-          </ResizableBox>
-          <div className="flex-1 bg-white"> Bottom </div>
-        </div>
-      </ResizableBox>
-      {!isRightCollapsed && (
-        <div className="flex-1 bg-white">
-          {jobId !== undefined ? (
-            <DetailPanel jobId={jobId} />
-          ) : (
-            <MetaPanel
-              hyperparameters={jobOptions?.hyperparameters ?? {}}
-              handleHyperparametersChange={handleHyperparametersChange}
+            <DetailPanel
+              jobDetail={jobDetail}
+              jobDetailLoading={jobDetailLoading}
             />
-          )}
+          </ResizableBox>
+          <div className="flex-1">
+            <InferencePanel
+              jobDetail={jobDetail}
+              jobDetailLoading={jobDetailLoading}
+            />
+          </div>
         </div>
       )}
     </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import DefaultChatContainer from '@/components/DefaultChat';
+import ChatContainer from '@/components/ChatContainer.component';
 import PasswordModal, { usePasswordModal } from '@/components/Modals/Password';
 import { FullScreenLoader } from '@/components/Preloader';
 
@@ -13,7 +13,7 @@ export default function Main() {
 
   return (
     <div className="h-screen overflow-hidden bg-main flex">
-      <DefaultChatContainer />
+      <ChatContainer />
     </div>
   );
 }

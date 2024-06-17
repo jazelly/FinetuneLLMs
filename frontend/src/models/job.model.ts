@@ -1,9 +1,16 @@
 import { API_BASE } from '@/utils/constants';
 import { baseHeaders } from '@/utils/request';
-import { JobCreate } from './types/dashboard';
+import type {
+  HTTPResponseError,
+  HTTPResponseSuccess,
+  JobCreate,
+  JobDetail,
+} from '@/types/dashboard.type';
 
 const Job = {
-  submitJob: async (jobOptions: JobCreate) => {
+  submitJob: async (
+    jobOptions: JobCreate
+  ): Promise<HTTPResponseSuccess<JobDetail> | HTTPResponseError> => {
     try {
       const resp = await fetch(`${API_BASE}/job`, {
         method: 'POST',
@@ -21,7 +28,9 @@ const Job = {
     }
   },
 
-  getJobDetails: async (jobId: string) => {
+  getJobDetail: async (
+    jobId: string
+  ): Promise<HTTPResponseSuccess<JobDetail> | HTTPResponseError> => {
     try {
       const resp = await fetch(`${API_BASE}/job/${jobId}`, {
         method: 'GET',

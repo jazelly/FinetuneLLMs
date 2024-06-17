@@ -1,79 +1,155 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 
 import { TRAINER_WS_URL_BASE } from '@/utils/constants';
+import { flushSync } from 'react-dom';
 
-export interface TrainerResponseWS {
-  type: string;
-  status: 'success' | 'failed' | 'error';
-  message: string;
-  code: number;
-  data?: Record<string, any>;
+export type SendMessage<T extends Record<string, any>> = (
+  message: T,
+  keep?: boolean
+) => void;
+export type WebSocketHook<
+  RequestProtocol extends Record<string, any>,
+  ReponseProtocol extends Record<string, any>,
+  P = WebSocketEventMap['message'] | null,
+> = {
+  sendMessage: SendMessage<RequestProtocol>;
+  messageMap: Record<string, Array<ReponseProtocol>>;
+  getWebSocket: () => WebSocket | null;
+};
+
+function assertIsWebSocket(
+  webSocketInstance: WebSocket
+): asserts webSocketInstance is WebSocket {
+  if (webSocketInstance instanceof WebSocket === false) throw new Error('');
 }
 
-const useWebSocket = () => {
-  const [messages, setMessages] = useState<
-    Record<string, Array<TrainerResponseWS>>
-  >({});
+const bindMessageHandler = <
+  Request extends Record<string, any>,
+  Response extends Record<string, any>,
+>(
+  webSocketInstance: WebSocket,
+  messageMap: Record<string, Array<Request>>,
+  setMessageMap: Dispatch<SetStateAction<Response>>
+) => {
+  let heartbeatCb: () => void;
+
+  webSocketInstance.onmessage = (event: WebSocketEventMap['message']) => {
+    heartbeatCb?.();
+    let resp: Response;
+    try {
+      resp = JSON.parse(event.data);
+    } catch (err: any) {
+      console.error('received non-json data');
+      return;
+    }
+    console.log('Received message data: ', resp);
+
+    if (resp.data?.task_id) {
+      const tid = resp.data.task_id;
+      const messageList = tid in messageMap ? messageMap[tid] : [];
+      const updatedMessageList = { [tid]: [...messageList, resp.data] };
+
+      flushSync(() =>
+        setMessageMap((prevMessages) => {
+          return {
+            ...prevMessages,
+            ...updatedMessageList,
+          };
+        })
+      );
+    }
+  };
+};
+
+const useWebSocket = <
+  Request extends Record<string, any>,
+  Response extends Record<string, any>,
+>(): WebSocketHook<Request, Response> => {
+  const [messageMap, setMessageMap] = useState<Record<string, Response[]>>({});
   const messageQueue = useRef<Array<string>>([]);
 
-  const trainerSocketRef = useRef<WebSocket | null>(null);
+  const webSocketRef = useRef<WebSocket | null>(null);
 
-  const sendMessageToTrainer = useCallback(
-    (msg: string) => {
-      if (
-        trainerSocketRef.current &&
-        trainerSocketRef.current.readyState === WebSocket.OPEN &&
-        msg
-      ) {
-        trainerSocketRef.current.send(msg);
-      } else {
-        messageQueue.current.push(msg);
-      }
-    },
-    [trainerSocketRef.current]
-  );
+  const sendMessage = useCallback((msg: Request, keep = true) => {
+    const msgString = JSON.stringify(msg);
+    if (webSocketRef.current?.readyState === WebSocket.OPEN && msg) {
+      assertIsWebSocket(webSocketRef.current);
+      webSocketRef.current.send(msgString);
+    } else {
+      console.log(
+        'Socket already closed from trainer side! State Code: ',
+        webSocketRef.current?.readyState
+      );
+      if (keep) messageQueue.current.push(msgString);
+    }
+  }, []);
+
+  const getWebSocket = useCallback(() => {
+    if (webSocketRef.current) {
+      assertIsWebSocket(webSocketRef.current);
+    }
+    return webSocketRef.current;
+  }, []);
 
   useEffect(() => {
-    const ws = new WebSocket(`${TRAINER_WS_URL_BASE}training/job/`);
-    trainerSocketRef.current = ws;
+    if (webSocketRef.current) return;
 
-    ws.onopen = () => {
-      console.log('WebSocket connection established');
+    console.log('connecting to WS');
+    console.log(typeof webSocketRef.current);
+
+    const start = async () => {
+      // TODO: abstact out url
+      webSocketRef.current = new WebSocket(
+        `${TRAINER_WS_URL_BASE}training/job/`
+      );
+      const protectedSetMessageMap = () => {};
+
+      // attach listeners
+      webSocketRef.current.onopen = () => {
+        // only ref the opened socket
+        console.log('WebSocket connection established');
+      };
+
+      bindMessageHandler(webSocketRef.current, messageMap, setMessageMap);
+
+      webSocketRef.current.onerror = (event) => {
+        if (event.type !== 'error') {
+          console.error('Got error event but type is not error');
+          return;
+        }
+      };
+
+      webSocketRef.current.onclose = (event) => {
+        // server side closed
+        if (event.code === 1006) {
+          console.log('WebSocket closed as server side has closed');
+        } else {
+          console.log('WebSocket connection closed');
+        }
+      };
     };
 
-    // every message is pushed to history
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log('Received message data: ', data);
-
-      if (data.task_id) {
-        const messageList =
-          data.task_id in messages ? messages[data.task_id] : [];
-        setMessages({
-          ...messages,
-          ...{ [data.task_id]: [...messageList, data] },
-        });
-      }
-    };
-
-    ws.onclose = () => {
-      console.log('WebSocket connection closed');
-    };
-
-    trainerSocketRef.current = ws;
+    start();
 
     return () => {
-      if (trainerSocketRef.current) {
-        trainerSocketRef.current.close(1000, 'Client closing connection');
-        trainerSocketRef.current = null;
+      if (webSocketRef.current) {
+        webSocketRef.current.close(1000, 'Client closing connection');
+        webSocketRef.current = null;
       }
     };
   }, []);
 
   return {
-    trainerSocket: trainerSocketRef,
-    messages,
-    sendMessageToTrainer,
+    getWebSocket,
+    messageMap,
+    sendMessage,
   };
 };
 

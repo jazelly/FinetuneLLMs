@@ -1,10 +1,12 @@
 import React from 'react';
-import Jazzicon from '../UserIcon';
+import UserIcon from './UserIcon';
 import { userFromStorage } from '@/utils/request';
 import { AI_BACKGROUND_COLOR, USER_BACKGROUND_COLOR } from '@/utils/constants';
+import { Plus } from '@phosphor-icons/react';
+import { IChatMessage } from '@/types/common.type';
 
-export default function ChatBubble({ message, type, popMsg }) {
-  const isUser = type === 'user';
+export default function ChatBubble({ message, type, id }: IChatMessage) {
+  const isUser = type === 'USER';
   const backgroundColor = isUser ? USER_BACKGROUND_COLOR : AI_BACKGROUND_COLOR;
 
   return (
@@ -13,10 +15,9 @@ export default function ChatBubble({ message, type, popMsg }) {
         className={`py-8 px-4 w-full flex gap-x-5 md:max-w-[800px] flex-col`}
       >
         <div className="flex gap-x-5">
-          <Jazzicon
+          <UserIcon
             size={36}
             user={{ uid: isUser ? userFromStorage()?.username : 'system' }}
-            role={type}
           />
 
           <span
