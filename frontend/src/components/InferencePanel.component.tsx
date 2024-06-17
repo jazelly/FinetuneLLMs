@@ -1,7 +1,6 @@
 import type { JobDetail } from '@/types/dashboard.type';
 import React from 'react';
 
-
 export interface InferencePanelProps {
   model?: string;
   jobDetail?: JobDetail | null;
