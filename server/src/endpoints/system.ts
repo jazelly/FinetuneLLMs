@@ -1,6 +1,3 @@
-process.env.NODE_ENV === "development"
-  ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
-  : require("dotenv").config();
 const { viewLocalFiles, normalizePath } = require("../utils/files");
 const { purgeDocument, purgeFolder } = require("../utils/files/purgeDocument");
 const { getVectorDbClass } = require("../utils/helpers");
@@ -50,6 +47,8 @@ const {
   generateRecoveryCodes,
 } = require("../utils/PasswordRecovery");
 const { SlashCommandPresets } = require("../models/slashCommandsPresets");
+import { config } from "../utils/dotenv";
+import crypto from "crypto";
 
 function systemEndpoints(app) {
   if (!app) return;
@@ -63,8 +62,7 @@ function systemEndpoints(app) {
   });
 
   app.get("/env-dump", async (_, response) => {
-    if (process.env.NODE_ENV !== "production")
-      return response.sendStatus(200).end();
+    if (config.NODE_ENV !== "production") return response.sendStatus(200).end();
     await dumpENV();
     response.sendStatus(200).end();
   });
@@ -105,72 +103,65 @@ function systemEndpoints(app) {
 
   app.post("/request-token", async (request, response) => {
     try {
-      const bcrypt = require("bcrypt");
+      const isMultiUserMode = await SystemSettings.isMultiUserMode();
 
-      if (await SystemSettings.isMultiUserMode()) {
-        const { username, password } = reqBody(request);
+      if (isMultiUserMode) {
+        const { username, password } = reqBody(request); // Replace with your request parsing logic
+
         const existingUser = await User.get({ username: String(username) });
 
         if (!existingUser) {
-          await EventLogs.logEvent(
-            "failed_login_invalid_username",
-            {
-              ip: request.ip || "Unknown IP",
-              username: username || "Unknown user",
-            },
-            existingUser?.id
-          );
-          response.status(200).json({
+          await EventLogs.logEvent("failed_login_invalid_username", {
+            ip: request.ip || "Unknown IP",
+            username: username || "Unknown user",
+          });
+
+          return response.status(200).json({
             user: null,
             valid: false,
             token: null,
             message: "[001] Invalid login credentials.",
           });
-          return;
         }
 
-        if (!bcrypt.compareSync(String(password), existingUser.password)) {
-          await EventLogs.logEvent(
-            "failed_login_invalid_password",
-            {
-              ip: request.ip || "Unknown IP",
-              username: username || "Unknown user",
-            },
-            existingUser?.id
-          );
-          response.status(200).json({
+        if (
+          !crypto.timingSafeEqual(
+            Buffer.from(password),
+            Buffer.from(existingUser.password)
+          )
+        ) {
+          await EventLogs.logEvent("failed_login_invalid_password", {
+            ip: request.ip || "Unknown IP",
+            username: username || "Unknown user",
+          });
+
+          return response.status(200).json({
             user: null,
             valid: false,
             token: null,
             message: "[002] Invalid login credentials.",
           });
-          return;
         }
 
         if (existingUser.suspended) {
-          await EventLogs.logEvent(
-            "failed_login_account_suspended",
-            {
-              ip: request.ip || "Unknown IP",
-              username: username || "Unknown user",
-            },
-            existingUser?.id
-          );
-          response.status(200).json({
+          await EventLogs.logEvent("failed_login_account_suspended", {
+            ip: request.ip || "Unknown IP",
+            username: username || "Unknown user",
+          });
+
+          return response.status(200).json({
             user: null,
             valid: false,
             token: null,
             message: "[004] Account suspended by admin.",
           });
-          return;
         }
 
         await Telemetry.sendTelemetry(
           "login_event",
-          { multiUserMode: false },
+          { multiUserMode: true },
           existingUser?.id
         );
-
         await EventLogs.logEvent(
           "login_event",
           {
@@ -185,7 +176,7 @@ function systemEndpoints(app) {
           const plainTextCodes = await generateRecoveryCodes(existingUser.id);
 
           // Return recovery codes to frontend
-          response.status(200).json({
+          return response.status(200).json({
             valid: true,
             user: existingUser,
             token: makeJWT(
@@ -195,10 +186,9 @@ function systemEndpoints(app) {
             message: null,
             recoveryCodes: plainTextCodes,
           });
-          return;
         }
 
-        response.status(200).json({
+        return response.status(200).json({
           valid: true,
           user: existingUser,
           token: makeJWT(
@@ -207,25 +197,25 @@ function systemEndpoints(app) {
           ),
           message: null,
         });
-        return;
       } else {
-        const { password } = reqBody(request);
+        const { password } = reqBody(request); // Replace with your request parsing logic
+
         if (
-          !bcrypt.compareSync(
-            password,
-            bcrypt.hashSync(process.env.AUTH_TOKEN, 10)
+          !crypto.timingSafeEqual(
+            Buffer.from(password),
+            Buffer.from(config.AUTH_TOKEN)
           )
         ) {
           await EventLogs.logEvent("failed_login_invalid_password", {
             ip: request.ip || "Unknown IP",
             multiUserMode: false,
           });
-          response.status(401).json({
+
+          return response.status(401).json({
             valid: false,
             token: null,
             message: "[003] Invalid password provided",
           });
-          return;
         }
 
         await Telemetry.sendTelemetry("login_event", { multiUserMode: false });
@@ -233,15 +223,18 @@ function systemEndpoints(app) {
           ip: request.ip || "Unknown IP",
           multiUserMode: false,
         });
-        response.status(200).json({
+
+        return response.status(200).json({
           valid: true,
           token: makeJWT({ p: password }, "30d"),
           message: null,
         });
       }
-    } catch (e: any) {
-      console.log(e.message, e);
-      response.sendStatus(500).end();
+    } catch (error: any) {
+      console.error("Login error:", error);
+      response.status(500).json({
+        message: error.message,
+      });
     }
   });
 
@@ -382,7 +375,7 @@ function systemEndpoints(app) {
           false,
           response?.locals?.user?.id
         );
-        if (process.env.NODE_ENV === "production") await dumpENV();
+        if (config.NODE_ENV === "production") await dumpENV();
         response.status(200).json({ newValues, error });
       } catch (e: any) {
         console.log(e.message, e);
@@ -410,7 +403,7 @@ function systemEndpoints(app) {
           },
           true
         );
-        if (process.env.NODE_ENV === "production") await dumpENV();
+        if (config.NODE_ENV === "production") await dumpENV();
         response.status(200).json({ success: !error, error });
       } catch (e: any) {
         console.log(e.message, e);
@@ -447,11 +440,11 @@ function systemEndpoints(app) {
 
         await updateENV(
           {
-            JWTSecret: process.env.JWT_SECRET || v4(),
+            JWTSecret: config.JWT_SECRET || v4(),
           },
           true
         );
-        if (process.env.NODE_ENV === "production") await dumpENV();
+        if (config.NODE_ENV === "production") await dumpENV();
         await Telemetry.sendTelemetry("enabled_multi_user_mode", {
           multiUserMode: true,
         });

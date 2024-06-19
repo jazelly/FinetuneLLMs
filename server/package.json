@@ -10,9 +10,9 @@
     "node": ">=18.12.1"
   },
   "scripts": {
-    "dev": "NODE_ENV=development nodemon --trace-warnings",
-    "start": "NODE_ENV=production node index.js",
-    "lint": "yarn prettier --write ./endpoints ./models ./utils index.js",
+    "dev": "nodemon --trace-warnings",
+    "start": "node index.js",
+    "lint": "npx prettier --write ./endpoints ./models ./utils index.js",
     "swagger": "node ./swagger/init.js",
     "sqlite:migrate": "cd ./utils/prisma && node migrateFromSqlite.js",
     "test": "node --test tests/**/*.test.js"
@@ -37,7 +37,6 @@
     "@xenova/transformers": "^2.14.0",
     "@zilliz/milvus2-sdk-node": "^2.3.5",
     "archiver": "^5.3.1",
-    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "chalk": "^4",
     "check-disk-space": "^3.4.0",

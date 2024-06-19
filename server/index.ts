@@ -1,7 +1,3 @@
-process.env.NODE_ENV === "development"
-  ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
-  : require("dotenv").config();
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
@@ -23,6 +19,8 @@ import { workspaceThreadEndpoints } from "./src/endpoints/workspaceThreads";
 import { documentEndpoints } from "./src/endpoints/document";
 import { jobEndpoints } from "./src/endpoints/job";
 import { agentWebsocket } from "./src/endpoints/agentWebsocket";
+import { config } from "./src/utils/dotenv";
+
 const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
@@ -56,7 +54,7 @@ jobEndpoints(apiRouter);
 // Externally facing embedder endpoints
 embeddedEndpoints(apiRouter);
 
-if (process.env.NODE_ENV !== "development") {
+if (config.NODE_ENV !== "development") {
   app.use(
     express.static(path.resolve(__dirname, "public"), {
       extensions: ["js"],
@@ -111,14 +109,8 @@ app.all("*", function (_, response) {
   response.sendStatus(404);
 });
 
-if (!!process.env.ENABLE_HTTPS) {
-  bootSSL(
-    app,
-    process.env.SERVER_PORT ? parseInt(process.env.SERVER_PORT) : 3001
-  );
+if (!!config.ENABLE_HTTPS) {
+  bootSSL(app, config.SERVER_PORT ?? 3001);
 } else {
-  bootHTTP(
-    app,
-    process.env.SERVER_PORT ? parseInt(process.env.SERVER_PORT) : 3001
-  );
+  bootHTTP(app, config.SERVER_PORT ?? 3001);
 }

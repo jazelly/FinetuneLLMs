@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 const { v4, validate } = require("uuid");
 const { User } = require("../../models/user");
 const {
@@ -11,7 +11,7 @@ async function generateRecoveryCodes(userId) {
   const plainTextCodes = [];
   for (let i = 0; i < 4; i++) {
     const code = v4();
-    const hashedCode = bcrypt.hashSync(code, 10);
+    const hashedCode = crypto.hashSync(code, 10);
     newRecoveryCodes.push({
       user_id: userId,
       code_hash: hashedCode,
@@ -51,7 +51,7 @@ async function recoverAccount(username = "", recoveryCodes = []) {
   const validCodes = uniqueRecoveryCodes.every((code) => {
     let valid = false;
     allUserHashes.forEach((hash) => {
-      if (bcrypt.compareSync(code, hash)) valid = true;
+      if (crypto.compareSync(code, hash)) valid = true;
     });
     return valid;
   });

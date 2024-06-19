@@ -25,8 +25,8 @@ const User = {
     }
 
     try {
-      const bcrypt = require("bcrypt");
-      const hashedPassword = bcrypt.hashSync(password, 10);
+      const crypto = require("crypto");
+      const hashedPassword = crypto.hashSync(password, 10);
       const user = await prisma.users.create({
         data: {
           username,
@@ -83,8 +83,8 @@ const User = {
         if (!passwordCheck.checkedOK) {
           return { success: false, error: passwordCheck.error };
         }
-        const bcrypt = require("bcrypt");
-        updates.password = bcrypt.hashSync(updates.password, 10);
+        const crypto = require("crypto");
+        updates.password = crypto.hashSync(updates.password, 10);
       }
 
       const user = await prisma.users.update({

@@ -1,27 +1,6 @@
 function getVectorDbClass() {
   const vectorSelection = process.env.VECTOR_DB || "lancedb";
   switch (vectorSelection) {
-    case "pinecone":
-      const { Pinecone } = require("../vectorDbProviders/pinecone");
-      return Pinecone;
-    case "lancedb":
-      const { LanceDb } = require("../vectorDbProviders/lance");
-      return LanceDb;
-    case "weaviate":
-      const { Weaviate } = require("../vectorDbProviders/weaviate");
-      return Weaviate;
-    case "qdrant":
-      const { QDrant } = require("../vectorDbProviders/qdrant");
-      return QDrant;
-    case "milvus":
-      const { Milvus } = require("../vectorDbProviders/milvus");
-      return Milvus;
-    case "zilliz":
-      const { Zilliz } = require("../vectorDbProviders/zilliz");
-      return Zilliz;
-    case "astra":
-      const { AstraDB } = require("../vectorDbProviders/astra");
-      return AstraDB;
     default:
       throw new Error("ENV: No VECTOR_DB value found in environment!");
   }
