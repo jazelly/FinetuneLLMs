@@ -21,7 +21,7 @@ import GroqLogo from '@/media/llmprovider/groq.png';
 import KoboldCPPLogo from '@/media/llmprovider/koboldcpp.png';
 import TextGenWebUILogo from '@/media/llmprovider/text-generation-webui.png';
 import CohereLogo from '@/media/llmprovider/cohere.png';
-import PreLoader from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import OpenAiOptions from '@/components/LLMSelection/OpenAiOptions';
 import GenericOpenAiOptions from '@/components/LLMSelection/GenericOpenAiOptions';
 import AzureAiOptions from '@/components/LLMSelection/AzureAiOptions';
@@ -287,7 +287,7 @@ export default function GeneralLLMPreference() {
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <div className="w-full h-full flex justify-center items-center">
-            <PreLoader />
+            <FullScreenLoader />
           </div>
         </div>
       ) : (

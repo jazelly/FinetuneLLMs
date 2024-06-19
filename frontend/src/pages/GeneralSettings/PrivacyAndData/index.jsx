@@ -3,7 +3,7 @@ import Sidebar from '@/components/SettingsSidebar';
 import { isMobile } from 'react-device-detect';
 import showToast from '@/utils/toast';
 import System from '@/models/system';
-import PreLoader from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import {
   EMBEDDING_ENGINE_PRIVACY,
   LLM_SELECTION_PRIVACY,
@@ -46,7 +46,7 @@ export default function PrivacyAndDataHandling() {
           {loading ? (
             <div className="h-1/2 transition-all duration-500 relative md:ml-[2px] md:mr-[8px] md:my-[16px] md:rounded-[26px] p-[18px] h-full overflow-y-scroll">
               <div className="w-full h-full flex justify-center items-center">
-                <PreLoader />
+                <FullScreenLoader />
               </div>
             </div>
           ) : (

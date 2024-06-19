@@ -1,6 +1,6 @@
 import React from 'react';
 import PasswordModal, { usePasswordModal } from '@/components/Modals/Password';
-import { FullScreenLoader } from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import { Navigate } from 'react-router-dom';
 import paths from '@/utils/paths';
 import useQuery from '@/hooks/useQuery';

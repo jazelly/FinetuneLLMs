@@ -1,8 +1,8 @@
 import React, { useState, useEffect, memo } from 'react';
 import truncate from 'truncate';
 import { CheckCircle, XCircle } from '@phosphor-icons/react';
-import { humanFileSize, milliToHms } from '../../../../../../utils/numbers';
-import PreLoader from '../../../../../Preloader';
+import { humanFileSize, milliToHms } from '@/utils/numbers';
+import { PreLoader } from '@/components/Loaders.component';
 import Document from '@/models/document';
 
 const CHUNK_SIZE = 100000; // bytes
@@ -58,8 +58,8 @@ function FileUploadProgressComponent({
 
         const formData = new FormData();
         formData.append('file', chunk, file.name);
-        formData.append('chunkIndex', chunkIndex);
-        formData.append('totalChunks', totalChunks);
+        formData.append('chunkIndex', `${chunkIndex}`);
+        formData.append('totalChunks', `${totalChunks}`);
 
         console.log('Uploading chunk: ', chunkIndex);
         response = await Document.uploadOneDatasetByChunk(formData);
@@ -139,7 +139,7 @@ function FileUploadProgressComponent({
       <div className="w-6 h-6 flex-shrink-0">
         {status !== 'complete' ? (
           <div className="flex items-center justify-center">
-            <PreLoader size="6" />
+            <PreLoader size={6} />
           </div>
         ) : (
           <CheckCircle className="w-6 h-6 stroke-white bg-green-500 rounded-full p-1 w-full h-full" />

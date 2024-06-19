@@ -4,7 +4,7 @@ import Sidebar from '@/components/Sidebar';
 import Workspace from '@/models/workspace';
 import PasswordModal, { usePasswordModal } from '@/components/Modals/Password';
 import { isMobile } from 'react-device-detect';
-import { FullScreenLoader } from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import {
   ArrowUUpLeft,
   ChatText,

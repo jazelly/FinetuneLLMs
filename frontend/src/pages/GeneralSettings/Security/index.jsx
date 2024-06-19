@@ -5,7 +5,7 @@ import showToast from '@/utils/toast';
 import System from '@/models/system';
 import paths from '@/utils/paths';
 import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from '@/utils/constants';
-import PreLoader from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import CTAButton from '@/components/CTAButton';
 
 export default function GeneralSecurity() {
@@ -74,7 +74,7 @@ function MultiUserMode() {
     return (
       <div className="h-1/2 transition-all duration-500 relative md:ml-[2px] md:mr-[8px] md:my-[16px] md:rounded-[26px] p-[18px] h-full overflow-y-scroll">
         <div className="w-full h-full flex justify-center items-center">
-          <PreLoader />
+          <FullScreenLoader />
         </div>
       </div>
     );
@@ -252,7 +252,7 @@ function PasswordProtection() {
     return (
       <div className="h-1/2 transition-all duration-500 relative md:ml-[2px] md:mr-[8px] md:my-[16px] md:rounded-[26px] p-[18px] h-full overflow-y-scroll">
         <div className="w-full h-full flex justify-center items-center">
-          <PreLoader />
+          <FullScreenLoader />
         </div>
       </div>
     );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { FullScreenLoader } from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import Invite from '@/models/invite';
 import NewUserModal from './NewUserModal';
 import ModalWrapper from '@/components/ModalWrapper';

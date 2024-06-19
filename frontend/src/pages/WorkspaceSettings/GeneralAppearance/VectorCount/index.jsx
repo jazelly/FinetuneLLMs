@@ -1,4 +1,4 @@
-import PreLoader from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import System from '@/models/system';
 import { useEffect, useState } from 'react';
 
@@ -21,7 +21,7 @@ export default function VectorCount({ reload, workspace }) {
           Total number of vectors in your vector database.
         </p>
         <p className="text-white text-opacity-60 text-sm font-medium">
-          <PreLoader size="4" />
+          <FullScreenLoader size="4" />
         </p>
       </div>
     );

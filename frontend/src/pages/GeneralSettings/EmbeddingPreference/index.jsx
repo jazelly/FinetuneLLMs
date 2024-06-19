@@ -10,7 +10,7 @@ import LocalAiLogo from '@/media/llmprovider/localai.png';
 import OllamaLogo from '@/media/llmprovider/ollama.png';
 import LMStudioLogo from '@/media/llmprovider/lmstudio.png';
 import CohereLogo from '@/media/llmprovider/cohere.png';
-import PreLoader from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import ChangeWarningModal from '@/components/ChangeWarning';
 import OpenAiOptions from '@/components/EmbeddingSelection/OpenAiOptions';
 import AzureAiOptions from '@/components/EmbeddingSelection/AzureAiOptions';
@@ -187,7 +187,7 @@ export default function GeneralEmbeddingPreference() {
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <div className="w-full h-full flex justify-center items-center">
-            <PreLoader />
+            <FullScreenLoader />
           </div>
         </div>
       ) : (

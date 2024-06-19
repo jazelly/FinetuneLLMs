@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { FullScreenLoader } from './Preloader';
+import FullScreenLoader from './Loaders.component';
 import paths from '@/utils/paths';
 import { userFromStorage } from '@/utils/request';
 import useAuthenticated from '@/hooks/useAuthenticated';

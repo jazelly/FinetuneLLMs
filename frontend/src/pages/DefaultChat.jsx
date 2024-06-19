@@ -1,7 +1,7 @@
 import React from 'react';
 import ChatContainer from '@/components/ChatContainer.component';
 import PasswordModal, { usePasswordModal } from '@/components/Modals/Password';
-import { FullScreenLoader } from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 
 export default function Main() {
   const { loading, requiresAuth, mode } = usePasswordModal();

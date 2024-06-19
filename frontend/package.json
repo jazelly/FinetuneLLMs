@@ -6,7 +6,7 @@
   "author": "jazelly",
   "scripts": {
     "start": "vite --open",
-    "dev": "NODE_ENV=development vite --debug --host=0.0.0.0",
+    "dev": "vite --debug --host=0.0.0.0",
     "build": "vite build",
     "lint": "npx prettier --write ./src",
     "preview": "vite preview"

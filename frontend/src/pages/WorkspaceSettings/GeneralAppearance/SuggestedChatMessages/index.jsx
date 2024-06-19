@@ -1,4 +1,4 @@
-import PreLoader from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import Workspace from '@/models/workspace';
 import showToast from '@/utils/toast';
 import { useEffect, useState } from 'react';
@@ -96,7 +96,7 @@ export default function SuggestedChatMessages({ slug }) {
           Customize the messages that will be suggested to your workspace users.
         </p>
         <p className="text-white text-opacity-60 text-sm font-medium mt-6">
-          <PreLoader size="4" />
+          <FullScreenLoader size="4" />
         </p>
       </div>
     );

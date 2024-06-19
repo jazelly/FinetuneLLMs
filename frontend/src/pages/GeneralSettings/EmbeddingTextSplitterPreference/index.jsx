@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '@/components/SettingsSidebar';
 import { isMobile } from 'react-device-detect';
-import PreLoader from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import CTAButton from '@/components/CTAButton';
 import Admin from '@/models/admin';
 import showToast from '@/utils/toast';
@@ -69,7 +69,7 @@ export default function EmbeddingTextSplitterPreference() {
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <div className="w-full h-full flex justify-center items-center">
-            <PreLoader />
+            <FullScreenLoader />
           </div>
         </div>
       ) : (

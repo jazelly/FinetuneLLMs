@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { isMobile } from 'react-device-detect';
 import Sidebar from '@/components/SettingsSidebar';
 import System from '@/models/system';
-import PreLoader from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import SpeechToTextProvider from './stt';
 import TextToSpeechProvider from './tts';
 
@@ -28,7 +28,7 @@ export default function AudioPreference() {
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <div className="w-full h-full flex justify-center items-center">
-            <PreLoader />
+            <FullScreenLoader />
           </div>
         </div>
       ) : (

@@ -1,19 +1,20 @@
 import { CloudArrowUp } from '@phosphor-icons/react';
 import { useState } from 'react';
-import showToast from '../../../../../utils/toast';
+import showToast from '@/utils/toast';
 import { useDropzone } from 'react-dropzone';
 import { v4 } from 'uuid';
-import FileUploadProgress from './FileUploadProgress';
+import FileUploadProgress from './UploadDatasets/Documents/UploadFile/FileUploadProgress.component';
 import debounce from 'lodash.debounce';
-import { isHFDatasetLinkValid } from '../../../../../utils/misc';
+import { isHFDatasetLinkValid } from '@/utils/misc';
 import Document from '@/models/document';
+import React from 'react';
 
 export default function UploadFile({
   fetchDatasets,
   setLoading,
   setLoadingMessage,
 }) {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<any[]>([]);
   const [fetchingUrl, setFetchingUrl] = useState(false);
   const [hfLinkError, setHFLinkError] = useState('');
 
@@ -109,7 +110,7 @@ export default function UploadFile({
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-2 overflow-auto max-h-[180px] p-1 overflow-y-scroll no-scroll">
-            {files.map((file) => (
+            {files.map((file: any) => (
               <FileUploadProgress
                 key={file.uid}
                 file={file.file}

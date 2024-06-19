@@ -1,13 +1,9 @@
 import UploadFile from '../UploadFile';
-import PreLoader from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import { useEffect, useState } from 'react';
 import FileRow from './FileRow';
-import System from '@/models/system';
 import { Plus, Trash } from '@phosphor-icons/react';
 import Document from '@/models/document';
-import showToast from '@/utils/toast';
-import FolderSelectionPopup from './FolderSelectionPopup';
-import MoveToFolderIcon from './MoveToFolderIcon';
 
 function Directory({
   files,
@@ -137,7 +133,7 @@ function Directory({
           <div className="overflow-y-auto h-full pt-8">
             {loading ? (
               <div className="w-full h-full flex items-center justify-center flex-col gap-y-5">
-                <PreLoader />
+                <FullScreenLoader />
                 <p className="text-white/80 text-sm font-semibold animate-pulse text-center w-1/3">
                   {loadingMessage}
                 </p>

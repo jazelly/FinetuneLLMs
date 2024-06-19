@@ -1,4 +1,4 @@
-import PreLoader from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import System from '@/models/system';
 import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
 import OpenAiLogo from '@/media/llmprovider/openai.png';
@@ -310,7 +310,7 @@ export default function DataHandling({ setHeader, setForwardBtn, setBackBtn }) {
   if (loading)
     return (
       <div className="w-full h-full flex justify-center items-center p-20">
-        <PreLoader />
+        <FullScreenLoader />
       </div>
     );
 

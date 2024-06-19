@@ -11,7 +11,7 @@ import QDrantLogo from '@/media/vectordbs/qdrant.png';
 import MilvusLogo from '@/media/vectordbs/milvus.png';
 import ZillizLogo from '@/media/vectordbs/zilliz.png';
 import AstraDBLogo from '@/media/vectordbs/astraDB.png';
-import PreLoader from '@/components/Preloader';
+import FullScreenLoader from '@/components/Loaders.component';
 import ChangeWarningModal from '@/components/ChangeWarning';
 import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
 import LanceDBOptions from '@/components/VectorDBSelection/LanceDBOptions';
@@ -168,7 +168,7 @@ export default function GeneralVectorDatabase() {
           className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
         >
           <div className="w-full h-full flex justify-center items-center">
-            <PreLoader />
+            <FullScreenLoader />
           </div>
         </div>
       ) : (
