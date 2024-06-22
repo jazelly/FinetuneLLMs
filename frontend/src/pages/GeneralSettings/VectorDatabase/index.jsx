@@ -160,7 +160,7 @@ export default function GeneralVectorDatabase() {
   const selectedVDBObject = VECTOR_DBS.find((vdb) => vdb.value === selectedVDB);
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-main flex">
+    <div className="w-screen h-screen overflow-hidden bg-main-base flex">
       <Sidebar />
       {loading ? (
         <div

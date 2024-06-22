@@ -25,7 +25,7 @@ export default {
         accent: '#3D4147',
         'sidebar-button': '#31353A',
         sidebar: '#ebeef7',
-        main: '#EFFBFF',
+        'main-base': '#E1F1FF',
         'historical-msg-system': 'rgba(255, 255, 255, 0.05);',
         'historical-msg-user': '#2C2F35',
         outline: '#4E5153',
@@ -49,7 +49,7 @@ export default {
           'linear-gradient(180deg, #3D4147 0%, #1b2638 100%);',
         'selected-preference-gradient':
           'linear-gradient(180deg, #313236 0%, rgba(63.40, 64.90, 70.13, 0) 100%);',
-        'main-gradient': 'linear-gradient(180deg, #3D4147 0%, #1b2638 100%)',
+        'main-gradient': 'linear-gradient(180deg, #3D4059 0%, #1b2638 100%)',
         'modal-gradient': 'linear-gradient(180deg, #3D4147 0%, #1b2638 100%)',
         'sidebar-gradient': 'linear-gradient(90deg, #5B616A 0%, #3F434B 100%)',
         'dashboard-gradient':

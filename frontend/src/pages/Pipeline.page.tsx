@@ -129,11 +129,27 @@ const Pipeline = () => {
         <div className="h-full w-full relative">Different panel</div>
       </ResizableBox>
       {!isRightCollapsed && (
-        <div className="flex-1 h-full">
-          <DetailPanel
-            jobDetail={jobDetail}
-            jobDetailLoading={jobDetailLoading}
-          />
+        <div className="flex-1 flex flex-col h-full">
+          <ResizableBox
+            height={topHeight}
+            axis="y"
+            resizeHandles={isBottomCollapsed ? [] : ['s']}
+            onResize={handleTopResize}
+            minConstraints={[leftWidth, minHeightTop]}
+            maxConstraints={[leftWidth, maxHeightTop]}
+            className="border-b-1"
+          >
+            <DetailPanel
+              jobDetail={jobDetail}
+              jobDetailLoading={jobDetailLoading}
+            />
+          </ResizableBox>
+          <div className="flex-1">
+            <InferencePanel
+              jobDetail={jobDetail}
+              jobDetailLoading={jobDetailLoading}
+            />
+          </div>
         </div>
       )}
     </div>

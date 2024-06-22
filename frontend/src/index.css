@@ -42,11 +42,6 @@ a {
   padding: 2px 2px;
 }
 
-.Header {
-  height: 4rem;
-  z-index: 20;
-}
-
 @keyframes slideIn {
   0% {
     opacity: 0;
@@ -59,11 +54,6 @@ a {
     transform: translateY(0);
     /* Slide to its final position */
   }
-}
-
-.MainBody {
-  z-index: 0;
-  overflow-y: hidden;
 }
 
 .pipeline-highlight-hover {

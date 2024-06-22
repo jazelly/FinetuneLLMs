@@ -137,35 +137,14 @@ const Dashboard = () => {
         maxConstraints={[maxWidthLeft, Infinity]}
         className="flex h-full"
       >
-        <div className="h-full w-full relative">
-          <FinetunePanel
-            jobOptions={jobOptions}
-            setJobOptions={setJobOptions}
-          />
-        </div>
+        <FinetunePanel jobOptions={jobOptions} setJobOptions={setJobOptions} />
       </ResizableBox>
       {!isRightCollapsed && (
         <div className="flex-1 flex flex-col h-full">
-          <ResizableBox
-            height={topHeight}
-            axis="y"
-            resizeHandles={isBottomCollapsed ? [] : ['s']}
-            onResize={handleTopResize}
-            minConstraints={[leftWidth, minHeightTop]}
-            maxConstraints={[leftWidth, maxHeightTop]}
-            className="border-b-1"
-          >
-            <DetailPanel
-              jobDetail={jobDetail}
-              jobDetailLoading={jobDetailLoading}
-            />
-          </ResizableBox>
-          <div className="flex-1">
-            <InferencePanel
-              jobDetail={jobDetail}
-              jobDetailLoading={jobDetailLoading}
-            />
-          </div>
+          <InferencePanel
+            jobDetail={jobDetail}
+            jobDetailLoading={jobDetailLoading}
+          />
         </div>
       )}
     </div>

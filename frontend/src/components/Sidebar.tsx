@@ -53,7 +53,7 @@ export default function Sidebar() {
               onClick={() => {
                 handleNavigate('/');
               }}
-              className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 bg-main rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
+              className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
             >
               <Circuitry
                 color={isNewingJob || isViewingJob ? '#5f27cd' : '#748497'}
@@ -67,7 +67,7 @@ export default function Sidebar() {
               onClick={() => {
                 handleNavigate('logs');
               }}
-              className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 bg-main rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
+              className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
             >
               <AlignLeft
                 size={28}
@@ -81,7 +81,7 @@ export default function Sidebar() {
               onClick={() => {
                 handleNavigate('settings');
               }}
-              className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 bg-main rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
+              className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
             >
               <Wrench
                 size={28}

@@ -12,6 +12,6 @@ export interface IPermalinksContext {
 
 export interface IChatMessage {
   message: string;
-  type: 'AI' | 'USER';
+  role: 'ai' | 'user';
   id: string;
 }

@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import { Warning } from '@phosphor-icons/react';
-import Jazzicon from '../../../../UserIcon';
 import renderMarkdown from '@/utils/chat/markdown';
 import Citations from '../Citation';
 

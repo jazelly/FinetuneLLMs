@@ -12,7 +12,7 @@ export default function Main() {
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-main flex">
+    <div className="h-screen overflow-hidden bg-main-base flex">
       <ChatContainer />
     </div>
   );

@@ -52,7 +52,7 @@ export default function App() {
         <LogoProvider>
           <PermalinksProvider>
             <TrainerMessageMapProvider>
-              <div className="bg-main flex h-full">
+              <div className="bg-main-base flex h-full">
                 {showingUpload && (
                   <UploadDatasets hideModal={hideUploadModal} />
                 )}
@@ -65,15 +65,10 @@ export default function App() {
                     <Sidebar />
                   </div>
                 )}
-                <div className="MainContainer flex-1 flex flex-col">
-                  {!isMobile ? (
-                    <div className="Header">
-                      <Header showUploadModal={showUploadModal} />
-                    </div>
-                  ) : (
-                    <div className="Header"></div>
-                  )}
-                  <div className={`MainBody flex-1 rounded-tl-xl shadow-2xl`}>
+                <div className="flex-1 flex flex-col h-full w-full overflow-y-hidden">
+                  <Header showUploadModal={showUploadModal} />
+
+                  <div className={`flex-1 rounded-tl-2xl shadow-xl`}>
                     <Routes>
                       <Route
                         path="/"

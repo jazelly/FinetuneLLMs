@@ -1,3 +1,5 @@
+import { IChatMessage } from '@/types/common.type';
+
 export const API_BASE = import.meta.env.VITE_API_BASE || '/api';
 
 export const TRAINER_WS_URL_BASE =
@@ -28,3 +30,28 @@ export const PERMALINK_DASHBOARD = {
   url: '/',
   name: 'Dashboard',
 };
+
+export const DEFAULT_CHAT_MESSAGES: IChatMessage[] = [
+  {
+    message:
+      'Welcome to FinetuneLLMs, FinetuneLLMs is an open-source AI tool that simplify your AI training requirements.',
+    role: 'ai',
+    id: 'system',
+  },
+  {
+    message: 'How do I get started?!',
+    role: 'user',
+    id: 'anon',
+  },
+  {
+    message:
+      "It's simple. You just need to choose model, method and dataset. You can upload a dataset or use the existing HuggingFace ones. Once all set, you can start training your AI by submitting a job.",
+    role: 'ai',
+    id: 'system',
+  },
+  {
+    message: 'Start creating your first finetuning job',
+    role: 'user',
+    id: 'system',
+  },
+];

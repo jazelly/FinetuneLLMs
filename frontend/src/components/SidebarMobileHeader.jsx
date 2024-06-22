@@ -23,7 +23,7 @@ export default function SidebarMobileHeader() {
     <>
       <div
         aria-label="Show sidebar"
-        className="fixed top-0 left-0 right-0 z-10 flex justify-between items-center px-4 py-2 bg-main text-slate-200 shadow-lg h-16"
+        className="fixed top-0 left-0 right-0 z-10 flex justify-between items-center px-4 py-2 bg-main-base text-slate-200 shadow-lg h-16"
       >
         <button
           onClick={() => setShowSidebar(true)}
@@ -57,7 +57,7 @@ export default function SidebarMobileHeader() {
         />
         <div
           ref={sidebarRef}
-          className="relative h-[100vh] fixed top-0 left-0  rounded-r-[26px] bg-main w-[80%] p-[18px] "
+          className="relative h-[100vh] fixed top-0 left-0  rounded-r-[26px] w-[80%] p-[18px] "
         >
           <div className="w-full h-full flex flex-col overflow-x-hidden items-between">
             <div className="flex w-full items-center justify-between gap-x-4">

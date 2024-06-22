@@ -53,7 +53,7 @@ export default function SettingsSidebar() {
   if (isMobile) {
     return (
       <>
-        <div className="fixed top-0 left-0 right-0 z-10 flex justify-between items-center px-4 py-2 bg-main text-slate-200 shadow-lg h-16">
+        <div className="fixed top-0 left-0 right-0 z-10 flex justify-between items-center px-4 py-2 bg-main-base text-slate-200 shadow-lg h-16">
           <button
             onClick={() => setShowSidebar(true)}
             className="rounded-md p-2 flex items-center justify-center text-slate-200"
@@ -86,7 +86,7 @@ export default function SettingsSidebar() {
           />
           <div
             ref={sidebarRef}
-            className="h-[100vh] fixed top-0 left-0  rounded-r-[26px] bg-main w-[80%] p-[18px] "
+            className="h-[100vh] fixed top-0 left-0  rounded-r-[26px] bg-main-base w-[80%] p-[18px] "
           >
             <div className="w-full h-full flex flex-col overflow-x-hidden items-between">
               {/* Header Information */}
@@ -141,7 +141,7 @@ export default function SettingsSidebar() {
       <div
         ref={sidebarRef}
         style={{ height: 'calc(100% - 76px)' }}
-        className="transition-all duration-500 relative m-[16px] rounded-[16px] bg-main border-2 border-outline min-w-[250px] p-[10px]"
+        className="transition-all duration-500 relative m-[16px] rounded-[16px] bg-main-base border-2 border-outline min-w-[250px] p-[10px]"
       >
         <div className="w-full h-full flex flex-col overflow-x-hidden items-between min-w-[235px]">
           <div className="text-white text-opacity-60 text-sm font-medium uppercase mt-[4px] mb-0 ml-2">

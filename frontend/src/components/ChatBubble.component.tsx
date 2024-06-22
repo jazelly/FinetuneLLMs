@@ -2,11 +2,10 @@ import React from 'react';
 import UserIcon from './UserIcon';
 import { userFromStorage } from '@/utils/request';
 import { AI_BACKGROUND_COLOR, USER_BACKGROUND_COLOR } from '@/utils/constants';
-import { Plus } from '@phosphor-icons/react';
 import { IChatMessage } from '@/types/common.type';
 
-export default function ChatBubble({ message, type, id }: IChatMessage) {
-  const isUser = type === 'USER';
+export default function ChatBubble({ message, role, id }: IChatMessage) {
+  const isUser = role === 'user';
   const backgroundColor = isUser ? USER_BACKGROUND_COLOR : AI_BACKGROUND_COLOR;
 
   return (
@@ -17,7 +16,7 @@ export default function ChatBubble({ message, type, id }: IChatMessage) {
         <div className="flex gap-x-5">
           <UserIcon
             size={36}
-            user={{ uid: isUser ? userFromStorage()?.username : 'system' }}
+            user={{ role: isUser ? userFromStorage()?.username : 'ai' }}
           />
 
           <span

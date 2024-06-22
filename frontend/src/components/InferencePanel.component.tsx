@@ -1,5 +1,6 @@
 import type { JobDetail } from '@/types/dashboard.type';
 import React from 'react';
+import ChatContainer from './ChatContainer.component';
 
 export interface InferencePanelProps {
   model?: string;
@@ -15,15 +16,14 @@ const InferencePanel = ({
   if (jobDetail)
     return (
       <div className="flex item-center justify-center bg-main-gradient text-white h-full">
-        You can now interact with {jobDetail.baseModel}: trained by{' '}
-        {jobDetail.datasetName}
+        <span>You can now interact with {jobDetail.baseModel}</span>
       </div>
     );
 
   if (!model)
     return (
-      <div className="flex item-center justify-center bg-main-gradient text-white h-full">
-        Choose a model to start
+      <div className="bg-main-gradient text-white h-full w-full">
+        <ChatContainer />
       </div>
     );
 

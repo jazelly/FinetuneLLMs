@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import type { TrainerPayload, TrainerResponseWS } from '@/types/dashboard.type';
 import JSONView from 'react-json-view';
 import { TrainerMessageMapContext } from '@/contexts/TrainerMessageMap.context';
+import Scrollable from './reusable/Scrollable.component'; // Import the ScrollBar component
+
 export interface FinetunePanelProps {
   jobOptions: AllJobOptions | undefined;
   setJobOptions: any;
@@ -92,78 +94,82 @@ const FinetunePanel = ({ jobOptions, setJobOptions }: FinetunePanelProps) => {
   };
 
   return (
-    <div className="flex flex-col item-start bg-main-white px-4 py-3 gap-y-4 h-full">
-      <div className="flex justify-between">
-        <div className="text-lg font-semibold text-main-title">
-          Submit a finetuning job
-        </div>
-        <div
-          onMouseEnter={() => {
-            setSubmitHovered(true);
-          }}
-          onMouseLeave={() => {
-            setSubmitHovered(false);
-          }}
-          className="flex items-center justify-center gap-x-2 w-32 lg:w-48 transition-all duration-300 p-2 rounded-lg shadow-sm border border-transparent cursor-pointer"
-          aria-label="Upload your datasets"
-          onClick={handleSubmitJob}
-          style={{ backgroundColor: '#0aa8ff' }}
-        >
-          <span className={`text-white`}>Submit</span>
-          <CaretCircleDoubleRight
-            weight={submitHovered ? 'fill' : 'bold'}
-            size={24}
-            color="#ffffff"
-          />
-        </div>
-      </div>
-      {submitJobError !== '' && (
-        <div className="text-red-500 text-sm italic">{submitJobError}</div>
-      )}
-      <Dropdown
-        placeholder="Base model"
-        options={jobOptions?.baseModels ?? []}
-        onSelect={setBaseModel}
-        label="Base model"
-        disabled={!jobOptions}
-      />
-      <Dropdown
-        placeholder="Training method"
-        options={jobOptions?.trainingMethods?.map((m) => m.name) ?? []}
-        onSelect={setTrainingMethod}
-        label="Training method"
-        disabled={!jobOptions}
-      />
-      <Dropdown
-        placeholder="Dataset"
-        options={jobOptions?.datasets?.map((d) => d.name) ?? []}
-        onSelect={(selectedDatasetName) => {
-          const theDataset = jobOptions?.datasets?.find(
-            (dataset) => dataset.name === selectedDatasetName
-          );
-          if (theDataset) setDatasetJson(theDataset);
-          else if (Object.keys(datasetJson).length !== 0) setDatasetJson({});
-        }}
-        label="Dataset"
-        disabled={!jobOptions}
-      />
-
-      {jobOptions && (
-        <div
-          className={`flex flex-col item-start px-2 py-2 gap-y-4 h-full ${'bg-red'}`}
-        >
+    <Scrollable>
+      {' '}
+      {/* Wrap the content with ScrollBar */}
+      <div className="flex flex-col item-start bg-main-white px-4 py-3 h-full w-full">
+        <div className="flex justify-between">
           <div className="text-lg font-semibold text-main-title">
-            Training Hyperparameters
+            Submit a finetuning job
           </div>
-          <JSONView
-            onEdit={handleHyperparametersStringChange}
-            src={jobOptions?.hyperparameters}
-            name="hyperparameters"
-            enableClipboard={true}
-          />
+          <div
+            onMouseEnter={() => {
+              setSubmitHovered(true);
+            }}
+            onMouseLeave={() => {
+              setSubmitHovered(false);
+            }}
+            className="flex items-center justify-center gap-x-2 w-32 lg:w-48 transition-all duration-300 p-2 rounded-lg shadow-sm border border-transparent cursor-pointer"
+            aria-label="Upload your datasets"
+            onClick={handleSubmitJob}
+            style={{ backgroundColor: '#0aa8ff' }}
+          >
+            <span className={`text-white`}>Submit</span>
+            <CaretCircleDoubleRight
+              weight={submitHovered ? 'fill' : 'bold'}
+              size={24}
+              color="#ffffff"
+            />
+          </div>
         </div>
-      )}
-    </div>
+        {submitJobError !== '' && (
+          <div className="text-red-500 text-sm italic">{submitJobError}</div>
+        )}
+        <Dropdown
+          placeholder="Base model"
+          options={jobOptions?.baseModels ?? []}
+          onSelect={setBaseModel}
+          label="Base model"
+          disabled={!jobOptions}
+        />
+        <Dropdown
+          placeholder="Training method"
+          options={jobOptions?.trainingMethods?.map((m) => m.name) ?? []}
+          onSelect={setTrainingMethod}
+          label="Training method"
+          disabled={!jobOptions}
+        />
+        <Dropdown
+          placeholder="Dataset"
+          options={jobOptions?.datasets?.map((d) => d.name) ?? []}
+          onSelect={(selectedDatasetName) => {
+            const theDataset = jobOptions?.datasets?.find(
+              (dataset) => dataset.name === selectedDatasetName
+            );
+            if (theDataset) setDatasetJson(theDataset);
+            else if (Object.keys(datasetJson).length !== 0) setDatasetJson({});
+          }}
+          label="Dataset"
+          disabled={!jobOptions}
+        />
+
+        {jobOptions && (
+          <div
+            className={`flex flex-col item-start px-2 py-2 gap-y-4 h-full ${'bg-red'}`}
+          >
+            <div className="text-lg font-semibold text-main-title">
+              Training Hyperparameters
+            </div>
+            <JSONView
+              onEdit={handleHyperparametersStringChange}
+              src={jobOptions?.hyperparameters}
+              name="hyperparameters"
+              enableClipboard={true}
+            />
+          </div>
+        )}
+      </div>
+    </Scrollable>
   );
 };
 

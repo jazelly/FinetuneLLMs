@@ -33,7 +33,7 @@ function Header({ showUploadModal }: { showUploadModal: () => void }) {
   const [uploadHover, setUploadHover] = useState<boolean>(false);
 
   return (
-    <div className="flex justify-between items-center pt-1 px-2 text-2xl h-full">
+    <div className="flex justify-between items-center h-16 pt-1 px-2 text-2xl">
       <Permalinks />
       <div
         id="header-right-logo"

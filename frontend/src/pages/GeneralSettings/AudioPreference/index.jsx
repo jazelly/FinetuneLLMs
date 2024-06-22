@@ -20,7 +20,7 @@ export default function AudioPreference() {
   }, []);
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-main flex">
+    <div className="w-screen h-screen overflow-hidden bg-main-base flex">
       <Sidebar />
       {loading ? (
         <div
