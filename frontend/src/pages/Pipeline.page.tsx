@@ -6,7 +6,7 @@ import type { ResizeHandle } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import DashboardModel from '../models/dashboard';
 import type { AllJobOptions, JobDetail } from '@/types/dashboard.type';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import DetailPanel from '@/components/DetailPanel.component';
 import Job from '@/models/job.model';
 import InferencePanel from '@/components/InferencePanel.component';
@@ -18,14 +18,13 @@ import {
   RIGHT_GAP,
   SIDEBAR_WIDTH,
 } from '@/utils/constants';
-import { TrainerMessageMapProvider } from '@/contexts/TrainerMessageMap.context';
 
 const MIN_BOTTOM_HEIGHT = 100;
 
-const Dashboard = () => {
-  const [jobOptions, setJobOptions] = useState<AllJobOptions | undefined>(
-    undefined
-  );
+const Pipeline = () => {
+  const { jobId } = useParams() as { jobId: string };
+  const location = useLocation();
+  const { fresh } = location.state as { fresh?: boolean };
 
   const [jobDetail, setJobDetail] = useState<JobDetail | undefined>(undefined);
 
@@ -35,30 +34,20 @@ const Dashboard = () => {
   const { setPermalinks } = useContext(PermalinksContext);
 
   useEffect(() => {
-    const fetchJobOptions = async () => {
-      try {
-        const resp = await DashboardModel.getJobOptions();
-        if (!resp.success) {
-          setJobOptions({
-            baseModels: [],
-            trainingMethods: [],
-            datasets: [],
-            hyperparameters: {},
-          });
-        } else {
-          setJobOptions(resp.data);
-        }
-      } catch (error: any) {
-        setError(error);
+    const fetchJobDetail = async () => {
+      setJobDetailLoading(true);
+      const resp = await Job.getJobDetail(jobId);
+      if (!resp.success) {
+        setError(resp.error);
+      } else {
+        setJobDetail(resp.data);
       }
+      setJobDetailLoading(false);
     };
 
-    fetchJobOptions();
-  }, []);
+    if (!fresh) fetchJobDetail();
 
-  useEffect(() => {
-    setPermalinks([PERMALINK_DASHBOARD]);
-    return;
+    setPermalinks([{ name: `Job ${jobId}`, url: `/job/${jobId}` }]);
   }, []);
 
   const initialLeftWidth = ((window.innerWidth - 42 - 16) * 1) / 3; // 1/3 width for the left panel
@@ -137,39 +126,18 @@ const Dashboard = () => {
         maxConstraints={[maxWidthLeft, Infinity]}
         className="flex h-full"
       >
-        <div className="h-full w-full relative">
-          <FinetunePanel
-            jobOptions={jobOptions}
-            setJobOptions={setJobOptions}
-          />
-        </div>
+        <div className="h-full w-full relative">Different panel</div>
       </ResizableBox>
       {!isRightCollapsed && (
-        <div className="flex-1 flex flex-col h-full">
-          <ResizableBox
-            height={topHeight}
-            axis="y"
-            resizeHandles={isBottomCollapsed ? [] : ['s']}
-            onResize={handleTopResize}
-            minConstraints={[leftWidth, minHeightTop]}
-            maxConstraints={[leftWidth, maxHeightTop]}
-            className="border-b-1"
-          >
-            <DetailPanel
-              jobDetail={jobDetail}
-              jobDetailLoading={jobDetailLoading}
-            />
-          </ResizableBox>
-          <div className="flex-1">
-            <InferencePanel
-              jobDetail={jobDetail}
-              jobDetailLoading={jobDetailLoading}
-            />
-          </div>
+        <div className="flex-1 h-full">
+          <DetailPanel
+            jobDetail={jobDetail}
+            jobDetailLoading={jobDetailLoading}
+          />
         </div>
       )}
     </div>
   );
 };
 
-export default Dashboard;
+export default Pipeline;

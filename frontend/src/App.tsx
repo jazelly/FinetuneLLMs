@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import React, { lazy, Suspense, useRef } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ContextWrapper } from '@/contexts/AuthContext';
 import PrivateRoute, { AdminRoute } from '@/components/PrivateRoute';
@@ -15,9 +15,11 @@ import Header from './components/Header';
 import UploadDatasets, {
   useUploadDatasetsModal,
 } from '@/components/Modals/UploadDatasets';
+import { TrainerMessageMapProvider } from './contexts/TrainerMessageMap.context';
 
 const DefaultChat = lazy(() => import('@/pages/DefaultChat'));
 const InvitePage = lazy(() => import('@/pages/Invite'));
+const Pipeline = lazy(() => import('@/pages/Pipeline.page'));
 // const WorkspaceChat = lazy(() => import("@/pages/WorkspaceChat")); // TODO: integarte to testing field
 const Dashboard = lazy(() => import('@/pages/Dashboard.page'));
 const AdminUsers = lazy(() => import('@/pages/Admin/Users'));
@@ -49,89 +51,95 @@ export default function App() {
       <ContextWrapper>
         <LogoProvider>
           <PermalinksProvider>
-            <div className="bg-main flex h-full">
-              {showingUpload && <UploadDatasets hideModal={hideUploadModal} />}
-
-              {!isMobile && (
-                <div
-                  className={`SidebarContainer h-full flex flex-col items-center justify-between`}
-                  ref={sidebarRef}
-                >
-                  <Sidebar />
-                </div>
-              )}
-              <div className="MainContainer flex-1 flex flex-col">
-                {!isMobile ? (
-                  <div className="Header">
-                    <Header showUploadModal={showUploadModal} />
-                  </div>
-                ) : (
-                  <div className="Header"></div>
+            <TrainerMessageMapProvider>
+              <div className="bg-main flex h-full">
+                {showingUpload && (
+                  <UploadDatasets hideModal={hideUploadModal} />
                 )}
-                <div className={`MainBody flex-1 rounded-tl-xl shadow-2xl`}>
-                  <Routes>
-                    <Route
-                      path="/"
-                      element={<PrivateRoute Component={Dashboard} />}
-                    />
-                    <Route
-                      path="/job/:jobId"
-                      element={<PrivateRoute Component={Dashboard} />}
-                    />
-                    <Route
-                      path="/logs"
-                      element={<PrivateRoute Component={DefaultChat} />}
-                    />
-                    <Route path="/login" element={<Login />} />
-                    <Route
-                      path="/accept-invite/:code"
-                      element={<InvitePage />}
-                    />
 
-                    {/* Admin */}
-                    <Route
-                      path="/settings"
-                      element={<AdminRoute Component={GeneralLLMPreference} />}
-                    />
+                {!isMobile && (
+                  <div
+                    className={`SidebarContainer h-full flex flex-col items-center justify-between`}
+                    ref={sidebarRef}
+                  >
+                    <Sidebar />
+                  </div>
+                )}
+                <div className="MainContainer flex-1 flex flex-col">
+                  {!isMobile ? (
+                    <div className="Header">
+                      <Header showUploadModal={showUploadModal} />
+                    </div>
+                  ) : (
+                    <div className="Header"></div>
+                  )}
+                  <div className={`MainBody flex-1 rounded-tl-xl shadow-2xl`}>
+                    <Routes>
+                      <Route
+                        path="/"
+                        element={<PrivateRoute Component={Dashboard} />}
+                      />
+                      <Route
+                        path="/job/:jobId"
+                        element={<PrivateRoute Component={Pipeline} />}
+                      />
+                      <Route
+                        path="/logs"
+                        element={<PrivateRoute Component={DefaultChat} />}
+                      />
+                      <Route path="/login" element={<Login />} />
+                      <Route
+                        path="/accept-invite/:code"
+                        element={<InvitePage />}
+                      />
 
-                    {/* Manager */}
-                    <Route
-                      path="/settings/privacy"
-                      element={<AdminRoute Component={PrivacyAndData} />}
-                    />
-                    <Route
-                      path="/settings/appearance"
-                      element={<ManagerRoute Component={GeneralAppearance} />}
-                    />
-                    <Route
-                      path="/settings/api-keys"
-                      element={<AdminRoute Component={GeneralApiKeys} />}
-                    />
-                    <Route
-                      path="/settings/workspace-chats"
-                      element={<ManagerRoute Component={GeneralChats} />}
-                    />
-                    <Route
-                      path="/settings/system-preferences"
-                      element={<ManagerRoute Component={AdminSystem} />}
-                    />
-                    <Route
-                      path="/settings/invites"
-                      element={<ManagerRoute Component={AdminInvites} />}
-                    />
-                    <Route
-                      path="/settings/users"
-                      element={<ManagerRoute Component={AdminUsers} />}
-                    />
-                    <Route
-                      path="/settings/workspaces"
-                      element={<ManagerRoute Component={AdminWorkspaces} />}
-                    />
-                  </Routes>
+                      {/* Admin */}
+                      <Route
+                        path="/settings"
+                        element={
+                          <AdminRoute Component={GeneralLLMPreference} />
+                        }
+                      />
+
+                      {/* Manager */}
+                      <Route
+                        path="/settings/privacy"
+                        element={<AdminRoute Component={PrivacyAndData} />}
+                      />
+                      <Route
+                        path="/settings/appearance"
+                        element={<ManagerRoute Component={GeneralAppearance} />}
+                      />
+                      <Route
+                        path="/settings/api-keys"
+                        element={<AdminRoute Component={GeneralApiKeys} />}
+                      />
+                      <Route
+                        path="/settings/workspace-chats"
+                        element={<ManagerRoute Component={GeneralChats} />}
+                      />
+                      <Route
+                        path="/settings/system-preferences"
+                        element={<ManagerRoute Component={AdminSystem} />}
+                      />
+                      <Route
+                        path="/settings/invites"
+                        element={<ManagerRoute Component={AdminInvites} />}
+                      />
+                      <Route
+                        path="/settings/users"
+                        element={<ManagerRoute Component={AdminUsers} />}
+                      />
+                      <Route
+                        path="/settings/workspaces"
+                        element={<ManagerRoute Component={AdminWorkspaces} />}
+                      />
+                    </Routes>
+                  </div>
                 </div>
+                <ToastContainer />
               </div>
-              <ToastContainer />
-            </div>
+            </TrainerMessageMapProvider>
           </PermalinksProvider>
         </LogoProvider>
       </ContextWrapper>

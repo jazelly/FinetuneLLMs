@@ -1,24 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Dropdown from './Dropdown.component';
 import { AllJobOptions, IDataset } from '@/types/dashboard.type';
 import { CaretCircleDoubleRight } from '@phosphor-icons/react';
 import Job from '@/models/job.model';
 import { useNavigate } from 'react-router-dom';
-import useWebSocket from '@/hooks/useWebSocket';
 import type { TrainerPayload, TrainerResponseWS } from '@/types/dashboard.type';
 import JSONView from 'react-json-view';
+import { TrainerMessageMapContext } from '@/contexts/TrainerMessageMap.context';
 export interface FinetunePanelProps {
   jobOptions: AllJobOptions | undefined;
   setJobOptions: any;
   runningJobId?: string;
 }
 
-const FinetunePanel = ({
-  jobOptions,
-  setJobOptions,
-  runningJobId,
-}: FinetunePanelProps) => {
-  const { sendMessage } = useWebSocket<TrainerPayload, TrainerResponseWS>();
+const FinetunePanel = ({ jobOptions, setJobOptions }: FinetunePanelProps) => {
+  const { sendMessage } = useContext(TrainerMessageMapContext);
   const [submitHovered, setSubmitHovered] = useState(false);
   const [submitJobError, setSubmitJobError] = useState('');
 
@@ -60,7 +56,7 @@ const FinetunePanel = ({
       return;
     }
 
-    clearSubmitJobError();
+    if (submitJobError) clearSubmitJobError();
 
     const resp = await Job.submitJob({
       baseModel,
@@ -76,18 +72,21 @@ const FinetunePanel = ({
       return;
     }
 
+    if (!sendMessage) return;
     console.log('send to ws', resp.data);
-    sendMessage({
-      type: 'command',
-      message: 'submitted a job',
-      data: {
-        baseModel,
-        trainingMethod,
-        datasetName: datasetJson.name,
-        hyperparameters: jobOptions.hyperparameters,
-      },
-    });
-    navigate(`/job/${resp.data.id}`, { replace: true });
+    sendMessage(
+      JSON.stringify({
+        type: 'command',
+        message: 'submitted a job',
+        data: {
+          baseModel,
+          trainingMethod,
+          datasetName: datasetJson.name,
+          hyperparameters: jobOptions.hyperparameters,
+        },
+      })
+    );
+    navigate(`/job/${resp.data.id}`, { state: { fresh: true } });
 
     return;
   };

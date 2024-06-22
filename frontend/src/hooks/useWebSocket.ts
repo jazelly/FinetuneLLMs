@@ -10,7 +10,12 @@ import {
 import { TRAINER_WS_URL_BASE } from '@/utils/constants';
 import { flushSync } from 'react-dom';
 
-export type SendMessage<T extends Record<string, any>> = (
+export type SendMessage<T extends string> = (
+  message: T,
+  keep?: boolean
+) => void;
+
+export type SendMessageJSON<T extends Record<string, any>> = (
   message: T,
   keep?: boolean
 ) => void;
@@ -19,7 +24,8 @@ export type WebSocketHook<
   ReponseProtocol extends Record<string, any>,
   P = WebSocketEventMap['message'] | null,
 > = {
-  sendMessage: SendMessage<RequestProtocol>;
+  sendMessage: SendMessage<string>;
+  sendMessageJSON: SendMessageJSON<RequestProtocol>;
   messageMap: Record<string, Array<ReponseProtocol>>;
   getWebSocket: () => WebSocket | null;
 };
@@ -77,7 +83,20 @@ const useWebSocket = <
 
   const webSocketRef = useRef<WebSocket | null>(null);
 
-  const sendMessage = useCallback((msg: Request, keep = true) => {
+  const sendMessage = useCallback((msg: string, keep = true) => {
+    if (webSocketRef.current?.readyState === WebSocket.OPEN && msg) {
+      assertIsWebSocket(webSocketRef.current);
+      webSocketRef.current.send(msg);
+    } else {
+      console.log(
+        'Socket already closed from trainer side! State Code: ',
+        webSocketRef.current?.readyState
+      );
+      if (keep) messageQueue.current.push(msg);
+    }
+  }, []);
+
+  const sendMessageJSON = useCallback((msg: Request, keep = true) => {
     const msgString = JSON.stringify(msg);
     if (webSocketRef.current?.readyState === WebSocket.OPEN && msg) {
       assertIsWebSocket(webSocketRef.current);
@@ -150,6 +169,7 @@ const useWebSocket = <
     getWebSocket,
     messageMap,
     sendMessage,
+    sendMessageJSON,
   };
 };
 

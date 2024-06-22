@@ -29,7 +29,7 @@ const InferencePanel = ({
 
   return (
     <div
-      className={`flex flex-col item-start bg-main-gradient text-white border-b-2 border-r-2 px-2 py-2 gap-y-4 h-full w-full`}
+      className={`flex flex-col item-start bg-main-gradient text-main-log-white border-b-2 border-r-2 px-2 py-2 gap-y-4 h-full w-full`}
     >
       <div className="flex">{model}</div>
     </div>

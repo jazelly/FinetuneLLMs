@@ -36,8 +36,11 @@ export default {
         'main-blue': '#3c97fd',
         'main-grey': '#A1ACBD',
         'main-white': '#F4F9FF',
+        'main-log-white': '#B8C7E0',
+        'main-log-lightblue': '#97D8F4',
         divline: '#eef4fa',
         'main-title': '#404b58',
+        'pipeline-highlight': '#455166',
       },
       backgroundImage: {
         'preference-gradient':

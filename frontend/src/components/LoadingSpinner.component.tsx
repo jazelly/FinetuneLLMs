@@ -1,9 +1,26 @@
+import { Cube } from '@phosphor-icons/react';
 import React from 'react';
 
 const LoadingSpinner = () => {
   return (
     <div className="flex items-center justify-center h-full">
-      <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-blue-500"></div>
+      <Cube color="darkorchid" weight="duotone">
+        <animate
+          attributeName="opacity"
+          values="0;1;0"
+          dur="4s"
+          repeatCount="indefinite"
+        ></animate>
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="rotate"
+          dur="5s"
+          from="0 0 0"
+          to="360 0 0"
+          repeatCount="indefinite"
+        ></animateTransform>
+      </Cube>
     </div>
   );
 };

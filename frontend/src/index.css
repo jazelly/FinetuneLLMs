@@ -66,6 +66,14 @@ a {
   overflow-y: hidden;
 }
 
+.pipeline-highlight-hover {
+  transition: background-color 0.3s;
+}
+
+.pipeline-highlight-hover:hover {
+  background-color: #455166;
+}
+
 .div-handle {
   display: flex;
   flex-direction: column;
