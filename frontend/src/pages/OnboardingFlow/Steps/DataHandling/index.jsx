@@ -1,6 +1,6 @@
 import FullScreenLoader from '@/components/Loaders.component';
 import System from '@/models/system';
-import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import FinetuneLLMsIcon from '@/media/logo/fllms-logo-transparent.png';
 import OpenAiLogo from '@/media/llmprovider/openai.png';
 import GenericOpenAiLogo from '@/media/llmprovider/generic-openai.png';
 import AzureOpenAiLogo from '@/media/llmprovider/azure.png';

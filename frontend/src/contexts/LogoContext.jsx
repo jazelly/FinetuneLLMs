@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import FinetuneLLMs from '@/media/logo/FinetuneLLMs_transparent.png';
+import FinetuneLLMs from '@/media/logo/fllms-transparent.png';
 
 export const LogoContext = createContext();
 

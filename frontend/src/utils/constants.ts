@@ -51,7 +51,7 @@ export const DEFAULT_CHAT_MESSAGES: IChatMessage[] = [
   },
   {
     message: 'Start creating your first finetuning job',
-    role: 'user',
+    role: 'ai',
     id: 'system',
   },
 ];

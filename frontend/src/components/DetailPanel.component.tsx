@@ -73,11 +73,11 @@ const DetailPanel = ({ jobDetail, jobDetailLoading }: DetailPanelProps) => {
 
   return (
     <div
-      className={`flex flex-col item-start bg-main-gradient py-5 px-5 gap-y-4 h-full w-full`}
+      className={`flex flex-col items-startstart bg-main-gradient py-5 px-5 gap-y-4 h-full w-full`}
     >
       <div
         id="pipeline-header"
-        className="flex justify-between item-center h-10 border-b-2"
+        className="flex justify-between items-center h-10 border-b-2"
       >
         <div
           id="pipeline-header"
@@ -87,7 +87,7 @@ const DetailPanel = ({ jobDetail, jobDetailLoading }: DetailPanelProps) => {
         </div>
         <div
           id="pipeline-header-icongroup"
-          className="flex justify-center item-center"
+          className="flex justify-center items-center"
         >
           <HoverableIcon
             hoverBackgroundColor="#DCF2FF"

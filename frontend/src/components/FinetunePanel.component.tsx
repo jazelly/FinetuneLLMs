@@ -95,9 +95,8 @@ const FinetunePanel = ({ jobOptions, setJobOptions }: FinetunePanelProps) => {
 
   return (
     <Scrollable>
-      {' '}
       {/* Wrap the content with ScrollBar */}
-      <div className="flex flex-col item-start bg-main-white px-4 py-3 h-full w-full">
+      <div className="flex flex-col items-startstart bg-main-white-gradient px-4 py-3 h-full w-full">
         <div className="flex justify-between">
           <div className="text-lg font-semibold text-main-title">
             Submit a finetuning job
@@ -155,7 +154,7 @@ const FinetunePanel = ({ jobOptions, setJobOptions }: FinetunePanelProps) => {
 
         {jobOptions && (
           <div
-            className={`flex flex-col item-start px-2 py-2 gap-y-4 h-full ${'bg-red'}`}
+            className={`flex flex-col items-startstart px-2 py-2 gap-y-4 h-full ${'bg-red'}`}
           >
             <div className="text-lg font-semibold text-main-title">
               Training Hyperparameters

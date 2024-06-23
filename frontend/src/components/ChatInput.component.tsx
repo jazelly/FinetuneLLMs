@@ -1,3 +1,4 @@
+import { CaretUp } from '@phosphor-icons/react';
 import React, { useState } from 'react';
 
 interface ChatInputProps {
@@ -7,7 +8,7 @@ interface ChatInputProps {
 const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   const [inputValue, setInputValue] = useState('');
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
   };
 
@@ -19,20 +20,24 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   };
 
   return (
-    <div className="flex items-center p-4 bg-white shadow-md">
-      <input
-        type="text"
+    <div className="flex items-center p-4 shadow-md w-full bg-main-base">
+      <textarea
+        data-key="chat-input"
         value={inputValue}
         onChange={handleInputChange}
-        placeholder="Type a message..."
-        className="flex-grow px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Send a message"
+        className="flex-grow h-[48px] resize-none px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
       />
-      <button
+      <div
+        data-key="chat-send-button"
+        className="absolute right-6 flex h-[32px] px-4 justify-center items-center cursor-pointer rounded-lg bg-main-blue hover:bg-blue-600 focus:outline-none"
         onClick={handleSendClick}
-        className="px-4 py-2 text-white bg-blue-500 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
-        Send
-      </button>
+        <span className="text-white">Send</span>
+        <div className="ml-2">
+          <CaretUp size={24} weight="bold" color="white" />
+        </div>
+      </div>
     </div>
   );
 };

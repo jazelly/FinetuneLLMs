@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-const Scrollable = ({ children }) => {
+interface ScrollableProps {
+  children: any;
+  color?: string;
+}
+
+const Scrollable = ({ children, color }: ScrollableProps) => {
+  const scrollColor = color ?? 'rgba(69, 81, 102, 0.5)';
+
   return (
     <Scrollbars
       className={`w-full h-full`}
@@ -11,8 +18,9 @@ const Scrollable = ({ children }) => {
           {...props}
           style={{
             ...style,
+            backgroundColor: scrollColor,
           }}
-          className={`rounded-md bg-pipeline-highlight bg-opacity-50`}
+          className={`rounded-md`}
         />
       )}
     >

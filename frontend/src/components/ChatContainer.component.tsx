@@ -4,6 +4,7 @@ import useUser from '@/hooks/useUser';
 import { IChatMessage } from '@/types/common.type';
 import { DEFAULT_CHAT_MESSAGES } from '@/utils/constants';
 import ChatInput from '@/components/ChatInput.component';
+import Scrollable from './reusable/Scrollable.component';
 
 export default function ChatContainer() {
   const [messages, setMessages] = useState<IChatMessage[]>([]);
@@ -20,11 +21,7 @@ export default function ChatContainer() {
 
   useEffect(() => {
     function processMsgs() {
-      setMessages([
-        ...DEFAULT_CHAT_MESSAGES,
-        ...DEFAULT_CHAT_MESSAGES,
-        ...DEFAULT_CHAT_MESSAGES,
-      ]);
+      setMessages([...DEFAULT_CHAT_MESSAGES]);
       return false;
     }
 
@@ -33,26 +30,29 @@ export default function ChatContainer() {
 
   const handleSendMessage = (message: string) => {
     const newMessage: IChatMessage = {
-      id: Date.now().toString(),
-      role: user ? 'ai' : 'user',
+      id: 'anon',
+      role: 'user',
       message: message,
     };
     setMessages([...messages, newMessage]);
   };
 
   return (
-    <div className="flex flex-col h-full w-full overflow-y-scroll relative">
-      <div className="p-4">
-        {messages.map((content, i) => (
-          <ChatBubble
-            key={content.id}
-            message={content.message}
-            role={content.role}
-            id={content.id}
-          />
-        ))}
-      </div>
-      <div className="absolute bottom-0">
+    <div className="flex flex-col h-full">
+      <Scrollable>
+        <div className="flex-1">
+          {messages.map((content, index) => (
+            <ChatBubble
+              key={index}
+              message={content.message}
+              role={content.role}
+              id={content.id}
+            />
+          ))}
+        </div>
+      </Scrollable>
+
+      <div data-key="chat-input-container" className="h-20">
         <ChatInput onSendMessage={handleSendMessage} />
       </div>
     </div>

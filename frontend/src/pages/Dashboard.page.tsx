@@ -116,7 +116,7 @@ const Dashboard = () => {
     <div
       ref={containerRef}
       onMouseUp={(e) => handleMouseUp(e, undefined)}
-      className="flex h-full"
+      className="flex rounded-tl-md overflow-y-hidden"
     >
       <ResizableBox
         width={leftWidth}
@@ -140,7 +140,7 @@ const Dashboard = () => {
         <FinetunePanel jobOptions={jobOptions} setJobOptions={setJobOptions} />
       </ResizableBox>
       {!isRightCollapsed && (
-        <div className="flex-1 flex flex-col h-full">
+        <div className="flex-1 bg-main-gradient">
           <InferencePanel
             jobDetail={jobDetail}
             jobDetailLoading={jobDetailLoading}

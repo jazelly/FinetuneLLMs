@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import FinetuneLLMsIcon from '@/media/logo/fllms-logo-transparent.png';
 import WorkspaceLLMItem from './WorkspaceLLMItem';
 import { AVAILABLE_LLM_PROVIDERS } from '@/pages/GeneralSettings/LLMPreference';
 import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';

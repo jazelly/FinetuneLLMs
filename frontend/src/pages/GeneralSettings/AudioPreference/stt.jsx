@@ -4,7 +4,7 @@ import showToast from '@/utils/toast';
 import LLMItem from '@/components/LLMSelection/LLMItem';
 import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
 import CTAButton from '@/components/CTAButton';
-import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import FinetuneLLMsIcon from '@/media/logo/fllms-logo-transparent.png';
 import BrowserNative from '@/components/SpeechToText/BrowserNative';
 
 const PROVIDERS = [

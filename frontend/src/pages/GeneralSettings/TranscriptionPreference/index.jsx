@@ -5,7 +5,7 @@ import System from '@/models/system';
 import showToast from '@/utils/toast';
 import FullScreenLoader from '@/components/Loaders.component';
 import OpenAiLogo from '@/media/llmprovider/openai.png';
-import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import FinetuneLLMsIcon from '@/media/logo/fllms-logo-transparent.png';
 import OpenAiWhisperOptions from '@/components/TranscriptionSelection/OpenAiOptions';
 import NativeTranscriptionOptions from '@/components/TranscriptionSelection/NativeTranscriptionOptions';
 import LLMItem from '@/components/LLMSelection/LLMItem';

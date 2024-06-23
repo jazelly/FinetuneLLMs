@@ -11,7 +11,7 @@ import { isMobile } from 'react-device-detect';
 import { LogoProvider } from '@/contexts/LogoContext';
 import { PermalinksProvider } from '@/contexts/Permalinks.context';
 import Sidebar from '@/components/Sidebar';
-import Header from './components/Header';
+import Header from './components/Header.component';
 import UploadDatasets, {
   useUploadDatasetsModal,
 } from '@/components/Modals/UploadDatasets';
@@ -59,78 +59,76 @@ export default function App() {
 
                 {!isMobile && (
                   <div
-                    className={`SidebarContainer h-full flex flex-col items-center justify-between`}
+                    className={`w-16 h-full flex-shrink-0 p-2 flex flex-col items-center justify-between`}
                     ref={sidebarRef}
                   >
                     <Sidebar />
                   </div>
                 )}
-                <div className="flex-1 flex flex-col h-full w-full overflow-y-hidden">
-                  <Header showUploadModal={showUploadModal} />
-
-                  <div className={`flex-1 rounded-tl-2xl shadow-xl`}>
-                    <Routes>
-                      <Route
-                        path="/"
-                        element={<PrivateRoute Component={Dashboard} />}
-                      />
-                      <Route
-                        path="/job/:jobId"
-                        element={<PrivateRoute Component={Pipeline} />}
-                      />
-                      <Route
-                        path="/logs"
-                        element={<PrivateRoute Component={DefaultChat} />}
-                      />
-                      <Route path="/login" element={<Login />} />
-                      <Route
-                        path="/accept-invite/:code"
-                        element={<InvitePage />}
-                      />
-
-                      {/* Admin */}
-                      <Route
-                        path="/settings"
-                        element={
-                          <AdminRoute Component={GeneralLLMPreference} />
-                        }
-                      />
-
-                      {/* Manager */}
-                      <Route
-                        path="/settings/privacy"
-                        element={<AdminRoute Component={PrivacyAndData} />}
-                      />
-                      <Route
-                        path="/settings/appearance"
-                        element={<ManagerRoute Component={GeneralAppearance} />}
-                      />
-                      <Route
-                        path="/settings/api-keys"
-                        element={<AdminRoute Component={GeneralApiKeys} />}
-                      />
-                      <Route
-                        path="/settings/workspace-chats"
-                        element={<ManagerRoute Component={GeneralChats} />}
-                      />
-                      <Route
-                        path="/settings/system-preferences"
-                        element={<ManagerRoute Component={AdminSystem} />}
-                      />
-                      <Route
-                        path="/settings/invites"
-                        element={<ManagerRoute Component={AdminInvites} />}
-                      />
-                      <Route
-                        path="/settings/users"
-                        element={<ManagerRoute Component={AdminUsers} />}
-                      />
-                      <Route
-                        path="/settings/workspaces"
-                        element={<ManagerRoute Component={AdminWorkspaces} />}
-                      />
-                    </Routes>
+                <div className="flex flex-col h-full w-full overflow-y-hidden">
+                  <div className="h-[64px] flex-shrink-0">
+                    <Header showUploadModal={showUploadModal} />
                   </div>
+
+                  <Routes>
+                    <Route
+                      path="/"
+                      element={<PrivateRoute Component={Dashboard} />}
+                    />
+                    <Route
+                      path="/job/:jobId"
+                      element={<PrivateRoute Component={Pipeline} />}
+                    />
+                    <Route
+                      path="/logs"
+                      element={<PrivateRoute Component={DefaultChat} />}
+                    />
+                    <Route path="/login" element={<Login />} />
+                    <Route
+                      path="/accept-invite/:code"
+                      element={<InvitePage />}
+                    />
+
+                    {/* Admin */}
+                    <Route
+                      path="/settings"
+                      element={<AdminRoute Component={GeneralLLMPreference} />}
+                    />
+
+                    {/* Manager */}
+                    <Route
+                      path="/settings/privacy"
+                      element={<AdminRoute Component={PrivacyAndData} />}
+                    />
+                    <Route
+                      path="/settings/appearance"
+                      element={<ManagerRoute Component={GeneralAppearance} />}
+                    />
+                    <Route
+                      path="/settings/api-keys"
+                      element={<AdminRoute Component={GeneralApiKeys} />}
+                    />
+                    <Route
+                      path="/settings/workspace-chats"
+                      element={<ManagerRoute Component={GeneralChats} />}
+                    />
+                    <Route
+                      path="/settings/system-preferences"
+                      element={<ManagerRoute Component={AdminSystem} />}
+                    />
+                    <Route
+                      path="/settings/invites"
+                      element={<ManagerRoute Component={AdminInvites} />}
+                    />
+                    <Route
+                      path="/settings/users"
+                      element={<ManagerRoute Component={AdminUsers} />}
+                    />
+                    <Route
+                      path="/settings/workspaces"
+                      element={<ManagerRoute Component={AdminWorkspaces} />}
+                    />
+                  </Routes>
                 </div>
                 <ToastContainer />
               </div>

@@ -35,13 +35,6 @@ a {
   border-color: #302f30;
 }
 
-.SidebarContainer {
-  width: 4rem;
-  height: 100%;
-  min-height: 100%;
-  padding: 2px 2px;
-}
-
 @keyframes slideIn {
   0% {
     opacity: 0;
@@ -54,14 +47,6 @@ a {
     transform: translateY(0);
     /* Slide to its final position */
   }
-}
-
-.pipeline-highlight-hover {
-  transition: background-color 0.3s;
-}
-
-.pipeline-highlight-hover:hover {
-  background-color: #455166;
 }
 
 .div-handle {

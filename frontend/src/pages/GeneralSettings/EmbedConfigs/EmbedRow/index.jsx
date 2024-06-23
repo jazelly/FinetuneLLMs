@@ -67,7 +67,7 @@ export default function EmbedRow({ embed }) {
       >
         <th
           scope="row"
-          className="px-6 py-4 whitespace-nowrap flex item-center gap-x-1"
+          className="px-6 py-4 whitespace-nowrap flex items-center gap-x-1"
         >
           <a
             href={paths.workspace.chat(embed.workspace.slug)}

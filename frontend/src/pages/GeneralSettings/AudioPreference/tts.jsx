@@ -5,7 +5,7 @@ import LLMItem from '@/components/LLMSelection/LLMItem';
 import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
 import CTAButton from '@/components/CTAButton';
 import OpenAiLogo from '@/media/llmprovider/openai.png';
-import FinetuneLLMsIcon from '@/media/logo/anything-llm-icon.png';
+import FinetuneLLMsIcon from '@/media/logo/fllms-logo-transparent.png';
 import ElevenLabsIcon from '@/media/ttsproviders/elevenlabs.png';
 import BrowserNative from '@/components/TextToSpeech/BrowserNative';
 import OpenAiTTSOptions from '@/components/TextToSpeech/OpenAiOptions';

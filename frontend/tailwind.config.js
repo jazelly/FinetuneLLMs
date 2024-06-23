@@ -4,12 +4,9 @@ export default {
   content: {
     relative: true,
     files: [
-      './src/components/**/*.{js,jsx,ts,tsx}',
-      './src/hooks/**/*.{ts,js}',
-      './src/models/**/*.{js,ts}',
-      './src/pages/**/*.{js,jsx,ts,tsx}',
-      './src/utils/**/*.{js,ts}',
+      './src/**/*.{js,jsx,ts,tsx}',
       './src/*.{jsx,tsx}',
+      './src/App.tsx',
       './index.html',
       './node_modules/@tremor/**/*.{js,ts,jsx,tsx}',
     ],
@@ -26,6 +23,7 @@ export default {
         'sidebar-button': '#31353A',
         sidebar: '#ebeef7',
         'main-base': '#E1F1FF',
+        'panel-blue': '#B3D7F4',
         'historical-msg-system': 'rgba(255, 255, 255, 0.05);',
         'historical-msg-user': '#2C2F35',
         outline: '#4E5153',
@@ -50,10 +48,10 @@ export default {
         'selected-preference-gradient':
           'linear-gradient(180deg, #313236 0%, rgba(63.40, 64.90, 70.13, 0) 100%);',
         'main-gradient': 'linear-gradient(180deg, #3D4059 0%, #1b2638 100%)',
+        'main-white-gradient':
+          'linear-gradient(to bottom right, #F4F9FF, #D3D7E4)',
         'modal-gradient': 'linear-gradient(180deg, #3D4147 0%, #1b2638 100%)',
         'sidebar-gradient': 'linear-gradient(90deg, #5B616A 0%, #3F434B 100%)',
-        'dashboard-gradient':
-          'linear-gradient(to bottom right, #0b1a55, #0e2a5e)',
         'login-gradient': 'linear-gradient(180deg, #3D4147 0%, #1b2638 100%)',
         'menu-item-gradient':
           'linear-gradient(90deg, #3D4147 0%, #1b2638 100%)',
