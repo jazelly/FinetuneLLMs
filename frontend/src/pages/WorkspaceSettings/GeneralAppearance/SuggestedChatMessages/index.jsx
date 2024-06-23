@@ -1,4 +1,4 @@
-import FullScreenLoader from '@/components/Loaders.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 import Workspace from '@/models/workspace';
 import showToast from '@/utils/toast';
 import { useEffect, useState } from 'react';

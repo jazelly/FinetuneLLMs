@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo } from 'react';
 import truncate from 'truncate';
 import { CheckCircle, XCircle } from '@phosphor-icons/react';
 import { humanFileSize, milliToHms } from '@/utils/numbers';
-import { PreLoader } from '@/components/Loaders.component';
+import { PreLoader } from '@/components/reusable/Loaders.component';
 import Document from '@/models/document';
 
 const CHUNK_SIZE = 100000; // bytes

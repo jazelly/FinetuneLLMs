@@ -3,7 +3,7 @@ import Sidebar from '@/components/SettingsSidebar';
 import { isMobile } from 'react-device-detect';
 import showToast from '@/utils/toast';
 import System from '@/models/system';
-import FullScreenLoader from '@/components/Loaders.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 import {
   EMBEDDING_ENGINE_PRIVACY,
   LLM_SELECTION_PRIVACY,

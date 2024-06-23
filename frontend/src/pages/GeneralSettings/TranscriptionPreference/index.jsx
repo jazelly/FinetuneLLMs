@@ -3,7 +3,7 @@ import { isMobile } from 'react-device-detect';
 import Sidebar from '@/components/SettingsSidebar';
 import System from '@/models/system';
 import showToast from '@/utils/toast';
-import FullScreenLoader from '@/components/Loaders.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 import OpenAiLogo from '@/media/llmprovider/openai.png';
 import FinetuneLLMsIcon from '@/media/logo/fllms-logo-transparent.png';
 import OpenAiWhisperOptions from '@/components/TranscriptionSelection/OpenAiOptions';

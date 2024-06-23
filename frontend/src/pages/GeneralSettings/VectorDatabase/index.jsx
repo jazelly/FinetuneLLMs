@@ -11,7 +11,7 @@ import QDrantLogo from '@/media/vectordbs/qdrant.png';
 import MilvusLogo from '@/media/vectordbs/milvus.png';
 import ZillizLogo from '@/media/vectordbs/zilliz.png';
 import AstraDBLogo from '@/media/vectordbs/astraDB.png';
-import FullScreenLoader from '@/components/Loaders.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 import ChangeWarningModal from '@/components/ChangeWarning';
 import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
 import LanceDBOptions from '@/components/VectorDBSelection/LanceDBOptions';

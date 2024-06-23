@@ -3,7 +3,7 @@ import { default as WorkspaceChatContainer } from '@/components/WorkspaceChat';
 import { useParams } from 'react-router-dom';
 import Workspace from '@/models/workspace';
 import PasswordModal, { usePasswordModal } from '@/components/Modals/Password';
-import FullScreenLoader from '@/components/Loaders.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 
 export default function WorkspaceChat() {
   const { loading, requiresAuth, mode } = usePasswordModal();

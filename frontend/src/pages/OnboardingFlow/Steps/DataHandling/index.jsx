@@ -1,4 +1,4 @@
-import FullScreenLoader from '@/components/Loaders.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 import System from '@/models/system';
 import FinetuneLLMsIcon from '@/media/logo/fllms-logo-transparent.png';
 import OpenAiLogo from '@/media/llmprovider/openai.png';

@@ -47,7 +47,10 @@ const Pipeline = () => {
 
     if (!fresh) fetchJobDetail();
 
-    setPermalinks([{ name: `Job ${jobId}`, url: `/job/${jobId}` }]);
+    setPermalinks([
+      { name: 'Job History', url: `/job/logs` },
+      { name: `Job ${jobId}`, url: `/job/${jobId}` },
+    ]);
   }, []);
 
   const initialLeftWidth = ((window.innerWidth - 42 - 16) * 1) / 3; // 1/3 width for the left panel
@@ -126,7 +129,7 @@ const Pipeline = () => {
         maxConstraints={[maxWidthLeft, Infinity]}
         className="flex h-full"
       >
-        <div className="h-full w-full relative">Different panel</div>
+        <div className="h-full w-full relative bg-white">Different panel</div>
       </ResizableBox>
       {!isRightCollapsed && (
         <div className="flex-1 flex flex-col h-full">
@@ -137,14 +140,14 @@ const Pipeline = () => {
             onResize={handleTopResize}
             minConstraints={[leftWidth, minHeightTop]}
             maxConstraints={[leftWidth, maxHeightTop]}
-            className="border-b-1"
+            className="border-b-2 flex flex-col"
           >
             <DetailPanel
               jobDetail={jobDetail}
               jobDetailLoading={jobDetailLoading}
             />
           </ResizableBox>
-          <div className="flex-1">
+          <div className="flex-1 bg-main-gradient">
             <InferencePanel
               jobDetail={jobDetail}
               jobDetailLoading={jobDetailLoading}

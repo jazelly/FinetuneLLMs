@@ -5,7 +5,7 @@ import showToast from '@/utils/toast';
 import System from '@/models/system';
 import paths from '@/utils/paths';
 import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from '@/utils/constants';
-import FullScreenLoader from '@/components/Loaders.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 import CTAButton from '@/components/CTAButton';
 
 export default function GeneralSecurity() {

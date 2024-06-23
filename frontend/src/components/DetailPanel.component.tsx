@@ -1,6 +1,6 @@
 import type { AllJobOptions, JobDetail } from '@/types/dashboard.type';
 import React, { useContext, useEffect, useState } from 'react';
-import LoadingSpinner from './LoadingSpinner.component';
+import { LoadingSpinner } from './reusable/Loaders.component';
 import {
   TrainerMessage,
   TrainerMessageMapContext,
@@ -9,6 +9,7 @@ import { MagnifyingGlass, Question } from '@phosphor-icons/react';
 import HoverableIcon from './reusable/HoverableIcon.component';
 import styled from 'styled-components';
 import ExpandableLog from './reusable/ExpandableLog.component';
+import { ReadyState } from 'react-use-websocket';
 
 export interface DetailPanelProps {
   jobDetail: JobDetail | undefined;
@@ -21,9 +22,15 @@ export interface LogEntry {
 }
 
 const DetailPanel = ({ jobDetail, jobDetailLoading }: DetailPanelProps) => {
-  const { messageMap } = useContext(TrainerMessageMapContext);
+  const { messageMap, readyState } = useContext(TrainerMessageMapContext);
 
-  if (jobDetailLoading) return <LoadingSpinner />;
+  if (jobDetailLoading || readyState !== ReadyState.OPEN)
+    return (
+      <div className="flex flex-col bg-main-gradient h-full justify-center items-center">
+        <LoadingSpinner size={80} color={'#3c97fd'} />
+        <span className="text-white">Loading</span>
+      </div>
+    );
 
   // TODO: get job list based on id
   let firstJobList: TrainerMessage[] = [];

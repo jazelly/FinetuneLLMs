@@ -5,7 +5,7 @@ import useAuthenticated from '@/hooks/useAuthenticated';
 import paths from '@/utils/paths';
 import { userFromStorage } from '@/utils/request';
 import { Navigate } from 'react-router-dom';
-import FullScreenLoader from './Loaders.component';
+import FullScreenLoader from './reusable/Loaders.component';
 
 // allows all users to access the route
 export function ManagerRoute({ Component }) {

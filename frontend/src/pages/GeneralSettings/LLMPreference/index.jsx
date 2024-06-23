@@ -21,7 +21,7 @@ import GroqLogo from '@/media/llmprovider/groq.png';
 import KoboldCPPLogo from '@/media/llmprovider/koboldcpp.png';
 import TextGenWebUILogo from '@/media/llmprovider/text-generation-webui.png';
 import CohereLogo from '@/media/llmprovider/cohere.png';
-import FullScreenLoader from '@/components/Loaders.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 import OpenAiOptions from '@/components/LLMSelection/OpenAiOptions';
 import GenericOpenAiOptions from '@/components/LLMSelection/GenericOpenAiOptions';
 import AzureAiOptions from '@/components/LLMSelection/AzureAiOptions';

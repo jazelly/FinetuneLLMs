@@ -1,5 +1,5 @@
 import UploadFile from '../UploadFile';
-import FullScreenLoader from '@/components/Loaders.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 import { useEffect, useState } from 'react';
 import FileRow from './FileRow';
 import { Plus, Trash } from '@phosphor-icons/react';

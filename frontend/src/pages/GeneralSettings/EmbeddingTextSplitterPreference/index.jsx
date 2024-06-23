@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '@/components/SettingsSidebar';
 import { isMobile } from 'react-device-detect';
-import FullScreenLoader from '@/components/Loaders.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 import CTAButton from '@/components/CTAButton';
 import Admin from '@/models/admin';
 import showToast from '@/utils/toast';

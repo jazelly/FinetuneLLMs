@@ -10,7 +10,7 @@ import LocalAiLogo from '@/media/llmprovider/localai.png';
 import OllamaLogo from '@/media/llmprovider/ollama.png';
 import LMStudioLogo from '@/media/llmprovider/lmstudio.png';
 import CohereLogo from '@/media/llmprovider/cohere.png';
-import FullScreenLoader from '@/components/Loaders.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 import ChangeWarningModal from '@/components/ChangeWarning';
 import OpenAiOptions from '@/components/EmbeddingSelection/OpenAiOptions';
 import AzureAiOptions from '@/components/EmbeddingSelection/AzureAiOptions';

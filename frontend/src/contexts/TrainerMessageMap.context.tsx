@@ -15,13 +15,18 @@ export interface TrainerMessage {
   code: number;
 }
 
-export const TrainerMessageMapContext = createContext<{
+export interface TrainerMessageMapContextData {
   messageMap: TrainerMessageMap;
   sendMessage: SendMessage | undefined;
-}>({
-  messageMap: {},
-  sendMessage: undefined,
-});
+  readyState: ReadyState;
+}
+
+export const TrainerMessageMapContext =
+  createContext<TrainerMessageMapContextData>({
+    messageMap: {},
+    sendMessage: undefined,
+    readyState: ReadyState.UNINSTANTIATED,
+  });
 
 export const TrainerMessageMapProvider = ({ children }) => {
   const [socketUrl, setSocketUrl] = useState(
@@ -58,7 +63,9 @@ export const TrainerMessageMapProvider = ({ children }) => {
   }[readyState];
 
   return (
-    <TrainerMessageMapContext.Provider value={{ messageMap, sendMessage }}>
+    <TrainerMessageMapContext.Provider
+      value={{ messageMap, sendMessage, readyState }}
+    >
       {children}
     </TrainerMessageMapContext.Provider>
   );

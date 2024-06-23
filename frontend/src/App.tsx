@@ -80,7 +80,7 @@ export default function App() {
                       element={<PrivateRoute Component={Pipeline} />}
                     />
                     <Route
-                      path="/logs"
+                      path="/job/logs"
                       element={<PrivateRoute Component={DefaultChat} />}
                     />
                     <Route path="/login" element={<Login />} />
