@@ -3,7 +3,7 @@ import System from '@/models/system';
 import showToast from '@/utils/toast';
 import LLMItem from '@/components/LLMSelection/LLMItem';
 import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
-import CTAButton from '@/components/CTAButton';
+import CTAButton from '@/components/reusable/CTAButton.component';
 import OpenAiLogo from '@/media/llmprovider/openai.png';
 import FinetuneLLMsIcon from '@/media/logo/fllms-logo-transparent.png';
 import ElevenLabsIcon from '@/media/ttsproviders/elevenlabs.png';

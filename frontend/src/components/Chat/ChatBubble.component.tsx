@@ -1,5 +1,5 @@
 import React from 'react';
-import UserIcon from './UserIcon';
+import UserIcon from '../UserIcon';
 import { userFromStorage } from '@/utils/request';
 import { AI_BACKGROUND_COLOR, USER_BACKGROUND_COLOR } from '@/utils/constants';
 import { IChatMessage } from '@/types/common.type';

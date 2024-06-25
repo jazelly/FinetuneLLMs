@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import ChatBubble from '@/components/ChatBubble.component';
-import useUser from '@/hooks/useUser';
+import ChatBubble from './ChatBubble.component';
 import { IChatMessage } from '@/types/common.type';
 import { DEFAULT_CHAT_MESSAGES } from '@/utils/constants';
-import ChatInput from '@/components/ChatInput.component';
-import Scrollable from './reusable/Scrollable.component';
+import Scrollable from '../reusable/Scrollable.component';
+import PromptInput from './PromptInput.component';
 
 export default function ChatContainer() {
   const [messages, setMessages] = useState<IChatMessage[]>([]);
-  const { user } = useUser();
+  const [loadingResponse, setLoadingResponse] = useState(false);
 
   useEffect(() => {
     // TODO: chat histories?
@@ -39,8 +38,8 @@ export default function ChatContainer() {
 
   return (
     <div className="flex flex-col h-full">
-      <Scrollable>
-        <div className="flex-1">
+      <Scrollable color="white">
+        <div className="flex-1 overflow-x-hidden">
           {messages.map((content, index) => (
             <ChatBubble
               key={index}
@@ -52,9 +51,11 @@ export default function ChatContainer() {
         </div>
       </Scrollable>
 
-      <div data-key="chat-input-container" className="h-20">
-        <ChatInput onSendMessage={handleSendMessage} />
-      </div>
+      <PromptInput
+        submit={handleSendMessage}
+        inputDisabled={loadingResponse}
+        buttonDisabled={loadingResponse}
+      />
     </div>
   );
 }

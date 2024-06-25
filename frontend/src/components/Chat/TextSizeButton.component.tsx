@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { TextT } from '@phosphor-icons/react';
 import { Tooltip } from 'react-tooltip';
+import React from 'react';
 
 export default function TextSizeButton() {
   const [showTextSizeMenu, setShowTextSizeMenu] = useState(false);
@@ -40,7 +41,7 @@ export default function TextSizeButton() {
 }
 
 function TextSizeMenu({ showing, setShowing, buttonRef }) {
-  const formRef = useRef(null);
+  const formRef = useRef<HTMLDivElement | null>(null);
   const [selectedSize, setSelectedSize] = useState(
     window.localStorage.getItem('anythingllm_text_size') || 'normal'
   );

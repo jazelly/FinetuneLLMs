@@ -1,6 +1,6 @@
 import type { JobDetail } from '@/types/dashboard.type';
 import React from 'react';
-import ChatContainer from './ChatContainer.component';
+import ChatContainer from './Chat/ChatContainer.component';
 
 export interface InferencePanelProps {
   model?: string;

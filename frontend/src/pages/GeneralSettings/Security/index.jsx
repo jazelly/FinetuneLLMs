@@ -6,7 +6,7 @@ import System from '@/models/system';
 import paths from '@/utils/paths';
 import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from '@/utils/constants';
 import FullScreenLoader from '@/components/reusable/Loaders.component';
-import CTAButton from '@/components/CTAButton';
+import CTAButton from '@/components/reusable/CTAButton.component';
 
 export default function GeneralSecurity() {
   return (

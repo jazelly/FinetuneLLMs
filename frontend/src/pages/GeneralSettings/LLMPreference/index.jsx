@@ -41,7 +41,7 @@ import CohereAiOptions from '@/components/LLMSelection/CohereAiOptions';
 
 import LLMItem from '@/components/LLMSelection/LLMItem';
 import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
-import CTAButton from '@/components/CTAButton';
+import CTAButton from '@/components/reusable/CTAButton.component';
 import KoboldCPPOptions from '@/components/LLMSelection/KoboldCPPOptions';
 import TextGenWebUIOptions from '@/components/LLMSelection/TextGenWebUIOptions';
 

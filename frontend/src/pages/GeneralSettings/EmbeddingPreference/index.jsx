@@ -24,7 +24,7 @@ import EmbedderItem from '@/components/EmbeddingSelection/EmbedderItem';
 import { CaretUpDown, MagnifyingGlass, X } from '@phosphor-icons/react';
 import { useModal } from '@/hooks/useModal';
 import ModalWrapper from '@/components/ModalWrapper';
-import CTAButton from '@/components/CTAButton';
+import CTAButton from '@/components/reusable/CTAButton.component';
 
 const EMBEDDERS = [
   {
