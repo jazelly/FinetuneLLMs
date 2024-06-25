@@ -11,7 +11,6 @@ import CTAButton from '@/components/reusable/CTAButton.component';
 export default function GeneralSecurity() {
   return (
     <div className="w-screen h-screen overflow-hidden bg-main-base flex">
-      <Sidebar />
       <div
         style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
         className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"

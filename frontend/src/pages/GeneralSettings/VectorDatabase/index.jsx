@@ -161,7 +161,6 @@ export default function GeneralVectorDatabase() {
 
   return (
     <div className="w-screen h-screen overflow-hidden bg-main-base flex">
-      <Sidebar />
       {loading ? (
         <div
           style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
