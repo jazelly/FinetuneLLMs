@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Sidebar from '@/components/SettingsSidebar';
 import { isMobile } from 'react-device-detect';
 import * as Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -10,41 +9,40 @@ import NewInviteModal from './NewInviteModal';
 import { useModal } from '@/hooks/useModal';
 import ModalWrapper from '@/components/ModalWrapper';
 import CTAButton from '@/components/reusable/CTAButton.component';
+import { Outlet } from 'react-router-dom';
 
 export default function AdminInvites() {
   const { isOpen, openModal, closeModal } = useModal();
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-main-base flex">
-      <Sidebar />
-      <div
-        style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
-        className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
-      >
-        <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
-          <div className="w-full flex flex-col gap-y-1 pb-6 border-white border-b-2 border-opacity-10">
-            <div className="items-center flex gap-x-4">
-              <p className="text-lg leading-6 font-bold text-white">
-                Invitations
-              </p>
-            </div>
-            <p className="text-xs leading-[18px] font-base text-white text-opacity-60">
-              Create invitation links for people in your organization to accept
-              and sign up with. Invitations can only be used by a single user.
+    <div
+      style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
+      className="relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll"
+    >
+      <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
+        <div className="w-full flex flex-col gap-y-1 pb-6 border-white border-b-2 border-opacity-10">
+          <div className="items-center flex gap-x-4">
+            <p className="text-lg leading-6 font-bold text-white">
+              Invitations
             </p>
           </div>
-          <div className="w-full justify-end flex">
-            <CTAButton onClick={openModal} className="mt-3 mr-0 -mb-12 z-10">
-              <EnvelopeSimple className="h-4 w-4" weight="bold" /> Create Invite
-              Link
-            </CTAButton>
-          </div>
-          <InvitationsContainer />
+          <p className="text-xs leading-[18px] font-base text-white text-opacity-60">
+            Create invitation links for people in your organization to accept
+            and sign up with. Invitations can only be used by a single user.
+          </p>
         </div>
-        <ModalWrapper isOpen={isOpen}>
-          <NewInviteModal closeModal={closeModal} />
-        </ModalWrapper>
+        <div className="w-full justify-end flex">
+          <CTAButton onClick={openModal} className="mt-3 mr-0 -mb-12 z-10">
+            <EnvelopeSimple className="h-4 w-4" weight="bold" /> Create Invite
+            Link
+          </CTAButton>
+        </div>
+        <InvitationsContainer />
       </div>
+      <ModalWrapper isOpen={isOpen}>
+        <NewInviteModal closeModal={closeModal} />
+      </ModalWrapper>
+      <Outlet />
     </div>
   );
 }

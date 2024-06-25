@@ -12,7 +12,7 @@ export default function Sidebar() {
 
   const isNewingJob = useMatch('/');
   const isViewingJob = useMatch('/job/:jobId');
-  const isViewingLog = useMatch('/logs');
+  const isViewingLog = useMatch('/jobs');
   const isViewingSettings = useMatch('/settings/*');
 
   const handleNavigate = (path) => {
@@ -21,7 +21,7 @@ export default function Sidebar() {
         navigate('/');
         break;
       case 'logs':
-        navigate('/logs');
+        navigate('/jobs');
         break;
       case 'settings':
         navigate('/settings');

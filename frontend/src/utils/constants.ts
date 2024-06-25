@@ -31,6 +31,11 @@ export const PERMALINK_DASHBOARD = {
   name: 'Dashboard',
 };
 
+export const PERMALINK_JOBS = {
+  url: '/jobs',
+  name: 'Jobs',
+};
+
 export const DEFAULT_CHAT_MESSAGES: IChatMessage[] = [
   {
     message:

@@ -7,29 +7,6 @@ export default {
   login: (noTry = false) => {
     return `/login${noTry ? '?nt=1' : ''}`;
   },
-  onboarding: {
-    home: () => {
-      return '/onboarding';
-    },
-    survey: () => {
-      return '/onboarding/survey';
-    },
-    llmPreference: () => {
-      return '/onboarding/llm-preference';
-    },
-    embeddingPreference: () => {
-      return '/onboarding/embedding-preference';
-    },
-    userSetup: () => {
-      return '/onboarding/user-setup';
-    },
-    dataHandling: () => {
-      return '/onboarding/data-handling';
-    },
-    createWorkspace: () => {
-      return '/onboarding/create-workspace';
-    },
-  },
   github: () => {
     return 'https://github.com/jazelly/FinetuneLLMs';
   },
@@ -37,10 +14,7 @@ export default {
     return '/upload';
   },
   discord: () => {
-    return 'https://discord.com/invite/6UyHPeGZAC';
-  },
-  docs: () => {
-    return 'https://docs.useanything.com';
+    return 'https://discord.gg/fBtdrb8qtm';
   },
   hosting: () => {
     return 'https://my.mintplexlabs.com/aio-checkout?product=anythingllm';
@@ -113,12 +87,6 @@ export default {
     },
     privacy: () => {
       return '/settings/privacy';
-    },
-    embedSetup: () => {
-      return `/settings/embed-config`;
-    },
-    embedChats: () => {
-      return `/settings/embed-chats`;
     },
   },
 };

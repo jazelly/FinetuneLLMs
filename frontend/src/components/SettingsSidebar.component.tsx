@@ -26,7 +26,6 @@ import {
 import useUser from '@/hooks/useUser';
 import { USER_BACKGROUND_COLOR } from '@/utils/constants';
 import { isMobile } from 'react-device-detect';
-import Footer from '../Footer';
 import { Link } from 'react-router-dom';
 
 export default function SettingsSidebar() {
@@ -116,7 +115,6 @@ export default function SettingsSidebar() {
                     <SidebarOptions user={user} />
                   </div>
                 </div>
-                <Footer />
               </div>
             </div>
           </div>
@@ -126,22 +124,10 @@ export default function SettingsSidebar() {
   }
 
   return (
-    <div>
-      <Link
-        to={paths.home()}
-        className="flex shrink-0 max-w-[55%] items-center justify-start mx-[38px] my-[18px]"
-      >
-        <img
-          src={logo}
-          alt="Logo"
-          className="rounded h-[24px]"
-          style={{ objectFit: 'contain' }}
-        />
-      </Link>
+    <div className="bg-main-gradient">
       <div
         ref={sidebarRef}
-        style={{ height: 'calc(100% - 76px)' }}
-        className="transition-all duration-500 relative m-[16px] rounded-[16px] bg-main-base border-2 border-outline min-w-[250px] p-[10px]"
+        className="transition-all duration-500 h-full relative m-[16px] rounded-[16px] border-2 border-outline min-w-[250px] p-[10px]"
       >
         <div className="w-full h-full flex flex-col overflow-x-hidden items-between min-w-[235px]">
           <div className="text-white text-opacity-60 text-sm font-medium uppercase mt-[4px] mb-0 ml-2">
@@ -152,9 +138,6 @@ export default function SettingsSidebar() {
               <div className="flex flex-col gap-y-2 h-full pb-8 overflow-y-scroll no-scroll">
                 <SidebarOptions user={user} />
               </div>
-            </div>
-            <div className="mb-2">
-              <Footer />
             </div>
           </div>
         </div>
@@ -169,11 +152,11 @@ const Option = ({
   href,
   childLinks = [],
   flex = false,
-  user = null,
+  user,
   allowedRole = [],
   subOptions = null,
   hidden = false,
-}) => {
+}: any) => {
   if (hidden) return null;
 
   const hasActiveChild = childLinks.includes(window.location.pathname);
@@ -220,7 +203,7 @@ const Option = ({
   );
 };
 
-const SidebarOptions = ({ user = null }) => (
+const SidebarOptions = ({ user = null }: any) => (
   <>
     <Option
       href={paths.settings.system()}
@@ -297,48 +280,6 @@ const SidebarOptions = ({ user = null }) => (
       user={user}
       flex={true}
       allowedRole={['admin']}
-    />
-    <Option
-      href={paths.settings.embedder.modelPreference()}
-      childLinks={[paths.settings.embedder.chunkingPreference()]}
-      btnText="Embedder Preferences"
-      icon={<FileCode className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      flex={true}
-      allowedRole={['admin']}
-      subOptions={
-        <>
-          <Option
-            href={paths.settings.embedder.chunkingPreference()}
-            btnText="Text Splitter & Chunking"
-            icon={<SplitVertical className="h-5 w-5 flex-shrink-0" />}
-            user={user}
-            flex={true}
-            allowedRole={['admin']}
-          />
-        </>
-      }
-    />
-    <Option
-      href={paths.settings.embedSetup()}
-      childLinks={[paths.settings.embedChats()]}
-      btnText="Embedded Chat"
-      icon={<CodeBlock className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      flex={true}
-      allowedRole={['admin']}
-      subOptions={
-        <>
-          <Option
-            href={paths.settings.embedChats()}
-            btnText="Embedded Chat History"
-            icon={<Barcode className="h-5 w-5 flex-shrink-0" />}
-            user={user}
-            flex={true}
-            allowedRole={['admin']}
-          />
-        </>
-      }
     />
     <Option
       href={paths.settings.security()}

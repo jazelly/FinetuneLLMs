@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { isMobile } from 'react-device-detect';
-import Sidebar from '@/components/SettingsSidebar';
+
 import System from '@/models/system';
 import showToast from '@/utils/toast';
 import FullScreenLoader from '@/components/reusable/Loaders.component';

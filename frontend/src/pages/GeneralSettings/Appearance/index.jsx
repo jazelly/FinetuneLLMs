@@ -1,4 +1,3 @@
-import Sidebar from '@/components/SettingsSidebar';
 import { isMobile } from 'react-device-detect';
 import FooterCustomization from './FooterCustomization';
 import SupportEmail from './SupportEmail';

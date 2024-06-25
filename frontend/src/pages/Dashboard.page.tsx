@@ -6,9 +6,6 @@ import type { ResizeHandle } from 'react-resizable';
 import 'react-resizable/css/styles.css';
 import DashboardModel from '../models/dashboard';
 import type { AllJobOptions, JobDetail } from '@/types/dashboard.type';
-import { useParams } from 'react-router-dom';
-import DetailPanel from '@/components/DetailPanel.component';
-import Job from '@/models/job.model';
 import InferencePanel from '@/components/InferencePanel.component';
 import { PermalinksContext } from '@/contexts/Permalinks.context';
 import {
@@ -18,9 +15,6 @@ import {
   RIGHT_GAP,
   SIDEBAR_WIDTH,
 } from '@/utils/constants';
-import { TrainerMessageMapProvider } from '@/contexts/TrainerMessageMap.context';
-
-const MIN_BOTTOM_HEIGHT = 100;
 
 const Dashboard = () => {
   const [jobOptions, setJobOptions] = useState<AllJobOptions | undefined>(
@@ -62,13 +56,10 @@ const Dashboard = () => {
   }, []);
 
   const initialLeftWidth = ((window.innerWidth - 42 - 16) * 1) / 3; // 1/3 width for the left panel
-  const initialTopHeight = ((window.innerHeight - 32 - 64) * 2) / 3; // 32 is the bottom gap, 64 is the top gap
 
   const [leftWidth, setLeftWidth] = useState(initialLeftWidth);
-  const [topHeight, setTopHeight] = useState(initialTopHeight);
 
   const [isRightCollapsed, setIsRightCollapsed] = useState(false);
-  const [isBottomCollapsed, setIsBottomCollapsed] = useState(false);
 
   const [isHoldingHandle, setIsHoldingHandle] = useState(false);
 
@@ -78,10 +69,6 @@ const Dashboard = () => {
     setLeftWidth(size.width);
   };
 
-  const handleTopResize = (event, { size }) => {
-    setTopHeight(size.height);
-  };
-
   // TODO: lift it to global so it can catch all mouse up
   const handleMouseUp = (e, cb) => {
     setIsHoldingHandle(false);
@@ -89,8 +76,6 @@ const Dashboard = () => {
   };
 
   const containerHeight = window.innerHeight - BOTTOM_GAP - 64;
-  const minHeightTop = HEADER_HEIGHT + 350;
-  const maxHeightTop = containerHeight - MIN_BOTTOM_HEIGHT;
   const minWidthLeft = SIDEBAR_WIDTH + 240;
   const maxWidthLeft = window.innerWidth - RIGHT_GAP - 330; // 330 is the min width of detail panel
 
@@ -101,15 +86,6 @@ const Dashboard = () => {
       setLeftWidth(containerRef.current!.offsetWidth - 8 - 12.5);
     }
     setIsRightCollapsed(!isRightCollapsed);
-  };
-
-  const toggleBottomCollapse = () => {
-    if (isBottomCollapsed) {
-      setTopHeight(initialTopHeight);
-    } else {
-      setTopHeight(containerRef.current!.offsetHeight);
-    }
-    setIsBottomCollapsed(!isBottomCollapsed);
   };
 
   return (

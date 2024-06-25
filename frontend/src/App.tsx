@@ -16,8 +16,9 @@ import UploadDatasets, {
   useUploadDatasetsModal,
 } from '@/components/Modals/UploadDatasets';
 import { TrainerMessageMapProvider } from './contexts/TrainerMessageMap.context';
+import Settings from './pages/Settings.page';
 
-const DefaultChat = lazy(() => import('@/pages/DefaultChat'));
+const Logs = lazy(() => import('@/pages/Logs.page'));
 const InvitePage = lazy(() => import('@/pages/Invite'));
 const Pipeline = lazy(() => import('@/pages/Pipeline.page'));
 // const WorkspaceChat = lazy(() => import("@/pages/WorkspaceChat")); // TODO: integarte to testing field
@@ -80,8 +81,8 @@ export default function App() {
                       element={<PrivateRoute Component={Pipeline} />}
                     />
                     <Route
-                      path="/job/logs"
-                      element={<PrivateRoute Component={DefaultChat} />}
+                      path="/jobs"
+                      element={<PrivateRoute Component={Logs} />}
                     />
                     <Route path="/login" element={<Login />} />
                     <Route
@@ -91,43 +92,11 @@ export default function App() {
 
                     {/* Admin */}
                     <Route
-                      path="/settings"
-                      element={<AdminRoute Component={GeneralLLMPreference} />}
+                      path="/settings/*"
+                      element={<AdminRoute Component={Settings} />}
                     />
 
                     {/* Manager */}
-                    <Route
-                      path="/settings/privacy"
-                      element={<AdminRoute Component={PrivacyAndData} />}
-                    />
-                    <Route
-                      path="/settings/appearance"
-                      element={<ManagerRoute Component={GeneralAppearance} />}
-                    />
-                    <Route
-                      path="/settings/api-keys"
-                      element={<AdminRoute Component={GeneralApiKeys} />}
-                    />
-                    <Route
-                      path="/settings/workspace-chats"
-                      element={<ManagerRoute Component={GeneralChats} />}
-                    />
-                    <Route
-                      path="/settings/system-preferences"
-                      element={<ManagerRoute Component={AdminSystem} />}
-                    />
-                    <Route
-                      path="/settings/invites"
-                      element={<ManagerRoute Component={AdminInvites} />}
-                    />
-                    <Route
-                      path="/settings/users"
-                      element={<ManagerRoute Component={AdminUsers} />}
-                    />
-                    <Route
-                      path="/settings/workspaces"
-                      element={<ManagerRoute Component={AdminWorkspaces} />}
-                    />
                   </Routes>
                 </div>
                 <ToastContainer />

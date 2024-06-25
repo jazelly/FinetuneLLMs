@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Sidebar from '@/components/SettingsSidebar';
+
 import { isMobile } from 'react-device-detect';
 import System from '@/models/system';
 import showToast from '@/utils/toast';
@@ -47,38 +47,6 @@ import TextGenWebUIOptions from '@/components/LLMSelection/TextGenWebUIOptions';
 
 export const AVAILABLE_LLM_PROVIDERS = [
   {
-    name: 'OpenAI',
-    value: 'openai',
-    logo: OpenAiLogo,
-    options: (settings) => <OpenAiOptions settings={settings} />,
-    description: 'The standard option for most non-commercial use.',
-    requiredConfig: ['OpenAiKey'],
-  },
-  {
-    name: 'Azure OpenAI',
-    value: 'azure',
-    logo: AzureOpenAiLogo,
-    options: (settings) => <AzureAiOptions settings={settings} />,
-    description: 'The enterprise option of OpenAI hosted on Azure services.',
-    requiredConfig: ['AzureOpenAiEndpoint'],
-  },
-  {
-    name: 'Anthropic',
-    value: 'anthropic',
-    logo: AnthropicLogo,
-    options: (settings) => <AnthropicAiOptions settings={settings} />,
-    description: 'A friendly AI Assistant hosted by Anthropic.',
-    requiredConfig: ['AnthropicApiKey'],
-  },
-  {
-    name: 'Gemini',
-    value: 'gemini',
-    logo: GeminiLogo,
-    options: (settings) => <GeminiLLMOptions settings={settings} />,
-    description: "Google's largest and most capable AI model",
-    requiredConfig: ['GeminiLLMApiKey'],
-  },
-  {
     name: 'HuggingFace',
     value: 'huggingface',
     logo: HuggingFaceLogo,
@@ -98,15 +66,6 @@ export const AVAILABLE_LLM_PROVIDERS = [
     options: (settings) => <OllamaLLMOptions settings={settings} />,
     description: 'Run LLMs locally on your own machine.',
     requiredConfig: ['OllamaLLMBasePath'],
-  },
-  {
-    name: 'LM Studio',
-    value: 'lmstudio',
-    logo: LMStudioLogo,
-    options: (settings) => <LMStudioOptions settings={settings} />,
-    description:
-      'Discover, download, and run thousands of cutting edge LLMs in a few clicks.',
-    requiredConfig: ['LMStudioBasePath'],
   },
   {
     name: 'Local AI',
@@ -133,30 +92,12 @@ export const AVAILABLE_LLM_PROVIDERS = [
     requiredConfig: ['MistralApiKey'],
   },
   {
-    name: 'Perplexity AI',
-    value: 'perplexity',
-    logo: PerplexityLogo,
-    options: (settings) => <PerplexityOptions settings={settings} />,
-    description:
-      'Run powerful and internet-connected models hosted by Perplexity AI.',
-    requiredConfig: ['PerplexityApiKey'],
-  },
-  {
     name: 'OpenRouter',
     value: 'openrouter',
     logo: OpenRouterLogo,
     options: (settings) => <OpenRouterOptions settings={settings} />,
     description: 'A unified interface for LLMs.',
     requiredConfig: ['OpenRouterApiKey'],
-  },
-  {
-    name: 'Groq',
-    value: 'groq',
-    logo: GroqLogo,
-    options: (settings) => <GroqAiOptions settings={settings} />,
-    description:
-      'The fastest LLM inferencing available for real-time AI applications.',
-    requiredConfig: ['GroqApiKey'],
   },
   {
     name: 'KoboldCPP',
@@ -262,7 +203,7 @@ export default function GeneralLLMPreference() {
     async function fetchKeys() {
       const _settings = await System.keys();
       setSettings(_settings);
-      setSelectedLLM(_settings?.LLMProvider);
+      setSelectedLLM('huggingface');
       setLoading(false);
     }
     fetchKeys();
@@ -383,11 +324,6 @@ export default function GeneralLLMPreference() {
                     onClick={() => setSearchMenuOpen(true)}
                   >
                     <div className="flex gap-x-4 items-center">
-                      <img
-                        src={selectedLLMObject.logo}
-                        alt={`${selectedLLMObject.name} logo`}
-                        className="w-10 h-10 rounded-md"
-                      />
                       <div className="flex flex-col text-left">
                         <div className="text-sm font-semibold text-white">
                           {selectedLLMObject.name}
