@@ -15,12 +15,7 @@ const GeneralAppearance = lazy(
   () => import('@/pages/GeneralSettings/Appearance')
 );
 const GeneralApiKeys = lazy(() => import('@/pages/GeneralSettings/ApiKeys'));
-const GeneralLLMPreference = lazy(
-  () => import('@/pages/GeneralSettings/LLMPreference')
-);
-const PrivacyAndData = lazy(
-  () => import('@/pages/GeneralSettings/PrivacyAndData')
-);
+const Privacy = lazy(() => import('@/pages/Privacy.page'));
 
 export default function Settings() {
   const match = useMatch('/settings');
@@ -32,13 +27,9 @@ export default function Settings() {
 
       <Routes>
         <Route path="/" element={<SettingsContainer />}>
-          <Route path="llm" element={<GeneralLLMPreference />} />
           <Route path="invites" element={<AdminInvites />} />
           <Route path="users" element={<AdminUsers />} />
-          <Route
-            path="privacy"
-            element={<AdminRoute Component={PrivacyAndData} />}
-          />
+          <Route path="privacy" element={<AdminRoute Component={Privacy} />} />
           <Route
             path="appearance"
             element={<ManagerRoute Component={GeneralAppearance} />}
@@ -50,10 +41,6 @@ export default function Settings() {
           <Route
             path="workspace-chats"
             element={<ManagerRoute Component={GeneralChats} />}
-          />
-          <Route
-            path="system-preferences"
-            element={<ManagerRoute Component={AdminSystem} />}
           />
           <Route
             path="workspaces"

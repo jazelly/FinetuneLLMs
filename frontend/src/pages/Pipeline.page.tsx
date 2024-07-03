@@ -14,7 +14,7 @@ import { PermalinksContext } from '@/contexts/Permalinks.context';
 import {
   BOTTOM_GAP,
   HEADER_HEIGHT,
-  PERMALINK_DASHBOARD,
+  PERMALINK_FINETUNE,
   RIGHT_GAP,
   SIDEBAR_WIDTH,
 } from '@/utils/constants';

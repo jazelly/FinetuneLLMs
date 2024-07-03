@@ -11,7 +11,7 @@ import { PermalinksContext } from '@/contexts/Permalinks.context';
 import {
   BOTTOM_GAP,
   HEADER_HEIGHT,
-  PERMALINK_DASHBOARD,
+  PERMALINK_FINETUNE,
   RIGHT_GAP,
   SIDEBAR_WIDTH,
 } from '@/utils/constants';
@@ -51,7 +51,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    setPermalinks([PERMALINK_DASHBOARD]);
+    setPermalinks([PERMALINK_FINETUNE]);
     return;
   }, []);
 
@@ -111,12 +111,12 @@ const Dashboard = () => {
         onResize={handleLeftResize}
         minConstraints={[minWidthLeft, Infinity]} // width and height
         maxConstraints={[maxWidthLeft, Infinity]}
-        className="flex h-full"
+        className="flex h-full bg-main-menu text-white"
       >
         <FinetunePanel jobOptions={jobOptions} setJobOptions={setJobOptions} />
       </ResizableBox>
       {!isRightCollapsed && (
-        <div className="flex-1 bg-main-gradient">
+        <div className="flex-1 bg-main-workspace">
           <InferencePanel
             jobDetail={jobDetail}
             jobDetailLoading={jobDetailLoading}

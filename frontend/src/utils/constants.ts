@@ -26,9 +26,9 @@ export function fullApiUrl() {
   return `${window.location.origin}/api`;
 }
 
-export const PERMALINK_DASHBOARD = {
+export const PERMALINK_FINETUNE = {
   url: '/',
-  name: 'Dashboard',
+  name: 'Finetune',
 };
 
 export const PERMALINK_JOBS = {

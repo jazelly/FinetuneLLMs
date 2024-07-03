@@ -42,9 +42,6 @@ export default {
     return `${API_BASE}/docs`;
   },
   settings: {
-    system: () => {
-      return `/settings/system-preferences`;
-    },
     users: () => {
       return `/settings/users`;
     },
@@ -59,12 +56,6 @@ export default {
     },
     llmPreference: () => {
       return '/settings/llm-preference';
-    },
-    transcriptionPreference: () => {
-      return '/settings/transcription-preference';
-    },
-    audioPreference: () => {
-      return '/settings/audio-preference';
     },
     embedder: {
       modelPreference: () => '/settings/embedding-preference',

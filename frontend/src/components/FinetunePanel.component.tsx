@@ -4,10 +4,9 @@ import { AllJobOptions, IDataset } from '@/types/dashboard.type';
 import { CaretCircleDoubleRight } from '@phosphor-icons/react';
 import Job from '@/models/job.model';
 import { useNavigate } from 'react-router-dom';
-import type { TrainerPayload, TrainerResponseWS } from '@/types/dashboard.type';
-import JSONView from 'react-json-view';
 import { TrainerMessageMapContext } from '@/contexts/TrainerMessageMap.context';
 import Scrollable from './reusable/Scrollable.component'; // Import the ScrollBar component
+import Tip from './reusable/Tip.component';
 
 export interface FinetunePanelProps {
   jobOptions: AllJobOptions | undefined;
@@ -96,11 +95,9 @@ const FinetunePanel = ({ jobOptions, setJobOptions }: FinetunePanelProps) => {
   return (
     <Scrollable>
       {/* Wrap the content with ScrollBar */}
-      <div className="flex flex-col items-startstart bg-main-white-gradient px-4 py-3 h-full w-full">
+      <div className="flex flex-col px-4 py-3 h-full w-full">
         <div className="flex justify-between">
-          <div className="text-lg font-semibold text-main-title">
-            Submit a finetuning job
-          </div>
+          <div className="text-lg font-semibold">Submit a finetuning job</div>
           <div
             onMouseEnter={() => {
               setSubmitHovered(true);
@@ -113,17 +110,11 @@ const FinetunePanel = ({ jobOptions, setJobOptions }: FinetunePanelProps) => {
             onClick={handleSubmitJob}
             style={{ backgroundColor: '#0aa8ff' }}
           >
-            <span className={`text-white`}>Submit</span>
-            <CaretCircleDoubleRight
-              weight={submitHovered ? 'fill' : 'bold'}
-              size={24}
-              color="#ffffff"
-            />
+            <span className={`text-white font-semibold`}>Submit</span>
+            <CaretCircleDoubleRight size={24} color="#ffffff" />
           </div>
         </div>
-        {submitJobError !== '' && (
-          <div className="text-red-500 text-sm italic">{submitJobError}</div>
-        )}
+        {submitJobError !== '' && <Tip type="error" message={submitJobError} />}
         <Dropdown
           placeholder="Base model"
           options={jobOptions?.baseModels ?? []}
@@ -151,22 +142,6 @@ const FinetunePanel = ({ jobOptions, setJobOptions }: FinetunePanelProps) => {
           label="Dataset"
           disabled={!jobOptions}
         />
-
-        {jobOptions && (
-          <div
-            className={`flex flex-col items-startstart px-2 py-2 gap-y-4 h-full ${'bg-red'}`}
-          >
-            <div className="text-lg font-semibold text-main-title">
-              Training Hyperparameters
-            </div>
-            <JSONView
-              onEdit={handleHyperparametersStringChange}
-              src={jobOptions?.hyperparameters}
-              name="hyperparameters"
-              enableClipboard={true}
-            />
-          </div>
-        )}
       </div>
     </Scrollable>
   );

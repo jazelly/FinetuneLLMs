@@ -266,22 +266,6 @@ const SidebarOptions = ({ user = null }: any) => (
       allowedRole={['admin']}
     />
     <Option
-      href={paths.settings.audioPreference()}
-      btnText="Voice and Speech Support"
-      icon={<Microphone className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      flex={true}
-      allowedRole={['admin']}
-    />
-    <Option
-      href={paths.settings.transcriptionPreference()}
-      btnText="Transcription Model"
-      icon={<ClosedCaptioning className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      flex={true}
-      allowedRole={['admin']}
-    />
-    <Option
       href={paths.settings.security()}
       btnText="Security"
       icon={<Lock className="h-5 w-5 flex-shrink-0" />}

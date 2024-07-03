@@ -1,10 +1,12 @@
 import Header from '../components/Header.component';
-import Footer from '../components/Footer';
+import React from 'react';
+import { useUploadDatasetsModal } from '@/components/Modals/UploadDatasets';
 
-export default function Contact() {
+export default function NotFound() {
+  const { showModal: showUploadModal } = useUploadDatasetsModal();
+
   return (
     <div className="text-black">
-      <Header />
       <div className="flex flex-col justify-center mx-auto mt-52 text-center max-w-2x1">
         <h1 className="text-3xl font-bold tracking-tight text-black md:text-5xl">
           404 – Unavailable
@@ -18,7 +20,6 @@ export default function Contact() {
         </a>
       </div>
       <div className="mt-64"></div>
-      <Footer />
     </div>
   );
 }

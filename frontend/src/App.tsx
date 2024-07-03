@@ -17,27 +17,13 @@ import UploadDatasets, {
 } from '@/components/Modals/UploadDatasets';
 import { TrainerMessageMapProvider } from './contexts/TrainerMessageMap.context';
 import Settings from './pages/Settings.page';
+import NotFound from './pages/404.page';
 
 const Logs = lazy(() => import('@/pages/Logs.page'));
 const InvitePage = lazy(() => import('@/pages/Invite'));
 const Pipeline = lazy(() => import('@/pages/Pipeline.page'));
 // const WorkspaceChat = lazy(() => import("@/pages/WorkspaceChat")); // TODO: integarte to testing field
 const Dashboard = lazy(() => import('@/pages/Dashboard.page'));
-const AdminUsers = lazy(() => import('@/pages/Admin/Users'));
-const AdminInvites = lazy(() => import('@/pages/Admin/Invitations'));
-const AdminWorkspaces = lazy(() => import('@/pages/Admin/Workspaces'));
-const AdminSystem = lazy(() => import('@/pages/Admin/System'));
-const GeneralChats = lazy(() => import('@/pages/GeneralSettings/Chats'));
-const GeneralAppearance = lazy(
-  () => import('@/pages/GeneralSettings/Appearance')
-);
-const GeneralApiKeys = lazy(() => import('@/pages/GeneralSettings/ApiKeys'));
-const GeneralLLMPreference = lazy(
-  () => import('@/pages/GeneralSettings/LLMPreference')
-);
-const PrivacyAndData = lazy(
-  () => import('@/pages/GeneralSettings/PrivacyAndData')
-);
 
 export default function App() {
   const sidebarRef = useRef(null);
@@ -53,14 +39,14 @@ export default function App() {
         <LogoProvider>
           <PermalinksProvider>
             <TrainerMessageMapProvider>
-              <div className="bg-main-base flex h-full">
+              <div className="bg-main-base text-white flex h-full">
                 {showingUpload && (
                   <UploadDatasets hideModal={hideUploadModal} />
                 )}
 
                 {!isMobile && (
                   <div
-                    className={`w-16 h-full flex-shrink-0 p-2 flex flex-col items-center justify-between`}
+                    className={`w-16 h-full bg-main-dark flex-shrink-0 p-2 flex flex-col items-center justify-between`}
                     ref={sidebarRef}
                   >
                     <Sidebar />
@@ -90,13 +76,11 @@ export default function App() {
                       element={<InvitePage />}
                     />
 
-                    {/* Admin */}
                     <Route
                       path="/settings/*"
                       element={<AdminRoute Component={Settings} />}
                     />
-
-                    {/* Manager */}
+                    <Route path="*" element={<NotFound />} />
                   </Routes>
                 </div>
                 <ToastContainer />

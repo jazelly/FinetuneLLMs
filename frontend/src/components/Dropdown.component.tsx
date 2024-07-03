@@ -64,13 +64,13 @@ const Dropdown = ({
     <div className="flex flex-col items-start">
       {!!label && (
         <div
-          className={`mr-2 font-semibold text-main-title flex items-center justify-center h-full`}
+          className={`mr-2 font-semibold flex items-center justify-center h-full`}
         >
           {label}
         </div>
       )}
       <div
-        className={`relative h-10 mt-1 w-full ${!disabled && 'cursor-pointer'}`}
+        className={`relative h-10 mt-1 w-full ${!disabled && 'cursor-pointer'} text-main-menu font-semibold`}
         onClick={toggleDropdown}
         ref={dropdownRef}
       >
@@ -96,7 +96,7 @@ const Dropdown = ({
               animate={{ opacity: 1, maxHeight: 200 }}
               exit={{ opacity: 0, maxHeight: 0 }}
               transition={{ duration: 0.3 }}
-              className="absolute z-50 left-0 w-full bg-white border rounded shadow overflow-hidden"
+              className="absolute z-50 left-0 w-full bg-white text-main-menu font-semibold border rounded shadow overflow-hidden"
               style={{ top: '100%' }}
             >
               {options.length === 0 ? (

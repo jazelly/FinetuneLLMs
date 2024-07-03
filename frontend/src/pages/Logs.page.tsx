@@ -12,7 +12,7 @@ import {
   Legend,
 } from 'chart.js';
 import { PermalinksContext } from '@/contexts/Permalinks.context';
-import { PERMALINK_DASHBOARD, PERMALINK_JOBS } from '@/utils/constants';
+import { PERMALINK_FINETUNE, PERMALINK_JOBS } from '@/utils/constants';
 
 ChartJS.register(
   CategoryScale,
