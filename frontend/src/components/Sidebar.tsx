@@ -1,19 +1,37 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useMatch } from 'react-router-dom';
-import { Plus, Wrench, Circuitry, AlignLeft } from '@phosphor-icons/react';
+import {
+  Plus,
+  Wrench,
+  Circuitry,
+  AlignLeft,
+  FlipVertical,
+  FileArrowUp,
+} from '@phosphor-icons/react';
 import { USER_BACKGROUND_COLOR } from '@/utils/constants';
 import useLogo from '@/hooks/useLogo';
 import { Link } from 'react-router-dom';
 import paths from '@/utils/paths';
+import { Tooltip } from 'react-tooltip';
+import UploadDatasets, {
+  useUploadDatasetsModal,
+} from './Modals/UploadDatasets';
 
 export default function Sidebar() {
-  const { logo } = useLogo();
   const navigate = useNavigate();
 
   const isNewingJob = useMatch('/');
   const isViewingJob = useMatch('/job/:jobId');
   const isViewingLog = useMatch('/jobs');
   const isViewingSettings = useMatch('/settings/*');
+
+  const {
+    showing: showingUpload,
+    showModal: showUploadModal,
+    hideModal: hideUploadModal,
+  } = useUploadDatasetsModal();
+
+  const [uploadHover, setUploadHover] = useState<boolean>(false);
 
   const handleNavigate = (path) => {
     switch (path) {
@@ -24,7 +42,7 @@ export default function Sidebar() {
         navigate('/jobs');
         break;
       case 'settings':
-        navigate('/settings');
+        navigate('/settings/privacy');
         break;
       default:
         navigate('/');
@@ -33,17 +51,23 @@ export default function Sidebar() {
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center h-full pt-2 pb-4 px-3">
+      {showingUpload && <UploadDatasets hideModal={hideUploadModal} />}
       <Link
         to={paths.home()}
-        className="flex shrink-0 max-w-[100%] items-center justify-start mt-1"
+        className="flex shrink-0 w-[40px] items-center justify-center"
         aria-label="Home"
       >
-        <img src={logo} alt="Logo" style={{ objectFit: 'contain' }} />
+        <FlipVertical size={36} color="#f0f2f4" weight="fill" />
       </Link>
-      <div className="flex flex-col h-full overflow-x-hidden mt-3">
-        <div className="flex-grow flex flex-col min-w-[24px] overflow-y-scroll no-scroll pb-8 gap-y-2">
-          <div className="flex gap-x-2 items-center justify-between">
+
+      <div className="overflow-hidden mt-5 flex-grow  flex justify-between items-center flex-col">
+        <div className="flex flex-col min-w-[24px] gap-y-3">
+          <div
+            className="flex gap-x-2 items-center justify-between"
+            data-tooltip-content="Finetune"
+            data-tooltip-id="finetune"
+          >
             <button
               onClick={() => {
                 handleNavigate('/');
@@ -51,11 +75,17 @@ export default function Sidebar() {
               className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
             >
               <Circuitry
-                color={isNewingJob || isViewingJob ? '#FFF' : '#7C8690'}
-                size={28}
+                color={isNewingJob || isViewingJob ? '#587DCA' : '#7C8690'}
+                size={30}
                 weight="fill"
               />
             </button>
+            <Tooltip
+              id="finetune"
+              place="right"
+              delayShow={200}
+              className="tooltip z-99"
+            />
           </div>
           <div className="flex gap-x-2 items-center justify-between">
             <button
@@ -65,8 +95,8 @@ export default function Sidebar() {
               className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
             >
               <AlignLeft
-                size={28}
-                color={isViewingLog ? '#FFF' : '#7C8690'}
+                size={30}
+                color={isViewingLog ? '#4A7AD6' : '#7C8690'}
                 weight="fill"
               />
             </button>
@@ -79,14 +109,31 @@ export default function Sidebar() {
               className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
             >
               <Wrench
-                size={28}
-                color={isViewingSettings ? '#FFF' : '#7C8690'}
+                size={30}
+                color={isViewingSettings ? '#4A7AD6' : '#7C8690'}
                 weight="fill"
               />
             </button>
           </div>
         </div>
+        <div
+          onMouseEnter={() => {
+            setUploadHover(true);
+          }}
+          onMouseLeave={() => {
+            setUploadHover(false);
+          }}
+          className={`transition-all duration-300 flex justify-center items-center rounded-lg shadow-sm cursor-pointer`}
+          aria-label="Upload your datasets"
+          onClick={showUploadModal}
+        >
+          <FileArrowUp
+            weight={uploadHover || showingUpload ? 'fill' : 'bold'}
+            size={30}
+            color={uploadHover || showingUpload ? '#fff' : '#737b85'}
+          />
+        </div>
       </div>
-    </>
+    </div>
   );
 }

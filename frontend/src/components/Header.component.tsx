@@ -12,7 +12,6 @@ import {
   LinkSimple,
   FileArrowUp,
 } from '@phosphor-icons/react';
-import { PermalinksContext } from '@/contexts/Permalinks.context';
 import Permalinks from './Permalinks.component';
 
 export const MAX_ICONS = 3;
@@ -28,34 +27,36 @@ export const ICON_COMPONENTS = {
   Info: Info,
 };
 
-function Header({ showUploadModal }: { showUploadModal: () => void }) {
+function Header() {
   const [githubHover, setGithubHover] = useState<boolean>(false);
-  const [uploadHover, setUploadHover] = useState<boolean>(false);
+  const [discordHover, setDiscordHover] = useState<boolean>(false);
 
   return (
-    <div className="flex justify-between items-center px-2 text-2xl h-full border-b-2 border-greay-200">
+    <div className="flex justify-between items-center pr-3 pl-5 text-2xl h-full">
       <Permalinks />
       <div
         id="header-right-logo"
-        className="flex justify-center space-x-6 mr-2"
+        className="flex justify-center items-center space-x-3 mr-2"
       >
-        <div
+        <a
+          href={paths.github()}
+          target="_blank"
+          rel="noreferrer"
           onMouseEnter={() => {
-            setUploadHover(true);
+            setDiscordHover(true);
           }}
           onMouseLeave={() => {
-            setUploadHover(false);
+            setDiscordHover(false);
           }}
-          className="transition-all duration-300 p-2 rounded-xl bg-white shadow-sm border border-transparent cursor-pointer"
-          aria-label="Upload your datasets"
-          onClick={showUploadModal}
+          className={`transition-all duration-300 flex justify-center items-center w-[36px] h-[36px] rounded-lg ${discordHover ? 'bg-white' : ''} shadow-sm`}
+          aria-label="Find me on Github"
         >
-          <FileArrowUp
-            weight={uploadHover ? 'fill' : 'bold'}
+          <DiscordLogo
+            weight={discordHover ? 'fill' : 'bold'}
             size={24}
             color="#737b85"
           />
-        </div>
+        </a>
         <a
           href={paths.github()}
           target="_blank"
@@ -66,7 +67,7 @@ function Header({ showUploadModal }: { showUploadModal: () => void }) {
           onMouseLeave={() => {
             setGithubHover(false);
           }}
-          className="transition-all duration-300 p-2 rounded-xl bg-white shadow-sm border border-transparent"
+          className={`transition-all duration-300 flex justify-center items-center w-[36px] h-[36px] rounded-lg ${githubHover ? 'bg-white' : ''}  shadow-sm`}
           aria-label="Find me on Github"
         >
           <GithubLogo

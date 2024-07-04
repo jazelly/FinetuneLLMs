@@ -17,7 +17,7 @@ function Permalinks() {
                 // the last element is unclickable
                 if (index < permalinks.length - 1) navigate(link.url);
               }}
-              className={`text-base font-semibold ${index < permalinks.length - 1 ? 'text-main-blue cursor-pointer' : 'text-main-grey'}`}
+              className={`text-base font-semibold ${index < permalinks.length - 1 ? 'text-main-blue cursor-pointer' : 'text-main-gray'}`}
             >
               {link.name}
             </div>

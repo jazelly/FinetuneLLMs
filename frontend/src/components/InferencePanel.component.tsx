@@ -15,7 +15,7 @@ const InferencePanel = ({
 }: InferencePanelProps) => {
   if (jobDetail)
     return (
-      <div className="flex items-center justify-center text-white h-full">
+      <div className="flex items-center justify-center h-full">
         <span>You can now interact with {jobDetail.baseModel}</span>
       </div>
     );

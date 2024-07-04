@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { formatDate, middleTruncate } from '@/utils/directories';
-import { File } from '@phosphor-icons/react';
+import { BracketsCurly, File, ImageSquare } from '@phosphor-icons/react';
 import debounce from 'lodash.debounce';
+import React from 'react';
 
-export default function FileRow({ file, selected, toggleSelection }) {
+export default function DatasetRow({ file, selected, toggleSelection }) {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handleShowTooltip = () => {
@@ -16,7 +17,7 @@ export default function FileRow({ file, selected, toggleSelection }) {
 
   const handleMouseEnter = debounce(handleShowTooltip, 500);
   const handleMouseLeave = debounce(handleHideTooltip, 500);
-
+  console.log('file.extension', file.extension);
   return (
     <tr
       onClick={() => toggleSelection(file)}
@@ -25,18 +26,22 @@ export default function FileRow({ file, selected, toggleSelection }) {
       }`}
     >
       <div className="pl-2 col-span-6 flex gap-x-[4px] items-center">
-        <div
-          className="shrink-0 w-3 h-3 rounded border-[1px] border-white flex justify-center items-center cursor-pointer"
-          role="checkbox"
-          aria-checked={selected}
-          tabIndex={0}
-        >
-          {selected && <div className="w-2 h-2 bg-white rounded-[2px]" />}
-        </div>
-        <File
-          className="shrink-0 text-base font-bold w-4 h-4 mr-[3px]"
-          weight="fill"
-        />
+        {file.extension === '.json' ? (
+          <BracketsCurly
+            className="shrink-0 text-base font-bold w-4 h-4 mr-[3px]"
+            weight="bold"
+          />
+        ) : ['.png', '.jpg', 'jpeg'].includes(file.extension) ? (
+          <ImageSquare
+            className="shrink-0 text-base font-bold w-4 h-4 mr-[3px]"
+            weight="bold"
+          />
+        ) : (
+          <File
+            className="shrink-0 text-base font-bold w-4 h-4 mr-[3px]"
+            weight="bold"
+          />
+        )}
         <div
           className="relative"
           onMouseEnter={handleMouseEnter}

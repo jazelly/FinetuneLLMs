@@ -86,13 +86,13 @@ a {
   grid-template-columns: repeat(2, 1fr);
 }
 
-.greyC {
+.grayC {
   filter: gray;
   -webkit-filter: grayscale(100%);
   transition: 0.4s;
 }
 
-.greyC:hover {
+.grayC:hover {
   filter: none;
   -webkit-filter: none;
   transition: 0.4s;

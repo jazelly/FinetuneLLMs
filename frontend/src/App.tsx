@@ -27,11 +27,6 @@ const Dashboard = lazy(() => import('@/pages/Dashboard.page'));
 
 export default function App() {
   const sidebarRef = useRef(null);
-  const {
-    showing: showingUpload,
-    showModal: showUploadModal,
-    hideModal: hideUploadModal,
-  } = useUploadDatasetsModal();
 
   return (
     <Suspense fallback={<div />}>
@@ -40,10 +35,6 @@ export default function App() {
           <PermalinksProvider>
             <TrainerMessageMapProvider>
               <div className="bg-main-base text-white flex h-full">
-                {showingUpload && (
-                  <UploadDatasets hideModal={hideUploadModal} />
-                )}
-
                 {!isMobile && (
                   <div
                     className={`w-16 h-full bg-main-dark flex-shrink-0 p-2 flex flex-col items-center justify-between`}
@@ -54,7 +45,7 @@ export default function App() {
                 )}
                 <div className="flex flex-col h-full w-full overflow-y-hidden">
                   <div className="h-[64px] flex-shrink-0">
-                    <Header showUploadModal={showUploadModal} />
+                    <Header />
                   </div>
 
                   <Routes>

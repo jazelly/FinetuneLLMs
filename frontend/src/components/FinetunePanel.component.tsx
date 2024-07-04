@@ -111,7 +111,11 @@ const FinetunePanel = ({ jobOptions, setJobOptions }: FinetunePanelProps) => {
             style={{ backgroundColor: '#0aa8ff' }}
           >
             <span className={`text-white font-semibold`}>Submit</span>
-            <CaretCircleDoubleRight size={24} color="#ffffff" />
+            <CaretCircleDoubleRight
+              weight={submitHovered ? 'fill' : 'bold'}
+              size={24}
+              color="#ffffff"
+            />
           </div>
         </div>
         {submitJobError !== '' && <Tip type="error" message={submitJobError} />}

@@ -92,7 +92,7 @@ const Dashboard = () => {
     <div
       ref={containerRef}
       onMouseUp={(e) => handleMouseUp(e, undefined)}
-      className="flex rounded-tl-md overflow-y-hidden"
+      className="flex overflow-y-hidden"
     >
       <ResizableBox
         width={leftWidth}

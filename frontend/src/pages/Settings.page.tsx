@@ -22,32 +22,37 @@ export default function Settings() {
 
   console.log('match', match);
   return (
-    <div className="w-full h-full overflow-hidden flex">
+    <div className="w-full h-full overflow-hidden bg-main-workspace bg-opacity-80 flex">
       <SettingsSidebar />
 
-      <Routes>
-        <Route path="/" element={<SettingsContainer />}>
-          <Route path="invites" element={<AdminInvites />} />
-          <Route path="users" element={<AdminUsers />} />
-          <Route path="privacy" element={<AdminRoute Component={Privacy} />} />
-          <Route
-            path="appearance"
-            element={<ManagerRoute Component={GeneralAppearance} />}
-          />
-          <Route
-            path="api-keys"
-            element={<AdminRoute Component={GeneralApiKeys} />}
-          />
-          <Route
-            path="workspace-chats"
-            element={<ManagerRoute Component={GeneralChats} />}
-          />
-          <Route
-            path="workspaces"
-            element={<ManagerRoute Component={AdminWorkspaces} />}
-          />
-        </Route>
-      </Routes>
+      <div className="p-6 max-md:p-3 flex-1">
+        <Routes>
+          <Route path="/" element={<SettingsContainer />}>
+            <Route path="invites" element={<AdminInvites />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route
+              path="privacy"
+              element={<AdminRoute Component={Privacy} />}
+            />
+            <Route
+              path="appearance"
+              element={<ManagerRoute Component={GeneralAppearance} />}
+            />
+            <Route
+              path="api-keys"
+              element={<AdminRoute Component={GeneralApiKeys} />}
+            />
+            <Route
+              path="workspace-chats"
+              element={<ManagerRoute Component={GeneralChats} />}
+            />
+            <Route
+              path="workspaces"
+              element={<ManagerRoute Component={AdminWorkspaces} />}
+            />
+          </Route>
+        </Routes>
+      </div>
     </div>
   );
 }

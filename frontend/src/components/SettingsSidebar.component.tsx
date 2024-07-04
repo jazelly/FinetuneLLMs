@@ -48,91 +48,13 @@ export default function SettingsSidebar() {
     handleBg();
   }, [showSidebar]);
 
-  console.log('isMobile', isMobile);
-  if (isMobile) {
-    return (
-      <>
-        <div className="fixed top-0 left-0 right-0 z-10 flex justify-between items-center px-4 py-2 bg-main-base text-slate-200 shadow-lg h-16">
-          <button
-            onClick={() => setShowSidebar(true)}
-            className="rounded-md p-2 flex items-center justify-center text-slate-200"
-          >
-            <List className="h-6 w-6" />
-          </button>
-          <div className="flex items-center justify-center flex-grow">
-            <img
-              src={logo}
-              alt="Logo"
-              className="block mx-auto h-6 w-auto"
-              style={{ maxHeight: '40px', objectFit: 'contain' }}
-            />
-          </div>
-          <div className="w-12"></div>
-        </div>
-        <div
-          style={{
-            transform: showSidebar ? `translateX(0vw)` : `translateX(-100vw)`,
-          }}
-          className={`z-99 fixed top-0 left-0 transition-all duration-500 w-[100vw] h-[100vh]`}
-        >
-          <div
-            className={`${
-              showBgOverlay
-                ? 'transition-all opacity-1'
-                : 'transition-none opacity-0'
-            }  duration-500 fixed top-0 left-0 ${USER_BACKGROUND_COLOR} bg-opacity-75 w-screen h-screen`}
-            onClick={() => setShowSidebar(false)}
-          />
-          <div
-            ref={sidebarRef}
-            className="h-[100vh] fixed top-0 left-0  rounded-r-[26px] bg-main-base w-[80%] p-[18px] "
-          >
-            <div className="w-full h-full flex flex-col overflow-x-hidden items-between">
-              {/* Header Information */}
-              <div className="flex w-full items-center justify-between gap-x-4">
-                <div className="flex shrink-1 w-fit items-center justify-start">
-                  <img
-                    src={logo}
-                    alt="Logo"
-                    className="rounded w-full max-h-[40px]"
-                    style={{ objectFit: 'contain' }}
-                  />
-                </div>
-                <div className="flex gap-x-2 items-center text-slate-500 shrink-0">
-                  <a
-                    href={paths.home()}
-                    className="transition-all duration-300 p-2 rounded-full text-white bg-main-button hover:bg-menu-item-selected-gradient hover:border-slate-100 hover:border-opacity-50 border-transparent border"
-                  >
-                    <House className="h-4 w-4" />
-                  </a>
-                </div>
-              </div>
-
-              {/* Primary Body */}
-              <div className="h-full flex flex-col w-full justify-between pt-4 overflow-y-scroll no-scroll ">
-                <div className="h-auto md:sidebar-items md:dark:sidebar-items">
-                  <div className=" flex flex-col gap-y-4 pb-8 overflow-y-scroll no-scroll">
-                    <SidebarOptions user={user} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
-
   return (
-    <div className="bg-main-gradient">
+    <div className="bg-main-menu bg-opacity-50">
       <div
         ref={sidebarRef}
-        className="transition-all duration-500 h-full relative m-[16px] rounded-[16px] border-2 border-outline min-w-[250px] p-[10px]"
+        className="transition-all duration-500 h-full relative m-[16px] rounded-[16px] border-2 border-outline md:w-[235px] w-[68px] p-[10px]"
       >
-        <div className="w-full h-full flex flex-col overflow-x-hidden items-between min-w-[235px]">
-          <div className="text-white text-opacity-60 text-sm font-medium uppercase mt-[4px] mb-0 ml-2">
-            Instance Settings
-          </div>
+        <div className="w-full h-full flex flex-col overflow-x-hidden items-between">
           <div className="relative h-full flex flex-col w-full justify-between pt-[10px] overflow-y-scroll no-scroll">
             <div className="h-auto sidebar-items">
               <div className="flex flex-col gap-y-2 h-full pb-8 overflow-y-scroll no-scroll">
@@ -185,7 +107,7 @@ const Option = ({
         `}
         >
           {React.cloneElement(icon, { weight: isActive ? 'fill' : 'regular' })}
-          <p className="text-sm leading-loose whitespace-nowrap overflow-hidden ">
+          <p className="max-md:hidden text-sm leading-loose whitespace-nowrap overflow-hidden ">
             {btnText}
           </p>
         </Link>
@@ -205,13 +127,6 @@ const Option = ({
 
 const SidebarOptions = ({ user = null }: any) => (
   <>
-    <Option
-      href={paths.settings.system()}
-      btnText="System Preferences"
-      icon={<SquaresFour className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      allowedRole={['admin', 'manager']}
-    />
     <Option
       href={paths.settings.invites()}
       btnText="Invitation"

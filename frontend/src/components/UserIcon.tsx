@@ -1,5 +1,4 @@
-import { getRandomInitials } from '@/utils/misc';
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import Avatar from 'react-avatar';
 
 export interface UserIconProps {
@@ -11,14 +10,11 @@ export interface UserIconProps {
 }
 
 export default function UserIcon({ size = 35, user }) {
-  const name =
-    user?.role === 'ai'
-      ? 'L L M'
-      : user?.name
-        ? user.name
-        : getRandomInitials();
+  const name = user?.role === 'ai' ? 'L L M' : user?.name ? user.name : 'Y O U';
   return (
-    <div className="relative w-[35px] h-[35px] rounded-full flex-shrink-0 overflow-hidden">
+    <div
+      className={`relative w-[${size}px] h-[${size}px] rounded-full flex-shrink-0 overflow-hidden`}
+    >
       <Avatar
         name={name}
         size={`${size}px`}

@@ -26,12 +26,12 @@ export default function Privacy() {
   }, []);
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-main-base flex">
+    <div className=" flex">
       <div
         style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
-        className="relative bg-main-gradient w-full h-full overflow-y-scroll"
+        className="relative w-full h-full"
       >
-        <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
+        <div className="flex flex-col w-full">
           <div className="w-full flex flex-col gap-y-1 pb-6 border-white border-b-2 border-opacity-10">
             <div className="items-center flex gap-x-4">
               <p className="text-lg leading-6 font-bold text-white">
