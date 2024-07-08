@@ -8,7 +8,7 @@ import { Datasets } from "../models/datasets";
 import { Jobs } from "../models/jobs";
 import { v4 } from "uuid";
 import Trainer, { TrainerResponseBase } from "../models/trainer.internal";
-import { IDataset } from "../models/schema/datasets.type";
+import { DatasetRemote } from "../models/schema/datasets.type";
 import {
   BASE_MODELS,
   EXAMPLE_DATASETS,

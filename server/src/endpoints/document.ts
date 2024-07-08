@@ -1,17 +1,19 @@
-const { Document } = require("../models/documents");
-const { normalizePath, documentsPath } = require("../utils/files");
-const { reqBody } = require("../utils/http");
-const {
+import { config } from "../utils/dotenv";
+
+import { reqBody } from "../utils/http";
+import {
   flexUserRoleValid,
   ROLES,
-} = require("../utils/middleware/multiUserProtected");
-const { validatedRequest } = require("../utils/middleware/validatedRequest");
-const fs = require("fs");
-const path = require("path");
-const { promisify } = require("util");
-const multer = require("multer");
-const { Datasets } = require("../models/datasets");
-const { HF_DATA_VALIDITY_URL, HF_DATA_API_BASE } = require("./constants");
+} from "../utils/middleware/multiUserProtected";
+import { validatedRequest } from "../utils/middleware/validatedRequest";
+import fs from "fs";
+import fsAsync from "fs/promises";
+import path from "path";
+import { promisify } from "util";
+import multer from "multer";
+import { Datasets } from "../models/datasets";
+import { HF_DATA_VALIDITY_URL, HF_DATA_API_BASE } from "./constants";
+import { DatasetLocal } from "../models/schema/datasets.type";
 
 const appendFile = promisify(fs.appendFile);
 const unlinkFile = promisify(fs.unlink);
@@ -159,7 +161,7 @@ function documentEndpoints(app) {
       console.log("infoJson", infoJson);
       const datasetInfo = infoJson["dataset_info"];
       for (const configSplit of configSplitSet) {
-        const configSplitJson = JSON.parse(configSplit);
+        const configSplitJson = JSON.parse(configSplit as string);
         console.log("configSplit", configSplit);
         const configJson = datasetInfo[configSplitJson.config];
         if (configJson) {
@@ -193,6 +195,47 @@ function documentEndpoints(app) {
       res.json(remoteDatasets);
     }
   );
+
+  app.get(
+    "/document/local/all",
+    [validatedRequest, flexUserRoleValid([ROLES.all])],
+    async (req, res) => {
+      // read from local dir
+      const directoryPath = path.resolve(
+        __dirname,
+        `../../${config.DATABASE_PATH_FROM_ROOT}`
+      );
+
+      const localDatasets: DatasetLocal[] = [];
+      try {
+        const files = await fsAsync.readdir(directoryPath, {
+          recursive: false,
+        });
+
+        for (const file of files) {
+          const filePath = path.join(directoryPath, file);
+          const stats = await fsAsync.stat(filePath);
+
+          if (stats.isFile()) {
+            const ext = path.extname(file).toLowerCase();
+            const fileDetails = {
+              name: path.basename(file, path.extname(file)), // File name without extension
+              extension: ext, // File extension
+              createdAt: stats.birthtime, // File creation date
+              size: stats.size, // File size in bytes
+            };
+
+            if (ext === ".csv" || ext === ".txt" || ext == ".json")
+              localDatasets.push(fileDetails);
+          }
+        }
+      } catch (err: any) {
+        console.error(`Error: ${err.message}`);
+      }
+
+      res.json(localDatasets);
+    }
+  );
 }
 
-module.exports = { documentEndpoints };
+export { documentEndpoints };

@@ -15,6 +15,9 @@ export interface Envs {
   JWT_SECRET: string | undefined;
   TRAINER_API_URL: string | undefined;
 
+  DATASETS_PATH_FROM_ROOT: string | undefined;
+  DATABASE_PATH_FROM_ROOT: string | undefined;
+
   ENABLE_HTTPS: boolean;
   HTTPS_KEY_PATH: string | undefined;
   HTTPS_CERT_PATH: string | undefined;
@@ -36,6 +39,14 @@ const ENVS_PARSER: EnvsParser<Envs> = {
 
   JWT_SECRET: (raw: string | undefined) => raw,
   TRAINER_API_URL: (raw: string | undefined) => raw,
+
+  DATASETS_PATH_FROM_ROOT: (raw: string | undefined) => {
+    return raw || "src/storage/datasets/";
+  },
+
+  DATABASE_PATH_FROM_ROOT: (raw: string | undefined) => {
+    return raw || "src/storage/finetunellms.db";
+  },
 
   ENABLE_HTTPS: (raw: string | undefined) => {
     return raw === "true";
