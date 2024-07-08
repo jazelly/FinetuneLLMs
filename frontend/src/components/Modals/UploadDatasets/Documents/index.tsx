@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react';
 
 import Directory from './Directory.component';
 import Document from '@/models/document';
-
-// OpenAI Cost per token
-// ref: https://openai.com/pricing#:~:text=%C2%A0/%201K%20tokens-,Embedding%20models,-Build%20advanced%20search
+import { DatasetBase } from '@/types/dashboard.type';
+import React from 'react';
 
 export default function DocumentSettings() {
-  const [availableDocs, setAvailableDocs] = useState([]);
+  const [availableDocs, setAvailableDocs] = useState<DatasetBase[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState({});
   const [hasChanges, setHasChanges] = useState(false);
@@ -15,23 +14,20 @@ export default function DocumentSettings() {
 
   async function fetchDatasets() {
     setLoading(true);
-    const localFiles = await System.localFiles();
-    const remoteDatasetsResponse = await Document.readRemoteDatasets();
-    const remoteDatasets = remoteDatasetsResponse;
+    try {
+      const localDatasetsResponse = await Document.readLocalDatasets();
+      const remoteDatasetsResponse = await Document.readRemoteDatasets();
+      const remoteDatasets = remoteDatasetsResponse;
 
-    const localFilesNorm = localFiles.items.map((f) => {
-      return {
-        ...f,
-        lastUpdatedAt: new Date(f.lastUpdatedAt),
-      };
-    });
+      // Documents that are not in the workspace
+      const availableDatasets = [...localDatasetsResponse, ...remoteDatasets];
 
-    // Documents that are not in the workspace
-    const availableDatasets = [...localFilesNorm, ...remoteDatasets];
-
-    // Documents that are already in the workspace
-    setAvailableDocs(availableDatasets);
-    setLoading(false);
+      // Documents that are already in the workspace
+      setAvailableDocs(availableDatasets);
+    } catch (err: any) {
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {

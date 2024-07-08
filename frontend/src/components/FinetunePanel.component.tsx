@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Dropdown from './Dropdown.component';
-import { AllJobOptions, IDataset } from '@/types/dashboard.type';
+import { AllJobOptions, DatasetRemote } from '@/types/dashboard.type';
 import { CaretCircleDoubleRight } from '@phosphor-icons/react';
 import Job from '@/models/job.model';
 import { useNavigate } from 'react-router-dom';

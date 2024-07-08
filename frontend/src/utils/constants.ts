@@ -4,6 +4,8 @@ export const API_BASE = import.meta.env.VITE_API_BASE || '/api';
 
 export const TRAINER_WS_URL_BASE =
   import.meta.env.TRAINER_WS_URL_BASE || 'ws://localhost:8000/';
+export const TRAINER_API_BASE =
+  import.meta.env.TRAINER_API_BASE || 'http://localhost:8000/';
 
 export const AUTH_USER = 'anythingllm_user';
 export const AUTH_TOKEN = 'anythingllm_authToken';

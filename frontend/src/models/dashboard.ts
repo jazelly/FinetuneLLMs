@@ -1,5 +1,5 @@
 import { API_BASE } from '@/utils/constants';
-import { AllJobOptions } from './types/dashboard';
+import { AllJobOptions } from '../types/dashboard.type';
 
 const Dashboard = {
   getJobOptions: async () => {

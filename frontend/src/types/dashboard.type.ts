@@ -12,16 +12,21 @@ export interface TrainerPayload {
   data?: Record<string, any>;
 }
 
-export interface IDataset {
-  id: string;
+export interface DatasetBase {
   name: string;
+  size: number;
+  extension: string;
+  numRows?: number;
+}
+
+export interface DatasetLocal extends DatasetBase {}
+
+export interface DatasetRemote extends DatasetBase {
+  id: string;
   path?: string;
   config: string;
   split: string;
-  size: number;
   source: string;
-  extension: string;
-  numRows?: number;
   createdAt: Date;
   lastUpdatedAt: Date;
 }

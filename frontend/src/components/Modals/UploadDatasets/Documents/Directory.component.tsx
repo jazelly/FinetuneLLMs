@@ -17,14 +17,6 @@ function Directory({
   setLoadingMessage,
   loadingMessage,
 }) {
-  const [amountSelected, setAmountSelected] = useState(0);
-  const [newFolderName, setNewFolderName] = useState('');
-  const [showNewFolderInput, setShowNewFolderInput] = useState(false);
-
-  useEffect(() => {
-    setAmountSelected(Object.keys(selectedItems).length);
-  }, [selectedItems]);
-
   const toggleSelection = (item) => {
     setSelectedItems((prevSelectedItems) => {
       const newSelectedItems = { ...prevSelectedItems };
@@ -60,32 +52,6 @@ function Directory({
     }
 
     return !!selectedItems[id];
-  };
-
-  const createNewFolder = () => {
-    setShowNewFolderInput(true);
-  };
-
-  const confirmNewFolder = async () => {
-    if (newFolderName.trim() !== '') {
-      const newFolder = {
-        name: newFolderName,
-        type: 'folder',
-        items: [],
-      };
-
-      // If folder failed to create - silently fail.
-      const { success } = await Document.createFolder(newFolderName);
-      if (success) {
-        setFiles({
-          ...files,
-          items: [...files.items, newFolder],
-        });
-      }
-
-      setNewFolderName('');
-      setShowNewFolderInput(false);
-    }
   };
 
   return (
