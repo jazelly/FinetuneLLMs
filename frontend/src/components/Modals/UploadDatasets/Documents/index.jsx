@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
-import System from '../../../../models/system';
-import showToast from '../../../../utils/toast';
-import Directory from './Directory';
+
+import Directory from './Directory.component';
 import Document from '@/models/document';
 
 // OpenAI Cost per token
 // ref: https://openai.com/pricing#:~:text=%C2%A0/%201K%20tokens-,Embedding%20models,-Build%20advanced%20search
 
-export default function DocumentSettings({ systemSettings }) {
+export default function DocumentSettings() {
   const [availableDocs, setAvailableDocs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState({});

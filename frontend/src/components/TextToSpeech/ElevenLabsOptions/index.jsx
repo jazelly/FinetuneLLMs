@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import System from '@/models/system';
 
 export default function ElevenLabsOptions({ settings }) {
   const [inputValue, setInputValue] = useState(settings?.TTSElevenLabsKey);

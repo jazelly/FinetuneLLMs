@@ -1,6 +1,5 @@
 import React from 'react';
 import ChatContainer from '@/components/Chat/ChatContainer.component';
-import PasswordModal, { usePasswordModal } from '@/components/Modals/Password';
 import FullScreenLoader from '@/components/reusable/Loaders.component';
 
 export default function Main() {

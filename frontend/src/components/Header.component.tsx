@@ -39,7 +39,7 @@ function Header() {
         className="flex justify-center items-center space-x-3 mr-2"
       >
         <a
-          href={paths.github()}
+          href={paths.discord}
           target="_blank"
           rel="noreferrer"
           onMouseEnter={() => {
@@ -58,7 +58,7 @@ function Header() {
           />
         </a>
         <a
-          href={paths.github()}
+          href={paths.github}
           target="_blank"
           rel="noreferrer"
           onMouseEnter={() => {

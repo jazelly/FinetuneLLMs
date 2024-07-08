@@ -48,9 +48,11 @@ export interface JobCreate {
 }
 
 export interface JobDetail extends JobCreate {
-  id: string;
-  status: string;
+  id: number;
+  status: 'finished' | 'running' | 'failed' | 'paused';
   taskId?: string;
+  createdAt: Date;
+  lastUpdatedAt: Date;
 }
 
 export interface TrainingMethod {

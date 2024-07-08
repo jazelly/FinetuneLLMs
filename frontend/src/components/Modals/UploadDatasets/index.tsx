@@ -1,6 +1,5 @@
 import React, { useState, useEffect, memo } from 'react';
 import { X } from '@phosphor-icons/react';
-import System from '../../../models/system';
 import { isMobile } from 'react-device-detect';
 import useUser from '../../../hooks/useUser';
 import DocumentSettings from './Documents';
@@ -8,16 +7,7 @@ import DocumentSettings from './Documents';
 const noop = () => {};
 const UploadDatasets = ({ hideModal = noop }) => {
   const { user } = useUser();
-  const [settings, setSettings] = useState({});
   const [selectedTab, setSelectedTab] = useState('documents');
-
-  useEffect(() => {
-    async function getSettings() {
-      const _settings = await System.keys();
-      setSettings(_settings ?? {});
-    }
-    getSettings();
-  }, []);
 
   if (isMobile) {
     return (
@@ -74,7 +64,7 @@ const UploadDatasets = ({ hideModal = noop }) => {
             />
           )}
 
-          <DocumentSettings systemSettings={settings} />
+          <DocumentSettings />
         </div>
       </div>
     </div>

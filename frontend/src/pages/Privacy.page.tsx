@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { isMobile } from 'react-device-detect';
 import showToast from '@/utils/toast';
-import System from '@/models/system';
+
 import FullScreenLoader from '@/components/reusable/Loaders.component';
 import {
   EMBEDDING_ENGINE_PRIVACY,

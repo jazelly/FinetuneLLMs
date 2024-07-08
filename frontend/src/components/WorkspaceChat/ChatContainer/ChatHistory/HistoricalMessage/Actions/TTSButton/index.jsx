@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import NativeTTSMessage from './native';
 import AsyncTTSMessage from './asyncTts';
-import System from '@/models/system';
 
 export default function TTSMessage({ slug, chatId, message }) {
   const [provider, setProvider] = useState('native');

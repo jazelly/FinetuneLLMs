@@ -1,5 +1,5 @@
+import { User } from '@phosphor-icons/react';
 import React from 'react';
-import Avatar from 'react-avatar';
 
 export interface UserIconProps {
   size: string;
@@ -10,18 +10,33 @@ export interface UserIconProps {
 }
 
 export default function UserIcon({ size = 35, user }) {
-  const name = user?.role === 'ai' ? 'L L M' : user?.name ? user.name : 'Y O U';
   return (
     <div
       className={`relative w-[${size}px] h-[${size}px] rounded-full flex-shrink-0 overflow-hidden`}
     >
-      <Avatar
-        name={name}
-        size={`${size}px`}
-        round={true}
-        textSizeRatio={2}
-        maxInitials={3}
-      />
+      <Avatar size={size} />
     </div>
   );
 }
+
+const Avatar = ({
+  src,
+  alt,
+  size = 24,
+}: {
+  src?: string;
+  alt?: string;
+  size: number;
+}) => {
+  return (
+    <div
+      className={`rounded-full overflow-hidden bg-gray-200 flex items-center justify-center w-[${size}px] h-[${size}px]`}
+    >
+      {src && alt ? (
+        <img src={src} alt={alt} className="w-full h-full object-cover" />
+      ) : (
+        <User className="text-gray-500" size={size} />
+      )}
+    </div>
+  );
+};

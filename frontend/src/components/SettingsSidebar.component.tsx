@@ -128,77 +128,7 @@ const Option = ({
 const SidebarOptions = ({ user = null }: any) => (
   <>
     <Option
-      href={paths.settings.invites()}
-      btnText="Invitation"
-      icon={<EnvelopeSimple className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      allowedRole={['admin', 'manager']}
-    />
-    <Option
-      href={paths.settings.users()}
-      btnText="Users"
-      icon={<Users className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      allowedRole={['admin', 'manager']}
-    />
-    <Option
-      href={paths.settings.workspaces()}
-      btnText="Workspaces"
-      icon={<BookOpen className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      allowedRole={['admin', 'manager']}
-    />
-    <Option
-      href={paths.settings.chats()}
-      btnText="Workspace Chat"
-      icon={<ChatCenteredText className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      flex={true}
-      allowedRole={['admin', 'manager']}
-    />
-    <Option
-      href={paths.settings.appearance()}
-      btnText="Appearance"
-      icon={<Eye className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      flex={true}
-      allowedRole={['admin', 'manager']}
-    />
-    <Option
-      href={paths.settings.apiKeys()}
-      btnText="API Keys"
-      icon={<Key className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      flex={true}
-      allowedRole={['admin']}
-    />
-    <Option
-      href={paths.settings.llmPreference()}
-      btnText="LLM Preference"
-      icon={<ChatText className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      flex={true}
-      allowedRole={['admin']}
-    />
-    <Option
-      href={paths.settings.security()}
-      btnText="Security"
-      icon={<Lock className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      flex={true}
-      allowedRole={['admin', 'manager']}
-      hidden={user?.role}
-    />
-    <Option
-      href={paths.settings.logs()}
-      btnText="Event Logs"
-      icon={<Notepad className="h-5 w-5 flex-shrink-0" />}
-      user={user}
-      flex={true}
-      allowedRole={['admin']}
-    />
-    <Option
-      href={paths.settings.privacy()}
+      href={paths.settings.privacy}
       btnText="Privacy & Data"
       icon={<EyeSlash className="h-5 w-5 flex-shrink-0" />}
       user={user}

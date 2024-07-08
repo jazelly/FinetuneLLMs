@@ -4,7 +4,6 @@ import PromptInput, { PROMPT_INPUT_EVENT } from './PromptInput';
 import Workspace from '@/models/workspace';
 import handleChat, { ABORT_STREAM_EVENT } from '@/utils/chat';
 import { isMobile } from 'react-device-detect';
-import SidebarMobileHeader from '../../SidebarMobileHeader';
 import { useParams } from 'react-router-dom';
 import { v4 } from 'uuid';
 import handleSocketResponse, {
@@ -234,7 +233,6 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
       style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
       className="transition-all duration-500 relative md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-main-gradient w-full h-full overflow-y-scroll border-2 border-outline"
     >
-      {isMobile && <SidebarMobileHeader />}
       <div className="flex flex-col h-full w-full md:mt-0 mt-[40px]">
         <ChatHistory
           history={chatHistory}

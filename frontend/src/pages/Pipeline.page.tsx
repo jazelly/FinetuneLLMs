@@ -18,13 +18,15 @@ import {
   RIGHT_GAP,
   SIDEBAR_WIDTH,
 } from '@/utils/constants';
+import PipelineGraph from '@/components/PipelineGraph.component';
+import { LoadingSpinner } from '@/components/reusable/Loaders.component';
+import paths from '@/utils/paths';
 
 const MIN_BOTTOM_HEIGHT = 100;
 
 const Pipeline = () => {
   const { jobId } = useParams() as { jobId: string };
-  const location = useLocation();
-  const { fresh } = location.state as { fresh?: boolean };
+  const { state } = useLocation();
 
   const [jobDetail, setJobDetail] = useState<JobDetail | undefined>(undefined);
 
@@ -34,9 +36,17 @@ const Pipeline = () => {
   const { setPermalinks } = useContext(PermalinksContext);
 
   useEffect(() => {
+    if (state.fresh) {
+      setPermalinks([
+        { name: 'Pipelines', url: paths.pipelines },
+        { name: `Job ${state.jobId}`, url: `/job/${jobId}` },
+      ]);
+      return;
+    }
     const fetchJobDetail = async () => {
       setJobDetailLoading(true);
       const resp = await Job.getJobDetail(jobId);
+      console.log('resp', resp);
       if (!resp.success) {
         setError(resp.error);
       } else {
@@ -45,13 +55,13 @@ const Pipeline = () => {
       setJobDetailLoading(false);
     };
 
-    if (!fresh) fetchJobDetail();
+    fetchJobDetail();
 
     setPermalinks([
-      { name: 'Job History', url: `/job/logs` },
+      { name: 'Job History', url: paths.pipelines },
       { name: `Job ${jobId}`, url: `/job/${jobId}` },
     ]);
-  }, []);
+  }, [jobId]);
 
   const initialLeftWidth = ((window.innerWidth - 42 - 16) * 1) / 3; // 1/3 width for the left panel
   const initialTopHeight = ((window.innerHeight - 32 - 64) * 2) / 3; // 32 is the bottom gap, 64 is the top gap
@@ -129,7 +139,16 @@ const Pipeline = () => {
         maxConstraints={[maxWidthLeft, Infinity]}
         className="flex h-full"
       >
-        <div className="h-full w-full relative bg-white">Different panel</div>
+        <div className="h-full w-full relative bg-white text-black">
+          {jobDetail ? (
+            <PipelineGraph jobDetail={jobDetail} />
+          ) : (
+            <div className="flex flex-col bg-main-menu h-full justify-center items-center">
+              <LoadingSpinner size={80} color={'#3c97fd'} />
+              <span className="text-white">Loading</span>
+            </div>
+          )}
+        </div>
       </ResizableBox>
       {!isRightCollapsed && (
         <div className="flex-1 flex flex-col h-full">
