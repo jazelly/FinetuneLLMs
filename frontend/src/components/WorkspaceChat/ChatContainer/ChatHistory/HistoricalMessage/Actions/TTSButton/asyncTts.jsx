@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef } from "react";
-import { SpeakerHigh, PauseCircle, CircleNotch } from "@phosphor-icons/react";
-import { Tooltip } from "react-tooltip";
-import Workspace from "@/models/workspace";
-import showToast from "@/utils/toast";
+import { useEffect, useState, useRef } from 'react';
+import { SpeakerHigh, PauseCircle, CircleNotch } from '@phosphor-icons/react';
+import { Tooltip } from 'react-tooltip';
+import Workspace from '@/models/workspace';
+import showToast from '@/utils/toast';
 
 export default function AsyncTTSMessage({ slug, chatId }) {
   const playerRef = useRef(null);
@@ -22,10 +22,10 @@ export default function AsyncTTSMessage({ slug, chatId }) {
         Workspace.ttsMessage(slug, chatId)
           .then((audioBlob) => {
             if (!audioBlob)
-              throw new Error("Failed to load or play TTS message response.");
+              throw new Error('Failed to load or play TTS message response.');
             setAudioSrc(audioBlob);
           })
-          .catch((e) => showToast(e.message, "error", { clear: true }))
+          .catch((e) => showToast(e.message, 'error', { clear: true }))
           .finally(() => setLoading(false));
       } else {
         playerRef.current.play();
@@ -40,11 +40,11 @@ export default function AsyncTTSMessage({ slug, chatId }) {
   useEffect(() => {
     function setupPlayer() {
       if (!playerRef?.current) return;
-      playerRef.current.addEventListener("play", () => {
+      playerRef.current.addEventListener('play', () => {
         setSpeaking(true);
       });
 
-      playerRef.current.addEventListener("pause", () => {
+      playerRef.current.addEventListener('pause', () => {
         playerRef.current.currentTime = 0;
         setSpeaking(false);
       });
@@ -59,10 +59,10 @@ export default function AsyncTTSMessage({ slug, chatId }) {
         onClick={speakMessage}
         data-tooltip-id="message-to-speech"
         data-tooltip-content={
-          speaking ? "Pause TTS speech of message" : "TTS Speak message"
+          speaking ? 'Pause TTS speech of message' : 'TTS Speak message'
         }
         className="border-none text-zinc-300"
-        aria-label={speaking ? "Pause speech" : "Speak message"}
+        aria-label={speaking ? 'Pause speech' : 'Speak message'}
       >
         {speaking ? (
           <PauseCircle size={18} className="mb-1" />

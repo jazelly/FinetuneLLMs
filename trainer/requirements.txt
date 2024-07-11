@@ -2,6 +2,7 @@ django
 django-ratelimit
 python-dotenv
 channels
+channels_redis
 daphne
 watchgod
 psutil

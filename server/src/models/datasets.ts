@@ -1,6 +1,6 @@
 import prisma from "../utils/prisma/index";
 import type { Prisma } from "@prisma/client";
-import type { IDataset } from "./schema/datasets.type";
+import type { DatasetRemote } from "./schema/datasets.type";
 
 export const Datasets = {
   create: async ({
@@ -12,7 +12,7 @@ export const Datasets = {
     config,
     split,
     numRows,
-  }) => {
+  }: DatasetRemote) => {
     await prisma.datasets.deleteMany({
       where: { name, source, config, split },
     });
@@ -38,7 +38,7 @@ export const Datasets = {
     return datasets;
   },
 
-  readBy: async (params: Partial<IDataset>) => {
+  readBy: async (params: Partial<DatasetRemote>) => {
     const whereParams: Prisma.datasetsWhereInput[] = [];
     for (const [key, value] of Object.entries(params)) {
       whereParams.push({ [key]: value });

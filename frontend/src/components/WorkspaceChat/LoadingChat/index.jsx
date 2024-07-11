@@ -1,13 +1,13 @@
-import { isMobile } from "react-device-detect";
-import * as Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import { isMobile } from 'react-device-detect';
+import * as Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function LoadingChat() {
-  const highlightColor = "#3D4147";
-  const baseColor = "#2C2F35";
+  const highlightColor = '#3D4147';
+  const baseColor = '#2C2F35';
   return (
     <div
-      style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+      style={{ height: isMobile ? '100%' : 'calc(100% - 32px)' }}
       className="transition-all duration-500 relative md:ml-[2px] md:mr-[8px] md:my-[16px] md:rounded-[26px] bg-main-gradient w-full h-full overflow-y-scroll"
     >
       <Skeleton.default
@@ -21,7 +21,7 @@ export default function LoadingChat() {
       />
       <Skeleton.default
         height="100px"
-        width={isMobile ? "70%" : "45%"}
+        width={isMobile ? '70%' : '45%'}
         baseColor={baseColor}
         highlightColor={highlightColor}
         count={1}
@@ -30,7 +30,7 @@ export default function LoadingChat() {
       />
       <Skeleton.default
         height="100px"
-        width={isMobile ? "55%" : "30%"}
+        width={isMobile ? '55%' : '30%'}
         baseColor={baseColor}
         highlightColor={highlightColor}
         count={1}
@@ -39,7 +39,7 @@ export default function LoadingChat() {
       />
       <Skeleton.default
         height="100px"
-        width={isMobile ? "88%" : "25%"}
+        width={isMobile ? '88%' : '25%'}
         baseColor={baseColor}
         highlightColor={highlightColor}
         count={1}

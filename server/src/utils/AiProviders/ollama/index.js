@@ -26,16 +26,6 @@ class OllamaAILLM {
     this.defaultTemp = 0.7;
   }
 
-  #ollamaClient({ temperature = 0.07 }) {
-    const { ChatOllama } = require("@langchain/community/chat_models/ollama");
-    return new ChatOllama({
-      baseUrl: this.basePath,
-      model: this.model,
-      useMLock: true,
-      temperature,
-    });
-  }
-
   // For streaming we use Langchain's wrapper to handle weird chunks
   // or otherwise absorb headaches that can arise from Ollama models
   #convertToLangchainPrototypes(chats = []) {
@@ -105,31 +95,6 @@ class OllamaAILLM {
   async isSafe(_input = "") {
     // Not implemented so must be stubbed
     return { safe: true, reasons: [] };
-  }
-
-  async getChatCompletion(messages = null, { temperature = 0.7 }) {
-    const model = this.#ollamaClient({ temperature });
-    const textResponse = await model
-      .pipe(new StringOutputParser())
-      .invoke(this.#convertToLangchainPrototypes(messages))
-      .catch((e) => {
-        throw new Error(
-          `Ollama::getChatCompletion failed to communicate with Ollama. ${e.message}`
-        );
-      });
-
-    if (!textResponse || !textResponse.length)
-      throw new Error(`Ollama::getChatCompletion text response was empty.`);
-
-    return textResponse;
-  }
-
-  async streamGetChatCompletion(messages = null, { temperature = 0.7 }) {
-    const model = this.#ollamaClient({ temperature });
-    const stream = await model
-      .pipe(new StringOutputParser())
-      .stream(this.#convertToLangchainPrototypes(messages));
-    return stream;
   }
 
   handleStream(response, stream, responseProps) {

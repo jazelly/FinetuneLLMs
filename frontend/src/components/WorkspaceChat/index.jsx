@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Workspace from "@/models/workspace";
-import LoadingChat from "./LoadingChat";
-import ChatContainer from "./ChatContainer";
-import paths from "@/utils/paths";
-import ModalWrapper from "../ModalWrapper";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import Workspace from '@/models/workspace';
+import LoadingChat from './LoadingChat';
+import ChatContainer from './ChatContainer';
+import paths from '@/utils/paths';
+import ModalWrapper from '../ModalWrapper';
+import { useParams } from 'react-router-dom';
 
 export default function WorkspaceChat({ loading, workspace }) {
   const { threadSlug = null } = useParams();
@@ -45,7 +45,7 @@ export default function WorkspaceChat({ loading, workspace }) {
 
                 <div className="flex w-full justify-center items-center mt-4">
                   <a
-                    href={paths.home()}
+                    href={paths.home}
                     className="border border-slate-200 text-white hover:bg-slate-200 hover:text-slate-800 px-4 py-2 rounded-lg text-sm items-center flex gap-x-2 transition-all duration-300"
                   >
                     Go back to homepage
@@ -72,27 +72,27 @@ function copyCodeSnippet(uuid) {
   if (!target) return false;
   const markdown =
     target.parentElement?.parentElement?.querySelector(
-      "pre:first-of-type"
+      'pre:first-of-type'
     )?.innerText;
   if (!markdown) return false;
 
   window.navigator.clipboard.writeText(markdown);
-  target.classList.add("text-green-500");
+  target.classList.add('text-green-500');
   const originalText = target.innerHTML;
-  target.innerText = "Copied!";
-  target.setAttribute("disabled", true);
+  target.innerText = 'Copied!';
+  target.setAttribute('disabled', true);
 
   setTimeout(() => {
-    target.classList.remove("text-green-500");
+    target.classList.remove('text-green-500');
     target.innerHTML = originalText;
-    target.removeAttribute("disabled");
+    target.removeAttribute('disabled');
   }, 2500);
 }
 
 // Listens and hunts for all data-code-snippet clicks.
 function setEventDelegatorForCodeSnippets() {
-  document?.addEventListener("click", function (e) {
-    const target = e.target.closest("[data-code-snippet]");
+  document?.addEventListener('click', function (e) {
+    const target = e.target.closest('[data-code-snippet]');
     const uuidCode = target?.dataset?.code;
     if (!uuidCode) return false;
     copyCodeSnippet(uuidCode);

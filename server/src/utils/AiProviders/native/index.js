@@ -6,12 +6,6 @@ const {
   clientAbortedHandler,
 } = require("../../helpers/chat/responses");
 
-// Docs: https://js.langchain.com/docs/integrations/chat/llama_cpp
-const ChatLlamaCpp = (...args) =>
-  import("@langchain/community/chat_models/llama_cpp").then(
-    ({ ChatLlamaCpp }) => new ChatLlamaCpp(...args)
-  );
-
 class NativeLLM {
   constructor(embedder = null, modelPreference = null) {
     if (!process.env.NATIVE_LLM_MODEL_PREF)
@@ -41,12 +35,6 @@ class NativeLLM {
       throw new Error(
         `Local Llama model ${this.model} was not found in storage!`
       );
-
-    global.llamaModelInstance = await ChatLlamaCpp({
-      modelPath,
-      temperature,
-      useMlock: true,
-    });
   }
 
   // If the model has been loaded once, it is in the memory now

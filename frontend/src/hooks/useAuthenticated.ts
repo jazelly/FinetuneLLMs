@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import validateSessionTokenForUser from "@/utils/session";
-import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from "@/utils/constants";
-import System from "@/models/system";
+import { useEffect, useState } from 'react';
+import validateSessionTokenForUser from '@/utils/session';
+import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from '@/utils/constants';
 
 function useAuthenticated() {
   const [isAuthd, setIsAuthed] = useState<boolean | null>(null);

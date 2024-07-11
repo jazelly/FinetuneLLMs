@@ -1,98 +1,98 @@
 export const Colors = {
-  blue: "#3b82f6",
-  sky: "#0ea5e9",
-  cyan: "#06b6d4",
-  teal: "#14b8a6",
-  emerald: "#10b981",
-  green: "#22c55e",
-  lime: "#84cc16",
-  yellow: "#eab308",
-  amber: "#f59e0b",
-  orange: "#f97316",
-  red: "#ef4444",
-  rose: "#f43f5e",
-  pink: "#ec4899",
-  fuchsia: "#d946ef",
-  purple: "#a855f7",
-  violet: "#8b5cf6",
-  indigo: "#6366f1",
-  neutral: "#737373",
-  stone: "#78716c",
-  gray: "#6b7280",
-  slate: "#64748b",
-  zinc: "#71717a",
+  blue: '#3b82f6',
+  sky: '#0ea5e9',
+  cyan: '#06b6d4',
+  teal: '#14b8a6',
+  emerald: '#10b981',
+  green: '#22c55e',
+  lime: '#84cc16',
+  yellow: '#eab308',
+  amber: '#f59e0b',
+  orange: '#f97316',
+  red: '#ef4444',
+  rose: '#f43f5e',
+  pink: '#ec4899',
+  fuchsia: '#d946ef',
+  purple: '#a855f7',
+  violet: '#8b5cf6',
+  indigo: '#6366f1',
+  neutral: '#737373',
+  stone: '#78716c',
+  gray: '#6b7280',
+  slate: '#64748b',
+  zinc: '#71717a',
 };
 
 export function getTremorColor(color) {
   switch (color) {
-    case "blue":
+    case 'blue':
       return Colors.blue;
-    case "sky":
+    case 'sky':
       return Colors.sky;
-    case "cyan":
+    case 'cyan':
       return Colors.cyan;
-    case "teal":
+    case 'teal':
       return Colors.teal;
-    case "emerald":
+    case 'emerald':
       return Colors.emerald;
-    case "green":
+    case 'green':
       return Colors.green;
-    case "lime":
+    case 'lime':
       return Colors.lime;
-    case "yellow":
+    case 'yellow':
       return Colors.yellow;
-    case "amber":
+    case 'amber':
       return Colors.amber;
-    case "orange":
+    case 'orange':
       return Colors.orange;
-    case "red":
+    case 'red':
       return Colors.red;
-    case "rose":
+    case 'rose':
       return Colors.rose;
-    case "pink":
+    case 'pink':
       return Colors.pink;
-    case "fuchsia":
+    case 'fuchsia':
       return Colors.fuchsia;
-    case "purple":
+    case 'purple':
       return Colors.purple;
-    case "violet":
+    case 'violet':
       return Colors.violet;
-    case "indigo":
+    case 'indigo':
       return Colors.indigo;
-    case "neutral":
+    case 'neutral':
       return Colors.neutral;
-    case "stone":
+    case 'stone':
       return Colors.stone;
-    case "gray":
+    case 'gray':
       return Colors.gray;
-    case "slate":
+    case 'slate':
       return Colors.slate;
-    case "zinc":
+    case 'zinc':
       return Colors.zinc;
   }
 }
 
 export const themeColorRange = [
-  "slate",
-  "gray",
-  "zinc",
-  "neutral",
-  "stone",
-  "red",
-  "orange",
-  "amber",
-  "yellow",
-  "lime",
-  "green",
-  "emerald",
-  "teal",
-  "cyan",
-  "sky",
-  "blue",
-  "indigo",
-  "violet",
-  "purple",
-  "fuchsia",
-  "pink",
-  "rose",
+  'slate',
+  'gray',
+  'zinc',
+  'neutral',
+  'stone',
+  'red',
+  'orange',
+  'amber',
+  'yellow',
+  'lime',
+  'green',
+  'emerald',
+  'teal',
+  'cyan',
+  'sky',
+  'blue',
+  'indigo',
+  'violet',
+  'purple',
+  'fuchsia',
+  'pink',
+  'rose',
 ];

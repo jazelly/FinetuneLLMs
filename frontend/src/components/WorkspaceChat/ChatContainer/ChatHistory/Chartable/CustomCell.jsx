@@ -23,8 +23,8 @@ export default function CustomCell({ ...props }) {
           fill:
             depth < 2
               ? colors[Math.floor((index / root.children.length) * 6)]
-              : "#ffffff00",
-          stroke: "#fff",
+              : '#ffffff00',
+          stroke: '#fff',
           strokeWidth: 2 / (depth + 1e-10),
           strokeOpacity: 1 / (depth + 1e-10),
         }}

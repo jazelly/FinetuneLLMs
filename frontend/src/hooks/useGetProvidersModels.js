@@ -1,23 +1,22 @@
-import System from "@/models/system";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 // Providers which cannot use this feature for workspace<>model selection
 export const DISABLED_PROVIDERS = [
-  "azure",
-  "lmstudio",
-  "native",
-  "textgenwebui",
+  'azure',
+  'lmstudio',
+  'native',
+  'textgenwebui',
 ];
 const PROVIDER_DEFAULT_MODELS = {
   openai: [],
-  gemini: ["gemini-pro", "gemini-1.5-pro-latest"],
+  gemini: ['gemini-pro', 'gemini-1.5-pro-latest'],
   anthropic: [
-    "claude-instant-1.2",
-    "claude-2.0",
-    "claude-2.1",
-    "claude-3-opus-20240229",
-    "claude-3-sonnet-20240229",
-    "claude-3-haiku-20240307",
+    'claude-instant-1.2',
+    'claude-2.0',
+    'claude-2.1',
+    'claude-3-opus-20240229',
+    'claude-3-sonnet-20240229',
+    'claude-3-haiku-20240307',
   ],
   azure: [],
   lmstudio: [],
@@ -25,19 +24,19 @@ const PROVIDER_DEFAULT_MODELS = {
   ollama: [],
   togetherai: [],
   groq: [
-    "mixtral-8x7b-32768",
-    "llama3-8b-8192",
-    "llama3-70b-8192",
-    "gemma-7b-it",
+    'mixtral-8x7b-32768',
+    'llama3-8b-8192',
+    'llama3-70b-8192',
+    'gemma-7b-it',
   ],
   native: [],
   cohere: [
-    "command-r",
-    "command-r-plus",
-    "command",
-    "command-light",
-    "command-nightly",
-    "command-light-nightly",
+    'command-r',
+    'command-r-plus',
+    'command',
+    'command-light',
+    'command-nightly',
+    'command-light-nightly',
   ],
   textgenwebui: [],
 };
@@ -53,7 +52,7 @@ function groupModels(models) {
   }, {});
 }
 
-const groupedProviders = ["togetherai", "openai", "openrouter"];
+const groupedProviders = ['togetherai', 'openai', 'openrouter'];
 export default function useGetProviderModels(provider = null) {
   const [defaultModels, setDefaultModels] = useState([]);
   const [customModels, setCustomModels] = useState([]);

@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import System from "@/models/system";
+import { useState, useEffect } from 'react';
 
 export default function ElevenLabsOptions({ settings }) {
   const [inputValue, setInputValue] = useState(settings?.TTSElevenLabsKey);
@@ -16,7 +15,7 @@ export default function ElevenLabsOptions({ settings }) {
           name="TTSElevenLabsKey"
           className="bg-zinc-900 text-white placeholder:text-white/20 text-sm rounded-lg focus:border-white block w-full p-2.5"
           placeholder="ElevenLabs API Key"
-          defaultValue={settings?.TTSElevenLabsKey ? "*".repeat(20) : ""}
+          defaultValue={settings?.TTSElevenLabsKey ? '*'.repeat(20) : ''}
           required={true}
           autoComplete="off"
           spellCheck={false}
@@ -39,8 +38,8 @@ function ElevenLabsModelSelection({ apiKey, settings }) {
     async function findCustomModels() {
       setLoading(true);
       const { models } = await System.customModels(
-        "elevenlabs-tts",
-        typeof apiKey === "boolean" ? null : apiKey
+        'elevenlabs-tts',
+        typeof apiKey === 'boolean' ? null : apiKey
       );
 
       if (models?.length > 0) {

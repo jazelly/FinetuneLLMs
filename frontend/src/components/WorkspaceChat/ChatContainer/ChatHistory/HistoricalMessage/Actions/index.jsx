@@ -1,15 +1,15 @@
-import React, { memo, useState } from "react";
-import useCopyText from "@/hooks/useCopyText";
+import React, { memo, useState } from 'react';
+import useCopyText from '@/hooks/useCopyText';
 import {
   Check,
   ClipboardText,
   ThumbsUp,
   ThumbsDown,
   ArrowsClockwise,
-} from "@phosphor-icons/react";
-import { Tooltip } from "react-tooltip";
-import Workspace from "@/models/workspace";
-import TTSMessage from "./TTSButton";
+} from '@phosphor-icons/react';
+import { Tooltip } from 'react-tooltip';
+import Workspace from '@/models/workspace';
+import TTSMessage from './TTSButton';
 
 const Actions = ({
   message,
@@ -33,7 +33,7 @@ const Actions = ({
       <div className="flex justify-start items-center gap-x-4">
         <CopyMessage message={message} />
         {isLastMessage &&
-          !message?.includes("Workspace chat memory was reset!") && (
+          !message?.includes('Workspace chat memory was reset!') && (
             <RegenerateMessage
               regenerateMessage={regenerateMessage}
               slug={slug}
@@ -83,7 +83,7 @@ function FeedbackButton({
         <IconComponent
           size={18}
           className="mb-1"
-          weight={isSelected ? "fill" : "regular"}
+          weight={isSelected ? 'fill' : 'regular'}
         />
       </button>
       <Tooltip

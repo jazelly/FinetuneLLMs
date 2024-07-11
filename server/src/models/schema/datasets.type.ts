@@ -1,13 +1,21 @@
-export interface IDataset {
-  id: number;
+export interface ModelBase {
+  id?: number;
+  createdAt?: Date;
+  lastUpdatedAt?: Date;
+}
+
+export interface DatasetBase extends ModelBase {
   name: string;
-  path?: string;
-  config: string;
-  split: string;
   size: number;
-  source: string;
   extension: string;
   numRows?: number;
-  createdAt: Date;
-  lastUpdatedAt: Date;
+}
+
+export interface DatasetLocal extends DatasetBase {}
+
+export interface DatasetRemote extends DatasetBase {
+  path?: string | null;
+  config: string;
+  split: string;
+  source: string;
 }

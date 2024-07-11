@@ -1,10 +1,10 @@
-import React, { memo } from "react";
-import { Warning } from "@phosphor-icons/react";
-import Actions from "./Actions";
-import renderMarkdown from "@/utils/chat/markdown";
-import { AI_BACKGROUND_COLOR, USER_BACKGROUND_COLOR } from "@/utils/constants";
-import { v4 } from "uuid";
-import createDOMPurify from "dompurify";
+import React, { memo } from 'react';
+import { Warning } from '@phosphor-icons/react';
+import Actions from './Actions';
+import renderMarkdown from '@/utils/chat/markdown';
+import { AI_BACKGROUND_COLOR, USER_BACKGROUND_COLOR } from '@/utils/constants';
+import { v4 } from 'uuid';
+import createDOMPurify from 'dompurify';
 
 const DOMPurify = createDOMPurify(window);
 const HistoricalMessage = ({
@@ -23,7 +23,7 @@ const HistoricalMessage = ({
     <div
       key={uuid}
       className={`flex justify-center items-end w-full ${
-        role === "user" ? USER_BACKGROUND_COLOR : AI_BACKGROUND_COLOR
+        role === 'user' ? USER_BACKGROUND_COLOR : AI_BACKGROUND_COLOR
       }`}
     >
       <div
@@ -49,7 +49,7 @@ const HistoricalMessage = ({
             />
           )}
         </div>
-        {role === "assistant" && !error && (
+        {role === 'assistant' && !error && (
           <div className="flex gap-x-5">
             <div className="relative w-[35px] h-[35px] rounded-full flex-shrink-0 overflow-hidden" />
             <Actions
@@ -62,7 +62,7 @@ const HistoricalMessage = ({
             />
           </div>
         )}
-        {role === "assistant" && <Citations sources={sources} />}
+        {role === 'assistant' && <Citations sources={sources} />}
       </div>
     </div>
   );

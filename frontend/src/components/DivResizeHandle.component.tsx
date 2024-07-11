@@ -1,6 +1,6 @@
-import { ArrowLineLeft, ArrowLineRight } from "@phosphor-icons/react";
-import React, { MouseEventHandler, TouchEventHandler, useState } from "react";
-import type { ResizableBox, ResizeHandle } from "react-resizable";
+import { ArrowLineLeft, ArrowLineRight } from '@phosphor-icons/react';
+import React, { MouseEventHandler, TouchEventHandler, useState } from 'react';
+import type { ResizableBox, ResizeHandle } from 'react-resizable';
 
 interface ResizeHandleProps {
   innerRef: any;
@@ -50,11 +50,7 @@ const DivResizeHandle = React.forwardRef<ResizableBox, ResizeHandleProps>(
         id="div-line-lr"
         ref={innerRef}
         className={`${classNameOuter} ${
-          isHoldingHandle
-            ? "div-handle-highlight"
-            : isHovered
-            ? "div-handle-highlight-weak"
-            : ""
+          isHoldingHandle || isHovered ? 'div-handle-highlight' : ''
         }`}
         onMouseDown={handleMouseDown}
         onMouseUp={(e) => handleMouseUp(e, onMouseUp)}

@@ -205,20 +205,6 @@ const KEY_MAPPING = {
     checks: [isNotEmpty, supportedVectorDB],
   },
 
-  // Chroma Options
-  ChromaEndpoint: {
-    envKey: "CHROMA_ENDPOINT",
-    checks: [isValidURL, validChromaURL, validDockerizedUrl],
-  },
-  ChromaApiHeader: {
-    envKey: "CHROMA_API_HEADER",
-    checks: [],
-  },
-  ChromaApiKey: {
-    envKey: "CHROMA_API_KEY",
-    checks: [],
-  },
-
   // Weaviate Options
   WeaviateEndpoint: {
     envKey: "WEAVIATE_ENDPOINT",
@@ -531,12 +517,6 @@ function supportedVectorDB(input = "") {
   return supported.includes(input)
     ? null
     : `Invalid VectorDB type. Must be one of ${supported.join(", ")}.`;
-}
-
-function validChromaURL(input = "") {
-  return input.slice(-1) === "/"
-    ? `Chroma Instance URL should not end in a trailing slash.`
-    : null;
 }
 
 function validAzureURL(input = "") {

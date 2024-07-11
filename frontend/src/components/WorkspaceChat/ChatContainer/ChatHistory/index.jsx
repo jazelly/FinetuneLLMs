@@ -1,12 +1,12 @@
-import HistoricalMessage from "./HistoricalMessage";
-import PromptReply from "./PromptReply";
-import { useEffect, useRef, useState } from "react";
-import { useUploadDatasetsModal } from "../../../Modals/UploadDatasets";
-import UploadDatasets from "../../../Modals/UploadDatasets";
-import { ArrowDown } from "@phosphor-icons/react";
-import debounce from "lodash.debounce";
-import useUser from "@/hooks/useUser";
-import Chartable from "./Chartable";
+import HistoricalMessage from './HistoricalMessage';
+import PromptReply from './PromptReply';
+import { useEffect, useRef, useState } from 'react';
+import { useUploadDatasetsModal } from '../../../Modals/UploadDatasets';
+import UploadDatasets from '../../../Modals/UploadDatasets';
+import { ArrowDown } from '@phosphor-icons/react';
+import debounce from 'lodash.debounce';
+import useUser from '@/hooks/useUser';
+import Chartable from './Chartable';
 
 export default function ChatHistory({
   history = [],
@@ -18,21 +18,21 @@ export default function ChatHistory({
   const { showing, showModal, hideModal } = useUploadDatasetsModal();
   const [isAtBottom, setIsAtBottom] = useState(true);
   const chatHistoryRef = useRef(null);
-  const [textSize, setTextSize] = useState("normal");
+  const [textSize, setTextSize] = useState('normal');
 
   const getTextSizeClass = (size) => {
     switch (size) {
-      case "small":
-        return "text-[12px]";
-      case "large":
-        return "text-[18px]";
+      case 'small':
+        return 'text-[12px]';
+      case 'large':
+        return 'text-[18px]';
       default:
-        return "text-[14px]";
+        return 'text-[14px]';
     }
   };
 
   useEffect(() => {
-    const storedTextSize = window.localStorage.getItem("anythingllm_text_size");
+    const storedTextSize = window.localStorage.getItem('anythingllm_text_size');
     if (storedTextSize) {
       setTextSize(getTextSizeClass(storedTextSize));
     }
@@ -42,10 +42,10 @@ export default function ChatHistory({
       setTextSize(getTextSizeClass(size));
     };
 
-    window.addEventListener("textSizeChange", handleTextSizeChange);
+    window.addEventListener('textSizeChange', handleTextSizeChange);
 
     return () => {
-      window.removeEventListener("textSizeChange", handleTextSizeChange);
+      window.removeEventListener('textSizeChange', handleTextSizeChange);
     };
   }, []);
 
@@ -69,7 +69,7 @@ export default function ChatHistory({
       if (!chatHistoryRef.current) return null;
       const chatHistoryElement = chatHistoryRef.current;
       if (!chatHistoryElement) return null;
-      chatHistoryElement.addEventListener("scroll", debouncedScroll);
+      chatHistoryElement.addEventListener('scroll', debouncedScroll);
     }
     watchScrollEvent();
   }, []);
@@ -78,7 +78,7 @@ export default function ChatHistory({
     if (chatHistoryRef.current) {
       chatHistoryRef.current.scrollTo({
         top: chatHistoryRef.current.scrollHeight,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     }
   };
@@ -94,9 +94,9 @@ export default function ChatHistory({
           <p className="text-white/60 text-lg font-base py-4">
             Welcome to your new workspace.
           </p>
-          {!user || user.role !== "default" ? (
+          {!user || user.role !== 'default' ? (
             <p className="w-full items-center text-white/60 text-lg font-base flex flex-col md:flex-row gap-x-1">
-              To get started either{" "}
+              To get started either{' '}
               <span
                 className="underline font-medium cursor-pointer"
                 onClick={showModal}
@@ -130,13 +130,13 @@ export default function ChatHistory({
     >
       {history.map((props, index) => {
         const isLastBotReply =
-          index === history.length - 1 && props.role === "assistant";
+          index === history.length - 1 && props.role === 'assistant';
 
-        if (props?.type === "statusResponse" && !!props.content) {
+        if (props?.type === 'statusResponse' && !!props.content) {
           return <StatusResponse key={props.uuid} props={props} />;
         }
 
-        if (props.type === "rechartVisualize" && !!props.content) {
+        if (props.type === 'rechartVisualize' && !!props.content) {
           return (
             <Chartable key={props.uuid} workspace={workspace} props={props} />
           );
@@ -215,7 +215,7 @@ function WorkspaceChatSuggestions({ suggestions = [], sendSuggestion }) {
       {suggestions.map((suggestion, index) => (
         <button
           key={index}
-          className="text-left p-2.5 border rounded-xl border-white/20 bg-main hover:bg-workspace-item-selected-gradient"
+          className="text-left p-2.5 border rounded-xl border-white/20 bg-main-base hover:bg-workspace-item-selected-gradient"
           onClick={() => sendSuggestion(suggestion.heading, suggestion.message)}
         >
           <p className="font-semibold">{suggestion.heading}</p>

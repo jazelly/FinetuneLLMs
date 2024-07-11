@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function useCopyText(delay = 2500) {
   const [copied, setCopied] = useState(false);

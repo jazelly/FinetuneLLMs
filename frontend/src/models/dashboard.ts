@@ -1,11 +1,11 @@
-import { API_BASE } from "@/utils/constants";
-import { AllJobOptions } from "./types/dashboard";
+import { API_BASE } from '@/utils/constants';
+import { AllJobOptions } from '../types/dashboard.type';
 
 const Dashboard = {
   getJobOptions: async () => {
     try {
       const response = await fetch(`${API_BASE}/job/options`, {
-        method: "GET",
+        method: 'GET',
       });
 
       const respJson: AllJobOptions = await response.json();

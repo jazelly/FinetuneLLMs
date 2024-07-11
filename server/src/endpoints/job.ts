@@ -7,8 +7,13 @@ import { reqBody } from "../utils/http";
 import { Datasets } from "../models/datasets";
 import { Jobs } from "../models/jobs";
 import { v4 } from "uuid";
-import Trainer from "../models/trainer.internal";
-import { IDataset } from "../models/schema/datasets.type";
+import Trainer, { TrainerResponseBase } from "../models/trainer.internal";
+import { DatasetRemote } from "../models/schema/datasets.type";
+import {
+  BASE_MODELS,
+  EXAMPLE_DATASETS,
+  TRAINING_METHODS,
+} from "../utils/supportList";
 
 function jobEndpoints(app) {
   if (!app) return;
@@ -25,12 +30,7 @@ function jobEndpoints(app) {
       };
 
       const datasetsPromise = Datasets.readAll();
-      const trainingMethods = ["sft", "dpo"];
-      const baseModels = [
-        "LLAMA 2",
-        "LLAMA 3",
-        "microsoft/Phi-3-mini-4k-instruct",
-      ];
+
       const hyperparameters = {
         bf16: true,
         do_eval: false,
@@ -56,9 +56,9 @@ function jobEndpoints(app) {
       };
 
       const [datasets] = await Promise.all([datasetsPromise]);
-      result.datasets = datasets;
-      result.trainingMethods = trainingMethods;
-      result.baseModels = baseModels;
+      result.datasets = datasets.length ? datasets : EXAMPLE_DATASETS;
+      result.trainingMethods = TRAINING_METHODS;
+      result.baseModels = BASE_MODELS;
       result.hyperparameters = hyperparameters;
 
       res.json(result);
@@ -87,37 +87,25 @@ function jobEndpoints(app) {
   );
 
   /**
-   * Create a job
+   * Create a job record in DB
+   * The job created is incomplete as we cannot know the taskId
+   * This simply creates a log so that other requests can look up on that
+   * NOTE: we do not trigger a worker job here. It's triggered by client
    */
   app.post(
     "/job",
     [validatedRequest, flexUserRoleValid([ROLES.all])],
     async (req, res) => {
-      const { datasetId, trainingMethod, baseModel, hyperparameters } =
+      const { datasetName, trainingMethod, baseModel, hyperparameters } =
         reqBody(req);
 
       const metaString = JSON.stringify(hyperparameters);
-      const datasetEntities = await Datasets.readBy({
-        id: parseInt(datasetId),
-      });
-
-      // forward to trainer
-      const trainerResponse = await Trainer.submitJobToTrainer({
-        trainingMethod,
-        baseModel,
-        hyperparameters,
-        dataset: datasetEntities[0] as IDataset,
-      });
-
-      console.log("trainerResponse", trainerResponse);
-
-      if ((trainerResponse as any).message === "noop") return res.json(201);
 
       // persist the job to Database
-      const name = `${trainingMethod}-${baseModel}-${datasetId}_${v4()}`;
+      const name = `${trainingMethod}-${baseModel}-${datasetName}`;
       const result = await Jobs.create({
         name,
-        datasetId,
+        datasetName,
         trainingMethod,
         baseModel,
         hyperparameters: metaString,

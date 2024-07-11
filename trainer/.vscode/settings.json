@@ -7,11 +7,14 @@
         "--line-length",
         "88"
     ],
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.python",
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": "explicit"
-        }
-    }
+    "python.linting.enabled": true,
+    
+    "python.languageServer": "Pylance",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/trainer",
+        "${workspaceFolder}/trainer_api",
+    ],
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.useLibraryCodeForTypes": true
+
 }

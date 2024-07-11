@@ -1,7 +1,6 @@
-import React from "react";
-import DefaultChatContainer from "@/components/DefaultChat";
-import PasswordModal, { usePasswordModal } from "@/components/Modals/Password";
-import { FullScreenLoader } from "@/components/Preloader";
+import React from 'react';
+import ChatContainer from '@/components/Chat/ChatContainer.component';
+import FullScreenLoader from '@/components/reusable/Loaders.component';
 
 export default function Main() {
   const { loading, requiresAuth, mode } = usePasswordModal();
@@ -12,8 +11,8 @@ export default function Main() {
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-main flex">
-      <DefaultChatContainer />
+    <div className="h-screen overflow-hidden bg-main-base flex">
+      <ChatContainer />
     </div>
   );
 }

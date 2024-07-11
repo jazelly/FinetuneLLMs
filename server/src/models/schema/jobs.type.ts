@@ -1,19 +1,18 @@
-export interface IJobBase {
-  id: number;
+export interface IJobCreate {
+  taskId?: string;
   name: string;
   userId?: number;
   baseModel: string;
-  datasetId: string;
+  datasetName: string;
   trainingMethod: string;
-  status: string;
+  hyperparameters: string;
+  status?: string;
+}
+
+export interface IJobModel extends IJobCreate {
+  id: number;
   createdAt: Date;
   lastUpdatedAt: Date;
+  status: string;
 }
 
-export interface IJobModel extends IJobBase {
-  hyperparameters: string;
-}
-
-export interface IJobJson<T extends {}> extends IJobBase {
-  hyperparameters: T;
-}

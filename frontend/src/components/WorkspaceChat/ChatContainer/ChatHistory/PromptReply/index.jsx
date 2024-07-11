@@ -1,8 +1,7 @@
-import { memo } from "react";
-import { Warning } from "@phosphor-icons/react";
-import Jazzicon from "../../../../UserIcon";
-import renderMarkdown from "@/utils/chat/markdown";
-import Citations from "../Citation";
+import { memo } from 'react';
+import { Warning } from '@phosphor-icons/react';
+import renderMarkdown from '@/utils/chat/markdown';
+import Citations from '../Citation';
 
 const PromptReply = ({
   uuid,
@@ -13,7 +12,7 @@ const PromptReply = ({
   sources = [],
   closed = true,
 }) => {
-  const assistantBackgroundColor = "bg-historical-msg-system";
+  const assistantBackgroundColor = 'bg-historical-msg-system';
   if (!reply && sources.length === 0 && !pending && !error) return null;
 
   if (pending) {
@@ -44,7 +43,7 @@ const PromptReply = ({
             >
               <Warning className="h-4 w-4 mb-1 inline-block" /> Could not
               respond to message.
-              <span className="text-xs">Reason: {error || "unknown"}</span>
+              <span className="text-xs">Reason: {error || 'unknown'}</span>
             </span>
           </div>
         </div>

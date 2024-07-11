@@ -1,4 +1,4 @@
-export const ABORT_STREAM_EVENT = "abort-chat-stream";
+export const ABORT_STREAM_EVENT = 'abort-chat-stream';
 
 // For handling of chat responses in the frontend by their various types.
 export default function handleChat(
@@ -20,7 +20,7 @@ export default function handleChat(
     action = null,
   } = chatResult;
 
-  if (type === "abort" || type === "statusResponse") {
+  if (type === 'abort' || type === 'statusResponse') {
     setLoadingResponse(false);
     setChatHistory([
       ...remHistory,
@@ -28,7 +28,7 @@ export default function handleChat(
         type,
         uuid,
         content: textResponse,
-        role: "assistant",
+        role: 'assistant',
         sources,
         closed: true,
         error,
@@ -40,21 +40,21 @@ export default function handleChat(
       type,
       uuid,
       content: textResponse,
-      role: "assistant",
+      role: 'assistant',
       sources,
       closed: true,
       error,
       animate: false,
       pending: false,
     });
-  } else if (type === "textResponse") {
+  } else if (type === 'textResponse') {
     setLoadingResponse(false);
     setChatHistory([
       ...remHistory,
       {
         uuid,
         content: textResponse,
-        role: "assistant",
+        role: 'assistant',
         sources,
         closed: close,
         error,
@@ -66,7 +66,7 @@ export default function handleChat(
     _chatHistory.push({
       uuid,
       content: textResponse,
-      role: "assistant",
+      role: 'assistant',
       sources,
       closed: close,
       error,
@@ -74,7 +74,7 @@ export default function handleChat(
       pending: false,
       chatId,
     });
-  } else if (type === "textResponseChunk") {
+  } else if (type === 'textResponseChunk') {
     const chatIdx = _chatHistory.findIndex((chat) => chat.uuid === uuid);
     if (chatIdx !== -1) {
       const existingHistory = { ..._chatHistory[chatIdx] };
@@ -95,7 +95,7 @@ export default function handleChat(
         sources,
         error,
         content: textResponse,
-        role: "assistant",
+        role: 'assistant',
         closed: close,
         animate: !close,
         pending: false,
@@ -103,9 +103,9 @@ export default function handleChat(
       });
     }
     setChatHistory([..._chatHistory]);
-  } else if (type === "agentInitWebsocketConnection") {
+  } else if (type === 'agentInitWebsocketConnection') {
     setWebsocket(chatResult.websocketUUID);
-  } else if (type === "finalizeResponseStream") {
+  } else if (type === 'finalizeResponseStream') {
     const chatIdx = _chatHistory.findIndex((chat) => chat.uuid === uuid);
     if (chatIdx !== -1) {
       const existingHistory = { ..._chatHistory[chatIdx] };
@@ -117,7 +117,7 @@ export default function handleChat(
     }
     setChatHistory([..._chatHistory]);
     setLoadingResponse(false);
-  } else if (type === "stopGeneration") {
+  } else if (type === 'stopGeneration') {
     const chatIdx = _chatHistory.length - 1;
     const existingHistory = { ..._chatHistory[chatIdx] };
     const updatedHistory = {
@@ -135,7 +135,7 @@ export default function handleChat(
   }
 
   // Action Handling via special 'action' attribute on response.
-  if (action === "reset_chat") {
+  if (action === 'reset_chat') {
     // Chat was reset, keep reset message and clear everything else.
     setChatHistory([_chatHistory.pop()]);
   }
@@ -144,13 +144,13 @@ export default function handleChat(
 export function chatPrompt(workspace) {
   return (
     workspace?.openAiPrompt ??
-    "Given the following conversation, relevant context, and a follow up question, reply with an answer to the current question the user is asking. Return only your response to the question given the above information following the users instructions as needed."
+    'Given the following conversation, relevant context, and a follow up question, reply with an answer to the current question the user is asking. Return only your response to the question given the above information following the users instructions as needed.'
   );
 }
 
 export function chatQueryRefusalResponse(workspace) {
   return (
     workspace?.queryRefusalResponse ??
-    "There is no relevant information in this workspace to answer your query."
+    'There is no relevant information in this workspace to answer your query.'
   );
 }

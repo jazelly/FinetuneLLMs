@@ -1,25 +1,13 @@
-import React, { useState, useEffect, memo } from "react";
-import { X } from "@phosphor-icons/react";
-import System from "../../../models/system";
-import { isMobile } from "react-device-detect";
-import useUser from "../../../hooks/useUser";
-import DocumentSettings from "./Documents";
+import React, { useState, useEffect, memo } from 'react';
+import { X } from '@phosphor-icons/react';
+import { isMobile } from 'react-device-detect';
+import useUser from '../../../hooks/useUser';
+import DocumentSettings from './Documents';
 
 const noop = () => {};
 const UploadDatasets = ({ hideModal = noop }) => {
   const { user } = useUser();
-  const [settings, setSettings] = useState({});
-  const [selectedTab, setSelectedTab] = useState("documents");
-
-  useEffect(() => {
-    async function getSettings() {
-      const _settings = await System.keys();
-      setSettings(_settings ?? {});
-    }
-    getSettings();
-  }, []);
-
-
+  const [selectedTab, setSelectedTab] = useState('documents');
 
   if (isMobile) {
     return (
@@ -53,7 +41,10 @@ const UploadDatasets = ({ hideModal = noop }) => {
 
   return (
     <div className="w-screen h-screen fixed top-0 left-0 flex justify-center items-center z-99">
-      <div className="backdrop h-full w-full absolute top-0 z-10" onClick={hideModal} />
+      <div
+        className="backdrop h-full w-full absolute top-0 z-10"
+        onClick={hideModal}
+      />
       <div className="absolute max-h-full w-fit transition duration-300 z-20 md:overflow-y-auto py-10">
         <div className="relative bg-main-gradient rounded-[12px] shadow border-2 border-slate-300/10">
           <div className="flex items-start justify-between p-2 rounded-t border-gray-500/50 relative">
@@ -66,14 +57,14 @@ const UploadDatasets = ({ hideModal = noop }) => {
             </button>
           </div>
 
-          {user?.role !== "default" && (
+          {user?.role !== 'default' && (
             <ModalTabSwitcher
               selectedTab={selectedTab}
               setSelectedTab={setSelectedTab}
             />
           )}
 
-          <DocumentSettings systemSettings={settings} />
+          <DocumentSettings />
         </div>
       </div>
     </div>
@@ -87,11 +78,11 @@ const ModalTabSwitcher = ({ selectedTab, setSelectedTab }) => {
     <div className="w-full flex justify-center z-10 relative">
       <div className="gap-x-2 flex justify-center -mt-[68px] mb-10 bg-main-button p-1 rounded-xl shadow border-2 border-slate-300/10 w-fit">
         <button
-          onClick={() => setSelectedTab("documents")}
+          onClick={() => setSelectedTab('documents')}
           className={`px-4 py-2 rounded-[8px] font-semibold text-white hover:bg-switch-selected hover:bg-opacity-60 ${
-            selectedTab === "documents"
-              ? "bg-switch-selected shadow-md font-bold"
-              : "bg-main-button text-white/20 font-medium hover:text-white"
+            selectedTab === 'documents'
+              ? 'bg-switch-selected shadow-md font-bold'
+              : 'bg-main-button text-white/20 font-medium hover:text-white'
           }`}
         >
           Documents

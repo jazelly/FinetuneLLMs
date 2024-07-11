@@ -1,14 +1,14 @@
-import { API_BASE } from "@/utils/constants";
-import { baseHeaders } from "@/utils/request";
-import { fetchEventSource } from "@microsoft/fetch-event-source";
-import WorkspaceThread from "@/models/workspaceThread";
-import { v4 } from "uuid";
-import { ABORT_STREAM_EVENT } from "@/utils/chat";
+import { API_BASE } from '@/utils/constants';
+import { baseHeaders } from '@/utils/request';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
+import WorkspaceThread from '@/models/workspaceThread';
+import { v4 } from 'uuid';
+import { ABORT_STREAM_EVENT } from '@/utils/chat';
 
 const Workspace = {
   new: async function (data = {}) {
     const { workspace, message } = await fetch(`${API_BASE}/workspace/new`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(data),
       headers: baseHeaders(),
     })
@@ -23,7 +23,7 @@ const Workspace = {
     const { workspace, message } = await fetch(
       `${API_BASE}/workspace/${slug}/update`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(data),
         headers: baseHeaders(),
       }
@@ -39,7 +39,7 @@ const Workspace = {
     const { workspace, message } = await fetch(
       `${API_BASE}/workspace/${slug}/update-embeddings`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(changes), // contains 'adds' and 'removes' keys that are arrays of filepaths
         headers: baseHeaders(),
       }
@@ -53,7 +53,7 @@ const Workspace = {
   },
   chatHistory: async function (slug) {
     const history = await fetch(`${API_BASE}/workspace/${slug}/chats`, {
-      method: "GET",
+      method: 'GET',
       headers: baseHeaders(),
     })
       .then((res) => res.json())
@@ -65,7 +65,7 @@ const Workspace = {
     const result = await fetch(
       `${API_BASE}/workspace/${slug}/chat-feedback/${chatId}`,
       {
-        method: "POST",
+        method: 'POST',
         headers: baseHeaders(),
         body: JSON.stringify({ feedback }),
       }
@@ -75,15 +75,15 @@ const Workspace = {
     return result;
   },
 
-  deleteChats: async function (slug = "", chatIds = []) {
+  deleteChats: async function (slug = '', chatIds = []) {
     return await fetch(`${API_BASE}/workspace/${slug}/delete-chats`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: baseHeaders(),
       body: JSON.stringify({ chatIds }),
     })
       .then((res) => {
         if (res.ok) return true;
-        throw new Error("Failed to delete chats.");
+        throw new Error('Failed to delete chats.');
       })
       .catch((e: any) => {
         console.log(e);
@@ -99,11 +99,11 @@ const Workspace = {
     // The backend response abort handling is done in each LLM's handleStreamResponse.
     window.addEventListener(ABORT_STREAM_EVENT, () => {
       ctrl.abort();
-      handleChat({ id: v4(), type: "stopGeneration" });
+      handleChat({ id: v4(), type: 'stopGeneration' });
     });
 
     await fetchEventSource(`${API_BASE}/workspace/${slug}/stream-chat`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ message }),
       headers: baseHeaders(),
       signal: ctrl.signal,
@@ -118,25 +118,25 @@ const Workspace = {
         ) {
           handleChat({
             id: v4(),
-            type: "abort",
+            type: 'abort',
             textResponse: null,
             sources: [],
             close: true,
             error: `An error occurred while streaming response. Code ${response.status}`,
           });
           ctrl.abort();
-          throw new Error("Invalid Status code response.");
+          throw new Error('Invalid Status code response.');
         } else {
           handleChat({
             id: v4(),
-            type: "abort",
+            type: 'abort',
             textResponse: null,
             sources: [],
             close: true,
             error: `An error occurred while streaming response. Unknown Error.`,
           });
           ctrl.abort();
-          throw new Error("Unknown error");
+          throw new Error('Unknown error');
         }
       },
       async onmessage(msg) {
@@ -148,7 +148,7 @@ const Workspace = {
       onerror(err) {
         handleChat({
           id: v4(),
-          type: "abort",
+          type: 'abort',
           textResponse: null,
           sources: [],
           close: true,
@@ -161,7 +161,7 @@ const Workspace = {
   },
   all: async function () {
     const workspaces = await fetch(`${API_BASE}/workspaces`, {
-      method: "GET",
+      method: 'GET',
       headers: baseHeaders(),
     })
       .then((res) => res.json())
@@ -170,7 +170,7 @@ const Workspace = {
 
     return workspaces;
   },
-  bySlug: async function (slug = "") {
+  bySlug: async function (slug = '') {
     const workspace = await fetch(`${API_BASE}/workspace/${slug}`, {
       headers: baseHeaders(),
     })
@@ -181,7 +181,7 @@ const Workspace = {
   },
   delete: async function (slug) {
     const result = await fetch(`${API_BASE}/workspace/${slug}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: baseHeaders(),
     })
       .then((res) => res.ok)
@@ -191,7 +191,7 @@ const Workspace = {
   },
   wipeVectorDb: async function (slug) {
     return await fetch(`${API_BASE}/workspace/${slug}/reset-vector-db`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: baseHeaders(),
     })
       .then((res) => res.ok)
@@ -199,7 +199,7 @@ const Workspace = {
   },
   uploadFile: async function (slug, formData) {
     const response = await fetch(`${API_BASE}/workspace/${slug}/upload`, {
-      method: "POST",
+      method: 'POST',
       body: formData,
       headers: baseHeaders(),
     });
@@ -209,7 +209,7 @@ const Workspace = {
   },
   uploadLink: async function (slug, link) {
     const response = await fetch(`${API_BASE}/workspace/${slug}/upload-link`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ link }),
       headers: baseHeaders(),
     });
@@ -220,12 +220,12 @@ const Workspace = {
 
   getSuggestedMessages: async function (slug) {
     return await fetch(`${API_BASE}/workspace/${slug}/suggested-messages`, {
-      method: "GET",
-      cache: "no-cache",
+      method: 'GET',
+      cache: 'no-cache',
       headers: baseHeaders(),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Could not fetch suggested messages.");
+        if (!res.ok) throw new Error('Could not fetch suggested messages.');
         return res.json();
       })
       .then((res) => res.suggestedMessages)
@@ -236,14 +236,14 @@ const Workspace = {
   },
   setSuggestedMessages: async function (slug, messages) {
     return fetch(`${API_BASE}/workspace/${slug}/suggested-messages`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify({ messages }),
     })
       .then((res) => {
         if (!res.ok) {
           throw new Error(
-            res.statusText || "Error setting suggested messages."
+            res.statusText || 'Error setting suggested messages.'
           );
         }
         return { success: true, ...res.json() };
@@ -255,14 +255,14 @@ const Workspace = {
   },
   setPinForDocument: async function (slug, docPath, pinStatus) {
     return fetch(`${API_BASE}/workspace/${slug}/update-pin`, {
-      method: "POST",
+      method: 'POST',
       headers: baseHeaders(),
       body: JSON.stringify({ docPath, pinStatus }),
     })
       .then((res) => {
         if (!res.ok) {
           throw new Error(
-            res.statusText || "Error setting pin status for document."
+            res.statusText || 'Error setting pin status for document.'
           );
         }
         return true;
@@ -274,13 +274,13 @@ const Workspace = {
   },
   ttsMessage: async function (slug, chatId) {
     return await fetch(`${API_BASE}/workspace/${slug}/tts/${chatId}`, {
-      method: "GET",
-      cache: "no-cache",
+      method: 'GET',
+      cache: 'no-cache',
       headers: baseHeaders(),
     })
       .then((res) => {
         if (res.ok && res.status !== 204) return res.blob();
-        throw new Error("Failed to fetch TTS.");
+        throw new Error('Failed to fetch TTS.');
       })
       .then((blob) => (blob ? URL.createObjectURL(blob) : null))
       .catch((e: any) => {
