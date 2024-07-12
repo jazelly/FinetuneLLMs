@@ -32,6 +32,7 @@
     "@pinecone-database/pinecone": "^2.0.1",
     "@prisma/client": "5.3.1",
     "@qdrant/js-client-rest": "^1.4.0",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/node": "^20.13.0",
     "@xenova/transformers": "^2.14.0",

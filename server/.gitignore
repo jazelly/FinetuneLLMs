@@ -16,4 +16,4 @@ logs/server.log
 *.db
 *.db-journal
 src/storage/lancedb
-public/
+src/certs/*
