@@ -22,5 +22,5 @@ services:
       context: ./trainer
     container_name: trainer
     ports:
-      - "80:80"
+      - "8000:8000"
     image: trainer

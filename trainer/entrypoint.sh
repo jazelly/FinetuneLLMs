@@ -1,0 +1,1 @@
+daphne trainer.asgi:application
