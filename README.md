@@ -9,14 +9,11 @@ Finetune an LLM, within a few clicks!
   <a href="https://github.com/jazelly/FinetuneLLMs/blob/main/LICENSE" target="_blank">
       <img src="https://img.shields.io/static/v1?label=license&message=MIT&color=white" alt="License">
   </a>
-
 </p>
 
 ## 🔥Goal & Roadmap🔥
 
-The main objective of this project is to lower the barrier to training large language models, especially for startup companies that have hardware in hands. With this project, it should be easy for a company to start experimenting with LLM training within a basic setup on servers with GPU/CPU resources.
-
-In a way, it helps provide an opportunity for everyone who has hardware available and wants to utilize it in the AI field.
+The main objective of this project is to lower the barrier to training large language models, especially for startup companies that have hardware in hands.
 
 ### [Roadmap](https://github.com/users/jazelly/projects/1/views/1)
 
