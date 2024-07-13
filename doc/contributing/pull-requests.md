@@ -25,13 +25,10 @@
 
 To get started, you will need to have `git` installed locally. Depending on
 your operating system, there are also a number of other dependencies required.
-These are detailed in the [Building guide][].
 
-Depending on your environment you might want to grab IDE specific settings from
-[IDE configs](https://github.com/nodejs/node-code-ide-configs).
+Enable WSL2 on your machine.
 
-Once you have `git` and are sure you have all of the necessary dependencies,
-it's time to create a fork.
+Install CUDA from [Nvidia installation guide](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
 
 ### Step 1: Fork
 
@@ -60,6 +57,9 @@ If you would like for the GitHub UI to link the commit to your account
 and award you the `Contributor` label after the changes have been merged,
 make sure this local email is also added to your
 [GitHub email list](https://github.com/settings/emails).
+
+After forking and cloning, you can follow the [build guide](../../BUILD.md) to
+setup dev environment.
 
 ### Step 2: Branch
 
