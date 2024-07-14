@@ -22,11 +22,10 @@ import PipelineGraph from '@/components/PipelineGraph.component';
 import { LoadingSpinner } from '@/components/reusable/Loaders.component';
 import paths from '@/utils/paths';
 
-const MIN_BOTTOM_HEIGHT = 100;
+const MIN_BOTTOM_HEIGHT = 200;
 
 const Pipeline = () => {
   const { jobId } = useParams() as { jobId: string };
-  const { state } = useLocation();
 
   const [jobDetail, setJobDetail] = useState<JobDetail | undefined>(undefined);
 
@@ -36,13 +35,6 @@ const Pipeline = () => {
   const { setPermalinks } = useContext(PermalinksContext);
 
   useEffect(() => {
-    if (state.fresh) {
-      setPermalinks([
-        { name: 'Pipelines', url: paths.pipelines },
-        { name: `Job ${state.jobId}`, url: `/job/${jobId}` },
-      ]);
-      return;
-    }
     const fetchJobDetail = async () => {
       setJobDetailLoading(true);
       const resp = await Job.getJobDetail(jobId);
@@ -53,6 +45,9 @@ const Pipeline = () => {
         setJobDetail(resp.data);
       }
       setJobDetailLoading(false);
+
+      console.log('resp', resp);
+      console.log('jobDetail', jobDetail);
     };
 
     fetchJobDetail();
@@ -91,7 +86,7 @@ const Pipeline = () => {
   };
 
   const containerHeight = window.innerHeight - BOTTOM_GAP - 64;
-  const minHeightTop = HEADER_HEIGHT + 350;
+  const minHeightTop = HEADER_HEIGHT + 250;
   const maxHeightTop = containerHeight - MIN_BOTTOM_HEIGHT;
   const minWidthLeft = SIDEBAR_WIDTH + 240;
   const maxWidthLeft = window.innerWidth - RIGHT_GAP - 330; // 330 is the min width of detail panel
@@ -139,7 +134,7 @@ const Pipeline = () => {
         maxConstraints={[maxWidthLeft, Infinity]}
         className="flex h-full"
       >
-        <div className="h-full w-full relative bg-white text-black">
+        <div className="h-full w-full relative bg-main-menu text-white">
           {jobDetail ? (
             <PipelineGraph jobDetail={jobDetail} />
           ) : (
@@ -159,7 +154,7 @@ const Pipeline = () => {
             onResize={handleTopResize}
             minConstraints={[leftWidth, minHeightTop]}
             maxConstraints={[leftWidth, maxHeightTop]}
-            className="border-b-2 flex flex-col"
+            className="border-b-2 flex w-full flex-col"
           >
             <DetailPanel
               jobDetail={jobDetail}

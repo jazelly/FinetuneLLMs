@@ -94,7 +94,9 @@ export default function Sidebar() {
             >
               <AlignLeft
                 size={30}
-                color={isViewingPipelines ? '#4A7AD6' : '#7C8690'}
+                color={
+                  isViewingPipelines || isViewingJob ? '#4A7AD6' : '#7C8690'
+                }
                 weight="fill"
               />
             </button>

@@ -32,10 +32,8 @@ def singleton(cls):
     return get_instance
 
 
-worker_manager_logger = get_stream_logger(
-    "trainer_api.scheduler.worker", "WorkerManager"
-)
-worker_thread_logger = get_stream_logger("trainer_api.scheduler.worker", "WorkerThread")
+worker_manager_logger = get_stream_logger("WorkerManager")
+worker_thread_logger = get_stream_logger("WorkerThread")
 
 
 @singleton

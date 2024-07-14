@@ -2,7 +2,7 @@ import logging
 import sys
 
 
-def get_stream_logger(name: str, prefix: str, level=logging.INFO):
+def get_stream_logger(name: str, level=logging.INFO):
     # Create a custom logger
     logger = logging.getLogger(name)
     logger.setLevel(level)
@@ -12,9 +12,7 @@ def get_stream_logger(name: str, prefix: str, level=logging.INFO):
     ch.setLevel(level)
 
     # Create formatter with the custom prefix
-    formatter = logging.Formatter(
-        f"[{prefix}] %(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    formatter = logging.Formatter(f"[{name}] %(asctime)s - %(levelname)s - %(message)s")
 
     # Add the formatter to the handler
     ch.setFormatter(formatter)
@@ -25,7 +23,7 @@ def get_stream_logger(name: str, prefix: str, level=logging.INFO):
     return logger
 
 
-def get_file_logger(name, prefix, log_file, level=logging.INFO):
+def get_file_logger(name, log_file, level=logging.INFO):
     # Create a custom logger
     logger = logging.getLogger(name)
     logger.setLevel(level)
@@ -35,9 +33,7 @@ def get_file_logger(name, prefix, log_file, level=logging.INFO):
     fh.setLevel(level)
 
     # Create formatter with the custom prefix
-    formatter = logging.Formatter(
-        f"{prefix} %(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    formatter = logging.Formatter(f"{name} %(asctime)s - %(levelname)s - %(message)s")
 
     # Add the formatter to the handler
     fh.setFormatter(formatter)

@@ -12,21 +12,24 @@ const RotatingCircle = ({
   color,
   weight,
   size,
-}: Pick<IconProps, 'color' | 'weight'> & { size: number }) => {
+}: Pick<IconProps, 'color' | 'weight'> & {
+  size: number;
+  weight: 'thin' | 'light' | 'regular' | 'bold' | 'duotone';
+}) => {
   return (
     <div
       className={`relative inline-flex justify-center items-center w-[${size}px] h-[${size}px]`}
     >
       <Circle
         color={color}
-        weight={weight}
+        weight={'regular'}
         size={size}
         className="flex items-center justify-center"
       ></Circle>
       <BracketsAngle
         color={color}
         weight={weight}
-        size={Math.floor(size / 2)}
+        size={Math.floor(size / 2) - 1}
         className={`absolute`}
       >
         <animateTransform

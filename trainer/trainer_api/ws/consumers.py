@@ -7,9 +7,7 @@ from trainer_api.scheduler.worker import Worker
 from trainer_api.utils.constants import BASE_MODELS, TRAINING_METHODS
 from trainer_api.utils import logging
 
-training_consumer_logger = logging.get_stream_logger(
-    "trainer_api.ws.consumers", "TrainingConsumer"
-)
+training_consumer_logger = logging.get_stream_logger("TrainingConsumer")
 
 
 class TrainingConsumer(AsyncWebsocketConsumer):

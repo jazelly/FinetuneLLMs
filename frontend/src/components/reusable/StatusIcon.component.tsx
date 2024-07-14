@@ -10,13 +10,22 @@ import RotatingCircle from './RotatingCircle.component';
 
 const StatusIcon = ({
   size,
+  color,
   status,
   weight,
-}: { size: number; weight: IconWeight } & Pick<JobDetail, 'status'>) => {
+}: { color?: string | undefined; size: number; weight: IconWeight } & Pick<
+  JobDetail,
+  'status'
+>) => {
   return status === 'finished' ? (
     <CheckCircle size={size} color="#22a06b" weight={weight} />
   ) : status === 'running' ? (
-    <RotatingCircle size={size} color={'#0c66e4'} weight={weight} />
+    // Rotating Circle cannot accept fill atm
+    <RotatingCircle
+      size={size}
+      color={color ?? '#0c66e4'}
+      weight={weight === 'fill' ? 'bold' : weight}
+    />
   ) : status === 'failed' ? (
     <WarningCircle size={size} color={'#c9372c '} weight={weight} />
   ) : status === 'paused' ? (

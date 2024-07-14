@@ -1,5 +1,5 @@
 from django.urls import path
-from trainer_api.rest.views import train
+from rest.controller import train
 
 urlpatterns = [
     path("job/", train, name="train"),

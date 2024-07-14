@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 import torch
@@ -31,7 +32,7 @@ def check_bf16_compat():
             return True
 
 
-logger = get_stream_logger("sft", "TRAINER")
+print(json.dumps({ 'title': 'Process hyperparameters'}))
 
 
 #############

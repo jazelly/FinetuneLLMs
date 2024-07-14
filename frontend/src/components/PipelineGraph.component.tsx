@@ -75,13 +75,29 @@ const PipelineGraph = ({ jobDetail }: { jobDetail: JobDetail }) => {
           ? `${passedTime.diffInSeconds} seconds ago`
           : 'Just submitted';
 
+  const majorSteps = [
+    'type-check',
+    'lint',
+    'Run Helm Lint',
+    'Run Terraform Docs Check',
+    'unit-tests',
+    'validate-sinecloud-api-workflow-types',
+    'build',
+    'publish-openapi',
+  ];
+
   return (
     <div className="shadow-md w-full h-full flex flex-col overflow-y-auto">
       <div
-        className={`flex items-center justify-between ${status === 'paused' ? 'bg-[#626F86]' : status === 'failed' ? 'bg-[#c9372c] ' : 'bg-[#22a06b]'}  px-3 py-2 text-white`}
+        className={`flex items-center justify-between ${status === 'paused' ? 'bg-[#626F86]' : status === 'failed' ? 'bg-[#c9372c] ' : status === 'running' ? 'bg-[#0c66e4]' : 'bg-[#22a06b]'}  px-3 py-2 text-white`}
       >
         <div className="flex items-center">
-          <StatusIcon status={status} size={32} weight="fill" />
+          <StatusIcon
+            status={status}
+            size={32}
+            weight="fill"
+            color={status === 'running' ? '#FFF' : undefined}
+          />
           <span className="text-xl ml-2">#{id}</span>
         </div>
         <button
@@ -91,7 +107,7 @@ const PipelineGraph = ({ jobDetail }: { jobDetail: JobDetail }) => {
           Rerun
         </button>
       </div>
-      <div className="bg-gray-200 p-4 flex-1">
+      <div className="p-4 flex-1">
         <div className="text-sm mb-4">
           <div className="text-gray-500 mt-2">
             {usedTimeString} • {passedTimeString}
@@ -139,16 +155,7 @@ const PipelineGraph = ({ jobDetail }: { jobDetail: JobDetail }) => {
             </div>
           </div>
         </div>
-        {[
-          'type-check',
-          'lint',
-          'Run Helm Lint',
-          'Run Terraform Docs Check',
-          'unit-tests',
-          'validate-sinecloud-api-workflow-types',
-          'build',
-          'publish-openapi',
-        ].map((step, index) => (
+        {majorSteps.map((step, index) => (
           <div className="flex items-center mb-2" key={index}>
             <CheckCircle
               size={26}

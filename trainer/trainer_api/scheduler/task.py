@@ -13,7 +13,7 @@ from trainer_api.utils.constants import (
 )
 from trainer_api.utils import logging
 
-logger = logging.get_stream_logger("trainer_api.scheduler.task", "Task")
+logger = logging.get_stream_logger("TrainerTask")
 
 
 class Task:
