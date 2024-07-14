@@ -9,7 +9,7 @@ from typing import Dict, List
 import uuid
 
 from trainer.settings import BASE_DIR
-from trainer_api.utils.logging import get_stream_logger
+from trainer_api.utils.logging_utils import get_stream_logger
 from trainer_api.utils.constants import (
     LOG_DIR,
     MAX_IDLE_TIME,

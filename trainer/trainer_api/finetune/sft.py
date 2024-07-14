@@ -10,16 +10,19 @@ from transformers import (
     BitsAndBytesConfig,
     pipeline,
 )
+
 from trl import SFTTrainer, SFTConfig, ORPOConfig, ORPOTrainer
 from datasets import load_dataset
 from peft import LoraConfig, PeftModel
+
+from trainer_api.utils.misc import get_current_device
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 TRAINER_ROOT_PATH = os.path.normpath(os.path.join(SCRIPT_DIR, "../../"))
 
 sys.path.append(TRAINER_ROOT_PATH)
 
-from trainer_api.utils.logging import get_stream_logger
+from trainer_api.utils.logging_utils import get_stream_logger
 
 
 def check_bf16_compat():
@@ -32,16 +35,12 @@ def check_bf16_compat():
             return True
 
 
-print(json.dumps({ 'title': 'Process hyperparameters'}))
+print(json.dumps({"title": "Validating finetuning options"}))
 
 
-#############
-# Pass args #
-#############
 def process_args():
     # Create the parser
     parser = argparse.ArgumentParser(description="Training script parser")
-
     # Add arguments
     parser.add_argument("--model", type=str, dest="model", help="Set the name of model")
     parser.add_argument(
@@ -50,39 +49,37 @@ def process_args():
     parser.add_argument(
         "--dataset", type=str, dest="dataset", help="Set the name of dataset"
     )
-
     # Parse the arguments
     args = parser.parse_args()
-
     return args
 
 
-logger.info("Processing args")
 args = process_args()
-
 method = args.method
 if not method:
-    logger.warning("No training method provided, exiting")
+    print(json.dumps({"warning": "No training method provided, exiting"}))
     sys.exit(0)
-
-# model_name = "NousResearch/Llama-2-7b-chat-hf"
+print(json.dumps({"detail": f"Training method： {method}"}))
 model_name = args.model
 if not model_name:
-    logger.warning("No model provided, exiting")
+    print(json.dumps({"warning": "No model provided, exiting"}))
     sys.exit(0)
-
-# dataset_name = "mlabonne/guanaco-llama2-1k"
-# dataset_name = "mlabonne/orpo-dpo-mix-40k"
+print(json.dumps({"detail": f"Base model： {model_name}"}))
 dataset_name = args.dataset
 if not dataset_name:
-    logger.warning("No dataset provided, exiting")
+    print(json.dumps({"warning": "No dataset provided, exiting"}))
     sys.exit(0)
-
+print(json.dumps({"detail": f"Selected dataset {dataset_name}"}))
 
 # Output directory where the model predictions and checkpoints will be stored
 MODEL_OUTPUT_DIR = os.path.join(SCRIPT_DIR, "results")
 DATASET_CACHE_DIR = os.path.join(SCRIPT_DIR, "datasets")
 MODELS_CACHE_DIR = os.path.join(SCRIPT_DIR, "models")
+
+
+def get_hparams():
+    return {}
+
 
 # Number of training epochs
 num_train_epochs = 1
@@ -144,8 +141,8 @@ max_seq_length = 1024
 # Pack multiple short examples in the same input sequence to increase efficiency
 packing = False
 
-# Load the entire model on GPU
-device_map = "auto"
+
+device_map = get_current_device()
 
 
 def get_dataset(name, split=None, cache_dir=DATASET_CACHE_DIR):
@@ -160,11 +157,6 @@ def get_tokenizer(model_name):
     return tokenizer
 
 
-################################################################################
-# QLoRA
-################################################################################
-
-
 def get_lora_config(lora_alpha, lora_dropout, lora_r):
     return LoraConfig(
         lora_alpha=lora_alpha,
@@ -173,6 +165,13 @@ def get_lora_config(lora_alpha, lora_dropout, lora_r):
         bias="none",
         task_type="CAUSAL_LM",
     )
+
+
+print(
+    json.dumps(
+        {"detail": f"Loading LORA configuration:\n { 'lora_alpha': lora_alpha, }"}
+    )
+)
 
 
 ################################################################################
@@ -273,16 +272,35 @@ def get_new_model_name():
 ##########################
 ## Validate GPU Limit ####
 ##########################
+
+
 def get_gpu_memory():
     if not torch.cuda.is_available():
-        logger.warning("No GPU available")
+        print({"type": "warning", "message": f"No GPU available, using CPU"})
         sys.exit(0)
 
     total_memory = torch.cuda.get_device_properties(0).total_memory
     free_memory = torch.cuda.memory_reserved(0)
 
-    print(f"Free Memory {free_memory} / Total Memory {total_memory}")
+    print(
+        {
+            "type": "info",
+            "message": f"Free Memory {free_memory} / Total Memory {total_memory}",
+        }
+    )
     return total_memory, free_memory
+
+
+def get_device_count() -> int:
+    r"""
+    Gets the number of available GPU or NPU devices.
+    """
+    if is_torch_npu_available():
+        return torch.npu.device_count()
+    elif is_torch_cuda_available():
+        return torch.cuda.device_count()
+    else:
+        return 0
 
 
 def calculate_memory_requirements(
@@ -409,6 +427,7 @@ def train(trainer, new_model=get_new_model_name()):
     # Save trained model
     trainer.model.save_pretrained(new_model)
 
+
 def save_trained_model():
     # Reload model in FP16 and merge it with LoRA weights
     base_model = AutoModelForCausalLM.from_pretrained(
@@ -420,6 +439,8 @@ def save_trained_model():
     )
     model = PeftModel.from_pretrained(base_model, new_model)
     model = model.merge_and_unload()
+    return model
+
 
 model = get_quantized_model(model_name, bnb_config, device_map)
 
@@ -430,11 +451,16 @@ estimated_training_memory_usage = calculate_memory_requirements(4, **model_param
 
 trainable = True
 if estimated_training_memory_usage["total_memory"] > free_memory:
-    logger.warning(
-        f"Estimated: require at least {estimated_training_memory_usage['total_memory'] // 1e6} MB, but only have {free_memory//1e6} MB left."
+    print(
+        json.dumps(
+            {
+                "type": "warning",
+                "message": f"Estimated: require at least {estimated_training_memory_usage['total_memory'] // 1e6} MB, but only have {free_memory//1e6} MB left.\n Unable to start model training.",
+            }
+        )
     )
-    logger.info("You cannot train model on this server, but you can try the inference")
     trainable = False
+
 
 if trainable:
     dataset = get_dataset(name=dataset_name, cache_dir=DATASET_CACHE_DIR)
@@ -470,28 +496,12 @@ if trainable:
     new_model = get_new_model_name()
     train(trainer, new_model)
 
+    del model
+    del trainer
+    import gc
 
-# %load_ext tensorboard
-# %tensorboard --logdir results/runs
+    gc.collect()
+    gc.collect()
 
-# Run text generation pipeline with our next model
-prompt = "What is a large language model?"
-pipe = pipeline(
-    task="text-generation", model=model, tokenizer=tokenizer, max_length=200
-)
-result = pipe(f"<s>[INST] {prompt} [/INST]")
-logger.info(result[0]["generated_text"])
-
-del model
-del pipe
-del trainer
-import gc
-
-gc.collect()
-gc.collect()
-
-
-if trainable:
-    save_trained_model()
-
+    model = save_trained_model()
     saved_tokenizer = tokenizer.save_pretrained(new_model)

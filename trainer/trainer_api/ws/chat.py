@@ -5,17 +5,15 @@ from asgiref.sync import async_to_sync
 from trainer_api.scheduler.task import Task
 from trainer_api.scheduler.worker import Worker
 from trainer_api.utils.constants import BASE_MODELS, TRAINING_METHODS
-from trainer_api.utils import logging
+from utils import logging_utils
 
-training_consumer_logger = logging.get_stream_logger("ChatConsumer")
+chat_logger = logging_utils.get_stream_logger(__name__)
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        training_consumer_logger.info(
-            f"----------NEW CONNECT COMING-----------------------"
-        )
-        training_consumer_logger.info(f"[SCOPE]: {self.scope}")
+        chat_logger.info(f"----------NEW CONNECT COMING-----------------------")
+        chat_logger.info(f"[SCOPE]: {self.scope}")
         # TODO: not use client_port as group name. Instead, use jobId/taskId
         self.client_port = self.scope["client"][1]
         await self.channel_layer.group_add(str(self.client_port), self.channel_name)
@@ -23,13 +21,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Accept the WebSocket connection
         await self.accept()
 
-        training_consumer_logger.info(
+        chat_logger.info(
             f"Client connected: {self.scope['client']} with channel name {self.channel_name}"
         )
 
     async def disconnect(self, close_code):
         # Clean up when the WebSocket closes
-        training_consumer_logger.info(
+        chat_logger.info(
             f"Client disaconnected: {self.scope['client']} disconnected with {self.channel_name} | Close Code: {close_code}"
         )
         await self.channel_layer.group_discard(str(self.client_port), self.channel_name)
@@ -49,7 +47,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json.get("message")
         data = text_data_json.get("data")
 
-        training_consumer_logger.info(
+        chat_logger.info(
             f"Received message for {self.client_port}: {type} | {message} | {data}"
         )
 
@@ -61,7 +59,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 or data.get("trainingMethod")
                 not in map(lambda m: m["name"], TRAINING_METHODS)
             ):
-                training_consumer_logger.warning(
+                chat_logger.warning(
                     f"Client requested for {type.upper()}, but did not give valid data"
                 )
                 await self.send(
@@ -77,7 +75,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             try:
                 # schedule the task and respond immediately
-                training_consumer_logger.info("[Worker] Submitting task")
+                chat_logger.info("[Worker] Submitting task")
                 worker = Worker()
 
                 t = Task(
@@ -94,14 +92,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
                             "status": "success",
                             "code": 200,
                             "message": f"Added task {t.id} to queue",
-                            "data": {
-                                "task_id": str(t.id),
-                            },
                         }
                     )
                 )
             except Exception as e:
-                training_consumer_logger.error(e)
+                chat_logger.error(e)
                 await self.send(
                     text_data=json.dumps(
                         {
@@ -120,9 +115,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def send_message_to_client(self, responseJson):
         channel_layer = get_channel_layer()
-        training_consumer_logger.info(
-            f"Sending message to {self.client_port}: {responseJson}"
-        )
+        chat_logger.info(f"Sending message to {self.client_port}: {responseJson}")
         await channel_layer.group_send(
             str(self.client_port),
             {"type": "send_job_update", "message": responseJson},
@@ -131,9 +124,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def send_message_to_client_sync(self, response):
         assert isinstance(response, str), "response must be str"
         channel_layer = get_channel_layer()
-        training_consumer_logger.info(
-            f"Sending message to group {self.client_port}: {response}"
-        )
+        chat_logger.info(f"Sending message to group {self.client_port}: {response}")
         async_to_sync(channel_layer.group_send)(
             str(self.client_port),
             {"type": "send_job_update", "message": response},
