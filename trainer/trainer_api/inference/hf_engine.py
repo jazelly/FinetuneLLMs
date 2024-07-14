@@ -33,9 +33,9 @@ import torch
 from transformers import GenerationConfig, TextIteratorStreamer
 
 from params import data_args, finetuning_args
-from utils.constants import Role
+from trainer_api.utils.constants import Role
 
-from ..utils.logging import get_stream_logger
+from ..utils.logging_utils import get_stream_logger
 from ..utils.misc import get_logits_processor
 from ..model import load_model, load_tokenizer
 from .base_engine import BaseEngine, Response

@@ -5,9 +5,9 @@ from asgiref.sync import async_to_sync
 from trainer_api.scheduler.task import Task
 from trainer_api.scheduler.worker import Worker
 from trainer_api.utils.constants import BASE_MODELS, TRAINING_METHODS
-from trainer_api.utils import logging
+from utils import logging_utils
 
-training_consumer_logger = logging.get_stream_logger("TrainingConsumer")
+training_consumer_logger = logging_utils.get_stream_logger("TrainingConsumer")
 
 
 class TrainingConsumer(AsyncWebsocketConsumer):

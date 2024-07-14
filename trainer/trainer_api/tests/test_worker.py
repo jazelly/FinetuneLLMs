@@ -6,8 +6,9 @@ from trainer_api.scheduler.task import Task
 
 # Create your tests here.
 
+
 class MockTask(Task):
-    def run(self, log):
+    def run(self):
         print("task being run")
         time.sleep(2)
         print("task is done")
@@ -24,10 +25,6 @@ class WorkerTestCase(TestCase):
         """
         i = 0
         while i < 10:
-            self.worker.submit(MockTask())
+            self.worker.submit(MockTask(method="fake", model="fake", dataset="fake"))
             i += 1
             time.sleep(1)
-        
-
-        
- 

@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
 
-from trainer_api.utils.logging import get_stream_logger
+from trainer_api.utils.logging_utils import get_stream_logger
 from trainer_api.utils.constants import BASE_MODELS, TRAINING_METHODS
 from trainer_api.scheduler.task import Task
 from trainer_api.scheduler.worker import Worker

@@ -30,8 +30,8 @@ from transformers.utils import is_torch_bf16_gpu_available
 from transformers.utils.versions import require_version
 
 from ..utils.constants import CHECKPOINT_NAMES
-from ..utils.logging import get_logger
-from ..utils.misc import check_dependencies, get_current_device
+from ..utils.logging_utils import get_stream_logger
+from ..utils.misc import get_current_device
 from .data_args import DataArguments
 from .evaluation_args import EvaluationArguments
 from .finetuning_args import FinetuningArguments
@@ -39,10 +39,7 @@ from .inference_args import InferenceArguments
 from .model_args import ModelArguments
 
 
-logger = get_logger(__name__)
-
-
-check_dependencies()
+logger = get_stream_logger(__name__)
 
 
 _TRAIN_ARGS = [

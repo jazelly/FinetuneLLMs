@@ -11,9 +11,9 @@ from trainer_api.utils.constants import (
     FINETUNE_SCRIPT_PATH,
     TRAINING_METHODS,
 )
-from trainer_api.utils import logging
+from trainer_api.utils import logging_utils
 
-logger = logging.get_stream_logger("TrainerTask")
+logger = logging_utils.get_stream_logger("TrainerTask")
 
 
 class Task:
