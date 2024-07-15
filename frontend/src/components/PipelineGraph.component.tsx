@@ -29,8 +29,6 @@ const PipelineGraph = ({ jobDetail }: { jobDetail: JobDetail }) => {
     };
     const resp = await Job.submitJob(jobDetailParams);
 
-    console.log('resp', resp);
-
     if (!resp.success || (resp.success === true && !resp.data.id)) {
       return;
     }

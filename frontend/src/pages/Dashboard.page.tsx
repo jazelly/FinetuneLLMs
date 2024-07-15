@@ -10,11 +10,13 @@ import InferencePanel from '@/components/InferencePanel.component';
 import { PermalinksContext } from '@/contexts/Permalinks.context';
 import {
   BOTTOM_GAP,
+  DEFAULT_CHAT_MESSAGES,
   HEADER_HEIGHT,
   PERMALINK_FINETUNE,
   RIGHT_GAP,
   SIDEBAR_WIDTH,
 } from '@/utils/constants';
+import ChatContainer from '@/components/Chat/ChatContainer.component';
 
 const Dashboard = () => {
   const [jobOptions, setJobOptions] = useState<AllJobOptions | undefined>(
@@ -117,9 +119,9 @@ const Dashboard = () => {
       </ResizableBox>
       {!isRightCollapsed && (
         <div className="flex-1 bg-main-workspace">
-          <InferencePanel
-            jobDetail={jobDetail}
-            jobDetailLoading={jobDetailLoading}
+          <ChatContainer
+            chatMessages={[...DEFAULT_CHAT_MESSAGES]}
+            chatDisabled={true}
           />
         </div>
       )}

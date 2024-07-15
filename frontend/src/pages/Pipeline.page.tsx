@@ -38,7 +38,7 @@ const Pipeline = () => {
     const fetchJobDetail = async () => {
       setJobDetailLoading(true);
       const resp = await Job.getJobDetail(jobId);
-      console.log('resp', resp);
+
       if (!resp.success) {
         setError(resp.error);
       } else {
@@ -46,7 +46,6 @@ const Pipeline = () => {
       }
       setJobDetailLoading(false);
 
-      console.log('resp', resp);
       console.log('jobDetail', jobDetail);
     };
 
@@ -146,27 +145,33 @@ const Pipeline = () => {
         </div>
       </ResizableBox>
       {!isRightCollapsed && (
+        // <div className="flex-1 flex flex-col h-full">
+        //   <ResizableBox
+        //     height={topHeight}
+        //     axis="y"
+        //     resizeHandles={isBottomCollapsed ? [] : ['s']}
+        //     onResize={handleTopResize}
+        //     minConstraints={[leftWidth, minHeightTop]}
+        //     maxConstraints={[leftWidth, maxHeightTop]}
+        //     className="border-b-2 flex w-full flex-col"
+        //   >
+        //     <DetailPanel
+        //       jobDetail={jobDetail}
+        //       jobDetailLoading={jobDetailLoading}
+        //     />
+        //   </ResizableBox>
+        //   <div className="flex-1 bg-main-gradient">
+        //     <InferencePanel
+        //       jobDetail={jobDetail}
+        //       jobDetailLoading={jobDetailLoading}
+        //     />
+        //   </div>
+        // </div>
         <div className="flex-1 flex flex-col h-full">
-          <ResizableBox
-            height={topHeight}
-            axis="y"
-            resizeHandles={isBottomCollapsed ? [] : ['s']}
-            onResize={handleTopResize}
-            minConstraints={[leftWidth, minHeightTop]}
-            maxConstraints={[leftWidth, maxHeightTop]}
-            className="border-b-2 flex w-full flex-col"
-          >
-            <DetailPanel
-              jobDetail={jobDetail}
-              jobDetailLoading={jobDetailLoading}
-            />
-          </ResizableBox>
-          <div className="flex-1 bg-main-gradient">
-            <InferencePanel
-              jobDetail={jobDetail}
-              jobDetailLoading={jobDetailLoading}
-            />
-          </div>
+          <DetailPanel
+            jobDetail={jobDetail}
+            jobDetailLoading={jobDetailLoading}
+          />
         </div>
       )}
     </div>

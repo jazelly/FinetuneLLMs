@@ -5,7 +5,7 @@ from asgiref.sync import async_to_sync
 from trainer_api.scheduler.task import Task
 from trainer_api.scheduler.worker import Worker
 from trainer_api.utils.constants import BASE_MODELS, TRAINING_METHODS
-from utils import logging_utils
+from trainer_api.utils import logging_utils
 
 chat_logger = logging_utils.get_stream_logger(__name__)
 

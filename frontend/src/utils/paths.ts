@@ -2,6 +2,7 @@ import { API_BASE } from './constants';
 
 export default {
   home: '/',
+  chat: '/chat',
   pipelines: '/pipelines',
   settings: {
     privacy: '/settings/privacy',

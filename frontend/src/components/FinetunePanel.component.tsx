@@ -66,8 +66,6 @@ const FinetunePanel = ({ jobOptions, setJobOptions }: FinetunePanelProps) => {
       hyperparameters: jobOptions.hyperparameters,
     });
 
-    console.log('resp', resp);
-
     if (!resp.success || (resp.success === true && !resp.data.id)) {
       setSubmitJobError('An error occurred when submitting the job');
       return;

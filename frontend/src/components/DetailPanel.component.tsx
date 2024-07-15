@@ -39,6 +39,7 @@ const DetailPanel = ({ jobDetail, jobDetailLoading }: DetailPanelProps) => {
     break;
   }
 
+  console.log('messageMap', messageMap);
   const test: any[] = [
     { type: 'title', data: { log: 'This is section 1 1111 1' } },
     {
@@ -100,7 +101,7 @@ const DetailPanel = ({ jobDetail, jobDetailLoading }: DetailPanelProps) => {
             hoverBackgroundColor="#DCF2FF"
             tooltipText="What is this"
             color="#dfe1e6"
-            hoverFill="#C4A1BC"
+            hoverfill="#C4A1BC"
           >
             <MagnifyingGlass size={26} weight="bold" />
           </HoverableIcon>
@@ -108,7 +109,7 @@ const DetailPanel = ({ jobDetail, jobDetailLoading }: DetailPanelProps) => {
             hoverBackgroundColor="#DCF2FF"
             tooltipText="What is this"
             color="#dfe1e6"
-            hoverFill="#C4A1BC"
+            hoverfill="#C4A1BC"
           >
             <Question size={26} weight="bold" />
           </HoverableIcon>

@@ -15,24 +15,17 @@ from trl import SFTTrainer, SFTConfig, ORPOConfig, ORPOTrainer
 from datasets import load_dataset
 from peft import LoraConfig, PeftModel
 
-from trainer_api.utils.misc import get_current_device
+from peft.utils import TaskType
+
+from trainer_api.utils.misc import (
+    calculate_memory_requirements,
+    get_current_device,
+)
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 TRAINER_ROOT_PATH = os.path.normpath(os.path.join(SCRIPT_DIR, "../../"))
 
 sys.path.append(TRAINER_ROOT_PATH)
-
-from trainer_api.utils.logging_utils import get_stream_logger
-
-
-def check_bf16_compat():
-    if compute_dtype == torch.float16 and use_4bit:
-        major, _ = torch.cuda.get_device_capability()
-        if major >= 8:
-            print("=" * 40)
-            print("Your GPU supports bfloat16")
-            print("=" * 40)
-            return True
 
 
 print(json.dumps({"title": "Validating finetuning options"}))
@@ -149,7 +142,7 @@ def get_dataset(name, split=None, cache_dir=DATASET_CACHE_DIR):
     return load_dataset(name, split=split, cache_dir=cache_dir)
 
 
-def get_tokenizer(model_name):
+def get_tokenizer(model_name) -> AutoTokenizer:
     # Load tokenizer
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     tokenizer.pad_token = tokenizer.eos_token
@@ -157,21 +150,17 @@ def get_tokenizer(model_name):
     return tokenizer
 
 
-def get_lora_config(lora_alpha, lora_dropout, lora_r):
+def get_lora_config(
+    lora_alpha,
+    lora_dropout,
+    lora_rank: int = 16,
+):
     return LoraConfig(
-        lora_alpha=lora_alpha,
+        lora_alpha=lora_alpha if lora_alpha is not None else lora_rank * 2,
         lora_dropout=lora_dropout,
-        r=lora_r,
-        bias="none",
-        task_type="CAUSAL_LM",
+        r=lora_rank,
+        task_type=TaskType.CAUSAL_LM,
     )
-
-
-print(
-    json.dumps(
-        {"detail": f"Loading LORA configuration:\n { 'lora_alpha': lora_alpha, }"}
-    )
-)
 
 
 ################################################################################
@@ -211,7 +200,6 @@ bnb_config = get_base_model_bnb_config()
 
 def get_quantized_model(model_name, quantization_config, device_map):
     # Load base model
-    logger.info(f"Loading model {model_name} to {MODELS_CACHE_DIR}")
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         quantization_config=quantization_config,
@@ -258,13 +246,6 @@ def validate_dataset(dataset):
         sys.exit(0)
 
 
-def format_chat_template(row):
-    if method == "orpo":
-        row["chosen"] = tokenizer.apply_chat_template(row["chosen"], tokenize=False)
-        row["rejected"] = tokenizer.apply_chat_template(row["rejected"], tokenize=False)
-    return row
-
-
 def get_new_model_name():
     return f"{model_name}-{dataset_name}"
 
@@ -275,6 +256,8 @@ def get_new_model_name():
 
 
 def get_gpu_memory():
+    if not device_map.startswith("cuda"):
+        return 0, 0
     if not torch.cuda.is_available():
         print({"type": "warning", "message": f"No GPU available, using CPU"})
         sys.exit(0)
@@ -289,40 +272,6 @@ def get_gpu_memory():
         }
     )
     return total_memory, free_memory
-
-
-def get_device_count() -> int:
-    r"""
-    Gets the number of available GPU or NPU devices.
-    """
-    if is_torch_npu_available():
-        return torch.npu.device_count()
-    elif is_torch_cuda_available():
-        return torch.cuda.device_count()
-    else:
-        return 0
-
-
-def calculate_memory_requirements(
-    quantization_bit, num_parameters, batch_size, seq_length, hidden_size, num_layers
-):
-    bits_per_float = quantization_bit
-    model_params_memory = num_parameters * bits_per_float // 8
-    gradients_memory = num_parameters * bits_per_float // 8
-    optimizer_memory = num_parameters * bits_per_float * 2 // 8
-    activations_per_layer = batch_size * seq_length * hidden_size
-    total_activations = activations_per_layer * num_layers
-    activations_memory = total_activations * bits_per_float // 8
-    total_memory = (
-        model_params_memory + gradients_memory + optimizer_memory + activations_memory
-    )
-    return {
-        "model_params_memory": model_params_memory,
-        "gradients_memory": gradients_memory,
-        "optimizer_memory": optimizer_memory,
-        "activations_memory": activations_memory,
-        "total_memory": total_memory,
-    }
 
 
 def get_model_parameters(model):
@@ -428,7 +377,7 @@ def train(trainer, new_model=get_new_model_name()):
     trainer.model.save_pretrained(new_model)
 
 
-def save_trained_model():
+def save_trained_model(new_model):
     # Reload model in FP16 and merge it with LoRA weights
     base_model = AutoModelForCausalLM.from_pretrained(
         model_name,
@@ -445,63 +394,83 @@ def save_trained_model():
 model = get_quantized_model(model_name, bnb_config, device_map)
 
 
-total_memory, free_memory = get_gpu_memory()
-model_params = get_model_parameters(model)
-estimated_training_memory_usage = calculate_memory_requirements(4, **model_params)
-
-trainable = True
-if estimated_training_memory_usage["total_memory"] > free_memory:
+def run():
+    total_memory, free_memory = get_gpu_memory()
+    model_params = get_model_parameters(model)
+    estimated_training_memory_usage = calculate_memory_requirements(4, **model_params)
+    trainable = True
     print(
         json.dumps(
             {
-                "type": "warning",
-                "message": f"Estimated: require at least {estimated_training_memory_usage['total_memory'] // 1e6} MB, but only have {free_memory//1e6} MB left.\n Unable to start model training.",
+                "type": "title",
+                "message": f"Checking hardware requirements",
             }
         )
     )
-    trainable = False
 
+    if estimated_training_memory_usage["total_memory"] > free_memory:
+        print(
+            json.dumps(
+                {
+                    "type": "warning",
+                    "message": f"Estimated: require at least {estimated_training_memory_usage['total_memory'] // 1e6} MB, but only have {free_memory//1e6} MB left.\n Unable to start model training.",
+                }
+            )
+        )
+        trainable = False
 
-if trainable:
-    dataset = get_dataset(name=dataset_name, cache_dir=DATASET_CACHE_DIR)
-    validate_dataset(dataset)
-    training_set = dataset["train"]
-    training_set_formatted = training_set.map(
-        format_chat_template,
-        num_proc=os.cpu_count(),
-    )
-    tokenizer = get_tokenizer(model_name)
+    else:
+        print(
+            json.dumps(
+                {
+                    "type": "title",
+                    "message": f"Checking hardware requirements",
+                }
+            )
+        )
 
-    # LoRA attention dimension
-    lora_r = 64
+    if trainable:
+        tokenizer = get_tokenizer(model_name)
+        dataset = get_dataset(name=dataset_name, cache_dir=DATASET_CACHE_DIR)
+        validate_dataset(dataset)
+        training_set = dataset["train"]
 
-    # Alpha parameter for LoRA scaling
-    lora_alpha = 16
+        lora_rank = 64
+        lora_alpha = 16
 
-    # Dropout probability for LoRA layers
-    lora_dropout = 0.1
-    peft_config = get_lora_config(
-        lora_alpha=lora_alpha, lora_dropout=lora_dropout, lora_r=lora_r
-    )
+        print(
+            json.dumps(
+                {
+                    "type": "info",
+                    "message": f"Loading LORA configuration:\n 'lora_alpha': {lora_alpha}\n 'lora_dropout': {lora_dropout}\n 'lora_rank': {lora_rank}\n",
+                }
+            )
+        )
 
-    trainer = get_trainer(
-        model=model,
-        train_dataset=training_set_formatted if method == "orpo" else training_set,
-        peft_config=peft_config,
-        tokenizer=tokenizer,
-        method=method,
-    )
+        # Dropout probability for LoRA layers
+        lora_dropout = 0.1
+        peft_config = get_lora_config(
+            lora_alpha=lora_alpha, lora_dropout=lora_dropout, lora_rank=lora_rank
+        )
 
-    # Fine-tuned model name
-    new_model = get_new_model_name()
-    train(trainer, new_model)
+        trainer = get_trainer(
+            model=model,
+            train_dataset=training_set,
+            peft_config=peft_config,
+            tokenizer=tokenizer,
+            method=method,
+        )
 
-    del model
-    del trainer
-    import gc
+        # Fine-tuned model name
+        new_model = get_new_model_name()
+        train(trainer, new_model)
 
-    gc.collect()
-    gc.collect()
+        del model
+        del trainer
+        import gc
 
-    model = save_trained_model()
-    saved_tokenizer = tokenizer.save_pretrained(new_model)
+        gc.collect()
+        gc.collect()
+
+        model = save_trained_model(new_model)
+        saved_tokenizer = tokenizer.save_pretrained(new_model)

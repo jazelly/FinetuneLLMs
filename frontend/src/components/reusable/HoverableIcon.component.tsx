@@ -6,7 +6,7 @@ interface HoverableIconProps {
   children: ReactElement;
   hoverBackgroundColor?: string;
   color: string;
-  hoverFill?: string;
+  hoverfill?: string;
   tooltipText?: string; // Add this prop for the tooltip text
 }
 
@@ -19,14 +19,14 @@ const IconContainer = styled.div<HoverableIconProps>`
       hoverBackgroundColor || 'rgba(0, 0, 0, 0.1)'};
   }
   &:hover svg {
-    fill: ${({ hoverFill, color }) => hoverFill ?? color};
+    fill: ${({ hoverfill, color }) => hoverfill ?? color};
   }
 `;
 
 const HoverableIcon: React.FC<HoverableIconProps> = ({
   children,
   color,
-  hoverFill,
+  hoverfill,
   hoverBackgroundColor,
   tooltipText,
 }) => {
@@ -35,7 +35,7 @@ const HoverableIcon: React.FC<HoverableIconProps> = ({
       hoverBackgroundColor={hoverBackgroundColor}
       title={tooltipText}
       color={color}
-      hoverFill={hoverFill}
+      hoverfill={hoverfill}
       className="rounded cursor-pointer"
     >
       {React.cloneElement(children, {
