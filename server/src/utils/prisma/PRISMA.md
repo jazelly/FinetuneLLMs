@@ -10,7 +10,7 @@ To get started with setting up Prisma, you should run the setup script from the 
 yarn setup
 ```
 
-This script will install the necessary node modules in both the server and frontend directories, set up the environment files, and set up Prisma (generate client, run migrations, and seed the database).
+This script will install the necessary node modules in both the server and frontend directories, set up the environment files, and set up Prisma (generate client, run migrations).
 
 ## Prisma Scripts
 
@@ -18,7 +18,6 @@ In the project root's `package.json`, there are several scripts set up to help y
 
 - **prisma:generate**: Generates the Prisma client.
 - **prisma:migrate**: Runs the migrations to ensure the database is in sync with the schema.
-- **prisma:seed**: Seeds the database with initial data.
 - **prisma:setup**: A convenience script that runs `prisma:generate`, `prisma:migrate`, and `prisma:seed` in sequence.
 - **sqlite:migrate**: (To be run from the `server` directory) This script is for users transitioning from the old SQLite custom ORM setup to Prisma and will migrate all exisiting data over to Prisma. If you're a new user, your setup will already use Prisma.
 

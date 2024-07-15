@@ -17,9 +17,6 @@
     "sqlite:migrate": "cd ./utils/prisma && node migrateFromSqlite.js",
     "test": "node --test tests/**/*.test.js"
   },
-  "prisma": {
-    "seed": "node prisma/seed.js"
-  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.16.1",
     "@azure/openai": "1.0.0-beta.10",
