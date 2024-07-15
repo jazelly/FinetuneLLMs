@@ -10,6 +10,6 @@
     "rootDir": "./src",
     "noEmit": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "prisma/**/*"],
   "exclude": ["node_modules", "src/storage"]
 }
