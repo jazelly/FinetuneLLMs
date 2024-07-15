@@ -5,27 +5,15 @@ import { DEFAULT_CHAT_MESSAGES } from '@/utils/constants';
 import Scrollable from '../reusable/Scrollable.component';
 import PromptInput from './PromptInput.component';
 
-export default function ChatContainer() {
-  const [messages, setMessages] = useState<IChatMessage[]>([]);
+export default function ChatContainer({
+  chatMessages,
+  chatDisabled,
+}: {
+  chatMessages: IChatMessage[];
+  chatDisabled?: boolean;
+}) {
+  const [messages, setMessages] = useState<IChatMessage[]>(chatMessages);
   const [loadingResponse, setLoadingResponse] = useState(false);
-
-  useEffect(() => {
-    // TODO: chat histories?
-    const fetchData = async () => {
-      //   const fetchedMessages = await Chat.getMessageHistory();
-      //   setMessages(fetchedMessages);
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    function processMsgs() {
-      setMessages([...DEFAULT_CHAT_MESSAGES]);
-      return false;
-    }
-
-    processMsgs();
-  }, []);
 
   const handleSendMessage = (message: string) => {
     const newMessage: IChatMessage = {
@@ -51,11 +39,13 @@ export default function ChatContainer() {
         </div>
       </Scrollable>
 
-      <PromptInput
-        submit={handleSendMessage}
-        inputDisabled={loadingResponse}
-        buttonDisabled={loadingResponse}
-      />
+      {!chatDisabled && (
+        <PromptInput
+          submit={handleSendMessage}
+          inputDisabled={loadingResponse}
+          buttonDisabled={loadingResponse}
+        />
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate, useMatch } from 'react-router-dom';
 import {
   Plus,
@@ -7,6 +7,7 @@ import {
   AlignLeft,
   FlipVertical,
   FileArrowUp,
+  ChatsCircle,
 } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 import paths from '@/utils/paths';
@@ -19,6 +20,7 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   const isNewingJob = useMatch('/');
+  const isChatting = useMatch('/chat/*');
   const isViewingPipelines = useMatch('/pipelines');
   const isViewingJob = useMatch('/job/:jobId');
   const isViewingSettings = useMatch('/settings/*');
@@ -35,6 +37,9 @@ export default function Sidebar() {
     switch (path) {
       case '/':
         navigate('/');
+        break;
+      case '/chat':
+        navigate(paths.chat);
         break;
       case 'pipelines':
         navigate(paths.pipelines);
@@ -85,7 +90,35 @@ export default function Sidebar() {
               className="tooltip z-99"
             />
           </div>
-          <div className="flex gap-x-2 items-center justify-between">
+          <div
+            className="flex gap-x-2 items-center justify-between"
+            data-tooltip-content="Chat"
+            data-tooltip-id="chat"
+          >
+            <button
+              onClick={() => {
+                handleNavigate(paths.chat);
+              }}
+              className="flex flex-grow h-[44px] gap-x-2 py-[5px] px-2.5 mb-2 rounded-[8px] text-sidebar justify-center items-center hover:bg-opacity-80 transition-all duration-300"
+            >
+              <ChatsCircle
+                color={isChatting ? '#587DCA' : '#7C8690'}
+                size={30}
+                weight="fill"
+              />
+            </button>
+            <Tooltip
+              id="chat"
+              place="right"
+              delayShow={200}
+              className="tooltip z-99"
+            />
+          </div>
+          <div
+            className="flex gap-x-2 items-center justify-between"
+            data-tooltip-content="Pipelines"
+            data-tooltip-id="pipelines"
+          >
             <button
               onClick={() => {
                 handleNavigate('pipelines');
@@ -100,8 +133,19 @@ export default function Sidebar() {
                 weight="fill"
               />
             </button>
+
+            <Tooltip
+              id="pipelines"
+              place="right"
+              delayShow={200}
+              className="tooltip z-99"
+            />
           </div>
-          <div className="flex gap-x-2 items-center justify-between">
+          <div
+            className="flex gap-x-2 items-center justify-between"
+            data-tooltip-content="Settings"
+            data-tooltip-id="settings"
+          >
             <button
               onClick={() => {
                 handleNavigate('settings');
@@ -114,6 +158,12 @@ export default function Sidebar() {
                 weight="fill"
               />
             </button>
+            <Tooltip
+              id="settings"
+              place="right"
+              delayShow={200}
+              className="tooltip z-99"
+            />
           </div>
         </div>
         <div
