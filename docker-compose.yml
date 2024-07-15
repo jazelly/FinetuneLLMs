@@ -3,6 +3,10 @@ services:
     build:
       context: ./frontend
     container_name: frontend
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /frontend
     ports:
       - 3000:3000
     image: frontend
@@ -11,16 +15,36 @@ services:
     build:
       context: ./web
     container_name: web
+    volumes:
+      - type: bind
+        source: ./web
+        target: /web
     ports:
       - "80:80"
     image: web
     depends_on:
       - frontend
-      
+
   trainer:
     build:
       context: ./trainer
     container_name: trainer
+    volumes:
+      - type: bind
+        source: ./trainer
+        target: /trainer
     ports:
       - "8000:8000"
     image: trainer
+
+  server:
+    build:
+      context: ./server
+    container_name: server
+    volumes:
+      - type: bind
+        source: ./server
+        target: /server
+    ports:
+      - "3001:3001"
+    image: server
