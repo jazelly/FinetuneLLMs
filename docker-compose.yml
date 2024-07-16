@@ -24,7 +24,6 @@ services:
     image: web
     depends_on:
       - frontend
-
   trainer:
     build:
       context: ./trainer

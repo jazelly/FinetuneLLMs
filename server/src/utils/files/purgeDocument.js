@@ -48,7 +48,7 @@ async function purgeFolder(folderName = null) {
   const filenames = fs
     .readdirSync(subFolderPath)
     .map((file) =>
-      path.join(subFolderPath, file).replace(documentsPath + "/", "")
+      path.join(subFolderPath, file).replace(documentsPath + "/", ""),
     );
   const workspaces = await Workspace.where();
 
@@ -57,7 +57,7 @@ async function purgeFolder(folderName = null) {
   for (const filename of filenames) {
     const rmVectorCache = () =>
       new Promise((resolve) =>
-        purgeVectorCache(filename).then(() => resolve(true))
+        purgeVectorCache(filename).then(() => resolve(true)),
       );
     purgePromises.push(rmVectorCache);
   }
@@ -66,7 +66,9 @@ async function purgeFolder(folderName = null) {
   for (const workspace of workspaces) {
     const rmWorkspaceDoc = () =>
       new Promise((resolve) =>
-        Document.removeDocuments(workspace, filenames).then(() => resolve(true))
+        Document.removeDocuments(workspace, filenames).then(() =>
+          resolve(true),
+        ),
       );
     purgePromises.push(rmWorkspaceDoc);
   }

@@ -12,7 +12,7 @@ async function checkForMigrations(model, db) {
   const toMigrate = [];
   for (const { colName, execCmd, doif } of model.migrations()) {
     const { _exists } = await db.get(
-      checkColumnTemplate(model.tablename, colName)
+      checkColumnTemplate(model.tablename, colName),
     );
     const colExists = _exists !== 0;
     if (colExists !== doif) continue;
@@ -31,7 +31,7 @@ async function validateTablePragmas(force = false) {
   try {
     if (process.env.NODE_ENV !== "development" && force === false) {
       console.log(
-        `\x1b[34m[MIGRATIONS STUBBED]\x1b[0m Please ping /migrate once server starts to run migrations`
+        `\x1b[34m[MIGRATIONS STUBBED]\x1b[0m Please ping /migrate once server starts to run migrations`,
       );
       return;
     }

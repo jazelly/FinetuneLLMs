@@ -15,4 +15,3 @@ export interface IJobModel extends IJobCreate {
   lastUpdatedAt: Date;
   status: string;
 }
-

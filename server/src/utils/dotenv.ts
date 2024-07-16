@@ -25,7 +25,7 @@ export interface Envs {
 
 type EnvsParser<T> = {
   [K in keyof T]: (
-    raw: undefined extends T[K] ? string | undefined : string
+    raw: undefined extends T[K] ? string | undefined : string,
   ) => T[K];
 };
 
@@ -60,7 +60,7 @@ const envs = dotenv.config().parsed;
 const parseEnvs = (envs: dotenv.DotenvParseOutput | undefined): Envs => {
   if (!envs)
     throw new Error(
-      "must provide .env file. Have you copied .env.example to .env?"
+      "must provide .env file. Have you copied .env.example to .env?",
     );
 
   const result: Partial<Envs> = {};
@@ -69,7 +69,7 @@ const parseEnvs = (envs: dotenv.DotenvParseOutput | undefined): Envs => {
     const parser = ENVS_PARSER[key];
     if (!parser)
       throw new Error(
-        `No parser found for .env key: ${key}. Did you forget to update the ENVS_PARSER?`
+        `No parser found for .env key: ${key}. Did you forget to update the ENVS_PARSER?`,
       );
     result[key] = ENVS_PARSER[key](value);
   }
