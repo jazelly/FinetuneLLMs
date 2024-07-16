@@ -10,4 +10,4 @@ This is the node.js server for handling HTTP requests. Usually, this is used to 
    openssl req -nodes -new -x509 -keyout server.key -out server.cert
    ```
 
-2.
+2. Add certificates path to .env file

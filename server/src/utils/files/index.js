@@ -80,7 +80,7 @@ async function cachedVectorInformation(filename = null, checkOnly = false) {
   if (!exists) return { exists, chunks: [] };
 
   console.log(
-    `Cached vectorized results of ${filename} found! Using cached data to save on embed costs.`
+    `Cached vectorized results of ${filename} found! Using cached data to save on embed costs.`,
   );
   const rawData = fs.readFileSync(file, "utf8");
   return { exists: true, chunks: JSON.parse(rawData) };
@@ -91,7 +91,7 @@ async function cachedVectorInformation(filename = null, checkOnly = false) {
 async function storeVectorResult(vectorData = [], filename = null) {
   if (!filename) return;
   console.log(
-    `Caching vectorized results of ${filename} to prevent duplicated embedding.`
+    `Caching vectorized results of ${filename} to prevent duplicated embedding.`,
   );
   if (!fs.existsSync(vectorCachePath)) fs.mkdirSync(vectorCachePath);
 

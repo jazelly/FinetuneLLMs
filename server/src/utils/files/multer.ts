@@ -48,7 +48,7 @@ const pfpUploadStorage = diskStorage({
     mkdirSync(uploadOutput, { recursive: true });
     return cb(null, uploadOutput);
   },
-  filename: function (req, file, cb) {
+  filename: function (req: any, file, cb) {
     const randomFileName = `${v4()}${extname(file.originalname)}`;
     req.randomFileName = randomFileName;
     cb(null, randomFileName);

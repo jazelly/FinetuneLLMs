@@ -1,6 +1,6 @@
 import { SubmitJobParams } from "./schema/trainer.internal.type";
 import { request } from "undici";
-import type { Dispatcher } from "undici" 
+import type { Dispatcher } from "undici";
 
 export interface TrainerResponseBase {
   status: "success" | "failed" | "error"; // 200, 400, 500
@@ -13,7 +13,9 @@ export interface TrainerResponseNode extends TrainerResponseBase {
 }
 
 const Trainer = {
-  submitJobToTrainer: async (params: SubmitJobParams): Promise<TrainerResponseNode> => {
+  submitJobToTrainer: async (
+    params: SubmitJobParams,
+  ): Promise<TrainerResponseNode> => {
     const trainerApi = `${process.env.TRAINER_API_URL}train/job/`;
 
     let statusCode;
@@ -27,12 +29,14 @@ const Trainer = {
       });
 
       statusCode = resp.statusCode;
-      if (resp.statusCode >= 300) { throw new Error() }
+      if (resp.statusCode >= 300) {
+        throw new Error();
+      }
 
-      const body = resp.body
+      const body = resp.body;
 
       const data = await body.json();
-      return { ...data as TrainerResponseBase, code: statusCode };
+      return { ...(data as TrainerResponseBase), code: statusCode };
     } catch (error) {
       console.error("Error:", error);
       return { status: "error", code: statusCode, message: "noop" };

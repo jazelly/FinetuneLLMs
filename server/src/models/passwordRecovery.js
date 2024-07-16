@@ -21,8 +21,8 @@ const RecoveryCode = {
     try {
       const recoveryCodes = await prisma.$transaction(
         data.map((recoveryCode) =>
-          prisma.recovery_codes.create({ data: recoveryCode })
-        )
+          prisma.recovery_codes.create({ data: recoveryCode }),
+        ),
       );
       return { recoveryCodes, error: null };
     } catch (error) {
@@ -64,7 +64,7 @@ const RecoveryCode = {
   hashesForUser: async function (userId = null) {
     if (!userId) return [];
     return (await this.findMany({ user_id: userId })).map(
-      (recovery) => recovery.code_hash
+      (recovery) => recovery.code_hash,
     );
   },
 };

@@ -4,9 +4,9 @@ import http from "http";
 import fs from "fs";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { documentEndpoints } from "./src/endpoints/document";
-import { jobEndpoints } from "./src/endpoints/job";
-import { config } from "./src/utils/dotenv";
+import { documentEndpoints } from "./endpoints/document";
+import { jobEndpoints } from "./endpoints/job";
+import { config } from "./utils/dotenv";
 
 const app = express();
 const apiRouter = express.Router();

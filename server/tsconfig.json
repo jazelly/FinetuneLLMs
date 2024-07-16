@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2022",
     "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
     "outDir": "./dist",
     "rootDir": "./src",
-    "noEmit": true
+    "noEmit": false
   },
-  "include": ["src/**/*", "prisma/**/*"],
+  "include": ["src/**/*.ts", "src/index.ts"],
   "exclude": ["node_modules", "src/storage"]
 }
