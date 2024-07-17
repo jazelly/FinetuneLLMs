@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import Directory from './Directory.component';
-import Document from '@/models/document';
+import DatasetService from '@/models/dataset.service';
 import { DatasetBase } from '@/types/dashboard.type';
 import React from 'react';
 
@@ -15,8 +15,8 @@ export default function DocumentSettings() {
   async function fetchDatasets() {
     setLoading(true);
     try {
-      const localDatasetsResponse = await Document.readLocalDatasets();
-      const remoteDatasetsResponse = await Document.readRemoteDatasets();
+      const localDatasetsResponse = await DatasetService.readLocalDatasets();
+      const remoteDatasetsResponse = await DatasetService.readRemoteDatasets();
       const remoteDatasets = remoteDatasetsResponse;
 
       // Documents that are not in the workspace

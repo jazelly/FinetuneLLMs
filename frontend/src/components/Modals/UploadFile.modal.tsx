@@ -6,7 +6,7 @@ import { v4 } from 'uuid';
 import FileUploadProgress from './UploadDatasets/Documents/UploadFile/FileUploadProgress.component';
 import debounce from 'lodash.debounce';
 import { isHFDatasetLinkValid } from '@/utils/misc';
-import Document from '@/models/document';
+import DatasetService from '@/models/dataset.service';
 import React from 'react';
 
 export default function UploadFile({
@@ -40,7 +40,7 @@ export default function UploadFile({
     setFetchingUrl(true);
 
     console.log('link', link);
-    const response = await Document.saveDatasetFromHF(link);
+    const response = await DatasetService.saveDatasetFromHF(link);
 
     if (response.message !== 'dataset saved') {
       showToast(`Error uploading link: ${response.error}`, 'error');
