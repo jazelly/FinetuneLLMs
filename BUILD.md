@@ -59,7 +59,7 @@ The up-to-date commands can be found here: https://pytorch.org/get-started/local
 #### 3. Install CUDA (optional)
 
 For NVIDIA, you also need to install the CUDA runtime libraries. This is only required if
-you want to run training and inference on GPU.
+you want to accelerate training and inference on GPU.
 
 ```
 conda install -y -c "nvidia/label/cuda-12.1.1" cuda-runtime
