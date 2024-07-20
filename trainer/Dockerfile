@@ -1,7 +1,6 @@
 FROM nvidia/cuda:12.5.0-runtime-ubuntu22.04
 RUN apt update
-RUN apt install python3.11 -y && \
-    apt install python3-pip -y
+RUN apt install python3.11 -y && apt install python3-pip -y
 WORKDIR /trainer
 COPY requirements.txt ./
 COPY . .

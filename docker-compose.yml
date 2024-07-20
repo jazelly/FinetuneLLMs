@@ -8,7 +8,7 @@ services:
         source: ./frontend
         target: /frontend
     ports:
-      - 3000:3000
+      - "3000:3000"
     image: frontend
 
   web:
@@ -19,11 +19,13 @@ services:
       - type: bind
         source: ./web
         target: /web
+      - ./frontend/build:/usr/share/nginx/html
     ports:
       - "80:80"
     image: web
     depends_on:
       - frontend
+
   trainer:
     build:
       context: ./trainer

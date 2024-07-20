@@ -2,7 +2,7 @@ import { DatasetLocal, DatasetRemote } from '@/types/dashboard.type';
 import { API_BASE } from '@/utils/constants';
 import { baseHeaders } from '@/utils/request';
 
-const Document = {
+const DatasetService = {
   uploadOneDatasetByChunk: async (datasetChunk) => {
     const response = await fetch(`${API_BASE}/document/upload-by-chunk`, {
       method: 'POST',
@@ -43,4 +43,4 @@ const Document = {
   },
 };
 
-export default Document;
+export default DatasetService;
