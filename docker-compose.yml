@@ -19,7 +19,7 @@ services:
       - type: bind
         source: ./web
         target: /web
-      - ./frontend/build:/usr/share/nginx/html
+      - ./frontend/dist:/usr/share/nginx/html
     ports:
       - "80:80"
     image: web
