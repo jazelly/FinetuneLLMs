@@ -28,7 +28,8 @@ const translation = {
       noOutput: '无输出',
       element: {
         title: '这里有人吗',
-        content: '在这里观测和标注最终用户和 AI 应用程序之间的交互，以不断提高 AI 的准确性。您可以<testLink>试试</testLink> WebApp 或<shareLink>分享</shareLink>出去，然后返回此页面。',
+        content:
+          '在这里观测和标注最终用户和 AI 应用程序之间的交互，以不断提高 AI 的准确性。您可以<testLink>试试</testLink> WebApp 或<shareLink>分享</shareLink>出去，然后返回此页面。',
       },
     },
   },
@@ -47,7 +48,8 @@ const translation = {
       dislike: '反对',
       addAnnotation: '标记改进回复',
       editAnnotation: '编辑改进回复',
-      annotationPlaceholder: '输入你希望 AI 回复的预期答案，这在今后可用于模型微调，持续改进文本生成质量。',
+      annotationPlaceholder:
+        '输入你希望 AI 回复的预期答案，这在今后可用于模型微调，持续改进文本生成质量。',
     },
     variables: '变量',
     uploadImages: '上传的图片',
@@ -86,6 +88,6 @@ const translation = {
     iteration: '迭代',
     finalProcessing: '最终处理',
   },
-}
+};
 
-export default translation
+export default translation;

@@ -12,7 +12,8 @@ const translation = {
   },
   input: {
     title: 'Source text',
-    placeholder: 'Please enter a text, a short declarative sentence is recommended.',
+    placeholder:
+      'Please enter a text, a short declarative sentence is recommended.',
     countWarning: 'Up to 200 characters.',
     indexWarning: 'High quality Knowledge only.',
     testing: 'Testing',
@@ -23,6 +24,6 @@ const translation = {
   },
   noRecentTip: 'No recent query results here',
   viewChart: 'View VECTOR CHART',
-}
+};
 
-export default translation
+export default translation;

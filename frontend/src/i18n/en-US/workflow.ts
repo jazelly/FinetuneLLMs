@@ -40,16 +40,18 @@ const translation = {
     needAnswerNode: 'The Answer block must be added',
     workflowProcess: 'Workflow Process',
     notRunning: 'Not running yet',
-    previewPlaceholder: 'Enter content in the box below to start debugging the Chatbot',
+    previewPlaceholder:
+      'Enter content in the box below to start debugging the Chatbot',
     effectVarConfirm: {
       title: 'Remove Variable',
-      content: 'The variable is used in other nodes. Do you still want to remove it?',
+      content:
+        'The variable is used in other nodes. Do you still want to remove it?',
     },
-    insertVarTip: 'Press the \'/\' key to insert quickly',
+    insertVarTip: "Press the '/' key to insert quickly",
     processData: 'Process Data',
     input: 'Input',
     output: 'Output',
-    jinjaEditorPlaceholder: 'Type \'/\' or \'{\' to insert variable',
+    jinjaEditorPlaceholder: "Type '/' or '{' to insert variable",
     viewOnly: 'View Only',
     showRunHistory: 'Show Run History',
     enableJinja: 'Enable Jinja template support',
@@ -65,7 +67,8 @@ const translation = {
     configureRequired: 'Configure Required',
     configure: 'Configure',
     manageInTools: 'Manage in Tools',
-    workflowAsToolTip: 'Tool reconfiguration is required after the workflow update.',
+    workflowAsToolTip:
+      'Tool reconfiguration is required after the workflow update.',
     viewDetailInTracingPanel: 'View details',
   },
   errorMsg: {
@@ -90,51 +93,58 @@ const translation = {
     iteration: 'Iteration',
   },
   tabs: {
-    'searchBlock': 'Search block',
-    'blocks': 'Blocks',
-    'tools': 'Tools',
-    'allTool': 'All',
-    'builtInTool': 'Built-in',
-    'customTool': 'Custom',
-    'workflowTool': 'Workflow',
+    searchBlock: 'Search block',
+    blocks: 'Blocks',
+    tools: 'Tools',
+    allTool: 'All',
+    builtInTool: 'Built-in',
+    customTool: 'Custom',
+    workflowTool: 'Workflow',
     'question-understand': 'Question Understand',
-    'logic': 'Logic',
-    'transform': 'Transform',
-    'utilities': 'Utilities',
-    'noResult': 'No match found',
+    logic: 'Logic',
+    transform: 'Transform',
+    utilities: 'Utilities',
+    noResult: 'No match found',
   },
   blocks: {
-    'start': 'Start',
-    'end': 'End',
-    'answer': 'Answer',
-    'llm': 'LLM',
+    start: 'Start',
+    end: 'End',
+    answer: 'Answer',
+    llm: 'LLM',
     'knowledge-retrieval': 'Knowledge Retrieval',
     'question-classifier': 'Question Classifier',
     'if-else': 'IF/ELSE',
-    'code': 'Code',
+    code: 'Code',
     'template-transform': 'Template',
     'http-request': 'HTTP Request',
     'variable-assigner': 'Variable Aggregator',
     'variable-aggregator': 'Variable Aggregator',
     'iteration-start': 'Iteration Start',
-    'iteration': 'Iteration',
+    iteration: 'Iteration',
     'parameter-extractor': 'Parameter Extractor',
   },
   blocksAbout: {
-    'start': 'Define the initial parameters for launching a workflow',
-    'end': 'Define the end and result type of a workflow',
-    'answer': 'Define the reply content of a chat conversation',
-    'llm': 'Invoking large language models to answer questions or process natural language',
-    'knowledge-retrieval': 'Allows you to query text content related to user questions from the Knowledge',
-    'question-classifier': 'Define the classification conditions of user questions, LLM can define how the conversation progresses based on the classification description',
-    'if-else': 'Allows you to split the workflow into two branches based on if/else conditions',
-    'code': 'Execute a piece of Python or NodeJS code to implement custom logic',
+    start: 'Define the initial parameters for launching a workflow',
+    end: 'Define the end and result type of a workflow',
+    answer: 'Define the reply content of a chat conversation',
+    llm: 'Invoking large language models to answer questions or process natural language',
+    'knowledge-retrieval':
+      'Allows you to query text content related to user questions from the Knowledge',
+    'question-classifier':
+      'Define the classification conditions of user questions, LLM can define how the conversation progresses based on the classification description',
+    'if-else':
+      'Allows you to split the workflow into two branches based on if/else conditions',
+    code: 'Execute a piece of Python or NodeJS code to implement custom logic',
     'template-transform': 'Convert data to string using Jinja template syntax',
     'http-request': 'Allow server requests to be sent over the HTTP protocol',
-    'variable-assigner': 'Aggregate multi-branch variables into a single variable for unified configuration of downstream nodes.',
-    'variable-aggregator': 'Aggregate multi-branch variables into a single variable for unified configuration of downstream nodes.',
-    'iteration': 'Perform multiple steps on a list object until all results are outputted.',
-    'parameter-extractor': 'Use LLM to extract structured parameters from natural language for tool invocations or HTTP requests.',
+    'variable-assigner':
+      'Aggregate multi-branch variables into a single variable for unified configuration of downstream nodes.',
+    'variable-aggregator':
+      'Aggregate multi-branch variables into a single variable for unified configuration of downstream nodes.',
+    iteration:
+      'Perform multiple steps on a list object until all results are outputted.',
+    'parameter-extractor':
+      'Use LLM to extract structured parameters from natural language for tool invocations or HTTP requests.',
   },
   operator: {
     zoomIn: 'Zoom In',
@@ -199,9 +209,9 @@ const translation = {
         variable: 'output variable',
       },
       type: {
-        'none': 'None',
+        none: 'None',
         'plain-text': 'Plain Text',
-        'structured': 'Structured',
+        structured: 'Structured',
       },
     },
     answer: {
@@ -213,7 +223,8 @@ const translation = {
       variables: 'variables',
       context: 'context',
       contextTooltip: 'You can import Knowledge as context',
-      notSetContextInPromptTip: 'To enable the context feature, please fill in the context variable in PROMPT.',
+      notSetContextInPromptTip:
+        'To enable the context feature, please fill in the context variable in PROMPT.',
       prompt: 'prompt',
       roleDescription: {
         system: 'Give high level instructions for the conversation',
@@ -268,18 +279,18 @@ const translation = {
         files: 'Files List',
       },
       authorization: {
-        'authorization': 'Authorization',
-        'authorizationType': 'Authorization Type',
+        authorization: 'Authorization',
+        authorizationType: 'Authorization Type',
         'no-auth': 'None',
         'api-key': 'API-Key',
         'auth-type': 'Auth Type',
-        'basic': 'Basic',
-        'bearer': 'Bearer',
-        'custom': 'Custom',
+        basic: 'Basic',
+        bearer: 'Bearer',
+        custom: 'Custom',
         'api-key-title': 'API Key',
-        'header': 'Header',
+        header: 'Header',
       },
-      insertVarPlaceholder: 'type \'/\' to insert variable',
+      insertVarPlaceholder: "type '/' to insert variable",
       timeout: {
         title: 'Timeout',
         connectLabel: 'Connection Timeout',
@@ -294,7 +305,8 @@ const translation = {
       inputVars: 'Input Variables',
       outputVars: 'Output Variables',
       advancedDependencies: 'Advanced Dependencies',
-      advancedDependenciesTip: 'Add some preloaded dependencies that take more time to consume or are not default built-in here',
+      advancedDependenciesTip:
+        'Add some preloaded dependencies that take more time to consume or are not default built-in here',
       searchDependencies: 'Search Dependencies',
     },
     templateTransform: {
@@ -308,21 +320,22 @@ const translation = {
     ifElse: {
       if: 'If',
       else: 'Else',
-      elseDescription: 'Used to define the logic that should be executed when the if condition is not met.',
+      elseDescription:
+        'Used to define the logic that should be executed when the if condition is not met.',
       and: 'and',
       or: 'or',
       operator: 'Operator',
       notSetVariable: 'Please set variable first',
       comparisonOperator: {
-        'contains': 'contains',
+        contains: 'contains',
         'not contains': 'not contains',
         'start with': 'start with',
         'end with': 'end with',
-        'is': 'is',
+        is: 'is',
         'is not': 'is not',
-        'empty': 'is empty',
+        empty: 'is empty',
         'not empty': 'is not empty',
-        'null': 'is null',
+        null: 'is null',
         'not null': 'is not null',
       },
       enterValue: 'Enter value',
@@ -341,7 +354,8 @@ const translation = {
         array: 'Array',
       },
       aggregationGroup: 'Aggregation Group',
-      aggregationGroupTip: 'Enabling this feature allows the variable aggregator to aggregate multiple sets of variables.',
+      aggregationGroupTip:
+        'Enabling this feature allows the variable aggregator to aggregate multiple sets of variables.',
       addGroup: 'Add Group',
       outputVars: {
         varDescribe: '{{groupName}} output',
@@ -375,7 +389,8 @@ const translation = {
       topicPlaceholder: 'Write your topic name',
       addClass: 'Add Class',
       instruction: 'Instruction',
-      instructionTip: 'Input additional instructions to help the question classifier better understand how to categorize questions.',
+      instructionTip:
+        'Input additional instructions to help the question classifier better understand how to categorize questions.',
       instructionPlaceholder: 'Write your instruction',
     },
     parameterExtractor: {
@@ -391,15 +406,19 @@ const translation = {
         description: 'Description',
         descriptionPlaceholder: 'Extract Parameter Description',
         required: 'Required',
-        requiredContent: 'Required is only used as a reference for model inference, and not for mandatory validation of parameter output.',
+        requiredContent:
+          'Required is only used as a reference for model inference, and not for mandatory validation of parameter output.',
       },
       extractParametersNotSet: 'Extract Parameters not setup',
       instruction: 'Instruction',
-      instructionTip: 'Input additional instructions to help the parameter extractor understand how to extract parameters.',
+      instructionTip:
+        'Input additional instructions to help the parameter extractor understand how to extract parameters.',
       advancedSetting: 'Advanced Setting',
       reasoningMode: 'Reasoning Mode',
-      reasoningModeTip: 'You can choose the appropriate reasoning mode based on the model\'s ability to respond to instructions for function calling or prompts.',
-      isSuccess: 'Is Success.On success the value is 1, on failure the value is 0.',
+      reasoningModeTip:
+        "You can choose the appropriate reasoning mode based on the model's ability to respond to instructions for function calling or prompts.",
+      isSuccess:
+        'Is Success.On success the value is 1, on failure the value is 0.',
       errorReason: 'Error Reason',
     },
     iteration: {
@@ -415,6 +434,6 @@ const translation = {
   tracing: {
     stopBy: 'Stop by {{user}}',
   },
-}
+};
 
-export default translation
+export default translation;

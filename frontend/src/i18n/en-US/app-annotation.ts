@@ -4,7 +4,8 @@ const translation = {
   editBy: 'Answer edited by {{author}}',
   noData: {
     title: 'No annotations',
-    description: 'You can edit annotations during app debugging or import annotations in bulk here for a high-quality response.',
+    description:
+      'You can edit annotations during app debugging or import annotations in bulk here for a high-quality response.',
   },
   table: {
     header: {
@@ -81,7 +82,8 @@ const translation = {
     confirmBtn: 'Save & Enable',
     configConfirmBtn: 'Save',
   },
-  embeddingModelSwitchTip: 'Annotation text vectorization model, switching models will be re-embedded, resulting in additional costs.',
-}
+  embeddingModelSwitchTip:
+    'Annotation text vectorization model, switching models will be re-embedded, resulting in additional costs.',
+};
 
-export default translation
+export default translation;

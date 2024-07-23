@@ -11,7 +11,8 @@ const translation = {
   signBtn: '登录',
   installBtn: '设置',
   setAdminAccount: '设置管理员账户',
-  setAdminAccountDesc: '管理员拥有的最大权限，可用于创建应用和管理 LLM 供应商等。',
+  setAdminAccountDesc:
+    '管理员拥有的最大权限，可用于创建应用和管理 LLM 供应商等。',
   createAndSignIn: '创建账户',
   oneMoreStep: '还差一步',
   createSample: '基于这些信息，我们将为您创建一个示例应用',
@@ -55,6 +56,6 @@ const translation = {
   activated: '现在登录',
   adminInitPassword: '管理员初始化密码',
   validate: '验证',
-}
+};
 
-export default translation
+export default translation;

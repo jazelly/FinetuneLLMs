@@ -18,12 +18,9 @@ const translation = {
     configDisabled:
       'Previous session settings have been used for this session.',
     startChat: 'Start Chat',
-    privacyPolicyLeft:
-      'Please read the ',
-    privacyPolicyMiddle:
-      'privacy policy',
-    privacyPolicyRight:
-      ' provided by the app developer.',
+    privacyPolicyLeft: 'Please read the ',
+    privacyPolicyMiddle: 'privacy policy',
+    privacyPolicyRight: ' provided by the app developer.',
     deleteConversation: {
       title: 'Delete conversation',
       content: 'Are you sure you want to delete this conversation?',
@@ -38,8 +35,9 @@ const translation = {
       saved: 'Saved',
     },
     savedNoData: {
-      title: 'You haven\'t saved a result yet!',
-      description: 'Start generating content, and find your saved results here.',
+      title: "You haven't saved a result yet!",
+      description:
+        'Start generating content, and find your saved results here.',
       startCreateContent: 'Start create content',
     },
     title: 'AI Completion',
@@ -65,10 +63,11 @@ const translation = {
       fileStructNotMatch: 'The uploaded CSV file not match the struct.',
       emptyLine: 'Row {{rowIndex}} is empty',
       invalidLine: 'Row {{rowIndex}}: {{varName}} value can not be empty',
-      moreThanMaxLengthLine: 'Row {{rowIndex}}: {{varName}} value can not be more than {{maxLength}} characters',
+      moreThanMaxLengthLine:
+        'Row {{rowIndex}}: {{varName}} value can not be more than {{maxLength}} characters',
       atLeastOne: 'Please input at least one row in the uploaded file.',
     },
   },
-}
+};
 
-export default translation
+export default translation;

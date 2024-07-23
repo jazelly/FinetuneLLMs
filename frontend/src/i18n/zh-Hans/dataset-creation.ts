@@ -54,14 +54,16 @@ const translation = {
   stepTwo: {
     segmentation: '分段设置',
     auto: '自动分段与清洗',
-    autoDescription: '自动设置分段规则与预处理规则，如果不了解这些参数建议选择此项',
+    autoDescription:
+      '自动设置分段规则与预处理规则，如果不了解这些参数建议选择此项',
     custom: '自定义',
     customDescription: '自定义分段规则、分段长度以及预处理规则等参数',
     separator: '分段标识符',
     separatorPlaceholder: '例如换行符（\n）或特定的分隔符（如 "***"）',
     maxLength: '分段最大长度',
     overlap: '分段重叠长度',
-    overlapTip: '设置分段之间的重叠长度可以保留分段之间的语义关系，提升召回效果。建议设置为最大分段长度的10%-25%',
+    overlapTip:
+      '设置分段之间的重叠长度可以保留分段之间的语义关系，提升召回效果。建议设置为最大分段长度的10%-25%',
     overlapCheck: '分段重叠长度不能大于分段最大长度',
     rules: '文本预处理规则',
     removeExtraSpaces: '替换掉连续的空格、换行符和制表符',
@@ -72,11 +74,13 @@ const translation = {
     indexMode: '索引方式',
     qualified: '高质量',
     recommend: '推荐',
-    qualifiedTip: '调用系统默认的嵌入接口进行处理，以在用户查询时提供更高的准确度',
+    qualifiedTip:
+      '调用系统默认的嵌入接口进行处理，以在用户查询时提供更高的准确度',
     warning: '请先完成模型供应商的 API KEY 设置。.',
     click: '前往设置',
     economical: '经济',
-    economicalTip: '使用离线的向量引擎、关键词索引等方式，降低了准确度但无需花费 Token',
+    economicalTip:
+      '使用离线的向量引擎、关键词索引等方式，降低了准确度但无需花费 Token',
     QATitle: '采用 Q&A 分段模式',
     QATip: '开启后将会消耗额外的 token',
     QALanguage: '分段使用',
@@ -95,9 +99,12 @@ const translation = {
     cancel: '取消',
     sideTipTitle: '为什么要分段和预处理？',
     sideTipP1: '在处理文本数据时，分段和清洗是两个重要的预处理步骤。',
-    sideTipP2: '分段的目的是将长文本拆分成较小的段落，以便模型更有效地处理和理解。这有助于提高模型生成的结果的质量和相关性。',
-    sideTipP3: '清洗则是对文本进行预处理，删除不必要的字符、符号或格式，使知识库更加干净、整洁，便于模型解析。',
-    sideTipP4: '通过对知识库进行适当的分段和清洗，可以提高模型在实际应用中的表现，从而为用户提供更准确、更有价值的结果。',
+    sideTipP2:
+      '分段的目的是将长文本拆分成较小的段落，以便模型更有效地处理和理解。这有助于提高模型生成的结果的质量和相关性。',
+    sideTipP3:
+      '清洗则是对文本进行预处理，删除不必要的字符、符号或格式，使知识库更加干净、整洁，便于模型解析。',
+    sideTipP4:
+      '通过对知识库进行适当的分段和清洗，可以提高模型在实际应用中的表现，从而为用户提供更准确、更有价值的结果。',
     previewTitle: '分段预览',
     previewTitleButton: '预览',
     previewButton: '切换至 Q&A 形式',
@@ -119,12 +126,13 @@ const translation = {
     resume: '恢复处理',
     navTo: '前往文档',
     sideTipTitle: '接下来做什么',
-    sideTipContent: '当文档完成索引处理后，知识库即可集成至应用内作为上下文使用，你可以在提示词编排页找到上下文设置。你也可以创建成可独立使用的 ChatGPT 索引插件发布。',
+    sideTipContent:
+      '当文档完成索引处理后，知识库即可集成至应用内作为上下文使用，你可以在提示词编排页找到上下文设置。你也可以创建成可独立使用的 ChatGPT 索引插件发布。',
     modelTitle: '确认停止索引过程吗？',
     modelContent: '如果您需要稍后恢复处理，则从停止处继续。',
     modelButtonConfirm: '确认停止',
     modelButtonCancel: '取消',
   },
-}
+};
 
-export default translation
+export default translation;

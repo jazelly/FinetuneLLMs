@@ -1,6 +1,7 @@
 const translation = {
   title: 'Logs',
-  description: 'The logs record the running status of the application, including user inputs and AI replies.',
+  description:
+    'The logs record the running status of the application, including user inputs and AI replies.',
   dateTimeFormat: 'MM/DD/YYYY hh:mm A',
   table: {
     header: {
@@ -28,7 +29,8 @@ const translation = {
       noOutput: 'No output',
       element: {
         title: 'Is anyone there?',
-        content: 'Observe and annotate interactions between end-users and AI applications here to continuously improve AI accuracy. You can try <shareLink>sharing</shareLink> or <testLink>testing</testLink> the Web App yourself, then return to this page.',
+        content:
+          'Observe and annotate interactions between end-users and AI applications here to continuously improve AI accuracy. You can try <shareLink>sharing</shareLink> or <testLink>testing</testLink> the Web App yourself, then return to this page.',
       },
     },
   },
@@ -47,7 +49,8 @@ const translation = {
       dislike: 'dislike',
       addAnnotation: 'Add Improvement',
       editAnnotation: 'Edit Improvement',
-      annotationPlaceholder: 'Enter the expected answer that you want AI to reply, which can be used for model fine-tuning and continuous improvement of text generation quality in the future.',
+      annotationPlaceholder:
+        'Enter the expected answer that you want AI to reply, which can be used for model fine-tuning and continuous improvement of text generation quality in the future.',
     },
     variables: 'Variables',
     uploadImages: 'Uploaded Images',
@@ -86,6 +89,6 @@ const translation = {
     iteration: 'Iteration',
     finalProcessing: 'Final Processing',
   },
-}
+};
 
-export default translation
+export default translation;

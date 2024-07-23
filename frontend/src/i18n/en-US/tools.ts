@@ -9,7 +9,7 @@ const translation = {
     workflow: 'Workflow',
   },
   contribute: {
-    line1: 'I\'m interested in ',
+    line1: "I'm interested in ",
     line2: 'contributing tools to Dify.',
     viewGuide: 'View the guide',
   },
@@ -19,7 +19,8 @@ const translation = {
     authorized: 'Authorized',
     setup: 'Set up authorization to use',
     setupModalTitle: 'Set Up Authorization',
-    setupModalTitleDescription: 'After configuring credentials, all members within the workspace can use this tool when orchestrating applications.',
+    setupModalTitleDescription:
+      'After configuring credentials, all members within the workspace can use this tool when orchestrating applications.',
   },
   includeToolNum: '{{num}} tools included',
   addTool: 'Add Tool',
@@ -39,10 +40,12 @@ const translation = {
     name: 'Name',
     toolNamePlaceHolder: 'Enter the tool name',
     nameForToolCall: 'Tool call name',
-    nameForToolCallPlaceHolder: 'Used for machine recognition, such as getCurrentWeather, list_pets',
+    nameForToolCallPlaceHolder:
+      'Used for machine recognition, such as getCurrentWeather, list_pets',
     nameForToolCallTip: 'Only supports numbers, letters, and underscores.',
     description: 'Description',
-    descriptionPlaceholder: 'Brief description of the tool\'s purpose, e.g., get the temperature for a specific location.',
+    descriptionPlaceholder:
+      "Brief description of the tool's purpose, e.g., get the temperature for a specific location.",
     schema: 'Schema',
     schemaPlaceHolder: 'Enter your OpenAPI schema here',
     viewSchemaSpec: 'View the OpenAPI-Swagger Specification',
@@ -67,7 +70,8 @@ const translation = {
     authMethod: {
       title: 'Authorization method',
       type: 'Authorization type',
-      keyTooltip: 'Http Header Key, You can leave it with "Authorization" if you have no idea what it is or set it to a custom value',
+      keyTooltip:
+        'Http Header Key, You can leave it with "Authorization" if you have no idea what it is or set it to a custom value',
       types: {
         none: 'None',
         api_key: 'API Key',
@@ -99,7 +103,7 @@ const translation = {
       label: 'Tags',
       labelPlaceholder: 'Choose tags(optional)',
       description: 'Description',
-      descriptionPlaceholder: 'Description of the parameter\'s meaning',
+      descriptionPlaceholder: "Description of the parameter's meaning",
     },
     customDisclaimer: 'Custom disclaimer',
     customDisclaimerPlaceholder: 'Please enter custom disclaimer',
@@ -137,7 +141,7 @@ const translation = {
   },
   noSearchRes: {
     title: 'Sorry, no results!',
-    content: 'We couldn\'t find any tools that match your search.',
+    content: "We couldn't find any tools that match your search.",
     reset: 'Reset Search',
   },
   builtInPromptTitle: 'Prompt',
@@ -146,6 +150,6 @@ const translation = {
   howToGet: 'How to get',
   openInStudio: 'Open in Studio',
   toolNameUsageTip: 'Tool call name for agent reasoning and prompting',
-}
+};
 
-export default translation
+export default translation;

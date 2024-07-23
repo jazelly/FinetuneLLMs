@@ -17,7 +17,8 @@ const translation = {
   },
   apps: {
     title: 'Explore Apps by Dify',
-    description: 'Use these template apps instantly or customize your own apps based on the templates.',
+    description:
+      'Use these template apps instantly or customize your own apps based on the templates.',
     allCategories: 'Recommended',
   },
   appCard: {
@@ -36,6 +37,6 @@ const translation = {
     Programming: 'Programming',
     HR: 'HR',
   },
-}
+};
 
-export default translation
+export default translation;

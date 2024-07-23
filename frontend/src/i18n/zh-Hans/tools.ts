@@ -19,7 +19,8 @@ const translation = {
     authorized: '已授权',
     setup: '要使用请先授权',
     setupModalTitle: '设置授权',
-    setupModalTitleDescription: '配置凭据后，工作区中的所有成员都可以在编排应用程序时使用此工具。',
+    setupModalTitleDescription:
+      '配置凭据后，工作区中的所有成员都可以在编排应用程序时使用此工具。',
   },
   includeToolNum: '包含 {{num}} 个工具',
   addTool: '添加工具',
@@ -67,7 +68,8 @@ const translation = {
     authMethod: {
       title: '鉴权方法',
       type: '鉴权类型',
-      keyTooltip: 'HTTP 头部名称，如果你不知道是什么，可以将其保留为 Authorization 或设置为自定义值',
+      keyTooltip:
+        'HTTP 头部名称，如果你不知道是什么，可以将其保留为 Authorization 或设置为自定义值',
       types: {
         none: '无',
         api_key: 'API Key',
@@ -146,6 +148,6 @@ const translation = {
   howToGet: '如何获取',
   openInStudio: '在工作室中打开',
   toolNameUsageTip: '工具调用名称，用于 Agent 推理和提示词',
-}
+};
 
-export default translation
+export default translation;

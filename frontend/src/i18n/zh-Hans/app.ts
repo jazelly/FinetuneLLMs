@@ -26,19 +26,23 @@ const translation = {
     startFromTemplate: '从应用模版创建',
     captionAppType: '想要哪种应用类型？',
     chatbotDescription: '使用大型语言模型构建基于聊天的助手',
-    completionDescription: '构建一个根据提示生成高质量文本的应用程序，例如生成文章、摘要、翻译等。',
+    completionDescription:
+      '构建一个根据提示生成高质量文本的应用程序，例如生成文章、摘要、翻译等。',
     completionWarning: '该类型不久后将不再支持创建',
     agentDescription: '构建一个智能Agent，可以自主选择工具来完成任务',
-    workflowDescription: '以工作流的形式编排生成型应用，提供更多的自定义能力。 它适合有经验的用户。',
+    workflowDescription:
+      '以工作流的形式编排生成型应用，提供更多的自定义能力。 它适合有经验的用户。',
     workflowWarning: '正在进行 Beta 测试',
     chatbotType: '聊天助手编排方法',
     basic: '基础编排',
     basicTip: '新手适用，可以切换成工作流编排',
     basicFor: '新手适用',
-    basicDescription: '基本编排允许使用简单的设置编排聊天机器人应用程序，而无需修改内置提示。 它适合初学者。',
+    basicDescription:
+      '基本编排允许使用简单的设置编排聊天机器人应用程序，而无需修改内置提示。 它适合初学者。',
     advanced: '工作流编排',
     advancedFor: '进阶用户适用',
-    advancedDescription: '工作流编排以工作流的形式编排聊天机器人，提供高度的自定义，包括编辑内置提示的能力。 它适合有经验的用户。',
+    advancedDescription:
+      '工作流编排以工作流的形式编排聊天机器人，提供高度的自定义，包括编辑内置提示的能力。 它适合有经验的用户。',
     captionName: '图标 & 名称',
     appNamePlaceholder: '给你的应用起个名字',
     captionDescription: '描述',
@@ -84,6 +88,6 @@ const translation = {
     workflow: '工作流',
     completion: '文本生成',
   },
-}
+};
 
-export default translation
+export default translation;

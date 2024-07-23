@@ -91,10 +91,13 @@ const translation = {
       max_tokens: '单次回复限制 max_tokens',
       max_tokensTip:
         '用于限制回复的最大长度，以 token 为单位。\n较大的值可能会限制给提示词、聊天记录和知识库留出的空间。\n建议将其设置在三分之二以下。\ngpt-4-1106-preview、gpt-4-vision-preview 最大长度 (输入128k，输出4k)',
-      maxTokenSettingTip: '您设置的最大 tokens 数较大，可能会导致 prompt、用户问题、知识库内容没有 token 空间进行处理，建议设置到 2/3 以下。',
-      setToCurrentModelMaxTokenTip: '最大令牌数更新为当前模型最大的令牌数 {{maxToken}} 的 80%。',
+      maxTokenSettingTip:
+        '您设置的最大 tokens 数较大，可能会导致 prompt、用户问题、知识库内容没有 token 空间进行处理，建议设置到 2/3 以下。',
+      setToCurrentModelMaxTokenTip:
+        '最大令牌数更新为当前模型最大的令牌数 {{maxToken}} 的 80%。',
       stop_sequences: '停止序列 stop_sequences',
-      stop_sequencesTip: '最多四个序列，API 将停止生成更多的 token。返回的文本将不包含停止序列。',
+      stop_sequencesTip:
+        '最多四个序列，API 将停止生成更多的 token。返回的文本将不包含停止序列。',
       stop_sequencesPlaceholder: '输入序列并按 Tab 键',
     },
     tone: {
@@ -112,7 +115,8 @@ const translation = {
     plugins: '插件',
     pluginsTips: '集成第三方插件或创建与 ChatGPT 兼容的 AI 插件。',
     datasets: '知识库',
-    datasetsTips: '即将到来: 上传自己的长文本数据，或通过 Webhook 集成自己的数据源',
+    datasetsTips:
+      '即将到来: 上传自己的长文本数据，或通过 Webhook 集成自己的数据源',
     newApp: '创建应用',
     newDataset: '创建知识库',
     tools: '工具',
@@ -242,7 +246,8 @@ const translation = {
     },
     anthropic: {
       using: '嵌入能力正在使用',
-      enableTip: '要启用 Anthropic 模型，您需要先绑定 OpenAI 或 Azure OpenAI 服务。',
+      enableTip:
+        '要启用 Anthropic 模型，您需要先绑定 OpenAI 或 Azure OpenAI 服务。',
       notEnabled: '未启用',
       keyFrom: '从 Anthropic 获取您的 API 密钥',
     },
@@ -302,7 +307,8 @@ const translation = {
       tip: '已付费额度将优先考虑。 试用额度将在付费额度用完后使用。',
     },
     item: {
-      deleteDesc: '{{modelName}} 被用作系统推理模型。删除后部分功能将无法使用。请确认。',
+      deleteDesc:
+        '{{modelName}} 被用作系统推理模型。删除后部分功能将无法使用。请确认。',
       freeQuota: '免费额度',
     },
     addApiKey: '添加您的 API 密钥',
@@ -366,7 +372,8 @@ const translation = {
     },
   },
   apiBasedExtension: {
-    title: 'API 扩展提供了一个集中式的 API 管理，在此统一添加 API 配置后，方便在 Dify 上的各类应用中直接使用。',
+    title:
+      'API 扩展提供了一个集中式的 API 管理，在此统一添加 API 配置后，方便在 Dify 上的各类应用中直接使用。',
     link: '了解如何开发您自己的 API 扩展。',
     linkUrl: 'https://docs.dify.ai/v/zh-hans/advanced/api_based_extension',
     add: '新增 API 扩展',
@@ -454,7 +461,7 @@ const translation = {
     },
   },
   promptEditor: {
-    placeholder: '在这里写你的提示词，输入\'{\' 插入变量、输入\'/\' 插入提示内容块',
+    placeholder: "在这里写你的提示词，输入'{' 插入变量、输入'/' 插入提示内容块",
     context: {
       item: {
         title: '上下文',
@@ -525,6 +532,6 @@ const translation = {
     created: '标签创建成功',
     failed: '标签创建失败',
   },
-}
+};
 
-export default translation
+export default translation;

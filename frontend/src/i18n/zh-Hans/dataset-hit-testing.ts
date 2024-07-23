@@ -23,6 +23,6 @@ const translation = {
   },
   noRecentTip: '最近无查询结果',
   viewChart: '查看向量图表',
-}
+};
 
-export default translation
+export default translation;

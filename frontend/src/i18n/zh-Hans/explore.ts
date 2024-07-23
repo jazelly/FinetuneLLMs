@@ -36,6 +36,6 @@ const translation = {
     Programming: '编程',
     HR: '人力资源',
   },
-}
+};
 
-export default translation
+export default translation;

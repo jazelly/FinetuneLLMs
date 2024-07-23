@@ -343,6 +343,6 @@ const translation = {
     newQaSegment: '新问答分段',
     delete: '删除这个分段？',
   },
-}
+};
 
-export default translation
+export default translation;

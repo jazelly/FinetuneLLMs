@@ -23,7 +23,7 @@ const translation = {
     send: 'Send',
     copy: 'Copy',
     lineBreak: 'Line break',
-    sure: 'I\'m sure',
+    sure: "I'm sure",
     download: 'Download',
     delete: 'Delete',
     settings: 'Settings',
@@ -84,17 +84,20 @@ const translation = {
         'Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered.',
       presence_penalty: 'Presence penalty',
       presence_penaltyTip:
-        'How much to penalize new tokens based on whether they appear in the text so far.\nIncreases the model\'s likelihood to talk about new topics.',
+        "How much to penalize new tokens based on whether they appear in the text so far.\nIncreases the model's likelihood to talk about new topics.",
       frequency_penalty: 'Frequency penalty',
       frequency_penaltyTip:
-        'How much to penalize new tokens based on their existing frequency in the text so far.\nDecreases the model\'s likelihood to repeat the same line verbatim.',
+        "How much to penalize new tokens based on their existing frequency in the text so far.\nDecreases the model's likelihood to repeat the same line verbatim.",
       max_tokens: 'Max token',
       max_tokensTip:
         'Used to limit the maximum length of the reply, in tokens. \nLarger values may limit the space left for prompt words, chat logs, and Knowledge. \nIt is recommended to set it below two-thirds\ngpt-4-1106-preview, gpt-4-vision-preview max token (input 128k output 4k)',
-      maxTokenSettingTip: 'Your max token setting is high, potentially limiting space for prompts, queries, and data. Consider setting it below 2/3.',
-      setToCurrentModelMaxTokenTip: 'Max token is updated to the 80% maximum token of the current model {{maxToken}}.',
+      maxTokenSettingTip:
+        'Your max token setting is high, potentially limiting space for prompts, queries, and data. Consider setting it below 2/3.',
+      setToCurrentModelMaxTokenTip:
+        'Max token is updated to the 80% maximum token of the current model {{maxToken}}.',
       stop_sequences: 'Stop sequences',
-      stop_sequencesTip: 'Up to four sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence.',
+      stop_sequencesTip:
+        'Up to four sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence.',
       stop_sequencesPlaceholder: 'Enter sequence and press Tab',
     },
     tone: {
@@ -110,9 +113,11 @@ const translation = {
     explore: 'Explore',
     apps: 'Studio',
     plugins: 'Plugins',
-    pluginsTips: 'Integrate third-party plugins or create ChatGPT-compatible AI-Plugins.',
+    pluginsTips:
+      'Integrate third-party plugins or create ChatGPT-compatible AI-Plugins.',
     datasets: 'Knowledge',
-    datasetsTips: 'COMING SOON: Import your own text data or write data in real-time via Webhook for LLM context enhancement.',
+    datasetsTips:
+      'COMING SOON: Import your own text data or write data in real-time via Webhook for LLM context enhancement.',
     newApp: 'New App',
     newDataset: 'Create Knowledge',
     tools: 'Tools',
@@ -145,7 +150,8 @@ const translation = {
     name: 'Name',
     email: 'Email',
     password: 'Password',
-    passwordTip: 'You can set a permanent password if you don’t want to use temporary login codes',
+    passwordTip:
+      'You can set a permanent password if you don’t want to use temporary login codes',
     setPassword: 'Set a password',
     resetPassword: 'Reset password',
     currentPassword: 'Current password',
@@ -170,14 +176,16 @@ const translation = {
     normal: 'Normal',
     normalTip: 'Only can use apps, can not build apps',
     inviteTeamMember: 'Add team member',
-    inviteTeamMemberTip: 'They can access your team data directly after signing in.',
+    inviteTeamMemberTip:
+      'They can access your team data directly after signing in.',
     email: 'Email',
     emailInvalid: 'Invalid Email Format',
     emailPlaceholder: 'Please input emails',
     sendInvite: 'Send Invite',
     invitedAsRole: 'Invited as {{role}} user',
     invitationSent: 'Invitation sent',
-    invitationSentTip: 'Invitation sent, and they can sign in to Dify to access your team data.',
+    invitationSentTip:
+      'Invitation sent, and they can sign in to Dify to access your team data.',
     invitationLink: 'Invitation Link',
     failedinvitationEmails: 'Below users were not invited successfully',
     ok: 'OK',
@@ -242,7 +250,8 @@ const translation = {
     },
     anthropic: {
       using: 'The embedding capability is using',
-      enableTip: 'To enable the Anthropic model, you need to bind to OpenAI or Azure OpenAI Service first.',
+      enableTip:
+        'To enable the Anthropic model, you need to bind to OpenAI or Azure OpenAI Service first.',
       notEnabled: 'Not enabled',
       keyFrom: 'Get your API key from Anthropic',
     },
@@ -252,7 +261,8 @@ const translation = {
     },
   },
   modelProvider: {
-    notConfigured: 'The system model has not yet been fully configured, and some functions may be unavailable.',
+    notConfigured:
+      'The system model has not yet been fully configured, and some functions may be unavailable.',
     systemModelSettings: 'System Model Settings',
     systemModelSettingsLink: 'Why is it necessary to set up a system model?',
     selectModel: 'Select your model',
@@ -302,7 +312,8 @@ const translation = {
       tip: 'Priority will be given to the paid quota. The Trial quota will be used after the paid quota is exhausted.',
     },
     item: {
-      deleteDesc: '{{modelName}} are being used as system reasoning models. Some functions will not be available after removal. Please confirm.',
+      deleteDesc:
+        '{{modelName}} are being used as system reasoning models. Some functions will not be available after removal. Please confirm.',
       freeQuota: 'FREE QUOTA',
     },
     addApiKey: 'Add your API key',
@@ -366,7 +377,8 @@ const translation = {
     },
   },
   apiBasedExtension: {
-    title: 'API extensions provide centralized API management, simplifying configuration for easy use across Dify\'s applications.',
+    title:
+      "API extensions provide centralized API management, simplifying configuration for easy use across Dify's applications.",
     link: 'Learn how to develop your own API Extension.',
     linkUrl: 'https://docs.dify.ai/features/extension/api_based_extension',
     add: 'Add API Extension',
@@ -419,7 +431,8 @@ const translation = {
     documents: 'Documents',
     hitTesting: 'Retrieval Testing',
     settings: 'Settings',
-    emptyTip: 'The Knowledge has not been associated, please go to the application or plug-in to complete the association.',
+    emptyTip:
+      'The Knowledge has not been associated, please go to the application or plug-in to complete the association.',
     viewDoc: 'View documentation',
     relatedApp: 'linked apps',
   },
@@ -454,7 +467,8 @@ const translation = {
     },
   },
   promptEditor: {
-    placeholder: 'Write your prompt word here, enter \'{\' to insert a variable, enter \'/\' to insert a prompt content block',
+    placeholder:
+      "Write your prompt word here, enter '{' to insert a variable, enter '/' to insert a prompt content block",
     context: {
       item: {
         title: 'Context',
@@ -525,6 +539,6 @@ const translation = {
     created: 'Tag created successfully',
     failed: 'Tag creation failed',
   },
-}
+};
 
-export default translation
+export default translation;

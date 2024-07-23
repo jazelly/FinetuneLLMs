@@ -24,6 +24,6 @@ const translation = {
     link: '详细信息面板',
     tipRight: '查看它。',
   },
-}
+};
 
-export default translation
+export default translation;

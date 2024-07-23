@@ -25,6 +25,6 @@ const translation = {
     prefix: '如需在 Dify 内自定义品牌图标，请',
     suffix: '升级至企业版。',
   },
-}
+};
 
-export default translation
+export default translation;

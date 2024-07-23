@@ -26,20 +26,26 @@ const translation = {
     startFromBlank: 'Create from Blank',
     startFromTemplate: 'Create from Template',
     captionAppType: 'What type of app do you want to create?',
-    chatbotDescription: 'Build a chat-based application. This app uses a question-and-answer format, allowing for multiple rounds of continuous conversation.',
-    completionDescription: 'Build an application that generates high-quality text based on prompts, such as generating articles, summaries, translations, and more.',
+    chatbotDescription:
+      'Build a chat-based application. This app uses a question-and-answer format, allowing for multiple rounds of continuous conversation.',
+    completionDescription:
+      'Build an application that generates high-quality text based on prompts, such as generating articles, summaries, translations, and more.',
     completionWarning: 'This type of app will no longer be supported.',
-    agentDescription: 'Build an intelligent Agent which can autonomously choose tools to complete the tasks',
-    workflowDescription: 'Build an application that generates high-quality text based on workflow orchestrates with a high degree of customization. It is suitable for experienced users.',
+    agentDescription:
+      'Build an intelligent Agent which can autonomously choose tools to complete the tasks',
+    workflowDescription:
+      'Build an application that generates high-quality text based on workflow orchestrates with a high degree of customization. It is suitable for experienced users.',
     workflowWarning: 'Currently in beta',
     chatbotType: 'Chatbot orchestrate method',
     basic: 'Basic',
     basicTip: 'For beginners, can switch to Chatflow later',
     basicFor: 'FOR BEGINNERS',
-    basicDescription: 'Basic Orchestrate allows for the orchestration of a Chatbot app using simple settings, without the ability to modify built-in prompts. It is suitable for beginners.',
+    basicDescription:
+      'Basic Orchestrate allows for the orchestration of a Chatbot app using simple settings, without the ability to modify built-in prompts. It is suitable for beginners.',
     advanced: 'Chatflow',
     advancedFor: 'For advanced users',
-    advancedDescription: 'Workflow Orchestrate orchestrates Chatbots in the form of workflows, offering a high degree of customization, including the ability to edit built-in prompts. It is suitable for experienced users.',
+    advancedDescription:
+      'Workflow Orchestrate orchestrates Chatbots in the form of workflows, offering a high degree of customization, including the ability to edit built-in prompts. It is suitable for experienced users.',
     captionName: 'App icon & name',
     appNamePlaceholder: 'Give your app a name',
     captionDescription: 'Description',
@@ -72,7 +78,8 @@ const translation = {
     cancel: 'Cancel',
   },
   switch: 'Switch to Workflow Orchestrate',
-  switchTipStart: 'A new app copy will be created for you, and the new copy will switch to Workflow Orchestrate. The new copy will ',
+  switchTipStart:
+    'A new app copy will be created for you, and the new copy will switch to Workflow Orchestrate. The new copy will ',
   switchTip: 'not allow',
   switchTipEnd: ' switching back to Basic Orchestrate.',
   switchLabel: 'The app copy to be created',
@@ -85,6 +92,6 @@ const translation = {
     workflow: 'Workflow',
     completion: 'Completion',
   },
-}
+};
 
-export default translation
+export default translation;

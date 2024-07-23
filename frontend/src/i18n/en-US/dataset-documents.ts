@@ -54,7 +54,8 @@ const translation = {
     },
     delete: {
       title: 'Are you sure Delete?',
-      content: 'If you need to resume processing later, you will continue from where you left off',
+      content:
+        'If you need to resume processing later, you will continue from where you left off',
     },
     batchModal: {
       title: 'Batch add chunks',
@@ -83,7 +84,7 @@ const translation = {
     docTypeChangeTitle: 'Change document type',
     docTypeSelectWarning:
       'If the document type is changed, the now filled metadata will no longer be preserved',
-    firstMetaAction: 'Let\'s go',
+    firstMetaAction: "Let's go",
     placeholder: {
       add: 'Add ',
       select: 'Select ',
@@ -324,7 +325,8 @@ const translation = {
     resume: 'Resume processing',
     automatic: 'Automatic',
     custom: 'Custom',
-    previewTip: 'Paragraph preview will be available after embedding is complete',
+    previewTip:
+      'Paragraph preview will be available after embedding is complete',
   },
   segment: {
     paragraphs: 'Paragraphs',
@@ -344,6 +346,6 @@ const translation = {
     newQaSegment: 'New Q&A Segment',
     delete: 'Delete this chunk ?',
   },
-}
+};
 
-export default translation
+export default translation;

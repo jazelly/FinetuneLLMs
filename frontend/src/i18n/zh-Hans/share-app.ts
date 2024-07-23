@@ -32,7 +32,6 @@ const translation = {
       create: '运行一次',
       batch: '批量运行',
       saved: '已保存',
-
     },
     savedNoData: {
       title: '您还没有保存结果！',
@@ -62,10 +61,11 @@ const translation = {
       fileStructNotMatch: '上传文件的内容与结构不匹配',
       emptyLine: '第 {{rowIndex}} 行的内容为空',
       invalidLine: '第 {{rowIndex}} 行: {{varName}}值必填',
-      moreThanMaxLengthLine: '第 {{rowIndex}} 行: {{varName}}值超过最大长度 {{maxLength}}',
+      moreThanMaxLengthLine:
+        '第 {{rowIndex}} 行: {{varName}}值超过最大长度 {{maxLength}}',
       atLeastOne: '上传文件的内容不能少于一条',
     },
   },
-}
+};
 
-export default translation
+export default translation;

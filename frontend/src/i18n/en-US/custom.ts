@@ -25,6 +25,6 @@ const translation = {
     prefix: 'To customize the brand logo within the app, please',
     suffix: 'to upgrade to the Enterprise edition.',
   },
-}
+};
 
-export default translation
+export default translation;

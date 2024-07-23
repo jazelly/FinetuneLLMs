@@ -4,7 +4,8 @@ const translation = {
   editBy: '{{author}}编辑的答案',
   noData: {
     title: '没有标注',
-    description: '你可以在应用会话调试中编辑标注，也可以在此批量导入标注用于高质量回复。',
+    description:
+      '你可以在应用会话调试中编辑标注，也可以在此批量导入标注用于高质量回复。',
   },
   table: {
     header: {
@@ -84,7 +85,8 @@ const translation = {
     confirmBtn: '保存并启用',
     configConfirmBtn: '保存',
   },
-  embeddingModelSwitchTip: '标注文本向量化模型，切换模型会重新嵌入，产生额外费用消耗',
-}
+  embeddingModelSwitchTip:
+    '标注文本向量化模型，切换模型会重新嵌入，产生额外费用消耗',
+};
 
-export default translation
+export default translation;
