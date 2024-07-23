@@ -485,10 +485,17 @@ class SFTRunner:
 
         # Train model
         trainer.train()
+
+        kwargs = {
+            "finetuned_from": model_name,
+            "dataset": list(data_config.dataset_mixer.keys()),
+            "dataset_tags": list(data_config.dataset_mixer.keys()),
+            "tags": ["aimo"],
+        }
         # Save trained model
         trainer.save_model()
         saved_tokenizer = tokenizer.save_pretrained(save_directory)
-
+        trainer.push_to_hub()
         del model
         del trainer
         torch.cuda.empty_cache()
