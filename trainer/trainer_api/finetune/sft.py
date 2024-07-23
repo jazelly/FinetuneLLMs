@@ -1,14 +1,13 @@
+import contextlib
+from datetime import datetime
 import json
 import os
-import sys
 import torch
-import argparse
-
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     BitsAndBytesConfig,
-    pipeline,
+    PreTrainedTokenizer,
 )
 
 from trl import SFTTrainer, SFTConfig, ORPOConfig, ORPOTrainer
@@ -17,61 +16,21 @@ from peft import LoraConfig, PeftModel
 
 from peft.utils import TaskType
 
+from trainer_api.reporter.reporter import TrainerReporter
+from trainer_api.utils.memory import estimate_command
+
+from .parser import TrainingParamsParser
+from trainer_api.utils.logging_utils import StdoutInterceptor
+
+from .loader import ModelLoader, TokenizerLoader
 from trainer_api.utils.misc import (
-    calculate_memory_requirements,
+    DotDict,
     get_current_device,
 )
-
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-TRAINER_ROOT_PATH = os.path.normpath(os.path.join(SCRIPT_DIR, "../../"))
-
-sys.path.append(TRAINER_ROOT_PATH)
-
-
-print(json.dumps({"title": "Validating finetuning options"}))
-
-
-def process_args():
-    # Create the parser
-    parser = argparse.ArgumentParser(description="Training script parser")
-    # Add arguments
-    parser.add_argument("--model", type=str, dest="model", help="Set the name of model")
-    parser.add_argument(
-        "--method", type=str, dest="method", help="Set the method to use"
-    )
-    parser.add_argument(
-        "--dataset", type=str, dest="dataset", help="Set the name of dataset"
-    )
-    # Parse the arguments
-    args = parser.parse_args()
-    return args
-
-
-args = process_args()
-method = args.method
-if not method:
-    print(json.dumps({"warning": "No training method provided, exiting"}))
-    sys.exit(0)
-print(json.dumps({"detail": f"Training method： {method}"}))
-model_name = args.model
-if not model_name:
-    print(json.dumps({"warning": "No model provided, exiting"}))
-    sys.exit(0)
-print(json.dumps({"detail": f"Base model： {model_name}"}))
-dataset_name = args.dataset
-if not dataset_name:
-    print(json.dumps({"warning": "No dataset provided, exiting"}))
-    sys.exit(0)
-print(json.dumps({"detail": f"Selected dataset {dataset_name}"}))
-
-# Output directory where the model predictions and checkpoints will be stored
-MODEL_OUTPUT_DIR = os.path.join(SCRIPT_DIR, "results")
-DATASET_CACHE_DIR = os.path.join(SCRIPT_DIR, "datasets")
-MODELS_CACHE_DIR = os.path.join(SCRIPT_DIR, "models")
-
-
-def get_hparams():
-    return {}
+from trainer_api.utils.constants import (
+    MODEL_OUTPUT_DIR,
+    DATASET_CACHE_DIR,
+)
 
 
 # Number of training epochs
@@ -142,14 +101,6 @@ def get_dataset(name, split=None, cache_dir=DATASET_CACHE_DIR):
     return load_dataset(name, split=split, cache_dir=cache_dir)
 
 
-def get_tokenizer(model_name) -> AutoTokenizer:
-    # Load tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-    tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"  # Fix weird overflow issue with fp16 training
-    return tokenizer
-
-
 def get_lora_config(
     lora_alpha,
     lora_dropout,
@@ -163,28 +114,26 @@ def get_lora_config(
     )
 
 
-################################################################################
-# bitsandbytes parameters
-################################################################################
+def get_bnb_config():
+    ################################################################################
+    # bitsandbytes parameters
+    ################################################################################
 
-# Activate 4-bit precision base model loading
-use_4bit = True
+    # Activate 4-bit precision base model loading
+    use_4bit = True
 
-# Compute dtype for 4-bit base models
-bnb_4bit_compute_dtype = "float16"
+    # Compute dtype for 4-bit base models
+    bnb_4bit_compute_dtype = "float16"
 
-# Quantization type (fp4 or nf4)
-bnb_4bit_quant_type = "nf4"
+    # Quantization type (fp4 or nf4)
+    bnb_4bit_quant_type = "nf4"
 
-# Activate nested quantization for 4-bit base models (double quantization)
-use_nested_quant = False
+    # Activate nested quantization for 4-bit base models (double quantization)
+    use_nested_quant = False
 
-# Load tokenizer and model with QLoRA configuration
-compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
+    # Load tokenizer and model with QLoRA configuration
+    compute_dtype = getattr(torch, bnb_4bit_compute_dtype)
 
-
-def get_base_model_bnb_config():
-    # Quantization config
     bnb_config = BitsAndBytesConfig(
         load_in_4bit=use_4bit,
         bnb_4bit_quant_type=bnb_4bit_quant_type,
@@ -195,83 +144,15 @@ def get_base_model_bnb_config():
     return bnb_config
 
 
-bnb_config = get_base_model_bnb_config()
-
-
-def get_quantized_model(model_name, quantization_config, device_map):
-    # Load base model
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        quantization_config=quantization_config,
-        device_map=device_map,
-        cache_dir=MODELS_CACHE_DIR,
-        config={
-            "use_cache": False,
-            "pretraining_tp": 1,
-        },
-    )
-    model.config.use_cache = False  # whether the model uses caching during inference to speed up generation by reusing previous computations
-    model.config.pretraining_tp = 1
-    return model
-
-
-def validate_dataset(dataset):
-    training_set = dataset["train"]
-    if not training_set:
-        print(f"[Warning] the dataset {dataset_name} has no train split", flush=True)
-        sys.exit(0)
-
-    if (
-        method == "orpo"
-        and training_set.features is not None
-        and "prompt" not in training_set.features
-        and "chosen" not in training_set.features
-        and "rejected" not in training_set.features
-    ):
-        print(
-            f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}",
-            flush=True,
-        )
-        sys.exit(0)
-
-    if (
-        method == "sft"
-        and isinstance(training_set.features, list)
-        and len(training_set.features) != 1
-    ):
-        print(
-            f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}",
-            flush=True,
-        )
-        sys.exit(0)
-
-
 def get_new_model_name():
-    return f"{model_name}-{dataset_name}"
+    now = datetime.now()
+    formatted_datetime = now.strftime("%Y-%m-%d-%H-%M-%S")
+    return formatted_datetime
 
 
 ##########################
 ## Validate GPU Limit ####
 ##########################
-
-
-def get_gpu_memory():
-    if not device_map.startswith("cuda"):
-        return 0, 0
-    if not torch.cuda.is_available():
-        print({"type": "warning", "message": f"No GPU available, using CPU"})
-        sys.exit(0)
-
-    total_memory = torch.cuda.get_device_properties(0).total_memory
-    free_memory = torch.cuda.memory_reserved(0)
-
-    print(
-        {
-            "type": "info",
-            "message": f"Free Memory {free_memory} / Total Memory {total_memory}",
-        }
-    )
-    return total_memory, free_memory
 
 
 def get_model_parameters(model):
@@ -293,20 +174,23 @@ def get_model_parameters(model):
     }
 
 
-################################################################################
-# TrainingArguments parameters
-################################################################################
-# Parameters for training arguments details => https://github.com/huggingface/transformers/blob/main/src/transformers/training_args.py#L158
-def get_training_args_of_method(method: str):
+def get_trainer(
+    model,
+    train_dataset,
+    peft_config,
+    tokenizer,
+    method,
+):
     if method == "sft":
+        k, v = next(iter(train_dataset.features.items()))
         training_arguments = SFTConfig(
             output_dir=MODEL_OUTPUT_DIR,
             max_seq_length=max_seq_length,
-            dataset_text_field=training_set.features[0],
+            dataset_text_field=k,
             num_train_epochs=num_train_epochs,
             gradient_accumulation_steps=gradient_accumulation_steps,
-            optim=optim,
-            save_steps=save_steps,
+            optim="paged_adamw_8bit",
+            save_steps=0,
             logging_steps=logging_steps,
             learning_rate=learning_rate,
             weight_decay=weight_decay,
@@ -317,9 +201,15 @@ def get_training_args_of_method(method: str):
             warmup_ratio=warmup_ratio,
             group_by_length=group_by_length,
             lr_scheduler_type=lr_scheduler_type,
-            # report_to="tensorboard",
         )
-        return training_arguments
+        trainer = SFTTrainer(
+            model=model,
+            train_dataset=train_dataset,
+            peft_config=peft_config,
+            tokenizer=tokenizer,
+            args=training_arguments,
+        )
+
     elif method == "orpo":
         training_arguments = ORPOConfig(
             learning_rate=learning_rate,
@@ -339,27 +229,6 @@ def get_training_args_of_method(method: str):
             output_dir=MODEL_OUTPUT_DIR,
             remove_unused_columns=False,
         )
-        return training_arguments
-
-
-def get_trainer(
-    model,
-    train_dataset,
-    peft_config,
-    tokenizer,
-    method,
-):
-    training_arguments = get_training_args_of_method(method)
-    if method == "sft":
-        trainer = SFTTrainer(
-            model=model,
-            train_dataset=train_dataset,
-            peft_config=peft_config,
-            tokenizer=tokenizer,
-            args=training_arguments,
-        )
-        return trainer
-    elif method == "orpo":
         trainer = ORPOTrainer(
             model=model,
             args=training_arguments,
@@ -367,60 +236,120 @@ def get_trainer(
             peft_config=peft_config,
             tokenizer=tokenizer,
         )
-        return trainer
+    return trainer
 
 
-def train(trainer, new_model=get_new_model_name()):
-    # Train model
-    trainer.train()
-    # Save trained model
-    trainer.model.save_pretrained(new_model)
+class SFTRunner:
+    def __init__(self, task_id, reporter):
+        self.id = task_id
+        self.reporter: TrainerReporter = reporter
 
+    def report(self, log):
+        print(log)
+        if not self.reporter:
+            return
+        self.reporter.report(log)
 
-def save_trained_model(new_model):
-    # Reload model in FP16 and merge it with LoRA weights
-    base_model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        low_cpu_mem_usage=True,
-        return_dict=True,
-        torch_dtype=torch.float16,
-        device_map=device_map,
-    )
-    model = PeftModel.from_pretrained(base_model, new_model)
-    model = model.merge_and_unload()
-    return model
+    def get_gpu_memory(self):
+        print(device_map.type)
+        if not device_map.type.startswith("cuda"):
+            return 0, 0
+        if not torch.cuda.is_available():
+            return -1, -1
 
+        total_memory = torch.cuda.get_device_properties(0).total_memory
+        free_memory = torch.cuda.memory_reserved(0)
 
-model = get_quantized_model(model_name, bnb_config, device_map)
+        return total_memory, free_memory
 
-
-def run():
-    total_memory, free_memory = get_gpu_memory()
-    model_params = get_model_parameters(model)
-    estimated_training_memory_usage = calculate_memory_requirements(4, **model_params)
-    trainable = True
-    print(
-        json.dumps(
-            {
-                "type": "title",
-                "message": f"Checking hardware requirements",
-            }
-        )
-    )
-
-    if estimated_training_memory_usage["total_memory"] > free_memory:
-        print(
-            json.dumps(
-                {
-                    "type": "warning",
-                    "message": f"Estimated: require at least {estimated_training_memory_usage['total_memory'] // 1e6} MB, but only have {free_memory//1e6} MB left.\n Unable to start model training.",
-                }
+    def validate_dataset(self, dataset, method, dataset_name):
+        if not dataset:
+            self.report(
+                json.dumps(
+                    {
+                        "type": "warning",
+                        "message": f"[Warning] the dataset {dataset_name} has no train split",
+                    }
+                )
             )
-        )
-        trainable = False
+            return False
 
-    else:
-        print(
+        if (
+            method == "orpo"
+            and dataset.features is not None
+            and "prompt" not in dataset.features
+            and "chosen" not in dataset.features
+            and "rejected" not in dataset.features
+        ):
+            self.report(
+                json.dumps(
+                    {
+                        "type": "warning",
+                        "message": f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}",
+                    }
+                )
+            )
+            return False
+
+        if (
+            method == "sft"
+            and isinstance(dataset.features, list)
+            and len(dataset.features) != 1
+        ):
+            self.report(
+                json.dumps(
+                    {
+                        "type": "warning",
+                        "message": f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}",
+                    }
+                )
+            )
+            return False
+        return True
+
+    def run(self, model_name, method, dataset_name, hparams):
+        self.report(
+            json.dumps({"type": "title", "message": "Validating finetuning options"})
+        )
+        if not model_name and not method and not dataset_name:
+            if not method:
+                self.report(
+                    json.dumps(
+                        {
+                            "type": "warning",
+                            "message": "No training method provided, exiting",
+                        }
+                    )
+                )
+                return
+            self.report(
+                json.dumps({"type": "detail", "message": f"Training method： {method}"})
+            )
+
+            if not model_name:
+                self.report(
+                    json.dumps(
+                        {"type": "warning", "message": "No model provided, exiting"}
+                    )
+                )
+                return
+            self.report(json.dumps({"detail": f"Base model： {model_name}"}))
+
+            if not dataset_name:
+                self.report(
+                    json.dumps(
+                        {"type": "warning", "message": "No dataset provided, exiting"}
+                    )
+                )
+                return
+            self.report(
+                json.dumps(
+                    {"type": "detail", "message": f"Selected dataset {dataset_name}"}
+                )
+            )
+        self.report(json.dumps({"type": "info", "message": "ok"}))
+
+        self.report(
             json.dumps(
                 {
                     "type": "title",
@@ -428,34 +357,123 @@ def run():
                 }
             )
         )
+        total_memory, free_memory = self.get_gpu_memory()
+        self.report(
+            {
+                "type": "info",
+                "message": f"Free Memory {free_memory} / Total Memory {total_memory}",
+            }
+        )
+        if total_memory == 0:
+            self.report(
+                json.dumps(
+                    {"type": "info", "message": f"CUDA is not available. Exiting"}
+                )
+            )
+            return
 
-    if trainable:
-        tokenizer = get_tokenizer(model_name)
-        dataset = get_dataset(name=dataset_name, cache_dir=DATASET_CACHE_DIR)
-        validate_dataset(dataset)
-        training_set = dataset["train"]
+        if total_memory < 0:
+            self.report(
+                json.dumps({"type": "info", "message": f"No GPU detected. Exiting"})
+            )
+            return
+
+        interceptor = StdoutInterceptor(logger_name=__name__)
+        estimate_args = DotDict(
+            {
+                "model_name": model_name,
+                "dtypes": ["float16", "int8", "int4"],
+            }
+        )
+        with contextlib.redirect_stdout(interceptor):
+            estimated_result = estimate_command(estimate_args)
+            print(estimated_result)
+        intercepted_output = interceptor.get_value()
+
+        trainable = True
+        # if estimated_training_memory_usage["total_memory"] > free_memory:
+        #     self.report(
+        #         json.dumps(
+        #             {
+        #                 "type": "warning",
+        #                 "message": f"Estimated: require at least {estimated_training_memory_usage['total_memory'] // 1e6} MB, but only have {free_memory//1e6} MB left.\n Unable to start model training.",
+        #             }
+        #         )
+        #     )
+        #     trainable = False
+        # else:
+        #     self.report(
+        #         json.dumps(
+        #             {
+        #                 "type": "info",
+        #                 "message": f"Memory check finished. The model is trainable on current device",
+        #             }
+        #         )
+        #     )
+
+        if not trainable:
+            return
+
+        everything_parser = TrainingParamsParser()
+        model_args, data_args = everything_parser.parse(model_name)
+        self.report(
+            json.dumps(
+                {
+                    "type": "title",
+                    "message": f"Loading model params",
+                }
+            )
+        )
+        bnb_config = get_bnb_config()
+        model_loader = ModelLoader(model_name, bnb_config, device_map)
+        model = model_loader.load()
+        tokenizer_loader = TokenizerLoader(model_args)
+        tokenizer = tokenizer_loader.load()
+        self.report(
+            json.dumps(
+                {
+                    "type": "detail",
+                    "message": f"Loading dataset {dataset_name}",
+                }
+            )
+        )
+
+        train_dataset = get_dataset(
+            name=dataset_name, split="train", cache_dir=DATASET_CACHE_DIR
+        )
+        if not self.validate_dataset(
+            train_dataset, method=method, dataset_name=dataset_name
+        ):
+            return
 
         lora_rank = 64
         lora_alpha = 16
-
-        print(
+        lora_dropout = 0.1
+        self.report(
             json.dumps(
                 {
-                    "type": "info",
+                    "type": "detail",
                     "message": f"Loading LORA configuration:\n 'lora_alpha': {lora_alpha}\n 'lora_dropout': {lora_dropout}\n 'lora_rank': {lora_rank}\n",
                 }
             )
         )
 
-        # Dropout probability for LoRA layers
-        lora_dropout = 0.1
         peft_config = get_lora_config(
             lora_alpha=lora_alpha, lora_dropout=lora_dropout, lora_rank=lora_rank
         )
 
+        self.report(
+            json.dumps(
+                {
+                    "type": "detail",
+                    "message": f"Preparing trainer\n",
+                }
+            )
+        )
+
         trainer = get_trainer(
             model=model,
-            train_dataset=training_set,
+            train_dataset=train_dataset,
             peft_config=peft_config,
             tokenizer=tokenizer,
             method=method,
@@ -463,14 +481,25 @@ def run():
 
         # Fine-tuned model name
         new_model = get_new_model_name()
-        train(trainer, new_model)
+        save_directory = os.path.join(MODEL_OUTPUT_DIR, new_model)
+
+        # Train model
+        trainer.train()
+        # Save trained model
+        trainer.save_model()
+        saved_tokenizer = tokenizer.save_pretrained(save_directory)
 
         del model
         del trainer
-        import gc
+        torch.cuda.empty_cache()
 
-        gc.collect()
-        gc.collect()
-
-        model = save_trained_model(new_model)
-        saved_tokenizer = tokenizer.save_pretrained(new_model)
+        # base_model = AutoModelForCausalLM.from_pretrained(
+        #     model_name,
+        #     low_cpu_mem_usage=True,
+        #     return_dict=True,
+        #     torch_dtype=torch.float16,
+        #     device_map=device_map,
+        # )
+        # model = PeftModel.from_pretrained(base_model, new_model)
+        # model = model.merge_and_unload()
+        # saved_tokenizer = tokenizer.save_pretrained(new_model)

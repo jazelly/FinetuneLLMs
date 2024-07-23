@@ -1,28 +1,13 @@
-# Copyright 2024 HuggingFace Inc. and the LlamaFactory team.
-#
-# This code is inspired by the HuggingFace's transformers library.
-# https://github.com/huggingface/transformers/blob/v4.40.0/examples/pytorch/language-modeling/run_clm.py
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 from dataclasses import dataclass, field
-from typing import Literal, Optional
+from typing import Dict, Literal, Optional, Union
+
+from trainer_api.utils.constants import DATASET_CACHE_DIR
 
 
 @dataclass
 class DataArguments:
-    r"""
-    Arguments pertaining to what data we are going to input our model for training and evaluation.
+    """
+    Arguments pertaining to what data we are going to input our model for training and eval.
     """
 
     template: Optional[str] = field(
@@ -31,15 +16,51 @@ class DataArguments:
             "help": "Which template to use for constructing prompts in training and inference."
         },
     )
-    dataset: Optional[str] = field(
+    dataset_name: Optional[str] = field(
         default=None,
         metadata={
             "help": "The name of provided dataset(s) to use. Use commas to separate multiple datasets."
         },
     )
     dataset_dir: str = field(
-        default="data",
+        default=DATASET_CACHE_DIR,
         metadata={"help": "Path to the folder containing the datasets."},
+    )
+    dataset_config_name: Optional[str] = field(
+        default=None,
+        metadata={
+            "help": "The configuration name of the dataset to use (via the datasets library)."
+        },
+    )
+    dataset_split_name: Optional[str] = field(
+        default="train",
+        metadata={"help": "The dataset split to use (via the datasets library)."},
+    )
+    dataset_mixer: Optional[Dict[str, Union[float, Dict[str, object]]]] = field(
+        default=None,
+        metadata={
+            "help": (
+                """
+                    Datasets and either their proportions to be used for training,
+                    or a dict of their proportions and the dataset revision to use.
+                    e.g.
+                    {
+                        'HuggingFaceH4/testing_codealpaca_small': 0.5,
+                        'HuggingFaceH4/testing_codealpaca_small': {
+                            'fraction': 0.5,
+                            'revision': '20-examples'
+                        }
+                    }
+
+                    As yaml
+                    dataset_mixer:
+                        HuggingFaceH4/testing_codealpaca_small: 0.5
+                        HuggingFaceH4/testing_codealpaca_small:
+                            fraction: 0.5
+                            revision: 20-examples
+                """
+            )
+        },
     )
     split: str = field(
         default="train",
@@ -52,10 +73,6 @@ class DataArguments:
     train_on_prompt: bool = field(
         default=False,
         metadata={"help": "Whether to disable the mask on the prompt or not."},
-    )
-    streaming: bool = field(
-        default=False,
-        metadata={"help": "Enable dataset streaming."},
     )
     buffer_size: int = field(
         default=16384,
@@ -80,7 +97,7 @@ class DataArguments:
         metadata={"help": "Overwrite the cached training and evaluation sets."},
     )
     preprocessing_num_workers: Optional[int] = field(
-        default=None,
+        default=1,
         metadata={"help": "The number of processes to use for the pre-processing."},
     )
     max_samples: Optional[int] = field(
@@ -117,20 +134,16 @@ class DataArguments:
         default=False,
         metadata={"help": "Enable sequence packing without cross-attention."},
     )
-    tool_format: Optional[str] = field(
+    num_beams: Optional[int] = field(
         default=None,
         metadata={
-            "help": "Tool format to use for constructing function calling examples."
+            "help": (
+                "Number of beams to use for evaluation. This argument will be passed to ``model.generate``, "
+                "which is used during ``evaluate`` and ``predict``."
+            )
         },
     )
     tokenized_path: Optional[str] = field(
         default=None,
         metadata={"help": "Path to save or load the tokenized datasets."},
     )
-
-    def __post_init__(self):
-        if self.streaming and self.val_size > 1e-6 and self.val_size < 1:
-            raise ValueError("Streaming mode should have an integer val size.")
-
-        if self.streaming and self.max_samples is not None:
-            raise ValueError("`max_samples` is incompatible with `streaming`.")

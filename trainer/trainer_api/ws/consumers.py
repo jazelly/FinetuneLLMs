@@ -1,13 +1,12 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 from trainer_api.scheduler.task import Task
 from trainer_api.scheduler.worker import Worker
 from trainer_api.utils.constants import BASE_MODELS, TRAINING_METHODS
 from trainer_api.utils import logging_utils
 
-training_consumer_logger = logging_utils.get_stream_logger("TrainingConsumer")
+training_consumer_logger = logging_utils.get_stream_logger(__name__)
 
 
 class TrainingConsumer(AsyncWebsocketConsumer):
@@ -77,9 +76,8 @@ class TrainingConsumer(AsyncWebsocketConsumer):
 
             try:
                 # schedule the task and respond immediately
-                training_consumer_logger.info("[Worker] Submitting task")
+                training_consumer_logger.info("Submitting task")
                 worker = Worker()
-
                 t = Task(
                     method=data["trainingMethod"],
                     model=data["baseModel"],
@@ -93,6 +91,7 @@ class TrainingConsumer(AsyncWebsocketConsumer):
                         {
                             "status": "success",
                             "code": 200,
+                            "type": "info",
                             "message": f"Added task {t.id} to queue",
                             "data": {
                                 "task_id": str(t.id),
@@ -126,15 +125,4 @@ class TrainingConsumer(AsyncWebsocketConsumer):
         await channel_layer.group_send(
             str(self.client_port),
             {"type": "send_job_update", "message": responseJson},
-        )
-
-    def send_message_to_client_sync(self, response):
-        assert isinstance(response, str), "response must be str"
-        channel_layer = get_channel_layer()
-        training_consumer_logger.info(
-            f"Sending message to group {self.client_port}: {response}"
-        )
-        async_to_sync(channel_layer.group_send)(
-            str(self.client_port),
-            {"type": "send_job_update", "message": response},
         )

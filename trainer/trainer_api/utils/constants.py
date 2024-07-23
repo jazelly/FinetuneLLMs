@@ -1,8 +1,6 @@
 from enum import Enum, unique
 import os
 
-from django.conf import settings
-
 """
 Scheduler scope
 """
@@ -16,10 +14,9 @@ class WorkerStates(Enum):
     ERROR = 3
 
 
-FINETUNE_SCRIPT_DIR = os.path.join(settings.BASE_DIR, "./trainer_api/finetune")
-FINETUNE_SCRIPT_PATH = os.path.join(FINETUNE_SCRIPT_DIR, "./sft.py")
-
-LOG_DIR = log_path = os.path.join(settings.BASE_DIR, "trainer_api/logs/")
+TRAINER_API_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../")
+FINETUNE_SCRIPT_DIR = os.path.join(TRAINER_API_DIR, "finetune/")
+LOG_DIR = log_path = os.path.join(TRAINER_API_DIR, "logs/")
 
 
 def convert_to_enum_name(text):
@@ -32,14 +29,14 @@ BASE_MODELS = [
     "microsoft/Phi-3-mini-4k-instruct",
 ]
 
-TRAINING_METHODS = [
-    {
+TRAINING_METHODS = {
+    "SFT": {
         "name": "SFT",
         "full_name": "Supervised Fine-Tuning",
         "explanation": "SFT is the process of adapting a pre-trained model to a specific task using labeled data.",
         "external_link": "https://huggingface.co/docs/trl/main/en/sft_trainer",
     },
-    {
+    "ORPO": {
         "name": "ORPO",
         "full_name": "Odds Ratio Preference Optimization",
         "explanation": "Odds Ratio Preference Optimization (ORPO) by Jiwoo Hong, Noah Lee, and James Thorne studies the crucial role of SFT within the context of preference alignment. "
@@ -47,7 +44,7 @@ TRAINING_METHODS = [
         + "log odds ratio term appended to the NLL loss is sufficient for preference-aligned SFT.",
         "external_link": "https://huggingface.co/docs/trl/main/en/orpo_trainer",
     },
-]
+}
 
 EXAMPLE_DATASETS = [
     {
@@ -63,6 +60,16 @@ EXAMPLE_DATASETS = [
     },
 ]
 
+"""
+DATA scope
+"""
+
+FILE_EXT_MAP = {
+    "csv": "csv",
+    "json": "json",
+    "parquet": "parquet",
+    "txt": "text",
+}
 
 """
 Inference scope
@@ -91,3 +98,11 @@ class Role(str, Enum):
     USER = "user"
     ASSISTANT = "assistant"
     SYSTEM = "system"
+
+
+"""
+Finetune scope
+"""
+MODEL_OUTPUT_DIR = os.path.join(FINETUNE_SCRIPT_DIR, "results/")
+MODEL_CACHE_DIR = os.path.join(FINETUNE_SCRIPT_DIR, "models/")
+DATASET_CACHE_DIR = os.path.join(FINETUNE_SCRIPT_DIR, "datasets/")
