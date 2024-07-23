@@ -26,6 +26,32 @@ model models {
   lastUpdatedAt DateTime @default(now())
 }
 
+model workflows {
+  id         String           @id @default(uuid())
+  name       String
+  nodes      workflow_nodes[]
+  edges      workflow_edges[]
+  created_at DateTime         @default(now())
+  updated_at DateTime         @default(now())
+}
+
+model workflow_nodes {
+  id          String    @id @default(uuid())
+  title       String
+  desc        String
+  type        String
+  workflow_id String
+  workflow    workflows @relation(fields: [workflow_id], references: [id])
+}
+
+model workflow_edges {
+  id          String    @id @default(uuid())
+  in_degree   String
+  out_degree  String
+  workflow_id String
+  workflow    workflows @relation(fields: [workflow_id], references: [id])
+}
+
 model chat_history {
   id            Int      @id @default(autoincrement())
   model_id      Int

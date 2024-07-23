@@ -31,20 +31,6 @@ export interface DatasetRemote extends DatasetBase {
   lastUpdatedAt: Date;
 }
 
-interface HTTPResponse {
-  success: boolean;
-}
-
-export interface HTTPResponseSuccess<T> extends HTTPResponse {
-  success: true;
-  data: T;
-}
-
-export interface HTTPResponseError extends HTTPResponse {
-  success: false;
-  error: string;
-}
-
 export interface JobCreate {
   baseModel: string;
   trainingMethod: string;

@@ -3,9 +3,8 @@ import { baseHeaders } from '@/utils/request';
 import type {
   HTTPResponseError,
   HTTPResponseSuccess,
-  JobCreate,
-  JobDetail,
-} from '@/types/dashboard.type';
+} from '@/types/common.type';
+import { JobCreate, JobDetail } from '@/types/dashboard.type';
 
 const Job = {
   submitJob: async (
@@ -20,7 +19,6 @@ const Job = {
 
       const data = await resp.json();
 
-      console.log('res', data);
       return { success: true, data };
     } catch (error: any) {
       console.error(error);

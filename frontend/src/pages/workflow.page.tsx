@@ -17,8 +17,10 @@ import {
   SIDEBAR_WIDTH,
 } from '@/utils/constants';
 import ChatContainer from '@/components/Chat/ChatContainer.component';
+import Workflow from '@/components/workflow/canva.component';
+import WorkflowCanva from '@/components/workflow/canva.component';
 
-const Dashboard = () => {
+const WorkflowPage = () => {
   const [jobOptions, setJobOptions] = useState<AllJobOptions | undefined>(
     undefined
   );
@@ -57,7 +59,7 @@ const Dashboard = () => {
     return;
   }, []);
 
-  const initialLeftWidth = ((window.innerWidth - 42 - 16) * 1) / 3; // 1/3 width for the left panel
+  const initialLeftWidth = ((window.innerWidth - 42 - 16) * 2) / 3; // 2/3 width for the left panel
 
   const [leftWidth, setLeftWidth] = useState(initialLeftWidth);
 
@@ -115,7 +117,8 @@ const Dashboard = () => {
         maxConstraints={[maxWidthLeft, Infinity]}
         className="flex h-full bg-main-menu text-white"
       >
-        <FinetunePanel jobOptions={jobOptions} setJobOptions={setJobOptions} />
+        {/* <FinetunePanel jobOptions={jobOptions} setJobOptions={setJobOptions} /> */}
+        <WorkflowCanva />
       </ResizableBox>
       {!isRightCollapsed && (
         <div className="flex-1 bg-main-workspace">
@@ -129,4 +132,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default WorkflowPage;

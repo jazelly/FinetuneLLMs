@@ -6,11 +6,10 @@ import useWebSocket, { ReadyState, SendMessage } from 'react-use-websocket';
 export type TrainerMessageMap = Record<string, TrainerMessage[]>;
 
 export interface TrainerMessage {
-  type: 'title' | 'detail';
+  type: 'title' | 'info' | 'warning';
   message: string;
   data: {
     task_id: string;
-    log: string;
   };
   code: number;
 }
@@ -34,10 +33,12 @@ export const TrainerMessageMapProvider = ({ children }) => {
   );
   const [messageMap, setMessageMap] = useState<TrainerMessageMap>({});
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  const { sendMessage, lastMessage, readyState } = useWebSocket<
+    TrainerMessage | string
+  >(socketUrl);
 
   useEffect(() => {
-    let dataJson;
+    let dataJson: TrainerMessage | undefined;
     try {
       dataJson = JSON.parse(lastMessage?.data);
     } catch (err) {
@@ -47,7 +48,7 @@ export const TrainerMessageMapProvider = ({ children }) => {
     if (dataJson) {
       setMessageMap((prev) => {
         const newMessageMap = { ...prev };
-        const oldList = newMessageMap[dataJson.data.task_id] ?? []; // TODO: key should be something more general
+        const oldList = newMessageMap[dataJson.data.task_id] ?? [];
         newMessageMap[dataJson.data.task_id] = oldList.concat(dataJson);
         return newMessageMap;
       });

@@ -18,7 +18,7 @@ import Chat from './pages/Chat.page';
 
 const Pipelines = lazy(() => import('@/pages/Pipelines.page'));
 const Pipeline = lazy(() => import('@/pages/Pipeline.page'));
-const Dashboard = lazy(() => import('@/pages/Dashboard.page'));
+const Dashboard = lazy(() => import('@/pages/workflow.page'));
 
 export default function App() {
   const sidebarRef = useRef(null);

@@ -28,6 +28,7 @@ export default {
         'main-menu': '#3D4B56',
         'main-text': '#BFCAD4',
         'main-blue': '#4F7ED4',
+        'workflow-gray': '#475467',
         blue350: '#4A7AD6',
         'main-nile-blue': '#518C99',
         'main-gray': '#A1ACBD',
