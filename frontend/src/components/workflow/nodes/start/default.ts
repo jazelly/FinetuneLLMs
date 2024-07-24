@@ -1,9 +1,6 @@
 import type { NodeDefault } from '../../types';
 import type { StartNodeType } from './types';
-import {
-  ALL_CHAT_AVAILABLE_BLOCKS,
-  ALL_COMPLETION_AVAILABLE_BLOCKS,
-} from '@/components/workflow/constants';
+import { ALL_COMPLETION_AVAILABLE_BLOCKS } from '@/components/workflow/constants';
 
 const StartNodeDefault: NodeDefault<StartNodeType> = {
   defaultValue: {
@@ -13,9 +10,7 @@ const StartNodeDefault: NodeDefault<StartNodeType> = {
     return [];
   },
   getAvailableNextNodes() {
-    const nodes = 
-      ? ALL_CHAT_AVAILABLE_BLOCKS
-      : ALL_COMPLETION_AVAILABLE_BLOCKS;
+    const nodes = ALL_COMPLETION_AVAILABLE_BLOCKS;
     return nodes;
   },
   checkValid() {

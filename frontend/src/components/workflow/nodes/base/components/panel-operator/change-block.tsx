@@ -1,12 +1,13 @@
 import { memo, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { intersection } from 'lodash-es';
-import BlockSelector from '@/app/components/workflow/block-selector';
+import BlockSelector from '@/components/workflow/block-selector';
 import {
   useAvailableBlocks,
   useNodesInteractions,
-} from '@/app/components/workflow/hooks';
-import type { Node, OnSelectBlock } from '@/app/components/workflow/types';
+} from '@/components/workflow/hooks/hooks';
+import type { Node, OnSelectBlock } from '@/components/workflow/types';
+import React from 'react';
 
 type ChangeBlockProps = {
   nodeId: string;
@@ -17,8 +18,7 @@ const ChangeBlock = ({ nodeId, nodeData, sourceHandle }: ChangeBlockProps) => {
   const { t } = useTranslation();
   const { handleNodeChange } = useNodesInteractions();
   const { availablePrevBlocks, availableNextBlocks } = useAvailableBlocks(
-    nodeData.type,
-    nodeData.isInIteration
+    nodeData.type
   );
 
   const availableNodes = useMemo(() => {

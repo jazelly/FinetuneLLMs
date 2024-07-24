@@ -54,7 +54,7 @@ const AddBlock = ({ renderTrigger, offset }: AddBlockProps) => {
               : t(`workflow.blocks.${type}`),
           ...(toolDefaultValue || {}),
           _isCandidate: true,
-        },
+        } as any,
         position: {
           x: 0,
           y: 0,

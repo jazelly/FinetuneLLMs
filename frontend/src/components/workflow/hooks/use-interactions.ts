@@ -89,29 +89,6 @@ export const useNodeIterationInteractions = () => {
         y: undefined,
       };
 
-      if (node.data.isInIteration) {
-        const parentNode = nodes.find((n) => n.id === node.parentId);
-
-        if (parentNode) {
-          if (node.position.y < ITERATION_PADDING.top)
-            restrictPosition.y = ITERATION_PADDING.top;
-          if (node.position.x < ITERATION_PADDING.left)
-            restrictPosition.x = ITERATION_PADDING.left;
-          if (
-            node.position.x + node.width! >
-            parentNode!.width! - ITERATION_PADDING.right
-          )
-            restrictPosition.x =
-              parentNode!.width! - ITERATION_PADDING.right - node.width!;
-          if (
-            node.position.y + node.height! >
-            parentNode!.height! - ITERATION_PADDING.bottom
-          )
-            restrictPosition.y =
-              parentNode!.height! - ITERATION_PADDING.bottom - node.height!;
-        }
-      }
-
       return {
         restrictPosition,
       };

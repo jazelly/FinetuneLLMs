@@ -2,16 +2,7 @@ import { useContext } from 'react';
 import { useStore as useZustandStore } from 'zustand';
 import { createStore } from 'zustand/vanilla';
 import { debounce } from 'lodash-es';
-import type { Viewport } from 'reactflow';
-import type {
-  CommonNodeType,
-  Edge,
-  HistoryWorkflowData,
-  Node,
-  RunFile,
-  ToolWithProvider,
-  WorkflowRunningData,
-} from './types';
+import type { WorkflowRunningData } from './types';
 import { WorkflowContext } from './context';
 
 type PreviewRunningData = WorkflowRunningData & {
@@ -19,123 +10,8 @@ type PreviewRunningData = WorkflowRunningData & {
   resultText?: string;
 };
 
-type Shape = {
-  appId: string;
-  panelWidth: number;
-  workflowRunningData?: PreviewRunningData;
-  setWorkflowRunningData: (workflowData: PreviewRunningData) => void;
-  historyWorkflowData?: HistoryWorkflowData;
-  setHistoryWorkflowData: (historyWorkflowData?: HistoryWorkflowData) => void;
-  showRunHistory: boolean;
-  setShowRunHistory: (showRunHistory: boolean) => void;
-  showFeaturesPanel: boolean;
-  setShowFeaturesPanel: (showFeaturesPanel: boolean) => void;
-  draftUpdatedAt: number;
-  setDraftUpdatedAt: (draftUpdatedAt: number) => void;
-  publishedAt: number;
-  setPublishedAt: (publishedAt: number) => void;
-  showInputsPanel: boolean;
-  setShowInputsPanel: (showInputsPanel: boolean) => void;
-  inputs: Record<string, string>;
-  setInputs: (inputs: Record<string, string>) => void;
-  toolPublished: boolean;
-  setToolPublished: (toolPublished: boolean) => void;
-  files: RunFile[];
-  setFiles: (files: RunFile[]) => void;
-  backupDraft?: {
-    nodes: Node[];
-    edges: Edge[];
-    viewport: Viewport;
-    features: Record<string, any>;
-  };
-  setBackupDraft: (backupDraft?: Shape['backupDraft']) => void;
-  notInitialWorkflow: boolean;
-  setNotInitialWorkflow: (notInitialWorkflow: boolean) => void;
-  nodesDefaultConfigs: Record<string, any>;
-  setNodesDefaultConfigs: (nodesDefaultConfigs: Record<string, any>) => void;
-  nodeAnimation: boolean;
-  setNodeAnimation: (nodeAnimation: boolean) => void;
-  isRestoring: boolean;
-  setIsRestoring: (isRestoring: boolean) => void;
-  debouncedSyncWorkflowDraft: (fn: () => void) => void;
-  buildInTools: ToolWithProvider[];
-  setBuildInTools: (tools: ToolWithProvider[]) => void;
-  customTools: ToolWithProvider[];
-  setCustomTools: (tools: ToolWithProvider[]) => void;
-  workflowTools: ToolWithProvider[];
-  setWorkflowTools: (tools: ToolWithProvider[]) => void;
-  clipboardElements: Node[];
-  setClipboardElements: (clipboardElements: Node[]) => void;
-  shortcutsDisabled: boolean;
-  setShortcutsDisabled: (shortcutsDisabled: boolean) => void;
-  showDebugAndPreviewPanel: boolean;
-  setShowDebugAndPreviewPanel: (showDebugAndPreviewPanel: boolean) => void;
-  selection: null | { x1: number; y1: number; x2: number; y2: number };
-  setSelection: (selection: Shape['selection']) => void;
-  bundleNodeSize: { width: number; height: number } | null;
-  setBundleNodeSize: (bundleNodeSize: Shape['bundleNodeSize']) => void;
-  controlMode: 'pointer' | 'hand';
-  setControlMode: (controlMode: Shape['controlMode']) => void;
-  candidateNode?: Node;
-  setCandidateNode: (candidateNode?: Node) => void;
-  panelMenu?: {
-    top: number;
-    left: number;
-  };
-  setPanelMenu: (panelMenu: Shape['panelMenu']) => void;
-  nodeMenu?: {
-    top: number;
-    left: number;
-    nodeId: string;
-  };
-  setNodeMenu: (nodeMenu: Shape['nodeMenu']) => void;
-  mousePosition: {
-    pageX: number;
-    pageY: number;
-    elementX: number;
-    elementY: number;
-  };
-  setMousePosition: (mousePosition: Shape['mousePosition']) => void;
-  syncWorkflowDraftHash: string;
-  setSyncWorkflowDraftHash: (hash: string) => void;
-  showConfirm?: { title: string; desc?: string; onConfirm: () => void };
-  setShowConfirm: (showConfirm: Shape['showConfirm']) => void;
-  showAssignVariablePopup?: {
-    nodeId: string;
-    nodeData: Node['data'];
-    variableAssignerNodeId: string;
-    variableAssignerNodeHandleId: string;
-    parentNode?: Node;
-    x: number;
-    y: number;
-  };
-  setShowAssignVariablePopup: (
-    showAssignVariablePopup: Shape['showAssignVariablePopup']
-  ) => void;
-  hoveringAssignVariableGroupId?: string;
-  setHoveringAssignVariableGroupId: (
-    hoveringAssignVariableGroupId?: string
-  ) => void;
-  connectingNodePayload?: {
-    nodeId: string;
-    nodeType: string;
-    handleType: string;
-    handleId: string | null;
-  };
-  setConnectingNodePayload: (
-    startConnectingPayload?: Shape['connectingNodePayload']
-  ) => void;
-  enteringNodePayload?: {
-    nodeId: string;
-    nodeData: CommonNodeType;
-  };
-  setEnteringNodePayload: (
-    enteringNodePayload?: Shape['enteringNodePayload']
-  ) => void;
-};
-
 export const createWorkflowStore = () => {
-  return createStore<Shape>((set) => ({
+  return createStore<Record<string, any>>((set) => ({
     appId: '',
     panelWidth: localStorage.getItem('workflow-node-panel-width')
       ? parseFloat(localStorage.getItem('workflow-node-panel-width')!)
@@ -163,12 +39,9 @@ export const createWorkflowStore = () => {
     setShowInputsPanel: (showInputsPanel) => set(() => ({ showInputsPanel })),
     inputs: {},
     setInputs: (inputs) => set(() => ({ inputs })),
-    toolPublished: false,
-    setToolPublished: (toolPublished) => set(() => ({ toolPublished })),
     files: [],
     setFiles: (files) => set(() => ({ files })),
     backupDraft: undefined,
-    setBackupDraft: (backupDraft) => set(() => ({ backupDraft })),
     notInitialWorkflow: false,
     setNotInitialWorkflow: (notInitialWorkflow) =>
       set(() => ({ notInitialWorkflow })),
@@ -179,15 +52,10 @@ export const createWorkflowStore = () => {
     setNodeAnimation: (nodeAnimation) => set(() => ({ nodeAnimation })),
     isRestoring: false,
     setIsRestoring: (isRestoring) => set(() => ({ isRestoring })),
-    debouncedSyncWorkflowDraft: debounce((syncWorkflowDraft) => {
-      syncWorkflowDraft();
+    debouncedUpdateWorkflow: debounce((updateWorkflow) => {
+      updateWorkflow();
     }, 5000),
-    buildInTools: [],
-    setBuildInTools: (buildInTools) => set(() => ({ buildInTools })),
-    customTools: [],
-    setCustomTools: (customTools) => set(() => ({ customTools })),
-    workflowTools: [],
-    setWorkflowTools: (workflowTools) => set(() => ({ workflowTools })),
+
     clipboardElements: [],
     setClipboardElements: (clipboardElements) =>
       set(() => ({ clipboardElements })),
@@ -217,9 +85,6 @@ export const createWorkflowStore = () => {
     setNodeMenu: (nodeMenu) => set(() => ({ nodeMenu })),
     mousePosition: { pageX: 0, pageY: 0, elementX: 0, elementY: 0 },
     setMousePosition: (mousePosition) => set(() => ({ mousePosition })),
-    syncWorkflowDraftHash: '',
-    setSyncWorkflowDraftHash: (syncWorkflowDraftHash) =>
-      set(() => ({ syncWorkflowDraftHash })),
     showConfirm: undefined,
     setShowConfirm: (showConfirm) => set(() => ({ showConfirm })),
     showAssignVariablePopup: undefined,
@@ -237,7 +102,7 @@ export const createWorkflowStore = () => {
   }));
 };
 
-export function useStore<T>(selector: (state: Shape) => T): T {
+export function useStore<T>(selector: (state) => T): T {
   const store = useContext(WorkflowContext);
   if (!store) throw new Error('Missing WorkflowContext.Provider in the tree');
 

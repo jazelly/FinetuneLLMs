@@ -2,7 +2,9 @@ import type { Var } from './types';
 import { BlockEnum, VarType } from './types';
 import StartNodeDefault from './nodes/start/default';
 import IfElseDefault from './nodes/if-else/default';
-import EndNodeDefault from './nodes/end/default';
+import { ComponentType } from 'react';
+import StartNode from './nodes/start';
+import IfElseNode from './nodes/if-else';
 
 type NodesExtraData = {
   author: string;
@@ -13,9 +15,14 @@ type NodesExtraData = {
   getAvailableNextNodes: () => BlockEnum[];
   checkValid: any;
 };
+export const NodeComponentMap: Record<string, ComponentType<any>> = {
+  [BlockEnum.Start]: StartNode,
+  [BlockEnum.IfElse]: IfElseNode,
+};
+
 export const NODES_EXTRA_DATA: Record<BlockEnum, NodesExtraData> = {
   [BlockEnum.Start]: {
-    author: 'Dify',
+    author: 'Vertile',
     about: '',
     availablePrevNodes: [],
     availableNextNodes: [],
@@ -23,17 +30,8 @@ export const NODES_EXTRA_DATA: Record<BlockEnum, NodesExtraData> = {
     getAvailableNextNodes: StartNodeDefault.getAvailableNextNodes,
     checkValid: StartNodeDefault.checkValid,
   },
-  [BlockEnum.End]: {
-    author: 'Dify',
-    about: '',
-    availablePrevNodes: [],
-    availableNextNodes: [],
-    getAvailablePrevNodes: EndNodeDefault.getAvailablePrevNodes,
-    getAvailableNextNodes: EndNodeDefault.getAvailableNextNodes,
-    checkValid: EndNodeDefault.checkValid,
-  },
   [BlockEnum.IfElse]: {
-    author: 'Dify',
+    author: 'Vertile',
     about: '',
     availablePrevNodes: [],
     availableNextNodes: [],
@@ -44,7 +42,7 @@ export const NODES_EXTRA_DATA: Record<BlockEnum, NodesExtraData> = {
 };
 
 export const ALL_CHAT_AVAILABLE_BLOCKS = Object.keys(NODES_EXTRA_DATA).filter(
-  (key) => key !== BlockEnum.End && key !== BlockEnum.Start
+  (key) => key !== BlockEnum.Start
 ) as BlockEnum[];
 export const ALL_COMPLETION_AVAILABLE_BLOCKS = Object.keys(
   NODES_EXTRA_DATA
@@ -56,12 +54,6 @@ export const NODES_INITIAL_DATA = {
     title: '',
     desc: '',
     ...StartNodeDefault.defaultValue,
-  },
-  [BlockEnum.End]: {
-    type: BlockEnum.End,
-    title: '',
-    desc: '',
-    ...EndNodeDefault.defaultValue,
   },
   [BlockEnum.IfElse]: {
     type: BlockEnum.IfElse,

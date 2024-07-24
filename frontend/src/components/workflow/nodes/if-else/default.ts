@@ -20,10 +20,7 @@ const nodeDefault: NodeDefault<IfElseNodeType> = {
     conditions: [],
   },
   getAvailablePrevNodes() {
-    const nodes = ALL_COMPLETION_AVAILABLE_BLOCKS.filter(
-      (type) => type !== BlockEnum.End
-    );
-    return nodes;
+    return ALL_COMPLETION_AVAILABLE_BLOCKS;
   },
   getAvailableNextNodes() {
     const nodes = ALL_COMPLETION_AVAILABLE_BLOCKS;

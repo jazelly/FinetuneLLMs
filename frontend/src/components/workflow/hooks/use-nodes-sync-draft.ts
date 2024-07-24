@@ -2,19 +2,18 @@ import produce from 'immer';
 import { useCallback } from 'react';
 import { BlockEnum } from '../types';
 import { useNodesReadOnly } from './hooks';
-import { useStore, useStoreApi } from 'reactflow';
-import { useWorkflowStore } from '../store';
+import { useStore, useWorkflowStore } from '../store';
 import { useParams } from 'react-router-dom';
+import WorkflowModel from '@/models/workflow';
+import { useStoreApi } from 'reactflow';
+import { useWorkflowUpdate } from './workflow.hooks';
 
 export const useNodesSyncDraft = () => {
   const store = useStoreApi();
   const workflowStore = useWorkflowStore();
-  const featuresStore = useFeaturesStore();
   const { getNodesReadOnly } = useNodesReadOnly();
   const { handleRefreshWorkflowDraft } = useWorkflowUpdate();
-  const debouncedSyncWorkflowDraft = useStore(
-    (s) => s.debouncedSyncWorkflowDraft
-  );
+  const debouncedUpdateWorkflow = useStore((s) => s.debouncedUpdateWorkflow);
   const params = useParams();
 
   const getPostParams = useCallback(() => {
@@ -30,7 +29,6 @@ export const useNodesSyncDraft = () => {
 
       if (!hasStartNode) return;
 
-      const features = featuresStore!.getState().features;
       const producedNodes = produce(nodes, (draft) => {
         draft.forEach((node) => {
           Object.keys(node.data).forEach((key) => {
@@ -57,33 +55,10 @@ export const useNodesSyncDraft = () => {
               zoom,
             },
           },
-          features: {
-            opening_statement: features.opening?.opening_statement || '',
-            suggested_questions: features.opening?.suggested_questions || [],
-            suggested_questions_after_answer: features.suggested,
-            text_to_speech: features.text2speech,
-            speech_to_text: features.speech2text,
-            retriever_resource: features.citation,
-            sensitive_word_avoidance: features.moderation,
-            file_upload: features.file,
-          },
-          hash: syncWorkflowDraftHash,
         },
       };
     }
-  }, [store, featuresStore, workflowStore]);
-
-  const syncWorkflowDraftWhenPageClose = useCallback(() => {
-    if (getNodesReadOnly()) return;
-    const postParams = getPostParams();
-
-    if (postParams) {
-      navigator.sendBeacon(
-        `${API_PREFIX}/apps/${params.appId}/workflows/draft?_token=${localStorage.getItem('console_token')}`,
-        JSON.stringify(postParams.params)
-      );
-    }
-  }, [getPostParams, params.appId, getNodesReadOnly]);
+  }, [store, workflowStore]);
 
   const doSyncWorkflowDraft = useCallback(
     async (notRefreshWhenSyncError?: boolean) => {
@@ -94,9 +69,9 @@ export const useNodesSyncDraft = () => {
         const { setSyncWorkflowDraftHash, setDraftUpdatedAt } =
           workflowStore.getState();
         try {
-          const res = await syncWorkflowDraft(postParams);
-          setSyncWorkflowDraftHash(res.hash);
-          setDraftUpdatedAt(res.updated_at);
+          const res = await WorkflowModel.updateWorkflow(
+            postParams.params as any
+          );
         } catch (error: any) {
           if (error && error.json && !error.bodyUsed) {
             error.json().then((err: any) => {
@@ -118,14 +93,13 @@ export const useNodesSyncDraft = () => {
       if (getNodesReadOnly()) return;
 
       if (sync) doSyncWorkflowDraft(notRefreshWhenSyncError);
-      else debouncedSyncWorkflowDraft(doSyncWorkflowDraft);
+      else debouncedUpdateWorkflow(doSyncWorkflowDraft);
     },
-    [debouncedSyncWorkflowDraft, doSyncWorkflowDraft, getNodesReadOnly]
+    [debouncedUpdateWorkflow, doSyncWorkflowDraft, getNodesReadOnly]
   );
 
   return {
     doSyncWorkflowDraft,
     handleSyncWorkflowDraft,
-    syncWorkflowDraftWhenPageClose,
   };
 };

@@ -1,38 +1,27 @@
-import type { FC } from 'react'
-import {
-  memo,
-  useCallback,
-  useState,
-} from 'react'
-import { useTranslation } from 'react-i18next'
-import {
-  useNodeDataUpdate,
-  useNodesInteractions,
-  useNodesSyncDraft,
-} from '../../../hooks'
-import type { Node } from '../../../types'
-import { canRunBySingle } from '../../../utils'
-import PanelOperator from './panel-operator'
-import {
-  Play,
-  Stop,
-} from '@/app/components/base/icons/src/vender/line/mediaAndDevices'
-import TooltipPlus from '@/app/components/base/tooltip-plus'
+import type { FC } from 'react';
+import { memo, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNodesInteractions } from '../../../hooks/hooks';
+import type { Node } from '../../../types';
+import { canRunBySingle } from '../../../utils';
+import PanelOperator from './panel-operator';
+import { useNodeDataUpdate } from '@/components/workflow/hooks/use-node-crud';
+import { useNodesSyncDraft } from '@/components/workflow/hooks/use-nodes-sync-draft';
+import React from 'react';
+import { Play, Stop } from '@phosphor-icons/react';
+import { TooltipPlus } from '@/components/reusable/TooltipPlus.component';
 
-type NodeControlProps = Pick<Node, 'id' | 'data'>
-const NodeControl: FC<NodeControlProps> = ({
-  id,
-  data,
-}) => {
-  const { t } = useTranslation()
-  const [open, setOpen] = useState(false)
-  const { handleNodeDataUpdate } = useNodeDataUpdate()
-  const { handleNodeSelect } = useNodesInteractions()
-  const { handleSyncWorkflowDraft } = useNodesSyncDraft()
+type NodeControlProps = Pick<Node, 'id' | 'data'>;
+const NodeControl: FC<NodeControlProps> = ({ id, data }) => {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const { handleNodeDataUpdate } = useNodeDataUpdate();
+  const { handleNodeSelect } = useNodesInteractions();
+  const { handleSyncWorkflowDraft } = useNodesSyncDraft();
 
   const handleOpenChange = useCallback((newOpen: boolean) => {
-    setOpen(newOpen)
-  }, [])
+    setOpen(newOpen);
+  }, []);
 
   return (
     <div
@@ -43,49 +32,32 @@ const NodeControl: FC<NodeControlProps> = ({
       `}
     >
       <div
-        className='flex items-center px-0.5 h-6 bg-white rounded-lg border-[0.5px] border-gray-100 shadow-xs text-gray-500'
-        onClick={e => e.stopPropagation()}
+        className="flex items-center px-0.5 h-6 bg-white rounded-lg border-[0.5px] border-gray-100 shadow-xs text-gray-500"
+        onClick={(e) => e.stopPropagation()}
       >
-        {
-          canRunBySingle(data.type) && (
-            <div
-              className='flex items-center justify-center w-5 h-5 rounded-md cursor-pointer hover:bg-black/5'
-              onClick={() => {
-                handleNodeDataUpdate({
-                  id,
-                  data: {
-                    _isSingleRun: !data._isSingleRun,
-                  },
-                })
-                handleNodeSelect(id)
-                if (!data._isSingleRun)
-                  handleSyncWorkflowDraft(true)
-              }}
-            >
-              {
-                data._isSingleRun
-                  ? <Stop className='w-3 h-3' />
-                  : (
-                    <TooltipPlus
-                      popupContent={t('workflow.panel.runThisStep')}
-                    >
-                      <Play className='w-3 h-3' />
-                    </TooltipPlus>
-                  )
-              }
-            </div>
-          )
-        }
+        {canRunBySingle(data.type) && (
+          <div
+            className="flex items-center justify-center w-5 h-5 rounded-md cursor-pointer hover:bg-black/5"
+            onClick={() => {
+              handleNodeSelect(id);
+              handleSyncWorkflowDraft(true);
+            }}
+          >
+            <TooltipPlus popupContent={t('workflow.panel.runThisStep')}>
+              <Play className="w-3 h-3" />
+            </TooltipPlus>
+          </div>
+        )}
         <PanelOperator
           id={id}
           data={data}
           offset={0}
           onOpenChange={handleOpenChange}
-          triggerClassName='!w-5 !h-5'
+          triggerClassName="!w-5 !h-5"
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default memo(NodeControl)
+export default memo(NodeControl);

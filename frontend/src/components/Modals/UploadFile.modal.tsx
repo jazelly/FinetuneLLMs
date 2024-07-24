@@ -40,7 +40,7 @@ export default function UploadFile({
     setFetchingUrl(true);
 
     console.log('link', link);
-    const response = await Document.saveDatasetFromHF(link);
+    const response = await Document.saveDatasetFromHF(link as string);
 
     if (response.message !== 'dataset saved') {
       showToast(`Error uploading link: ${response.error}`, 'error');

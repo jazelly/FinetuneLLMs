@@ -1,25 +1,23 @@
-'use client'
-import type { FC } from 'react'
-import React, { useCallback } from 'react'
-import { Expand04 } from '@/app/components/base/icons/src/vender/solid/arrows'
-import { Collapse04 } from '@/app/components/base/icons/src/vender/line/arrows'
+'use client';
+import { ToggleLeft } from '@phosphor-icons/react';
+import type { FC } from 'react';
+import React, { useCallback } from 'react';
 
 type Props = {
-  isExpand: boolean
-  onExpandChange: (isExpand: boolean) => void
-}
+  isExpand: boolean;
+  onExpandChange: (isExpand: boolean) => void;
+};
 
-const ExpandBtn: FC<Props> = ({
-  isExpand,
-  onExpandChange,
-}) => {
+const ExpandBtn: FC<Props> = ({ isExpand, onExpandChange }) => {
   const handleToggle = useCallback(() => {
-    onExpandChange(!isExpand)
-  }, [isExpand])
+    onExpandChange(!isExpand);
+  }, [isExpand]);
 
-  const Icon = isExpand ? Collapse04 : Expand04
   return (
-    <Icon className='w-3.5 h-3.5 text-gray-500 cursor-pointer' onClick={handleToggle} />
-  )
-}
-export default React.memo(ExpandBtn)
+    <ToggleLeft
+      className="w-3.5 h-3.5 text-gray-500 cursor-pointer"
+      onClick={handleToggle}
+    />
+  );
+};
+export default React.memo(ExpandBtn);

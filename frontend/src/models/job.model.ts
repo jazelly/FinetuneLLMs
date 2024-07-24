@@ -1,5 +1,4 @@
 import { API_BASE } from '@/utils/constants';
-import { baseHeaders } from '@/utils/request';
 import type {
   HTTPResponseError,
   HTTPResponseSuccess,
@@ -13,7 +12,6 @@ const Job = {
     try {
       const resp = await fetch(`${API_BASE}/job`, {
         method: 'POST',
-        headers: baseHeaders(),
         body: JSON.stringify(jobOptions),
       });
 
@@ -32,7 +30,6 @@ const Job = {
     try {
       const resp = await fetch(`${API_BASE}/job/${jobId}`, {
         method: 'GET',
-        headers: baseHeaders(),
       });
 
       const res = await resp.json();

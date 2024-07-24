@@ -17,8 +17,7 @@ import {
   SIDEBAR_WIDTH,
 } from '@/utils/constants';
 import ChatContainer from '@/components/Chat/ChatContainer.component';
-import Workflow from '@/components/workflow/canva.component';
-import WorkflowCanva from '@/components/workflow/canva.component';
+import Workflow from '@/components/workflow';
 
 const WorkflowPage = () => {
   const [jobOptions, setJobOptions] = useState<AllJobOptions | undefined>(
@@ -118,7 +117,7 @@ const WorkflowPage = () => {
         className="flex h-full bg-main-menu text-white"
       >
         {/* <FinetunePanel jobOptions={jobOptions} setJobOptions={setJobOptions} /> */}
-        <WorkflowCanva />
+        <Workflow />
       </ResizableBox>
       {!isRightCollapsed && (
         <div className="flex-1 bg-main-workspace">

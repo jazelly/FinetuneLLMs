@@ -23,3 +23,4 @@ dist-ssr
 bundleinspector.html
 .env.production
 flow-typed
+vite.config.js.timestamp*

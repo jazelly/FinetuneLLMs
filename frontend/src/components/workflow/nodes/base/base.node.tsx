@@ -4,9 +4,7 @@ import cn from 'classnames';
 import type { NodeProps } from '../../types';
 import { BlockEnum, NodeRunningStatus } from '../../types';
 import { NodeSourceHandle, NodeTargetHandle } from './components/node-handle';
-import NodeResizer from './components/node-resizer';
 import NodeControl from './components/node-control';
-import AddVariablePopupWithPosition from './components/add-variable-popup-with-position';
 import { CheckCircle, Cube, SpinnerGap, Warning } from '@phosphor-icons/react';
 import React from 'react';
 
@@ -17,8 +15,7 @@ type BaseNodeProps = {
 const BaseNode: FC<BaseNodeProps> = ({ id, data, children }) => {
   const nodeRef = useRef<HTMLDivElement>(null);
 
-  const showSelectedBorder =
-    data.selected || data._isBundled || data._isEntering;
+  const showSelectedBorder = data.selected || data._isEntering;
   const { showRunningBorder, showSuccessBorder, showFailedBorder } =
     useMemo(() => {
       return {
@@ -50,14 +47,9 @@ const BaseNode: FC<BaseNodeProps> = ({ id, data, children }) => {
           !data._runningStatus && 'hover:shadow-lg',
           showRunningBorder && '!border-primary-500',
           showSuccessBorder && '!border-[#12B76A]',
-          showFailedBorder && '!border-[#F04438]',
-          data._isBundled && '!shadow-lg'
+          showFailedBorder && '!border-[#F04438]'
         )}
       >
-        {data._showAddVariablePopup && (
-          <AddVariablePopupWithPosition nodeId={id} nodeData={data} />
-        )}
-
         {!data._isCandidate && (
           <NodeTargetHandle
             id={id}
@@ -83,7 +75,7 @@ const BaseNode: FC<BaseNodeProps> = ({ id, data, children }) => {
             'bg-[rgba(250,252,255,0.9)]'
           )}
         >
-          <Cube className="shrink-0 mr-2" size="md" />
+          <Cube className="shrink-0 mr-2" size={16} color={'black'} />
           <div
             title={data.title}
             className="grow mr-1 text-[13px] font-semibold text-gray-700 truncate"

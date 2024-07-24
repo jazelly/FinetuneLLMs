@@ -1,12 +1,10 @@
 import React, { useState, useEffect, memo } from 'react';
 import { X } from '@phosphor-icons/react';
 import { isMobile } from 'react-device-detect';
-import useUser from '../../../hooks/useUser';
 import DocumentSettings from './Documents';
 
 const noop = () => {};
 const UploadDatasets = ({ hideModal = noop }) => {
-  const { user } = useUser();
   const [selectedTab, setSelectedTab] = useState('documents');
 
   if (isMobile) {
@@ -57,12 +55,10 @@ const UploadDatasets = ({ hideModal = noop }) => {
             </button>
           </div>
 
-          {user?.role !== 'default' && (
-            <ModalTabSwitcher
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
-            />
-          )}
+          <ModalTabSwitcher
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
+          />
 
           <DocumentSettings />
         </div>

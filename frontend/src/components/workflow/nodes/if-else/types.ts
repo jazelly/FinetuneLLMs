@@ -1,4 +1,7 @@
-import type { CommonNodeType, ValueSelector } from '@/app/components/workflow/types'
+import type {
+  CommonNodeType,
+  ValueSelector,
+} from '@/components/workflow/types';
 
 export enum LogicalOperator {
   and = 'and',
@@ -25,13 +28,13 @@ export enum ComparisonOperator {
 }
 
 export type Condition = {
-  id: string
-  variable_selector: ValueSelector
-  comparison_operator?: ComparisonOperator
-  value: string
-}
+  id: string;
+  variable_selector: ValueSelector;
+  comparison_operator?: ComparisonOperator;
+  value: string;
+};
 
 export type IfElseNodeType = CommonNodeType & {
-  logical_operator: LogicalOperator
-  conditions: Condition[]
-}
+  logical_operator: LogicalOperator;
+  conditions: Condition[];
+};

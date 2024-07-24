@@ -21,17 +21,13 @@ import {
   useNodesInteractions,
   useNodesReadOnly,
   usePanelInteractions,
+  useWorkflow,
 } from './hooks/hooks';
 import CustomNode from './nodes';
 import Operator from './tools';
 import CustomEdge from './custom-edge';
 import CustomConnectionLine from './custom-connection-line';
-import Panel from './panel';
-import Features from './features';
-import HelpLine from './help-line';
 import CandidateNode from './candidate-node';
-import PanelContextmenu from './panel-contextmenu';
-import NodeContextmenu from './node-contextmenu';
 import { useStore, useWorkflowStore } from './store';
 import {
   getKeyboardKeyCodeBySystem,
@@ -39,14 +35,12 @@ import {
   initialNodes,
 } from './utils';
 import { ITERATION_CHILDREN_Z_INDEX, WORKFLOW_DATA_UPDATE } from './constants';
-import { FeaturesProvider } from '@/app/components/base/features';
-import type { Features as FeaturesData } from '@/app/components/base/features/types';
-import { useEventEmitterContextContext } from '@/context/event-emitter';
-import Confirm from '@/app/components/base/confirm/common';
+import { useEventEmitterContextContext } from '@/contexts/EventEmitter';
 import React from 'react';
-import FullScreenLoader, {
-  LoadingSpinner,
-} from '../reusable/Loaders.component';
+import { RunningSpinner } from '../reusable/Loaders.component';
+import { useWorkflowInit } from './hooks/workflow.hooks';
+import { useEdgesInteractions } from './hooks/use-edges-interactions';
+import { useSelectionInteractions } from './hooks/use-selection-interactions';
 
 const nodeTypes = {
   custom: CustomNode,
@@ -66,11 +60,8 @@ const Workflow: FC<WorkflowProps> = memo(
     const workflowStore = useWorkflowStore();
     const [nodes, setNodes] = useNodesState(originalNodes);
     const [edges, setEdges] = useEdgesState(originalEdges);
-    const showFeaturesPanel = useStore((state) => state.showFeaturesPanel);
     const controlMode = useStore((s) => s.controlMode);
     const nodeAnimation = useStore((s) => s.nodeAnimation);
-    const showConfirm = useStore((s) => s.showConfirm);
-    const { setShowConfirm } = workflowStore.getState();
     const { nodesReadOnly } = useNodesReadOnly();
 
     const { eventEmitter } = useEventEmitterContextContext();
@@ -136,12 +127,9 @@ const Workflow: FC<WorkflowProps> = memo(
       useSelectionInteractions();
     const { handlePaneContextMenu } = usePanelInteractions();
     const { isValidConnection } = useWorkflow();
-    const { handleStartWorkflowRun } = useWorkflowStartRun();
 
     useOnViewportChange({
-      onEnd: () => {
-        handleSyncWorkflowDraft();
-      },
+      onEnd: () => {},
     });
 
     useKeyPress('delete', handleNodesDelete);
@@ -159,40 +147,18 @@ const Workflow: FC<WorkflowProps> = memo(
       handleNodesDuplicate,
       { exactMatch: true, useCapture: true }
     );
-    useKeyPress(
-      `${getKeyboardKeyCodeBySystem('alt')}.r`,
-      handleStartWorkflowRun,
-      { exactMatch: true, useCapture: true }
-    );
 
     return (
       <div
         id="workflow-container"
         className={`
-        relative w-full min-w-[960px] h-full bg-[#F0F2F7]
-        ${workflowReadOnly && 'workflow-panel-animation'}
+        relative w-full h-full
         ${nodeAnimation && 'workflow-node-animation'}
       `}
         ref={workflowContainerRef}
       >
         <CandidateNode />
-        <Header />
-        <Panel />
         <Operator />
-        {showFeaturesPanel && <Features />}
-        <PanelContextmenu />
-        <NodeContextmenu />
-        <HelpLine />
-        {!!showConfirm && (
-          <Confirm
-            isShow
-            onCancel={() => setShowConfirm(undefined)}
-            onConfirm={showConfirm.onConfirm}
-            title={showConfirm.title}
-            desc={showConfirm.desc}
-            confirmWrapperClassName="!z-[11]"
-          />
-        )}
         <ReactFlow
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
@@ -224,14 +190,14 @@ const Workflow: FC<WorkflowProps> = memo(
           nodesConnectable={!nodesReadOnly}
           nodesFocusable={!nodesReadOnly}
           edgesFocusable={!nodesReadOnly}
-          panOnDrag={controlMode === 'hand' && !workflowReadOnly}
-          zoomOnPinch={!workflowReadOnly}
-          zoomOnScroll={!workflowReadOnly}
-          zoomOnDoubleClick={!workflowReadOnly}
+          panOnDrag={controlMode === 'hand'}
+          zoomOnPinch={true}
+          zoomOnScroll={true}
+          zoomOnDoubleClick={true}
           isValidConnection={isValidConnection}
           selectionKeyCode={null}
           selectionMode={SelectionMode.Partial}
-          selectionOnDrag={controlMode === 'pointer' && !workflowReadOnly}
+          selectionOnDrag={controlMode === 'pointer'}
           minZoom={0.25}
         >
           <Background gap={[14, 14]} size={2} color="#E4E5E7" />
@@ -246,12 +212,12 @@ const WorkflowWrap = memo(() => {
   const { data, isLoading } = useWorkflowInit();
 
   const nodesData = useMemo(() => {
-    if (data) return initialNodes(data.graph.nodes, data.graph.edges);
+    if (data) return initialNodes(data.nodes as any, data.edges as any);
 
     return [];
   }, [data]);
   const edgesData = useMemo(() => {
-    if (data) return initialEdges(data.graph.edges, data.graph.nodes);
+    if (data) return initialEdges(data.edges as any, data.nodes as any);
 
     return [];
   }, [data]);
@@ -259,44 +225,14 @@ const WorkflowWrap = memo(() => {
   if (!data || isLoading) {
     return (
       <div className="flex justify-center items-center relative w-full h-full bg-[#F0F2F7]">
-        <LoadingSpinner size={32} color={'black'} />
+        <RunningSpinner size={32} color={'black'} />
       </div>
     );
   }
 
-  const features = data.features || {};
-  const initialFeatures: FeaturesData = {
-    file: {
-      image: {
-        enabled: !!features.file_upload?.image.enabled,
-        number_limits: features.file_upload?.image.number_limits || 3,
-        transfer_methods: features.file_upload?.image.transfer_methods || [
-          'local_file',
-          'remote_url',
-        ],
-      },
-    },
-    opening: {
-      enabled: !!features.opening_statement,
-      opening_statement: features.opening_statement,
-      suggested_questions: features.suggested_questions,
-    },
-    suggested: features.suggested_questions_after_answer || { enabled: false },
-    speech2text: features.speech_to_text || { enabled: false },
-    text2speech: features.text_to_speech || { enabled: false },
-    citation: features.retriever_resource || { enabled: false },
-    moderation: features.sensitive_word_avoidance || { enabled: false },
-  };
-
   return (
     <ReactFlowProvider>
-      <FeaturesProvider features={initialFeatures}>
-        <Workflow
-          nodes={nodesData}
-          edges={edgesData}
-          viewport={data?.graph.viewport}
-        />
-      </FeaturesProvider>
+      <Workflow nodes={nodesData} edges={edgesData} viewport={data.viewport} />
     </ReactFlowProvider>
   );
 });

@@ -1,6 +1,5 @@
 import { DatasetLocal, DatasetRemote } from '@/types/dashboard.type';
 import { API_BASE } from '@/utils/constants';
-import { baseHeaders } from '@/utils/request';
 
 const Document = {
   uploadOneDatasetByChunk: async (datasetChunk) => {
@@ -12,7 +11,7 @@ const Document = {
     return response;
   },
 
-  saveDatasetFromHF: async (link) => {
+  saveDatasetFromHF: async (link: string) => {
     const response = await fetch(`${API_BASE}/document/save-from-hf`, {
       method: 'POST',
       body: JSON.stringify({ link }),

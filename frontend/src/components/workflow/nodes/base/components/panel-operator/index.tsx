@@ -1,27 +1,24 @@
-import {
-  memo,
-  useCallback,
-  useState,
-} from 'react'
-import type { OffsetOptions } from '@floating-ui/react'
-import PanelOperatorPopup from './panel-operator-popup'
-import { DotsHorizontal } from '@/app/components/base/icons/src/vender/line/general'
+import { memo, useCallback, useState } from 'react';
+import type { OffsetOptions } from '@floating-ui/react';
+import PanelOperatorPopup from './panel-operator-popup';
+import type { Node } from '@/components/workflow/types';
 import {
   PortalToFollowElem,
   PortalToFollowElemContent,
   PortalToFollowElemTrigger,
-} from '@/app/components/base/portal-to-follow-elem'
-import type { Node } from '@/app/components/workflow/types'
+} from '@/components/reusable/FollowPortal.component';
+import { DotsThreeOutline } from '@phosphor-icons/react/dist/ssr';
+import React from 'react';
 
 type PanelOperatorProps = {
-  id: string
-  data: Node['data']
-  triggerClassName?: string
-  offset?: OffsetOptions
-  onOpenChange?: (open: boolean) => void
-  inNode?: boolean
-  showHelpLink?: boolean
-}
+  id: string;
+  data: Node['data'];
+  triggerClassName?: string;
+  offset?: OffsetOptions;
+  onOpenChange?: (open: boolean) => void;
+  inNode?: boolean;
+  showHelpLink?: boolean;
+};
 const PanelOperator = ({
   id,
   data,
@@ -34,18 +31,20 @@ const PanelOperator = ({
   inNode,
   showHelpLink = true,
 }: PanelOperatorProps) => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const handleOpenChange = useCallback((newOpen: boolean) => {
-    setOpen(newOpen)
+  const handleOpenChange = useCallback(
+    (newOpen: boolean) => {
+      setOpen(newOpen);
 
-    if (onOpenChange)
-      onOpenChange(newOpen)
-  }, [onOpenChange])
+      if (onOpenChange) onOpenChange(newOpen);
+    },
+    [onOpenChange]
+  );
 
   return (
     <PortalToFollowElem
-      placement='bottom-end'
+      placement="bottom-end"
       offset={offset}
       open={open}
       onOpenChange={handleOpenChange}
@@ -59,10 +58,10 @@ const PanelOperator = ({
             ${triggerClassName}
           `}
         >
-          <DotsHorizontal className={`w-4 h-4 ${inNode ? 'text-gray-500' : 'text-gray-700'}`} />
+          <DotsThreeOutline color="gray" />
         </div>
       </PortalToFollowElemTrigger>
-      <PortalToFollowElemContent className='z-[11]'>
+      <PortalToFollowElemContent className="z-[11]">
         <PanelOperatorPopup
           id={id}
           data={data}
@@ -71,7 +70,7 @@ const PanelOperator = ({
         />
       </PortalToFollowElemContent>
     </PortalToFollowElem>
-  )
-}
+  );
+};
 
-export default memo(PanelOperator)
+export default memo(PanelOperator);

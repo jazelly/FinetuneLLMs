@@ -24,13 +24,13 @@ const nodeTypes: NodeTypes = {
 const initialNodes: Node[] = [
   {
     id: '1',
-    type: 'datasetNode',
+    type: 'start',
     position: { x: 250, y: 5 },
     data: {},
   },
   {
     id: '2',
-    type: 'trainerNode',
+    type: 'if-else',
     position: { x: 250, y: 200 },
     data: {},
   },

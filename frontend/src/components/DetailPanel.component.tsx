@@ -1,6 +1,6 @@
 import type { AllJobOptions, JobDetail } from '@/types/dashboard.type';
 import React, { useContext, useEffect, useState } from 'react';
-import { LoadingSpinner } from './reusable/Loaders.component';
+import { RunningSpinner } from './reusable/Loaders.component';
 import {
   TrainerMessage,
   TrainerMessageMapContext,
@@ -27,7 +27,7 @@ const DetailPanel = ({ jobDetail, jobDetailLoading }: DetailPanelProps) => {
   if (jobDetailLoading || readyState !== ReadyState.OPEN)
     return (
       <div className="flex flex-col bg-main-gradient h-full justify-center items-center">
-        <LoadingSpinner size={80} color={'#3c97fd'} />
+        <RunningSpinner size={80} color={'#3c97fd'} />
         <span className="text-white">Loading</span>
       </div>
     );

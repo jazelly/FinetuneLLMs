@@ -3,7 +3,6 @@ import type { FC } from 'react';
 import React from 'react';
 import { useWorkflow } from '../../../hooks/hooks';
 import { BlockEnum } from '../../../types';
-import { getNodeInfoById, isSystemVar } from './variable/utils';
 import { CodeBlock, LineSegment } from '@phosphor-icons/react';
 type Props = {
   nodeId: string;
@@ -40,11 +39,8 @@ const ReadonlyInputWithSelectVar: FC<Props> = ({ nodeId, value }) => {
           );
 
         const value = vars[index].split('.');
-        const isSystem = isSystemVar(value);
-        const node = (
-          isSystem ? startNode : getNodeInfoById(availableNodes, value[0])
-        )?.data;
-        const varName = `${isSystem ? 'sys.' : ''}${value[value.length - 1]}`;
+        const node = startNode?.data;
+        const varName = `${value[value.length - 1]}`;
 
         return (
           <span key={index}>

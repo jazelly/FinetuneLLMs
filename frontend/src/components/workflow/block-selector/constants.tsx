@@ -10,11 +10,6 @@ export const BLOCKS: Block[] = [
     description: '',
   },
   {
-    classification: BlockClassificationEnum.Default,
-    type: BlockEnum.End,
-    title: 'End',
-  },
-  {
     classification: BlockClassificationEnum.Logic,
     type: BlockEnum.IfElse,
     title: 'IF/ELSE',

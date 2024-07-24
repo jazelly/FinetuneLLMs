@@ -1,19 +1,70 @@
 import { API_BASE } from '@/utils/constants';
-import { baseHeaders } from '@/utils/request';
-import type { Workflow } from '@/components/workflow/types';
+import {
+  BlockEnum,
+  type Node,
+  type Edge,
+  type WorkflowGraphRecord,
+  WorkflowDataUpdator,
+} from '@/components/workflow/types';
 import type {
   HTTPResponseError,
   HTTPResponseSuccess,
 } from '@/types/common.type';
+import { v4 } from 'uuid';
 
-const Job = {
+const Workflow = {
+  getDefaultWorkflow: async (): Promise<
+    HTTPResponseSuccess<WorkflowDataUpdator> | HTTPResponseError
+  > => {
+    try {
+      const resp = await fetch(`${API_BASE}/workflow/default`, {
+        method: 'GET',
+      });
+
+      const data = await resp.json();
+
+      return { success: true, data };
+    } catch (error: any) {
+      // TODO: stubbed
+      const initialNodes: Node[] = [
+        {
+          id: '1',
+          position: { x: 250, y: 5 },
+          data: {
+            id: '1',
+            title: 'Start',
+            desc: '',
+            type: BlockEnum.Start,
+          },
+        },
+        {
+          id: '2',
+          position: { x: 250, y: 5 },
+          data: {
+            id: '2',
+            title: 'IF Else',
+            desc: '',
+            type: BlockEnum.IfElse,
+          },
+        },
+      ];
+
+      const edges: Edge[] = [
+        {
+          id: '3',
+          source: '1',
+          target: '2',
+        },
+      ];
+      return { success: true, data: { id: v4(), nodes: initialNodes, edges } };
+    }
+  },
   getWorkflow: async (
     workflowId: string
-  ): Promise<HTTPResponseSuccess<Workflow> | HTTPResponseError> => {
+  ): Promise<HTTPResponseSuccess<WorkflowGraphRecord> | HTTPResponseError> => {
     try {
       const resp = await fetch(`${API_BASE}/workflow/${workflowId}`, {
         method: 'GET',
-        headers: baseHeaders(),
       });
 
       const data = await resp.json();
@@ -25,18 +76,16 @@ const Job = {
     }
   },
 
-  getJobDetail: async (
-    jobId: string
-  ): Promise<HTTPResponseSuccess<JobDetail> | HTTPResponseError> => {
+  updateWorkflow: async (params: Partial<WorkflowGraphRecord>) => {
     try {
-      const resp = await fetch(`${API_BASE}/job/${jobId}`, {
-        method: 'GET',
-        headers: baseHeaders(),
+      const resp = await fetch(`${API_BASE}/workflow/`, {
+        method: 'POST',
+        body: JSON.stringify(params),
       });
 
-      const res = await resp.json();
+      const data = await resp.json();
 
-      return { success: true, data: res };
+      return { success: true, data };
     } catch (error: any) {
       console.error(error);
       return { success: false, error: error.message };
@@ -44,4 +93,4 @@ const Job = {
   },
 };
 
-export default Job;
+export default Workflow;

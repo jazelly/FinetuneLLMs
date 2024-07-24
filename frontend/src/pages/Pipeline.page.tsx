@@ -19,7 +19,7 @@ import {
   SIDEBAR_WIDTH,
 } from '@/utils/constants';
 import PipelineGraph from '@/components/PipelineGraph.component';
-import { LoadingSpinner } from '@/components/reusable/Loaders.component';
+import { RunningSpinner } from '@/components/reusable/Loaders.component';
 import paths from '@/utils/paths';
 
 const MIN_BOTTOM_HEIGHT = 200;
@@ -138,7 +138,7 @@ const Pipeline = () => {
             <PipelineGraph jobDetail={jobDetail} />
           ) : (
             <div className="flex flex-col bg-main-menu h-full justify-center items-center">
-              <LoadingSpinner size={80} color={'#3c97fd'} />
+              <RunningSpinner size={80} color={'#3c97fd'} />
               <span className="text-white">Loading</span>
             </div>
           )}

@@ -33,13 +33,18 @@ This directory contains the internationalization (i18n) files for this project.
 ├── [4.4K]  language.ts
 ```
 
-We use English as the default language. The i18n files are organized by language and then by module. For example, the English translation for the `app` module is in `en-US/app.ts`.
+We use English as the default language. The i18n files are organized by language and then by module.
+For example, the English translation for the `app` module is in `en-US/app.ts`.
 
-If you want to add a new language or modify an existing translation, you can create a new file for the language or modify the existing file. The file name should be the language code (e.g., `zh-CN` for Chinese) and the file extension should be `.ts`.
+If you want to add a new language or modify an existing translation,
+you can create a new file for the language or modify the existing file.
+The file name should be the language code (e.g., `zh-CN` for Chinese) and the file extension should be `.ts`.
 
-For example, if you want to add french translation, you can create a new folder `fr-FR` and add the translation files in it.
+For example, if you want to add french translation,
+you can create a new folder `fr-FR` and add the translation files in it.
 
-By default we will use `LanguagesSupported` to determine which languages are supported. For example, in login page and settings page, we will use `LanguagesSupported` to determine which languages are supported and display them in the language selection dropdown.
+By default we will use `LanguagesSupported` to determine which languages are supported.
+For example, in login page and settings page, we will use `LanguagesSupported` to determine which languages are supported and display them in the language selection dropdown.
 
 ## Example
 
@@ -85,7 +90,5 @@ export const languages = [
 
 5. Don't forget to mark the supported field as `true` if the language is supported.
 
-6. Sometime you might need to do some changes in the server side. Please change this file as well. 👇
-   https://github.com/langgenius/dify/blob/61e4bbabaf2758354db4073cbea09fdd21a5bec1/api/constants/languages.py#L5
-
-That's it! You have successfully added a new language to the project. If you want to remove a language, you can simply delete the folder and remove the language from the `language.ts` file.
+That's it! You have successfully added a new language to the project. If you want to remove a language,
+you can simply delete the folder and remove the language from the `language.ts` file.

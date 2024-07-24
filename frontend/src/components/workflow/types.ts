@@ -115,7 +115,6 @@ export enum TransferMethod {
 
 export enum BlockEnum {
   Start = 'start',
-  End = 'end',
   IfElse = 'if-else',
 }
 
@@ -124,37 +123,26 @@ export type Branch = {
   name: string;
 };
 
-export type CommonNodeType<T = {}> = {
+export interface CommonNodeType extends GraphNode {
   _connectedSourceHandleIds?: string[];
   _connectedTargetHandleIds?: string[];
   _targetBranches?: Branch[];
-  _isSingleRun?: boolean;
   _runningStatus?: NodeRunningStatus;
   _singleRunningStatus?: NodeRunningStatus;
   _isCandidate?: boolean;
-  _isBundled?: boolean;
   _children?: string[];
   _isEntering?: boolean;
   _showAddVariablePopup?: boolean;
   _holdAddVariablePopup?: boolean;
   _iterationLength?: number;
   _iterationIndex?: number;
-  isIterationStart?: boolean;
-  isInIteration?: boolean;
   iteration_id?: string;
   selected?: boolean;
   width?: number;
   height?: number;
-} & GraphNode &
-  T &
-  Partial<
-    Pick<
-      ToolDefaultValue,
-      'provider_id' | 'provider_type' | 'provider_name' | 'tool_name'
-    >
-  >;
+}
 
-export type CommonEdgeType = {
+export interface CommonEdgeType {
   _hovering?: boolean;
   _connectedNodeIsHovering?: boolean;
   _connectedNodeIsSelected?: boolean;
@@ -164,21 +152,24 @@ export type CommonEdgeType = {
   iteration_id?: string;
   sourceType: BlockEnum;
   targetType: BlockEnum;
-};
+}
 
-export type Node<T = {}> = ReactFlowNode<CommonNodeType<T>>;
+export type Node = ReactFlowNode<CommonNodeType>;
 export type SelectedNode = Pick<Node, 'id' | 'data'>;
-export type NodeProps<T = unknown> = { id: string; data: CommonNodeType<T> };
-export type NodePanelProps<T> = {
+export interface NodeProps {
   id: string;
-  data: CommonNodeType<T>;
-};
+  data: CommonNodeType;
+}
+export interface NodePanelProps {
+  id: string;
+  data: CommonNodeType;
+}
 export type Edge = ReactFlowEdge<CommonEdgeType>;
 
 export interface GraphNode {
   id: string;
   title: string;
-  desc: string;
+  desc?: string;
   type: BlockEnum;
 }
 
@@ -195,11 +186,11 @@ export interface WorkflowGraphRecord {
   viewport: Viewport;
 }
 
-export type WorkflowDataUpdator = {
+export interface WorkflowDataUpdator {
   nodes: Node[];
   edges: Edge[];
   viewport: Viewport;
-};
+}
 
 export type ValueSelector = string[]; // [nodeId, key | obj key path]
 export enum VarType {
@@ -207,7 +198,7 @@ export enum VarType {
   constant = 'constant',
   mixed = 'mixed',
 }
-export type Variable = {
+export interface Variable {
   variable: string;
   label?:
     | string
@@ -222,12 +213,12 @@ export type Variable = {
   options?: string[];
   required?: boolean;
   isParagraph?: boolean;
-};
+}
 
-export type VariableWithValue = {
+export interface VariableWithValue {
   key: string;
   value: string;
-};
+}
 
 export enum InputVarType {
   textInput = 'text-input',
