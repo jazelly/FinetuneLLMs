@@ -3,4 +3,4 @@ WORKDIR /trainer
 COPY requirements.txt ./
 COPY . .
 RUN pip install -r requirements.txt
-CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "trainer.asgi:trainer_api"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "trainer.asgi:application"]

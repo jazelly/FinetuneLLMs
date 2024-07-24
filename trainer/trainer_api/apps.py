@@ -9,7 +9,6 @@ class TrainerApiConfig(AppConfig):
 
     _ready_lock = threading.Lock()
     _ready_executed = False
-
     def ready(self):
         with self._ready_lock:
             if not self._ready_executed:
