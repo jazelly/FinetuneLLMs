@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import Directory from './Directory.component';
-import DatasetService from '@/models/dataset.service';
+import DatasetService from '@/models/document';
 import { DatasetBase } from '@/types/dashboard.type';
 import React from 'react';
 

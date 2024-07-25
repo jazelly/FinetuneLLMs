@@ -3,7 +3,7 @@ import truncate from 'truncate';
 import { CheckCircle, XCircle } from '@phosphor-icons/react';
 import { humanFileSize, milliToHms } from '@/utils/numbers';
 import { PreLoader } from '@/components/reusable/Loaders.component';
-import DatasetService from '@/models/dataset.service';
+import DatasetService from '@/models/document';
 
 const CHUNK_SIZE = 100000; // bytes
 
