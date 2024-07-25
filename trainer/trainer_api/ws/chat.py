@@ -121,11 +121,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {"type": "send_job_update", "message": responseJson},
         )
 
-    def send_message_to_client_sync(self, response):
-        assert isinstance(response, str), "response must be str"
+    def send_message_to_client_sync(self, message: str) -> None:
+        assert isinstance(message, str), "message must be str"
         channel_layer = get_channel_layer()
-        chat_logger.info(f"Sending message to group {self.client_port}: {response}")
+        chat_logger.info(f"Sending message to group {self.client_port}: {message}")
         async_to_sync(channel_layer.group_send)(
             str(self.client_port),
-            {"type": "send_job_update", "message": response},
+            {"type": "send_job_update", "message": message},
         )

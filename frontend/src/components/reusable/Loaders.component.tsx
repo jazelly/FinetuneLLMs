@@ -25,7 +25,7 @@ export interface LoadingSpinnerProps {
   color: string;
 }
 
-export const LoadingSpinner = ({ size, color }: LoadingSpinnerProps) => {
+export const RunningSpinner = ({ size, color }: LoadingSpinnerProps) => {
   return (
     <Cube color={color} weight="duotone" size={size}>
       <animate

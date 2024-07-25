@@ -1,18 +1,20 @@
 # Queue abstract class
-# implementation details from 
+# implementation details from
 # https://github.com/jazelly/collections-jdk/blob/main/src/PriorityQueue.ts
 
 from typing import Generic, List, Optional, Union, TypeVar, Callable
 
 
 # Type definitions
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class QueueNode(Generic[T]):
-    def __init__(self, v: T |  None):
+    def __init__(self, v: T | None):
         self.value = v
         self.next = None
         self.prev = None
+
 
 class MQueue(Generic[T]):
     def __init__(self):
@@ -25,7 +27,6 @@ class MQueue(Generic[T]):
     def peek(self) -> T:
         return self.head.next
 
-    
     def add(self, val: T):
         new_node = QueueNode[T](val)
 
@@ -35,7 +36,7 @@ class MQueue(Generic[T]):
         self.length += 1
 
         return 0
-    
+
     def pop(self) -> T | None:
         cur_next = self.head.next
         if cur_next is None:
@@ -51,10 +52,9 @@ class MQueue(Generic[T]):
         cur_next.prev = None
         cur_next.next = None
 
-        
         self.length -= 1
         return cur_next.value
-        
+
     def __str__(self):
         result = ""
         cur = self.head
@@ -67,18 +67,27 @@ class MQueue(Generic[T]):
             index += 1
         return result
 
+
 Comparator = Callable[[T, T], int]
 Comparable = Union[int, float, str]
 
+
 class PriorityQueueParams:
-    def __init__(self, from_: Optional[List[T]] = None, comparator: Optional[Comparator[T]] = None):
+    def __init__(
+        self,
+        from_: Optional[List[T]] = None,
+        comparator: Optional[Comparator[T]] = None,
+    ):
         self.from_ = from_
         self.comparator = comparator
+
 
 class PriorityQueue:
     def __init__(self, params):
         default_q: List[T] = []
-        default_comparator: Comparator[T] = lambda a, b: 0 if a == b else -1 if a > b else 1
+        default_comparator: Comparator[T] = lambda a, b: (
+            0 if a == b else -1 if a > b else 1
+        )
 
         options = params or PriorityQueueParams()
 
@@ -110,10 +119,16 @@ class PriorityQueue:
             right = 2 * i + 2
             largest = i
 
-            if self.is_valid_index(left) and self.comparator(self.q[left], self.q[largest]) <= 0:
+            if (
+                self.is_valid_index(left)
+                and self.comparator(self.q[left], self.q[largest]) <= 0
+            ):
                 largest = left
 
-            if self.is_valid_index(right) and self.comparator(self.q[right], self.q[largest]) <= 0:
+            if (
+                self.is_valid_index(right)
+                and self.comparator(self.q[right], self.q[largest]) <= 0
+            ):
                 largest = right
 
             if largest != i:
@@ -134,7 +149,10 @@ class PriorityQueue:
         while i > 0:
             parent = self.get_parent_index(i)
 
-            if self.is_valid_index(parent) and self.comparator(self.q[i], self.q[parent]) <= 0:
+            if (
+                self.is_valid_index(parent)
+                and self.comparator(self.q[i], self.q[parent]) <= 0
+            ):
                 self.q[i], self.q[parent] = self.q[parent], self.q[i]
                 i = parent
             else:

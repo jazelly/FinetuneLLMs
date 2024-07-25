@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "channels",
-    "trainer_api",
+    "trainer_api.apps.TrainerApiConfig",
 ]
 
 MIDDLEWARE = [

@@ -1,36 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import paths from '@/utils/paths';
 import useLogo from '@/hooks/useLogo';
-import {
-  EnvelopeSimple,
-  SquaresFour,
-  Users,
-  BookOpen,
-  ChatCenteredText,
-  Eye,
-  Key,
-  ChatText,
-  Database,
-  Lock,
-  House,
-  List,
-  FileCode,
-  Notepad,
-  CodeBlock,
-  Barcode,
-  ClosedCaptioning,
-  EyeSlash,
-  SplitVertical,
-  Microphone,
-} from '@phosphor-icons/react';
-import useUser from '@/hooks/useUser';
-import { USER_BACKGROUND_COLOR } from '@/utils/constants';
-import { isMobile } from 'react-device-detect';
+import { EyeSlash } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 
 export default function SettingsSidebar() {
   const { logo } = useLogo();
-  const { user } = useUser();
   const sidebarRef = useRef(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showBgOverlay, setShowBgOverlay] = useState(false);
@@ -58,7 +33,7 @@ export default function SettingsSidebar() {
           <div className="relative h-full flex flex-col w-full justify-between pt-[10px] overflow-y-scroll no-scroll">
             <div className="h-auto sidebar-items">
               <div className="flex flex-col gap-y-2 h-full pb-8 overflow-y-scroll no-scroll">
-                <SidebarOptions user={user} />
+                <SidebarOptions />
               </div>
             </div>
           </div>
@@ -74,7 +49,6 @@ const Option = ({
   href,
   childLinks = [],
   flex = false,
-  user,
   allowedRole = [],
   subOptions = null,
   hidden = false,
@@ -83,12 +57,6 @@ const Option = ({
 
   const hasActiveChild = childLinks.includes(window.location.pathname);
   const isActive = window.location.pathname === href;
-
-  // Option only for multi-user
-  if (!flex && !allowedRole.includes(user?.role)) return null;
-
-  // Option is dual-mode, but user exists, we need to check permissions
-  if (flex && !!user && !allowedRole.includes(user?.role)) return null;
 
   return (
     <>
@@ -125,13 +93,12 @@ const Option = ({
   );
 };
 
-const SidebarOptions = ({ user = null }: any) => (
+const SidebarOptions = () => (
   <>
     <Option
       href={paths.settings.privacy}
       btnText="Privacy & Data"
       icon={<EyeSlash className="h-5 w-5 flex-shrink-0" />}
-      user={user}
       flex={true}
       allowedRole={['admin']}
     />

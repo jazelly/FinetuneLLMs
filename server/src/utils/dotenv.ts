@@ -11,10 +11,11 @@ import dotenv from "dotenv";
 export interface Envs {
   NODE_ENV: string;
   SERVER_PORT: number | undefined;
-  AUTH_TOKEN: string;
+  AUTH_TOKEN: string | undefined;
   JWT_SECRET: string | undefined;
   TRAINER_API_URL: string | undefined;
 
+  DATABASE_URL: string | undefined;
   DATASETS_PATH_FROM_ROOT: string | undefined;
   DATABASE_PATH_FROM_ROOT: string | undefined;
 
@@ -25,21 +26,26 @@ export interface Envs {
 
 type EnvsParser<T> = {
   [K in keyof T]: (
-    raw: undefined extends T[K] ? string | undefined : string,
+    raw: undefined extends T[K] ? string | undefined : string
   ) => T[K];
 };
 
+/**
+ * A mapper for .env
+ * Every env var must be provided with a parser here
+ */
 const ENVS_PARSER: EnvsParser<Envs> = {
-  NODE_ENV: (raw: string) => raw,
+  NODE_ENV: (raw: Envs["NODE_ENV"]) => raw,
   SERVER_PORT: (raw: string | undefined) => {
     if (raw === undefined) return undefined;
     return parseInt(raw, 10);
   },
-  AUTH_TOKEN: (raw: string) => raw,
+  AUTH_TOKEN: (raw: string | undefined) => raw,
 
-  JWT_SECRET: (raw: string | undefined) => raw,
-  TRAINER_API_URL: (raw: string | undefined) => raw,
+  JWT_SECRET: (raw: Envs["JWT_SECRET"]) => raw,
+  TRAINER_API_URL: (raw: Envs["TRAINER_API_URL"]) => raw,
 
+  DATABASE_URL: (raw: Envs["DATABASE_URL"]) => raw,
   DATASETS_PATH_FROM_ROOT: (raw: string | undefined) => {
     return raw || "src/storage/datasets/";
   },
@@ -60,7 +66,7 @@ const envs = dotenv.config().parsed;
 const parseEnvs = (envs: dotenv.DotenvParseOutput | undefined): Envs => {
   if (!envs)
     throw new Error(
-      "must provide .env file. Have you copied .env.example to .env?",
+      "must provide .env file. Have you copied .env.example to .env?"
     );
 
   const result: Partial<Envs> = {};
@@ -69,7 +75,7 @@ const parseEnvs = (envs: dotenv.DotenvParseOutput | undefined): Envs => {
     const parser = ENVS_PARSER[key];
     if (!parser)
       throw new Error(
-        `No parser found for .env key: ${key}. Did you forget to update the ENVS_PARSER?`,
+        `No parser found for .env key: ${key}. Did you forget to update the ENVS_PARSER?`
       );
     result[key] = ENVS_PARSER[key](value);
   }

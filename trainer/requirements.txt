@@ -8,9 +8,10 @@ watchgod
 psutil
 
 transformers
-trl >= 0.9.4, < 1.0.0
+numspy
+trl>=0.9.4,<1.0.0
 peft
-accelerate
+accelerate>=0.32.0
 datasets
 bitsandbytes
 scipy

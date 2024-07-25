@@ -1,7 +1,6 @@
+import os
 import threading
 from django.apps import AppConfig
-
-from .scheduler.worker import Worker, WorkerThread
 
 
 class TrainerApiConfig(AppConfig):
@@ -15,5 +14,3 @@ class TrainerApiConfig(AppConfig):
         with self._ready_lock:
             if not self._ready_executed:
                 self._ready_executed = True
-                # Your initialization logic here
-                print("MyAppConfig.ready() is called")

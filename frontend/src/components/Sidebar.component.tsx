@@ -5,7 +5,6 @@ import {
   Wrench,
   Circuitry,
   AlignLeft,
-  FlipVertical,
   FileArrowUp,
   ChatsCircle,
 } from '@phosphor-icons/react';
@@ -15,6 +14,7 @@ import { Tooltip } from 'react-tooltip';
 import UploadDatasets, {
   useUploadDatasetsModal,
 } from './Modals/UploadDatasets';
+import AppIcon from './reusable/AppIcon.component';
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ export default function Sidebar() {
         className="flex shrink-0 w-[40px] items-center justify-center"
         aria-label="Home"
       >
-        <FlipVertical size={36} color="#f0f2f4" weight="fill" />
+        <AppIcon />
       </Link>
 
       <div className="overflow-hidden mt-5 flex-grow  flex justify-between items-center flex-col">

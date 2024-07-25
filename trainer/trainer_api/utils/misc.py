@@ -6,6 +6,23 @@ from transformers.utils import (
 )
 
 
+class DotDict(dict):
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            pass
+
+    def __setattr__(self, key, value):
+        self[key] = value
+
+    def __delattr__(self, key):
+        try:
+            del self[key]
+        except KeyError:
+            raise AttributeError(f"'DotDict' object has no attribute '{key}'")
+
+
 def check_bf16_compat(compute_dtype):
     if compute_dtype == torch.float16:
         major, _ = torch.cuda.get_device_capability()
@@ -16,28 +33,6 @@ def check_bf16_compat(compute_dtype):
             return True
 
     return False
-
-
-def calculate_memory_requirements(
-    quantization_bit, num_parameters, batch_size, seq_length, hidden_size, num_layers
-):
-    bits_per_float = quantization_bit
-    model_params_memory = num_parameters * bits_per_float // 8
-    gradients_memory = num_parameters * bits_per_float // 8
-    optimizer_memory = num_parameters * bits_per_float * 2 // 8
-    activations_per_layer = batch_size * seq_length * hidden_size
-    total_activations = activations_per_layer * num_layers
-    activations_memory = total_activations * bits_per_float // 8
-    total_memory = (
-        model_params_memory + gradients_memory + optimizer_memory + activations_memory
-    )
-    return {
-        "model_params_memory": model_params_memory,
-        "gradients_memory": gradients_memory,
-        "optimizer_memory": optimizer_memory,
-        "activations_memory": activations_memory,
-        "total_memory": total_memory,
-    }
 
 
 def get_logits_processor() -> "LogitsProcessorList":

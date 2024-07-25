@@ -1,21 +1,23 @@
 {
-    "compilerOptions": {
-      "target": "es6",
-      "module": "esnext",
-      "jsx": "react",
-      "strict": true,
-      "esModuleInterop": true,
-      "moduleResolution": "node",
-      "baseUrl": "./",
-      "paths": {
-        "@/*": ["src/*"]
-      },
-      "lib": ["dom", "dom.iterable", "esnext"],
-      "types": ["node", "vite/client"],
-      "allowJs": true, // TODO: false
-      "noImplicitAny": false, // TODO: true
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "jsx": "react",
+    "outDir": "./dist",
+    "strict": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
     },
-    "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"]
-  }
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["node", "vite/client"],
+    "allowJs": true, // TODO: false
+    "noImplicitAny": false, // TODO: true
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"]
+}

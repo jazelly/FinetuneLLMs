@@ -19,3 +19,5 @@ src/certs/*
 dist
 build
 node_modules
+prisma/**/*
+!prisma/schema.prisma

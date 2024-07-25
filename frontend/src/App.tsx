@@ -1,7 +1,8 @@
 import React, { lazy, Suspense, useRef } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { ContextWrapper } from '@/contexts/AuthContext';
-
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { isMobile } from 'react-device-detect';
@@ -15,51 +16,50 @@ import NotFound from './pages/404.page';
 import paths from './utils/paths';
 import { InferenceMessageListProvider } from './contexts/InferenceMessageMap.context';
 import Chat from './pages/Chat.page';
+dayjs.extend(relativeTime);
 
 const Pipelines = lazy(() => import('@/pages/Pipelines.page'));
 const Pipeline = lazy(() => import('@/pages/Pipeline.page'));
-const Dashboard = lazy(() => import('@/pages/Dashboard.page'));
+const Dashboard = lazy(() => import('@/pages/workflow.page'));
 
 export default function App() {
   const sidebarRef = useRef(null);
 
   return (
     <Suspense fallback={<div />}>
-      <ContextWrapper>
-        <LogoProvider>
-          <PermalinksProvider>
-            <InferenceMessageListProvider>
-              <TrainerMessageMapProvider>
-                <div className="bg-main-base text-white flex h-full">
-                  {!isMobile && (
-                    <div
-                      className={`w-16 h-full bg-main-dark flex-shrink-0 p-2 flex flex-col items-center justify-between`}
-                      ref={sidebarRef}
-                    >
-                      <Sidebar />
-                    </div>
-                  )}
-                  <div className="flex flex-col h-full w-full overflow-y-hidden">
-                    <div className="h-[64px] flex-shrink-0">
-                      <Header />
-                    </div>
-
-                    <Routes>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/job/:jobId" element={<Pipeline />} />
-                      <Route path={paths.pipelines} element={<Pipelines />} />
-                      <Route path="/chat/*" element={<Chat />} />
-                      <Route path="/settings/*" element={<Settings />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
+      <LogoProvider>
+        <PermalinksProvider>
+          <InferenceMessageListProvider>
+            <TrainerMessageMapProvider>
+              <div className="bg-main-base text-white flex h-full">
+                {!isMobile && (
+                  <div
+                    className={`w-16 h-full bg-main-dark flex-shrink-0 p-2 flex flex-col items-center justify-between`}
+                    ref={sidebarRef}
+                  >
+                    <Sidebar />
                   </div>
-                  <ToastContainer />
+                )}
+                <div className="flex flex-col h-full w-full overflow-y-hidden">
+                  <div className="h-[64px] flex-shrink-0">
+                    <Header />
+                  </div>
+
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/job/:jobId" element={<Pipeline />} />
+                    <Route path={paths.pipelines} element={<Pipelines />} />
+                    <Route path="/chat/*" element={<Chat />} />
+                    <Route path="/settings/*" element={<Settings />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
                 </div>
-              </TrainerMessageMapProvider>
-            </InferenceMessageListProvider>
-          </PermalinksProvider>
-        </LogoProvider>
-      </ContextWrapper>
+                <ToastContainer />
+              </div>
+            </TrainerMessageMapProvider>
+          </InferenceMessageListProvider>
+        </PermalinksProvider>
+      </LogoProvider>
     </Suspense>
   );
 }

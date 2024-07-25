@@ -20,6 +20,8 @@ from typing import TYPE_CHECKING, Any, Dict, Literal, Optional, Union
 
 from typing_extensions import Self
 
+from trainer_api.utils.constants import MODEL_CACHE_DIR, MODEL_OUTPUT_DIR
+
 
 if TYPE_CHECKING:
     import torch
@@ -33,7 +35,7 @@ class ModelArguments:
 
     model_name_or_path: str = field(
         metadata={
-            "help": "Path to the model weight or identifier from huggingface.co/models or modelscope.cn/models."
+            "help": "Path to the model weight or identifier from huggingface.co/models."
         },
     )
     adapter_name_or_path: Optional[str] = field(
@@ -50,9 +52,9 @@ class ModelArguments:
         metadata={"help": "The folder containing the adapter weights to load."},
     )
     cache_dir: Optional[str] = field(
-        default=None,
+        default=MODEL_CACHE_DIR,
         metadata={
-            "help": "Where to store the pre-trained models downloaded from huggingface.co or modelscope.cn."
+            "help": "Where to store the pre-trained models downloaded from huggingface.co."
         },
     )
     use_fast_tokenizer: bool = field(
@@ -89,10 +91,7 @@ class ModelArguments:
         default=True,
         metadata={"help": "Whether or not to use memory-efficient model loading."},
     )
-    quantization_method: Literal["bitsandbytes", "hqq", "eetq"] = field(
-        default="bitsandbytes",
-        metadata={"help": "Quantization method to use for on-the-fly quantization."},
-    )
+
     quantization_bit: Optional[int] = field(
         default=None,
         metadata={
@@ -143,12 +142,6 @@ class ModelArguments:
             "help": "Whether or not to use unsloth's optimization for the LoRA training."
         },
     )
-    visual_inputs: bool = field(
-        default=False,
-        metadata={
-            "help": "Whethor or not to use multimodal LLM that accepts visual inputs."
-        },
-    )
     moe_aux_loss_coef: Optional[float] = field(
         default=None,
         metadata={
@@ -171,30 +164,11 @@ class ModelArguments:
         default=False,
         metadata={"help": "Whether or not to randomly initialize the model weights."},
     )
-    infer_backend: Literal["huggingface", "vllm"] = field(
+    infer_backend: Literal["huggingface"] = field(
         default="huggingface",
         metadata={"help": "Backend engine used at inference."},
     )
-    vllm_maxlen: int = field(
-        default=2048,
-        metadata={
-            "help": "Maximum sequence (prompt + response) length of the vLLM engine."
-        },
-    )
-    vllm_gpu_util: float = field(
-        default=0.9,
-        metadata={
-            "help": "The fraction of GPU memory in (0,1) to be used for the vLLM engine."
-        },
-    )
-    vllm_enforce_eager: bool = field(
-        default=False,
-        metadata={"help": "Whether or not to disable CUDA graph in the vLLM engine."},
-    )
-    vllm_max_lora_rank: int = field(
-        default=32,
-        metadata={"help": "Maximum rank of all LoRAs in the vLLM engine."},
-    )
+
     offload_folder: str = field(
         default="offload",
         metadata={"help": "Path to offload model weights."},
@@ -211,12 +185,9 @@ class ModelArguments:
         default=None,
         metadata={"help": "Auth token to log in with Hugging Face Hub."},
     )
-    ms_hub_token: Optional[str] = field(
-        default=None,
-        metadata={"help": "Auth token to log in with ModelScope Hub."},
-    )
+
     export_dir: Optional[str] = field(
-        default=None,
+        default=MODEL_OUTPUT_DIR,
         metadata={"help": "Path to the directory to save the exported model."},
     )
     export_size: int = field(
@@ -278,9 +249,6 @@ class ModelArguments:
             raise ValueError(
                 "`split_special_tokens` is only supported for slow tokenizers."
             )
-
-        if self.visual_inputs and self.use_unsloth:
-            raise ValueError("Unsloth does not support MLLM yet. Stay tuned.")
 
         if (
             self.adapter_name_or_path is not None
