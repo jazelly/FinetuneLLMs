@@ -16,6 +16,8 @@ import NotFound from './pages/404.page';
 import paths from './utils/paths';
 import { InferenceMessageListProvider } from './contexts/InferenceMessageMap.context';
 import Chat from './pages/Chat.page';
+import I18N from './i18n/context';
+
 dayjs.extend(relativeTime);
 
 const Pipelines = lazy(() => import('@/pages/Pipelines.page'));
@@ -27,39 +29,41 @@ export default function App() {
 
   return (
     <Suspense fallback={<div />}>
-      <LogoProvider>
-        <PermalinksProvider>
-          <InferenceMessageListProvider>
-            <TrainerMessageMapProvider>
-              <div className="bg-main-base text-white flex h-full">
-                {!isMobile && (
-                  <div
-                    className={`w-16 h-full bg-main-dark flex-shrink-0 p-2 flex flex-col items-center justify-between`}
-                    ref={sidebarRef}
-                  >
-                    <Sidebar />
-                  </div>
-                )}
-                <div className="flex flex-col h-full w-full overflow-y-hidden">
-                  <div className="h-[64px] flex-shrink-0">
-                    <Header />
-                  </div>
+      <I18N locale="en-US">
+        <LogoProvider>
+          <PermalinksProvider>
+            <InferenceMessageListProvider>
+              <TrainerMessageMapProvider>
+                <div className="bg-main-base text-white flex h-full">
+                  {!isMobile && (
+                    <div
+                      className={`w-16 h-full bg-main-dark flex-shrink-0 p-2 flex flex-col items-center justify-between`}
+                      ref={sidebarRef}
+                    >
+                      <Sidebar />
+                    </div>
+                  )}
+                  <div className="flex flex-col h-full w-full overflow-y-hidden">
+                    <div className="h-[64px] flex-shrink-0">
+                      <Header />
+                    </div>
 
-                  <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/job/:jobId" element={<Pipeline />} />
-                    <Route path={paths.pipelines} element={<Pipelines />} />
-                    <Route path="/chat/*" element={<Chat />} />
-                    <Route path="/settings/*" element={<Settings />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
+                    <Routes>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/job/:jobId" element={<Pipeline />} />
+                      <Route path={paths.pipelines} element={<Pipelines />} />
+                      <Route path="/chat/*" element={<Chat />} />
+                      <Route path="/settings/*" element={<Settings />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </div>
+                  <ToastContainer />
                 </div>
-                <ToastContainer />
-              </div>
-            </TrainerMessageMapProvider>
-          </InferenceMessageListProvider>
-        </PermalinksProvider>
-      </LogoProvider>
+              </TrainerMessageMapProvider>
+            </InferenceMessageListProvider>
+          </PermalinksProvider>
+        </LogoProvider>
+      </I18N>
     </Suspense>
   );
 }

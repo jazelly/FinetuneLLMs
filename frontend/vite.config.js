@@ -51,6 +51,7 @@ export default defineConfig({
     ],
   },
   build: {
+    target: 'esnext',
     rollupOptions: {
       external: [/@phosphor-icons\/react\/dist\/ssr/],
     },

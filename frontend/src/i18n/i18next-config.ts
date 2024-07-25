@@ -1,41 +1,49 @@
-'use client';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 import { LanguagesSupported } from './language';
 
-const loadLangResources = (lang: string) => ({
-  translation: {
-    common: require(`./${lang}/common`).default,
-    layout: require(`./${lang}/layout`).default,
-    login: require(`./${lang}/login`).default,
-    register: require(`./${lang}/register`).default,
-    app: require(`./${lang}/app`).default,
-    appOverview: require(`./${lang}/app-overview`).default,
-    appDebug: require(`./${lang}/app-debug`).default,
-    appApi: require(`./${lang}/app-api`).default,
-    appLog: require(`./${lang}/app-log`).default,
-    appAnnotation: require(`./${lang}/app-annotation`).default,
-    share: require(`./${lang}/share-app`).default,
-    dataset: require(`./${lang}/dataset`).default,
-    datasetDocuments: require(`./${lang}/dataset-documents`).default,
-    datasetHitTesting: require(`./${lang}/dataset-hit-testing`).default,
-    datasetSettings: require(`./${lang}/dataset-settings`).default,
-    datasetCreation: require(`./${lang}/dataset-creation`).default,
-    explore: require(`./${lang}/explore`).default,
-    billing: require(`./${lang}/billing`).default,
-    custom: require(`./${lang}/custom`).default,
-    tools: require(`./${lang}/tools`).default,
-    workflow: require(`./${lang}/workflow`).default,
-    runLog: require(`./${lang}/run-log`).default,
-  },
-});
+const loadLangResources = async (lang: string) => {
+  const resources = {
+    translation: {
+      common: (await import(`./${lang}/common`)).default,
+      layout: (await import(`./${lang}/layout`)).default,
+      login: (await import(`./${lang}/login`)).default,
+      register: (await import(`./${lang}/register`)).default,
+      app: (await import(`./${lang}/app`)).default,
+      appOverview: (await import(`./${lang}/app-overview`)).default,
+      appDebug: (await import(`./${lang}/app-debug`)).default,
+      appApi: (await import(`./${lang}/app-api`)).default,
+      appLog: (await import(`./${lang}/app-log`)).default,
+      appAnnotation: (await import(`./${lang}/app-annotation`)).default,
+      share: (await import(`./${lang}/share-app`)).default,
+      dataset: (await import(`./${lang}/dataset`)).default,
+      datasetDocuments: (await import(`./${lang}/dataset-documents`)).default,
+      datasetHitTesting: (await import(`./${lang}/dataset-hit-testing`))
+        .default,
+      datasetSettings: (await import(`./${lang}/dataset-settings`)).default,
+      datasetCreation: (await import(`./${lang}/dataset-creation`)).default,
+      explore: (await import(`./${lang}/explore`)).default,
+      billing: (await import(`./${lang}/billing`)).default,
+      custom: (await import(`./${lang}/custom`)).default,
+      tools: (await import(`./${lang}/tools`)).default,
+      workflow: (await import(`./${lang}/workflow`)).default,
+      runLog: (await import(`./${lang}/run-log`)).default,
+    },
+  };
+  return resources;
+};
 
 // Automatically generate the resources object
-const resources = LanguagesSupported.reduce((acc: any, lang: string) => {
-  acc[lang] = loadLangResources(lang);
-  return acc;
-}, {});
+const loadResources = async () => {
+  const resources = {};
+  for (const lang of LanguagesSupported) {
+    resources[lang] = await loadLangResources(lang);
+  }
+  return resources;
+};
+
+const resources = await loadResources();
 
 i18n.use(initReactI18next).init({
   lng: undefined,
