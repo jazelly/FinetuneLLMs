@@ -3,7 +3,7 @@ import FullScreenLoader from '@/components/reusable/Loaders.component';
 import { useEffect, useState } from 'react';
 import DatasetRow from '../DatasetRow.component';
 import { Plus, Trash } from '@phosphor-icons/react';
-import Document from '@/models/document';
+import DatasetService from '@/models/document';
 import React from 'react';
 
 function Directory({

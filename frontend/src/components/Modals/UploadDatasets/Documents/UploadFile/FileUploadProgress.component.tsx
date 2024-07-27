@@ -3,7 +3,7 @@ import truncate from 'truncate';
 import { CheckCircle, XCircle } from '@phosphor-icons/react';
 import { humanFileSize, milliToHms } from '@/utils/numbers';
 import { PreLoader } from '@/components/reusable/Loaders.component';
-import Document from '@/models/document';
+import DatasetService from '@/models/document';
 
 const CHUNK_SIZE = 100000; // bytes
 
@@ -62,7 +62,7 @@ function FileUploadProgressComponent({
         formData.append('totalChunks', `${totalChunks}`);
 
         console.log('Uploading chunk: ', chunkIndex);
-        response = await Document.uploadOneDatasetByChunk(formData);
+        response = await DatasetService.uploadOneDatasetByChunk(formData);
         console.log(`chunk ${chunkIndex}`, response);
         if (response.status !== 200) {
           break;

@@ -11,6 +11,12 @@
     "rootDir": "./src",
     "noEmit": false
   },
-  "include": ["src/**/*.ts", "src/index.ts"],
-  "exclude": ["node_modules", "src/storage"]
+  "include": [
+    "src/**/*.ts",
+    "src/index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/storage"
+  ]
 }

@@ -3,9 +3,9 @@
   "private": false,
   "license": "MIT",
   "type": "module",
-  "author": "jazelly",
+  "author": "vertile.ai",
   "scripts": {
-    "start": "vite",
+    "start": "vite --host=0.0.0.0",
     "dev": "vite --debug --host=0.0.0.0",
     "build": "vite build",
     "lint": "npx prettier --write ./src",
@@ -114,6 +114,9 @@
     "tailwindcss": "^3.3.1",
     "typescript": "^5.4.5",
     "vite": "^4.3.0"
+  },
+  "optionalDependencies": {
+    "esbuild": "^0.23.0"
   },
   "overrides": {
     "react-custom-scrollbars": {

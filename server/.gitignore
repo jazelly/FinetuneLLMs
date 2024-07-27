@@ -18,6 +18,7 @@ src/storage/lancedb
 src/certs/*
 dist
 build
+package-lock.json
 node_modules
 prisma/**/*
 !prisma/schema.prisma

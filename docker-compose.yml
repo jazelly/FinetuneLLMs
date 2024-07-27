@@ -1,0 +1,68 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /frontend
+    ports:
+      - "3000:3000"
+    image: frontend
+
+  web:
+    build:
+      context: ./web
+    container_name: web
+    volumes:
+      - type: bind
+        source: ./web
+        target: /web
+      - ./frontend/dist:/etc/nginx/html
+      - ./server/dist:/etc/nginx/server
+    ports:
+      - "80:80"
+    image: web
+    depends_on:
+      - frontend
+
+  trainer:
+    build:
+      context: ./trainer
+    container_name: trainer
+    volumes:
+      - type: bind
+        source: ./trainer
+        target: /trainer
+    ports:
+      - "8000:8000"
+    image: trainer
+
+  database:
+    image: postgres
+    container_name: database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: main
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  server:
+    depends_on:
+      - database
+    build:
+      context: ./server
+    container_name: server
+    volumes:
+      - type: bind
+        source: ./server
+        target: /server
+    ports:
+      - "3001:3001"
+    image: server
+volumes:
+  db-data:
