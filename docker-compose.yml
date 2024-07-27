@@ -39,7 +39,21 @@ services:
       - "8000:8000"
     image: trainer
 
+  database:
+    image: postgres
+    container_name: database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: main
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
   server:
+    depends_on:
+      - database
     build:
       context: ./server
     container_name: server
@@ -50,3 +64,5 @@ services:
     ports:
       - "3001:3001"
     image: server
+volumes:
+  db-data:

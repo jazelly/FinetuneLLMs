@@ -7,8 +7,9 @@
 ```
 nvm use
 cd frontend
-cp .env.example .env
-npm ci
+chmod +x init_env.sh
+init_env.sh
+npm i
 npm run dev
 ```
 
@@ -17,9 +18,10 @@ npm run dev
 ```
 nvm use
 cd server
-cp .env.example .env
-npx prisma migrate dev
+chmod +x init_env.sh
+init_env.sh
 npm i
+npx prisma migrate dev
 npm run dev
 ```
 
@@ -86,5 +88,5 @@ python watch.py
 otherwise, to serve on localhost:
 
 ```
-daphne -b 0.0.0.0 -p 8000 trainer.asgi:trainer_api
+daphne -b 0.0.0.0 -p 8000 trainer.asgi:application
 ```
