@@ -26,7 +26,7 @@ function getDatasetDestination(req, file, cb) {
 const HF_DATASET_LINK_BASE = "https://huggingface.co/datasets/";
 
 class DatasetStorage {
-  getDestination;
+  public getDestination: Function;
 
   constructor(opts) {
     this.getDestination = opts.destination || getDatasetDestination;
@@ -92,7 +92,7 @@ function documentEndpoints(app) {
         // Respond with an error status
         res.status(500).send("Error during file upload");
       }
-    },
+    }
   );
 
   const getDatasetName = (link) => {
@@ -110,7 +110,7 @@ function documentEndpoints(app) {
     const name = getDatasetName(link);
     const datasetValidity = await fetch(
       `${HF_DATA_VALIDITY_URL}?dataset=${name}`,
-      { method: "GET" },
+      { method: "GET" }
     );
     const validityJson = await datasetValidity.json();
 
@@ -128,7 +128,7 @@ function documentEndpoints(app) {
       `${HF_DATA_API_BASE}/splits?dataset=${name}`,
       {
         method: "GET",
-      },
+      }
     );
     const splitsNConfigsJson = await splitsNConfigs.json();
     const splits = splitsNConfigsJson.splits;
@@ -183,7 +183,7 @@ function documentEndpoints(app) {
     // read from local dir
     const directoryPath = path.resolve(
       __dirname,
-      `../../${config.DATABASE_PATH_FROM_ROOT}`,
+      `../../${config.DATABASE_PATH_FROM_ROOT}`
     );
 
     const localDatasets: DatasetLocal[] = [];

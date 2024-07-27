@@ -503,15 +503,10 @@ export const useNodesInteractions = () => {
 
   const handleNodeDragStop = useCallback<NodeDragHandler>(
     (_, node) => {
-      const { setHelpLineHorizontal, setHelpLineVertical } =
-        workflowStore.getState();
-
       if (getNodesReadOnly()) return;
 
       const { x, y } = dragNodeStartPosition.current;
       if (!(x === node.position.x && y === node.position.y)) {
-        setHelpLineHorizontal();
-        setHelpLineVertical();
         handleSyncWorkflowDraft();
       }
     },

@@ -40,6 +40,8 @@ model workflow_nodes {
   title       String
   desc        String
   type        String
+  x           Int
+  y           Int
   workflow_id String
   workflow    workflows @relation(fields: [workflow_id], references: [id])
 }
