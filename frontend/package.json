@@ -5,7 +5,7 @@
   "type": "module",
   "author": "jazelly",
   "scripts": {
-    "start": "vite",
+    "start": "vite --host=0.0.0.0",
     "dev": "vite --debug --host=0.0.0.0",
     "build": "vite build",
     "lint": "npx prettier --write ./src",
