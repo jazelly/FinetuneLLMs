@@ -68,8 +68,8 @@ export default function Sidebar() {
         <div className="flex flex-col min-w-[24px] gap-y-3">
           <div
             className="flex gap-x-2 items-center justify-between"
-            data-tooltip-content="Finetune"
-            data-tooltip-id="finetune"
+            data-tooltip-content="Workflow"
+            data-tooltip-id="workflow"
           >
             <button
               onClick={() => {
@@ -84,10 +84,10 @@ export default function Sidebar() {
               />
             </button>
             <Tooltip
-              id="finetune"
+              id="workflow"
               place="right"
               delayShow={200}
-              className="tooltip z-99"
+              className="tooltip z-99 absolute"
             />
           </div>
           <div
@@ -111,7 +111,7 @@ export default function Sidebar() {
               id="chat"
               place="right"
               delayShow={200}
-              className="tooltip z-99"
+              className="tooltip z-99 absolute"
             />
           </div>
           <div
@@ -138,7 +138,7 @@ export default function Sidebar() {
               id="pipelines"
               place="right"
               delayShow={200}
-              className="tooltip z-99"
+              className="tooltip z-99 absolute"
             />
           </div>
           <div
@@ -162,7 +162,7 @@ export default function Sidebar() {
               id="settings"
               place="right"
               delayShow={200}
-              className="tooltip z-99"
+              className="tooltip z-99 absolute"
             />
           </div>
         </div>
