@@ -20,4 +20,3 @@ dist
 build
 package-lock.json
 node_modules
-prisma/migrations/*
