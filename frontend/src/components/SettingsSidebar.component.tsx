@@ -1,27 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import paths from '@/utils/paths';
-import useLogo from '@/hooks/useLogo';
 import { EyeSlash } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 
 export default function SettingsSidebar() {
-  const { logo } = useLogo();
   const sidebarRef = useRef(null);
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [showBgOverlay, setShowBgOverlay] = useState(false);
-
-  useEffect(() => {
-    function handleBg() {
-      if (showSidebar) {
-        setTimeout(() => {
-          setShowBgOverlay(true);
-        }, 300);
-      } else {
-        setShowBgOverlay(false);
-      }
-    }
-    handleBg();
-  }, [showSidebar]);
 
   return (
     <div className="bg-main-menu bg-opacity-50">
