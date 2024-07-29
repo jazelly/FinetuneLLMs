@@ -56,7 +56,10 @@ const Workflow = {
           target: '2',
         },
       ];
-      return { success: true, data: { id: v4(), nodes: initialNodes, edges } };
+      return {
+        success: true,
+        data: { id: v4(), nodes: initialNodes, edges } as any,
+      };
     }
   },
   getWorkflow: async (

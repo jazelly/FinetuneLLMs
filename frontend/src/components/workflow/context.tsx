@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useRef } from 'react';
 import { createWorkflowStore } from './store';
 import { Locale } from '@/i18n';
-import { getLanguage } from '@/i18n/language';
 
 type WorkflowStore = ReturnType<typeof createWorkflowStore>;
 export const WorkflowContext = createContext<WorkflowStore | null>(null);
@@ -30,16 +29,10 @@ type II18NContext = {
 };
 
 const I18NContext = createContext<II18NContext>({
-  locale: 'en-US',
+  locale: 'en',
   i18n: {},
   setLocaleOnClient: (_lang: Locale, _reloadPage?: boolean) => {},
 });
 
 export const useI18N = () => useContext(I18NContext);
-export const useGetLanguage = () => {
-  const { locale } = useI18N();
-
-  return getLanguage(locale);
-};
-
 export default I18NContext;

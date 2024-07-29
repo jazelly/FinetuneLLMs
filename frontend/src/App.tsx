@@ -17,19 +17,17 @@ import paths from './utils/paths';
 import { InferenceMessageListProvider } from './contexts/InferenceMessageMap.context';
 import Chat from './pages/Chat.page';
 import I18N from './i18n/context';
+import Pipelines from '@/pages/Pipelines.page';
+import Pipeline from '@/pages/Pipeline.page';
+import WorkflowPage from '@/pages/workflow.page';
 
 dayjs.extend(relativeTime);
-
-const Pipelines = lazy(() => import('@/pages/Pipelines.page'));
-const Pipeline = lazy(() => import('@/pages/Pipeline.page'));
-const Dashboard = lazy(() => import('@/pages/workflow.page'));
-
 export default function App() {
   const sidebarRef = useRef(null);
 
   return (
     <Suspense fallback={<div />}>
-      <I18N locale="en-US">
+      <I18N locale="en">
         <LogoProvider>
           <PermalinksProvider>
             <InferenceMessageListProvider>
@@ -49,7 +47,7 @@ export default function App() {
                     </div>
 
                     <Routes>
-                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/" element={<WorkflowPage />} />
                       <Route path="/job/:jobId" element={<Pipeline />} />
                       <Route path={paths.pipelines} element={<Pipelines />} />
                       <Route path="/chat/*" element={<Chat />} />

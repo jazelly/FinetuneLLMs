@@ -4,10 +4,7 @@ import type { Var } from '../../types';
 import { VarType } from '../../types';
 import { LogicalOperator } from './types';
 import type { Condition, IfElseNodeType } from './types';
-import {
-  useNodeCrud,
-  useNodeInfo,
-} from '@/components/workflow/hooks/use-node-crud';
+import { useNodeCrud } from '@/components/workflow/hooks/use-node-crud';
 import {
   useNodesReadOnly,
   useWorkflow,
@@ -15,9 +12,6 @@ import {
 
 const useConfig = (id: string, payload: IfElseNodeType) => {
   const { nodesReadOnly: readOnly } = useNodesReadOnly();
-  const { getBeforeNodesInSameBranch } = useWorkflow();
-  const { parentNode } = useNodeInfo(id);
-  const beforeNodes = getBeforeNodesInSameBranch(id);
 
   const { inputs, setInputs } = useNodeCrud<IfElseNodeType>(id, payload);
 

@@ -160,9 +160,11 @@ export interface NodeProps {
   id: string;
   data: CommonNodeType;
 }
-export interface NodePanelProps {
+export interface NodePanelProps<
+  NodeType extends CommonNodeType = CommonNodeType,
+> {
   id: string;
-  data: CommonNodeType;
+  data: NodeType;
 }
 export type Edge = ReactFlowEdge<CommonEdgeType>;
 

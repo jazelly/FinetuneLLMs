@@ -3,9 +3,7 @@ import type { StartNodeType } from './types';
 import { ALL_COMPLETION_AVAILABLE_BLOCKS } from '@/components/workflow/constants';
 
 const StartNodeDefault: NodeDefault<StartNodeType> = {
-  defaultValue: {
-    variables: [],
-  },
+  defaultValue: {},
   getAvailablePrevNodes() {
     return [];
   },

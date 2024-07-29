@@ -1,23 +1,33 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "esnext",
-    "jsx": "react",
-    "outDir": "./dist",
-    "strict": true,
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "outDir": "./dist",
     "esModuleInterop": true,
-    "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
     },
-    "lib": ["dom", "dom.iterable", "esnext"],
     "types": ["node", "vite/client"],
-    "allowJs": true, // TODO: false
-    "noImplicitAny": false, // TODO: true
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "allowJs": false,
+    "noImplicitAny": false // TODO: true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"]
+  "include": ["src"]
 }

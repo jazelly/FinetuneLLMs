@@ -19,7 +19,9 @@ The best way to do this is via docker,
 docker compose up -d
 ```
 
-and in browser, visit `http://localhost:3000`
+In browser, visit `http://localhost:8080`
+
+For detailed explanation on the structure, see [BUILD.md](./BUILD.md)
 
 ## 🔥Goal & Roadmap🔥
 

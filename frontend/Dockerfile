@@ -1,12 +1,27 @@
-FROM node:lts
-ENV NODE_VERSION 22.2.0
+FROM node:lts AS builder
+
 WORKDIR /frontend
-COPY package.json ./
-COPY init_env.sh /frontend/init_env.sh
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy the rest of the application files
+COPY . .
 RUN chmod +x /frontend/init_env.sh
 RUN /frontend/init_env.sh
-RUN npm i
-COPY . .
-ENV CI=true
+
 RUN npm run build
-CMD [ "npm", "run", "start" ]
+
+FROM nginx:alpine
+COPY --from=builder /frontend/dist /usr/share/nginx/html
+
+# Copy the build output from the host to the container
+
+# Copy custom Nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expose port 80 to the outside world
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

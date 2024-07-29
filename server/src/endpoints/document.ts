@@ -1,29 +1,28 @@
-import { config } from "../utils/dotenv";
+import { config } from '../utils/dotenv';
 
-import { reqBody } from "../utils/http";
-import fs from "fs";
-import fsAsync from "fs/promises";
-import path from "path";
-import { promisify } from "util";
-import multer from "multer";
-import { Datasets } from "../models/datasets";
-import { HF_DATA_VALIDITY_URL, HF_DATA_API_BASE } from "./constants";
-import { DatasetLocal } from "../models/schema/datasets.type";
+import { reqBody } from '../utils/http';
+import fs from 'fs';
+import fsAsync from 'fs/promises';
+import path from 'path';
+import { promisify } from 'util';
+import multer from 'multer';
+import { Datasets } from '../models/datasets';
+import { HF_DATA_VALIDITY_URL, HF_DATA_API_BASE } from './constants';
+import { DatasetLocal } from '../models/schema/datasets.type';
+import { HF_DATASET_LINK_BASE } from '../utils/constants';
 
 const appendFile = promisify(fs.appendFile);
 const unlinkFile = promisify(fs.unlink);
 
 const serverRootDir = process.cwd();
-const datasetsDirPath = path.join(serverRootDir, "storage/datasets");
-const tempDirPath = path.join(serverRootDir, "storage/temp");
+const datasetsDirPath = path.join(serverRootDir, 'storage/datasets');
+const tempDirPath = path.join(serverRootDir, 'storage/temp');
 
 function getDatasetDestination(req, file, cb) {
   const fileName = file.originalname;
   const savePath = path.join(tempDirPath, fileName);
   cb(null, savePath);
 }
-
-const HF_DATASET_LINK_BASE = "https://huggingface.co/datasets/";
 
 class DatasetStorage {
   public getDestination: Function;
@@ -39,8 +38,8 @@ class DatasetStorage {
       const outStream = fs.createWriteStream(path);
 
       file.stream.pipe(outStream);
-      outStream.on("error", cb);
-      outStream.on("finish", function () {
+      outStream.on('error', cb);
+      outStream.on('finish', function () {
         cb(null, {
           path: path,
           size: outStream.bytesWritten,
@@ -55,12 +54,18 @@ class DatasetStorage {
 
 const uploadMiddleware = multer({ storage: new DatasetStorage({}) });
 
+const getDatasetName = (link) => {
+  const segments = link.split('/');
+  const datasetsIndex = segments.indexOf('datasets');
+  return segments.slice(datasetsIndex + 1).join('/'); // e.g. ibm/duorc or rotten_tomatoes
+};
+
 function documentEndpoints(app) {
   if (!app) return;
 
   app.post(
-    "/document/upload-by-chunk",
-    [uploadMiddleware.single("file")],
+    '/document/upload-by-chunk',
+    [uploadMiddleware.single('file')],
     async (req, res) => {
       const { file } = req;
       const { chunkIndex, totalChunks } = req.body;
@@ -82,7 +87,7 @@ function documentEndpoints(app) {
           res.status(200).send({ mesage: `finished chunk ${chunkIndex}` });
         }
       } catch (error) {
-        console.error("Error during file upload:", error);
+        console.error('Error during file upload:', error);
 
         // Clean up: delete the partially uploaded file
         if (fs.existsSync(targetPath)) {
@@ -90,27 +95,21 @@ function documentEndpoints(app) {
         }
 
         // Respond with an error status
-        res.status(500).send("Error during file upload");
+        res.status(500).send('Error during file upload');
       }
     }
   );
 
-  const getDatasetName = (link) => {
-    const segments = link.split("/");
-    const datasetsIndex = segments.indexOf("datasets");
-    return segments.slice(datasetsIndex + 1).join("/"); // e.g. ibm/duorc or rotten_tomatoes
-  };
-
-  app.post("/document/save-from-hf", async (req, res) => {
+  app.post('/document/save-from-hf', async (req, res) => {
     const { link } = reqBody(req);
 
     if (!link.startsWith(HF_DATASET_LINK_BASE))
-      res.status(400).send({ message: "must be a HuggingFace link" });
+      res.status(400).send({ message: 'must be a HuggingFace link' });
 
     const name = getDatasetName(link);
     const datasetValidity = await fetch(
       `${HF_DATA_VALIDITY_URL}?dataset=${name}`,
-      { method: "GET" }
+      { method: 'GET' }
     );
     const validityJson = await datasetValidity.json();
 
@@ -120,14 +119,14 @@ function documentEndpoints(app) {
       !validityJson.filter &&
       !validityJson.viewer
     ) {
-      res.status(400).send({ message: "dataset not available" });
+      res.status(400).send({ message: 'dataset not available' });
     }
 
     // split and config
     const splitsNConfigs = await fetch(
       `${HF_DATA_API_BASE}/splits?dataset=${name}`,
       {
-        method: "GET",
+        method: 'GET',
       }
     );
     const splitsNConfigsJson = await splitsNConfigs.json();
@@ -142,24 +141,24 @@ function documentEndpoints(app) {
 
     // get dataset meta data and save to space
     const info = await fetch(`${HF_DATA_API_BASE}/info?dataset=${name}`, {
-      method: "GET",
+      method: 'GET',
     });
 
     const infoJson = await info.json();
-    console.log("infoJson", infoJson);
-    const datasetInfo = infoJson["dataset_info"];
+    console.log('infoJson', infoJson);
+    const datasetInfo = infoJson['dataset_info'];
     for (const configSplit of configSplitSet) {
       const configSplitJson = JSON.parse(configSplit as string);
-      console.log("configSplit", configSplit);
+      console.log('configSplit', configSplit);
       const configJson = datasetInfo[configSplitJson.config];
       if (configJson) {
-        const splitJson = configJson["splits"][configSplitJson.split];
-        const size = splitJson["num_bytes"];
-        const numRows = splitJson["num_examples"];
+        const splitJson = configJson['splits'][configSplitJson.split];
+        const size = splitJson['num_bytes'];
+        const numRows = splitJson['num_examples'];
         await Datasets.create({
           name,
           source: link,
-          extension: "parquet",
+          extension: 'parquet',
           split: configSplitJson.split,
           config: configSplitJson.config,
           size,
@@ -170,16 +169,16 @@ function documentEndpoints(app) {
 
     res.status(200).send({
       configSplit: Array.from(configSplitSet),
-      message: "dataset saved",
+      message: 'dataset saved',
     });
   });
 
-  app.get("/document/remote/all", async (req, res) => {
+  app.get('/document/remote/all', async (req, res) => {
     const remoteDatasets = await Datasets.readBy({ path: null });
     res.json(remoteDatasets);
   });
 
-  app.get("/document/local/all", async (req, res) => {
+  app.get('/document/local/all', async (req, res) => {
     // read from local dir
     const directoryPath = path.resolve(
       __dirname,
@@ -205,7 +204,7 @@ function documentEndpoints(app) {
             size: stats.size, // File size in bytes
           };
 
-          if (ext === ".csv" || ext === ".txt" || ext == ".json")
+          if (ext === '.csv' || ext === '.txt' || ext == '.json')
             localDatasets.push(fileDetails);
         }
       }

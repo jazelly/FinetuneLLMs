@@ -1,6 +1,3 @@
-const { getGitVersion } = require("../../endpoints/utils");
-const { Telemetry } = require("../../models/telemetry");
-
 function checkColumnTemplate(tablename = null, column = null) {
   if (!tablename || !column)
     throw new Error(`Migration Error`, { tablename, column });
@@ -12,7 +9,7 @@ async function checkForMigrations(model, db) {
   const toMigrate = [];
   for (const { colName, execCmd, doif } of model.migrations()) {
     const { _exists } = await db.get(
-      checkColumnTemplate(model.tablename, colName),
+      checkColumnTemplate(model.tablename, colName)
     );
     const colExists = _exists !== 0;
     if (colExists !== doif) continue;
@@ -23,28 +20,28 @@ async function checkForMigrations(model, db) {
   if (toMigrate.length === 0) return;
 
   console.log(`Running ${toMigrate.length} migrations`, toMigrate);
-  await db.exec(toMigrate.join(";\n"));
+  await db.exec(toMigrate.join(';\n'));
   return;
 }
 
 async function validateTablePragmas(force = false) {
   try {
-    if (process.env.NODE_ENV !== "development" && force === false) {
+    if (process.env.NODE_ENV !== 'development' && force === false) {
       console.log(
-        `\x1b[34m[MIGRATIONS STUBBED]\x1b[0m Please ping /migrate once server starts to run migrations`,
+        `\x1b[34m[MIGRATIONS STUBBED]\x1b[0m Please ping /migrate once server starts to run migrations`
       );
       return;
     }
-    const { SystemSettings } = require("../../models/systemSettings");
-    const { User } = require("../../models/user");
-    const { Workspace } = require("../../models/workspace");
-    const { WorkspaceUser } = require("../../models/workspaceUsers");
-    const { Document } = require("../../models/documents");
-    const { DocumentVectors } = require("../../models/vectors");
-    const { WorkspaceChats } = require("../../models/workspaceChats");
-    const { Invite } = require("../../models/invite");
-    const { WelcomeMessages } = require("../../models/welcomeMessages");
-    const { ApiKey } = require("../../models/apiKeys");
+    const { SystemSettings } = require('../../models/systemSettings');
+    const { User } = require('../../models/user');
+    const { Workspace } = require('../../models/workspace');
+    const { WorkspaceUser } = require('../../models/workspaceUsers');
+    const { Document } = require('../../models/documents');
+    const { DocumentVectors } = require('../../models/vectors');
+    const { WorkspaceChats } = require('../../models/workspaceChats');
+    const { Invite } = require('../../models/invite');
+    const { WelcomeMessages } = require('../../models/welcomeMessages');
+    const { ApiKey } = require('../../models/apiKeys');
 
     await SystemSettings.migrateTable();
     await User.migrateTable();

@@ -56,10 +56,13 @@ export const useNodeDataUpdate = () => {
     handleNodeDataUpdateWithSyncDraft,
   };
 };
-export const useNodeCrud = (id: string, data: CommonNodeType) => {
+export const useNodeCrud = <NodeType extends CommonNodeType = CommonNodeType>(
+  id: string,
+  data: NodeType
+) => {
   const { handleNodeDataUpdateWithSyncDraft } = useNodeDataUpdate();
 
-  const setInputs = (newInputs: CommonNodeType) => {
+  const setInputs = (newInputs: NodeType) => {
     handleNodeDataUpdateWithSyncDraft({
       id,
       data: newInputs,

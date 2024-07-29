@@ -10,7 +10,6 @@ import {
 } from '@/components/workflow/hooks/hooks';
 import type { Node } from '@/components/workflow/types';
 import { BlockEnum } from '@/components/workflow/types';
-import { useGetLanguage } from '@/contexts/i18n';
 import React from 'react';
 import { useNodesSyncDraft } from '@/components/workflow/hooks/use-nodes-sync-draft';
 import { useNodeDataUpdate } from '@/components/workflow/hooks/use-node-crud';
@@ -25,10 +24,8 @@ const PanelOperatorPopup = ({
   id,
   data,
   onClosePopup,
-  showHelpLink,
 }: PanelOperatorPopupProps) => {
   const { t } = useTranslation();
-  const language = useGetLanguage();
   const edges = useEdges();
   const {
     handleNodeDelete,
@@ -47,7 +44,7 @@ const PanelOperatorPopup = ({
 
   const about = useMemo(() => {
     return nodesExtraData[data.type].about;
-  }, [data, nodesExtraData, language]);
+  }, [data, nodesExtraData]);
 
   const showChangeBlock = data.type !== BlockEnum.Start && !nodesReadOnly;
 

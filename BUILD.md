@@ -1,5 +1,11 @@
 # Build Guide
 
+There are three components in this project,
+
+- frontend: a react app showing WebUI
+- server: a node.js server handling basic CRUD
+- trainer: a python [asgi](https://asgi.readthedocs.io/en/latest/) application handling LLM related operations
+
 ## Local dev setup
 
 ### Setup frontend

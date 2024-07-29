@@ -1,6 +1,7 @@
 import { IChatMessage } from '@/types/common.type';
 
-export const API_BASE = import.meta.env.VITE_API_BASE || '/api';
+export const API_BASE =
+  import.meta.env.VITE_API_BASE || 'http://localhost:3001/api';
 
 export const LOCALE_COOKIE_NAME = 'locale';
 

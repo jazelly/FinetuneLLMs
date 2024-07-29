@@ -1,31 +1,30 @@
+name: vertile
+
+networks:
+  internal_network:
+    driver: bridge
 services:
+  database:
+    image: postgres
+    container_name: database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: main
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - internal_network
+
   frontend:
     build:
       context: ./frontend
     container_name: frontend
-    volumes:
-      - type: bind
-        source: ./frontend
-        target: /frontend
-    ports:
-      - "3000:3000"
     image: frontend
-
-  web:
-    build:
-      context: ./web
-    container_name: web
-    volumes:
-      - type: bind
-        source: ./web
-        target: /web
-      - ./frontend/dist:/etc/nginx/html
-      - ./server/dist:/etc/nginx/server
     ports:
-      - "80:80"
-    image: web
-    depends_on:
-      - frontend
+      - "8080:80"
 
   trainer:
     build:
@@ -38,18 +37,8 @@ services:
     ports:
       - "8000:8000"
     image: trainer
-
-  database:
-    image: postgres
-    container_name: database
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_DB: main
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    networks:
+      - internal_network
 
   server:
     depends_on:
@@ -57,6 +46,8 @@ services:
     build:
       context: ./server
     container_name: server
+    environment:
+      DATABASE_URL: postgres://postgres:mysecretpassword@database:5432/main
     volumes:
       - type: bind
         source: ./server
@@ -64,5 +55,8 @@ services:
     ports:
       - "3001:3001"
     image: server
+    networks:
+      - internal_network
 volumes:
   db-data:
+    
