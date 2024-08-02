@@ -8,7 +8,15 @@ import {
   isEmptyRelatedOperator,
 } from './utils';
 import type { IfElseNodeType } from './types';
-import { TestTube } from '@phosphor-icons/react';
+import {
+  CheckCircle,
+  PlayCircle,
+  SpinnerGap,
+  TestTube,
+  TreeStructure,
+  Warning,
+} from '@phosphor-icons/react';
+import { NodeRunningStatus } from '../../types';
 const i18nPrefix = 'workflow.nodes.ifElse';
 
 const IfElseNode: FC<NodeProps<IfElseNodeType>> = (props) => {
@@ -18,6 +26,29 @@ const IfElseNode: FC<NodeProps<IfElseNodeType>> = (props) => {
 
   return (
     <div className="px-3">
+      <div
+        className={
+          'flex items-center px-3 pt-3 pb-2 rounded-t-2xl bg-[rgba(250,252,255,0.9)]'
+        }
+      >
+        <TreeStructure className="shrink-0 mr-2" size={16} color={'black'} />
+        <div
+          title={data.title}
+          className="grow mr-1 text-[13px] font-semibold text-gray-700 truncate"
+        >
+          {data.title}
+        </div>
+        {(data._runningStatus === NodeRunningStatus.Running ||
+          data._singleRunningStatus === NodeRunningStatus.Running) && (
+          <SpinnerGap className="w-3.5 h-3.5 text-primary-600 animate-spin" />
+        )}
+        {data._runningStatus === NodeRunningStatus.Succeeded && (
+          <CheckCircle className="w-3.5 h-3.5 text-[#12B76A]" />
+        )}
+        {data._runningStatus === NodeRunningStatus.Failed && (
+          <Warning className="w-3.5 h-3.5" color="#F04438" />
+        )}
+      </div>
       <div className="relative flex items-center h-6 px-1">
         <div className="w-full text-xs font-semibold text-right text-gray-700">
           IF

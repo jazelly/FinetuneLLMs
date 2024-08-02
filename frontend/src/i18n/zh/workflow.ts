@@ -111,7 +111,7 @@ const translation = {
     'knowledge-retrieval': '知识检索',
     'question-classifier': '问题分类器',
     'if-else': '条件分支',
-    code: '代码执行',
+    train: '训练模型',
     'template-transform': '模板转换',
     'http-request': 'HTTP 请求',
     'variable-assigner': '变量聚合器',

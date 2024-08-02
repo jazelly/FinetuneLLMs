@@ -1,5 +1,4 @@
-'use client';
-
+import React, { useContext, useState } from 'react';
 import type { FC } from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { setAutoFreeze } from 'immer';
@@ -11,12 +10,14 @@ import ReactFlow, {
   useEdgesState,
   useNodesState,
   useOnViewportChange,
+  useReactFlow,
+  useStoreApi,
 } from 'reactflow';
 import type { Viewport } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './style.css';
-import type { Edge, Node } from './types';
-import { WorkflowContextProvider } from './context';
+import { BlockEnum, Edge, Node } from './types';
+import { WorkflowContext, WorkflowContextProvider } from './context';
 import {
   useNodesInteractions,
   useNodesReadOnly,
@@ -28,19 +29,21 @@ import Operator from './tools';
 import CustomEdge from './custom-edge';
 import CustomConnectionLine from './custom-connection-line';
 import CandidateNode from './candidate-node';
-import { useStore, useWorkflowStore } from './store';
+import { useStore } from './store';
 import {
   getKeyboardKeyCodeBySystem,
-  initialEdges,
-  initialNodes,
+  initNodesAndEdges,
+  sortNodes,
 } from './utils';
 import { ITERATION_CHILDREN_Z_INDEX, WORKFLOW_DATA_UPDATE } from './constants';
 import { useEventEmitterContextContext } from '@/contexts/EventEmitter';
-import React from 'react';
 import { RunningSpinner } from '../reusable/Loaders.component';
 import { useWorkflowInit } from './hooks/workflow.hooks';
 import { useEdgesInteractions } from './hooks/use-edges-interactions';
 import { useSelectionInteractions } from './hooks/use-selection-interactions';
+import { NodeSelector } from './NodeSelector.component';
+import { TrainerMessageMapContext } from '@/contexts/TrainerMessageMap.context';
+import { NodeDetailStateProvider } from '@/contexts/Workflow.context';
 
 const nodeTypes = {
   custom: CustomNode,
@@ -49,20 +52,45 @@ const edgeTypes = {
   custom: CustomEdge,
 };
 
-type WorkflowProps = {
+interface WorkflowProps {
   nodes: Node[];
   edges: Edge[];
   viewport?: Viewport;
-};
+}
+
 const Workflow: FC<WorkflowProps> = memo(
   ({ nodes: originalNodes, edges: originalEdges, viewport }) => {
+    const [isFirstUpdate, setIsFirstUpdate] = useState(true);
+
     const workflowContainerRef = useRef<HTMLDivElement>(null);
-    const workflowStore = useWorkflowStore();
+    const workflowStore = useContext(WorkflowContext)!;
     const [nodes, setNodes] = useNodesState(originalNodes);
     const [edges, setEdges] = useEdgesState(originalEdges);
+    console.log('afterInit', nodes, edges);
     const controlMode = useStore((s) => s.controlMode);
     const nodeAnimation = useStore((s) => s.nodeAnimation);
     const { nodesReadOnly } = useNodesReadOnly();
+    const store = useStoreApi();
+    const reactflow = useReactFlow();
+
+    useEffect(() => {
+      const { setNodes: setStoreNodes } = store.getState();
+      const { setViewport } = reactflow;
+
+      if (originalNodes.length && isFirstUpdate) {
+        const newNodes = sortNodes(nodes, edges);
+        console.log('afterSort', newNodes);
+        setNodes(newNodes);
+        setEdges(edges);
+        setStoreNodes(newNodes);
+        setViewport({
+          x: 0,
+          y: 0,
+          zoom: 1,
+        });
+        setIsFirstUpdate(false);
+      }
+    }, [isFirstUpdate]);
 
     const { eventEmitter } = useEventEmitterContextContext();
 
@@ -81,10 +109,6 @@ const Workflow: FC<WorkflowProps> = memo(
       };
     }, []);
 
-    useEventListener('keydown', (e) => {
-      if ((e.key === 'd' || e.key === 'D') && (e.ctrlKey || e.metaKey))
-        e.preventDefault();
-    });
     useEventListener('mousemove', (e) => {
       const containerClientRect =
         workflowContainerRef.current?.getBoundingClientRect();
@@ -126,7 +150,7 @@ const Workflow: FC<WorkflowProps> = memo(
     const { handleSelectionStart, handleSelectionChange, handleSelectionDrag } =
       useSelectionInteractions();
     const { handlePaneContextMenu } = usePanelInteractions();
-    const { isValidConnection } = useWorkflow();
+    const { isValidConnection, handleLayout } = useWorkflow();
 
     useOnViewportChange({
       onEnd: () => {},
@@ -145,7 +169,10 @@ const Workflow: FC<WorkflowProps> = memo(
     useKeyPress(
       `${getKeyboardKeyCodeBySystem('ctrl')}.d`,
       handleNodesDuplicate,
-      { exactMatch: true, useCapture: true }
+      {
+        exactMatch: true,
+        useCapture: true,
+      }
     );
 
     return (
@@ -158,6 +185,10 @@ const Workflow: FC<WorkflowProps> = memo(
         ref={workflowContainerRef}
       >
         <CandidateNode />
+
+        <div className="z-[100] absolute top-5 left-2">
+          <NodeSelector />
+        </div>
         <Operator />
         <ReactFlow
           nodeTypes={nodeTypes}
@@ -211,17 +242,9 @@ Workflow.displayName = 'Workflow';
 const WorkflowWrap = memo(() => {
   const { data, isLoading } = useWorkflowInit();
 
-  const nodesData = useMemo(() => {
-    if (data) return initialNodes(data.nodes as any, data.edges as any);
-
-    return [];
+  const nodesAndEdges = useMemo(() => {
+    return initNodesAndEdges(data?.nodes, data?.edges);
   }, [data]);
-  const edgesData = useMemo(() => {
-    if (data) return initialEdges(data.edges as any, data.nodes as any);
-
-    return [];
-  }, [data]);
-
   if (!data || isLoading) {
     return (
       <div className="flex justify-center items-center relative w-full h-full bg-[#F0F2F7]">
@@ -232,16 +255,47 @@ const WorkflowWrap = memo(() => {
 
   return (
     <ReactFlowProvider>
-      <Workflow nodes={nodesData} edges={edgesData} viewport={data.viewport} />
+      <Workflow
+        nodes={nodesAndEdges.nodes}
+        edges={nodesAndEdges.edges}
+        viewport={data.viewport}
+      />
     </ReactFlowProvider>
   );
 });
 WorkflowWrap.displayName = 'WorkflowWrap';
 
 const WorkflowContainer = () => {
+  const { sendMessage } = useContext(TrainerMessageMapContext);
+
+  const handleRunAll = async () => {
+    if (!sendMessage) return;
+
+    const data = {
+      type: 'command',
+      message: 'submitted a job',
+      data: {
+        baseModel: 'TinyLlama/TinyLlama-1.1B-Chat-v1.0',
+        trainingMethod: 'SFT',
+        datasetName: 'soulhq-ai/insuranceQA-v2',
+      },
+    };
+    console.log('send to ws', data);
+    sendMessage(JSON.stringify(data));
+
+    return;
+  };
   return (
     <WorkflowContextProvider>
-      <WorkflowWrap />
+      <NodeDetailStateProvider>
+        <button
+          onClick={handleRunAll}
+          className="absolute top-4 right-4 z-[100] bg-blue-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none"
+        >
+          Run All
+        </button>
+        <WorkflowWrap />
+      </NodeDetailStateProvider>
     </WorkflowContextProvider>
   );
 };

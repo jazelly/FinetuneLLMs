@@ -116,6 +116,9 @@ export enum TransferMethod {
 export enum BlockEnum {
   Start = 'start',
   IfElse = 'if-else',
+  Train = 'train',
+  Dataset = 'dataset',
+  Model = 'model',
 }
 
 export type Branch = {
@@ -134,9 +137,6 @@ export interface CommonNodeType extends GraphNode {
   _isEntering?: boolean;
   _showAddVariablePopup?: boolean;
   _holdAddVariablePopup?: boolean;
-  _iterationLength?: number;
-  _iterationIndex?: number;
-  iteration_id?: string;
   selected?: boolean;
   width?: number;
   height?: number;
@@ -148,8 +148,6 @@ export interface CommonEdgeType {
   _connectedNodeIsSelected?: boolean;
   _runned?: boolean;
   _isBundled?: boolean;
-  isInIteration?: boolean;
-  iteration_id?: string;
   sourceType: BlockEnum;
   targetType: BlockEnum;
 }

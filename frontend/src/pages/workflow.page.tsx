@@ -24,9 +24,6 @@ const WorkflowPage = () => {
     undefined
   );
 
-  const [jobDetail, setJobDetail] = useState<JobDetail | undefined>(undefined);
-
-  const [jobDetailLoading, setJobDetailLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const { setPermalinks } = useContext(PermalinksContext);
@@ -116,7 +113,6 @@ const WorkflowPage = () => {
         maxConstraints={[maxWidthLeft, Infinity]}
         className="flex h-full bg-main-menu text-white"
       >
-        {/* <FinetunePanel jobOptions={jobOptions} setJobOptions={setJobOptions} /> */}
         <Workflow />
       </ResizableBox>
       {!isRightCollapsed && (

@@ -16,6 +16,7 @@ import {
   NODE_WIDTH_X_OFFSET,
   START_INITIAL_POSITION,
 } from './constants';
+import produce from 'immer';
 
 const WHITE = 'WHITE';
 const GRAY = 'GRAY';
@@ -109,35 +110,17 @@ const getCycleEdges = (nodes: Node[], edges: Edge[]) => {
   return cycleEdges;
 };
 
-export const initialNodes = (originNodes: Node[], originEdges: Edge[]) => {
-  const nodes = cloneDeep(originNodes);
-  const edges = cloneDeep(originEdges);
-  const firstNode = nodes[0];
+export const initNodesAndEdges = (
+  originalNodes?: Node[],
+  originalEdges?: Edge[]
+) => {
+  const nodes = originalNodes ? cloneDeep(originalNodes) : [];
+  const edges = originalEdges ? cloneDeep(originalEdges) : [];
 
-  if (!firstNode?.position) {
-    nodes.forEach((node, index) => {
-      node.position = {
-        x: START_INITIAL_POSITION.x + index * NODE_WIDTH_X_OFFSET,
-        y: START_INITIAL_POSITION.y,
-      };
-    });
-  }
-
-  const iterationNodeMap = nodes.reduce(
-    (acc, node) => {
-      if (node.parentId) {
-        if (acc[node.parentId]) acc[node.parentId].push(node.id);
-        else acc[node.parentId] = [node.id];
-      }
-      return acc;
-    },
-    {} as Record<string, string[]>
-  );
-
-  return nodes.map((node) => {
+  const connectedEdges = getConnectedEdges(nodes, edges);
+  const initNodes = nodes.map((node) => {
     node.type = 'custom';
 
-    const connectedEdges = getConnectedEdges([node], edges);
     node.data._connectedSourceHandleIds = connectedEdges
       .filter((edge) => edge.source === node.id)
       .map((edge) => edge.sourceHandle || 'source');
@@ -160,11 +143,8 @@ export const initialNodes = (originNodes: Node[], originEdges: Edge[]) => {
 
     return node;
   });
-};
 
-export const initialEdges = (originEdges: Edge[], originNodes: Node[]) => {
-  const nodes = cloneDeep(originNodes);
-  const edges = cloneDeep(originEdges);
+  console.log('initNodes', initNodes);
   let selectedNode: Node | null = null;
   const nodesMap = nodes.reduce(
     (acc, node) => {
@@ -178,7 +158,7 @@ export const initialEdges = (originEdges: Edge[], originNodes: Node[]) => {
   );
 
   const cycleEdges = getCycleEdges(nodes, edges);
-  return edges
+  const initEdges = edges
     .filter((edge) => {
       return !cycleEdges.find(
         (cycEdge) =>
@@ -215,17 +195,53 @@ export const initialEdges = (originEdges: Edge[], originNodes: Node[]) => {
       }
       return edge;
     });
+
+  return { nodes: initNodes, edges: initEdges };
+};
+
+/**
+ * Sort messy nodes and edges to top down layout
+ * @param messyNodes Nodes to be sorted
+ * @param messyEdges Edges connecting the nodes
+ */
+export const sortNodes = (messyNodes: Node[], messyEdges: Edge[]) => {
+  const graphLayout = getLayoutByDagre(messyNodes, messyEdges);
+  const rankMap = {} as Record<string, Node>;
+
+  messyNodes.forEach((node) => {
+    if (!node.parentId) {
+      const rank = graphLayout.node(node.id).rank!;
+
+      if (!rankMap[rank]) rankMap[rank] = node;
+      else if (rankMap[rank].position.y > node.position.y) rankMap[rank] = node;
+    }
+  });
+
+  const newNodes = produce(messyNodes, (draft) => {
+    draft.forEach((node) => {
+      if (!node.parentId) {
+        const nodeWithPosition = graphLayout.node(node.id);
+
+        node.position = {
+          x: nodeWithPosition.x - node.width! / 2,
+          y:
+            nodeWithPosition.y -
+            node.height! / 2 +
+            rankMap[nodeWithPosition.rank!].height! / 2,
+        };
+      }
+    });
+  });
+  return newNodes;
 };
 
 export const getLayoutByDagre = (originNodes: Node[], originEdges: Edge[]) => {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
   const nodes = cloneDeep(originNodes).filter((node) => !node.parentId);
-  const edges = cloneDeep(originEdges).filter(
-    (edge) => !edge.data?.isInIteration
-  );
+  const edges = cloneDeep(originEdges);
   dagreGraph.setGraph({
-    rankdir: 'LR',
+    rankdir: 'TB',
     align: 'UL',
     nodesep: 40,
     ranksep: 60,

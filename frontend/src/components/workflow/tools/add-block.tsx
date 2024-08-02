@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useContext, useState } from 'react';
 import cn from 'classnames';
 import { useStoreApi } from 'reactflow';
 import { useTranslation } from 'react-i18next';
@@ -10,13 +10,13 @@ import {
   usePanelInteractions,
 } from '../hooks/hooks';
 import { NODES_INITIAL_DATA } from '../constants';
-import { useWorkflowStore } from '../store';
 import TipPopup from './tip-popup';
 import BlockSelector from '@/components/workflow/block-selector';
 import type { OnSelectBlock } from '@/components/workflow/types';
 import { BlockEnum } from '@/components/workflow/types';
 import React from 'react';
 import { PlusCircle } from '@phosphor-icons/react';
+import { WorkflowContext } from '../context';
 
 type AddBlockProps = {
   renderTrigger?: (open: boolean) => React.ReactNode;
@@ -25,7 +25,7 @@ type AddBlockProps = {
 const AddBlock = ({ renderTrigger, offset }: AddBlockProps) => {
   const { t } = useTranslation();
   const store = useStoreApi();
-  const workflowStore = useWorkflowStore();
+  const workflowStore = useContext(WorkflowContext)!;
   const nodesExtraData = useNodesExtraData();
   const { nodesReadOnly } = useNodesReadOnly();
   const { handlePaneContextmenuCancel } = usePanelInteractions();
@@ -67,24 +67,21 @@ const AddBlock = ({ renderTrigger, offset }: AddBlockProps) => {
     [store, workflowStore, t]
   );
 
-  const renderTriggerElement = useCallback(
-    (open: boolean) => {
-      return (
-        <TipPopup title={t('workflow.common.addBlock')}>
-          <div
-            className={cn(
-              'flex items-center justify-center w-8 h-8 rounded-lg hover:bg-black/5 hover:text-gray-700 cursor-pointer',
-              `${nodesReadOnly && '!cursor-not-allowed opacity-50'}`,
-              open && '!bg-black/5'
-            )}
-          >
-            <PlusCircle className="w-4 h-4" />
-          </div>
-        </TipPopup>
-      );
-    },
-    [nodesReadOnly, t]
-  );
+  const renderTriggerElement = (open: boolean) => {
+    return (
+      <TipPopup title={t('workflow.common.addBlock')}>
+        <div
+          className={cn(
+            'flex items-center justify-center w-8 h-8 rounded-lg hover:bg-black/5 hover:text-gray-700 cursor-pointer',
+            `${nodesReadOnly && '!cursor-not-allowed opacity-50'}`,
+            open && '!bg-black/5'
+          )}
+        >
+          <PlusCircle size={20} />
+        </div>
+      </TipPopup>
+    );
+  };
 
   return (
     <BlockSelector

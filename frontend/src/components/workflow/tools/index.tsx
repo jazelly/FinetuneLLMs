@@ -4,7 +4,7 @@ import ZoomInOut from './zoom-in-out';
 import Control from './control';
 import React from 'react';
 
-const Tools = () => {
+const Operator = () => {
   return (
     <>
       <MiniMap
@@ -22,4 +22,4 @@ const Tools = () => {
   );
 };
 
-export default memo(Tools);
+export default memo(Operator);

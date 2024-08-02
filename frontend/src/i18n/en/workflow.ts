@@ -114,7 +114,7 @@ const translation = {
     'knowledge-retrieval': 'Knowledge Retrieval',
     'question-classifier': 'Question Classifier',
     'if-else': 'IF/ELSE',
-    code: 'Code',
+    train: 'Train',
     'template-transform': 'Template',
     'http-request': 'HTTP Request',
     'variable-assigner': 'Variable Aggregator',

@@ -133,7 +133,6 @@ export const useNodeIterationInteractions = () => {
                 : t(`workflow.blocks.${childNodeType}`),
           },
           position: child.position,
-          positionAbsolute: child.positionAbsolute,
           parentId: newNodeId,
           extent: child.extent,
           zIndex: child.zIndex,

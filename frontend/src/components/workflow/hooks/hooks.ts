@@ -12,7 +12,7 @@ import {
   X_OFFSET,
   Y_OFFSET,
 } from '../constants';
-import { useStore, useWorkflowStore } from '../store';
+import { useStore } from '../store';
 import {
   Connection,
   Edge,
@@ -42,9 +42,10 @@ import {
   getLayoutByDagre,
   getNodesConnectedSourceOrTargetHandleIdsMap,
   getTopLeftNodePosition,
+  sortNodes,
 } from '../utils';
 import { uniqBy } from 'lodash-es';
-import { useI18N } from '../context';
+import { useI18N, WorkflowContext } from '../context';
 import { useNodesSyncDraft } from './use-nodes-sync-draft';
 import dayjs from 'dayjs';
 
@@ -67,7 +68,7 @@ export const useNodesExtraData = () => {
 };
 
 export const useNodesReadOnly = () => {
-  const workflowStore = useWorkflowStore();
+  const workflowStore = useContext(WorkflowContext)!;
   const workflowRunningData = useStore((s) => s.workflowRunningData);
   const historyWorkflowData = useStore((s) => s.historyWorkflowData);
   const isRestoring = useStore((s) => s.isRestoring);
@@ -94,7 +95,7 @@ export const useNodesReadOnly = () => {
 };
 
 export const usePanelInteractions = () => {
-  const workflowStore = useWorkflowStore();
+  const workflowStore = useContext(WorkflowContext)!;
 
   const handlePaneContextMenu = useCallback(
     (e: React.MouseEvent<Element, MouseEvent>) => {
@@ -134,7 +135,7 @@ export const useWorkflow = () => {
   const { locale } = useI18N();
   const store = useStoreApi();
   const reactflow = useReactFlow();
-  const workflowStore = useWorkflowStore();
+  const workflowStore = useContext(WorkflowContext)!;
   const nodesExtraData = useNodesExtraData();
   const { handleSyncWorkflowDraft } = useNodesSyncDraft();
 
@@ -146,52 +147,22 @@ export const useWorkflow = () => {
     [workflowStore]
   );
 
-  const handleLayout = useCallback(async () => {
+  const handleLayout = () => {
     workflowStore.setState({ nodeAnimation: true });
     const { getNodes, edges, setNodes } = store.getState();
     const { setViewport } = reactflow;
     const nodes = getNodes();
-    const layout = getLayoutByDagre(nodes, edges);
-    const rankMap = {} as Record<string, Node>;
-
-    nodes.forEach((node) => {
-      if (!node.parentId) {
-        const rank = layout.node(node.id).rank!;
-
-        if (!rankMap[rank]) {
-          rankMap[rank] = node;
-        } else {
-          if (rankMap[rank].position.y > node.position.y) rankMap[rank] = node;
-        }
-      }
-    });
-
-    const newNodes = produce(nodes, (draft) => {
-      draft.forEach((node) => {
-        if (!node.parentId) {
-          const nodeWithPosition = layout.node(node.id);
-
-          node.position = {
-            x: nodeWithPosition.x - node.width! / 2,
-            y:
-              nodeWithPosition.y -
-              node.height! / 2 +
-              rankMap[nodeWithPosition.rank!].height! / 2,
-          };
-        }
-      });
-    });
+    const newNodes = sortNodes(nodes, edges);
     setNodes(newNodes);
-    const zoom = 0.7;
     setViewport({
       x: 0,
       y: 0,
-      zoom,
+      zoom: 1,
     });
     setTimeout(() => {
       handleSyncWorkflowDraft();
     });
-  }, [store, reactflow, handleSyncWorkflowDraft, workflowStore]);
+  };
 
   const getTreeLeafNodes = useCallback(
     (nodeId: string) => {
@@ -395,9 +366,7 @@ export const useWorkflow = () => {
 
   const formatTimeFromNow = useCallback(
     (time: number) => {
-      return dayjs(time)
-        .locale(locale === 'zh-Hans' ? 'zh-cn' : locale)
-        .fromNow();
+      return dayjs(time).locale(locale).fromNow();
     },
     [locale]
   );
@@ -445,7 +414,7 @@ export const useWorkflow = () => {
 export const useNodesInteractions = () => {
   const { t } = useTranslation();
   const store = useStoreApi();
-  const workflowStore = useWorkflowStore();
+  const workflowStore = useContext(WorkflowContext)!;
   const reactflow = useReactFlow();
   const { handleSyncWorkflowDraft } = useNodesSyncDraft();
   const { getAfterNodesInSameBranch } = useWorkflow();
@@ -878,7 +847,6 @@ export const useNodesInteractions = () => {
         newNode.parentId = prevNode.parentId;
         newNode.extent = prevNode.extent;
         if (prevNode.parentId) {
-          newNode.data.iteration_id = prevNode.parentId;
           newNode.zIndex = ITERATION_CHILDREN_Z_INDEX;
         }
 
@@ -937,7 +905,6 @@ export const useNodesInteractions = () => {
         const nextNode = nodes[nextNodeIndex]!;
 
         if (nextNode.parentId) {
-          newNode.data.iteration_id = nextNode.parentId;
           newNode.zIndex = ITERATION_CHILDREN_Z_INDEX;
         }
 
@@ -1021,7 +988,6 @@ export const useNodesInteractions = () => {
         newNode.parentId = prevNode.parentId;
         newNode.extent = prevNode.extent;
         if (prevNode.parentId) {
-          newNode.data.iteration_id = prevNode.parentId;
           newNode.zIndex = ITERATION_CHILDREN_Z_INDEX;
         }
 

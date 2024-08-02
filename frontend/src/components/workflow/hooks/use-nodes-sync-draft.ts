@@ -1,16 +1,17 @@
 import produce from 'immer';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { BlockEnum } from '../types';
 import { useNodesReadOnly } from './hooks';
-import { useStore, useWorkflowStore } from '../store';
+import { useStore } from '../store';
 import { useParams } from 'react-router-dom';
 import WorkflowModel from '@/models/workflow';
 import { useStoreApi } from 'reactflow';
 import { useWorkflowUpdate } from './workflow.hooks';
+import { WorkflowContext } from '../context';
 
 export const useNodesSyncDraft = () => {
   const store = useStoreApi();
-  const workflowStore = useWorkflowStore();
+  const workflowStore = useContext(WorkflowContext)!;
   const { getNodesReadOnly } = useNodesReadOnly();
   const { handleRefreshWorkflowDraft } = useWorkflowUpdate();
   const debouncedUpdateWorkflow = useStore((s) => s.debouncedUpdateWorkflow);
@@ -19,9 +20,9 @@ export const useNodesSyncDraft = () => {
   const getPostParams = useCallback(() => {
     const { getNodes, edges, transform } = store.getState();
     const [x, y, zoom] = transform;
-    const { appId, syncWorkflowDraftHash } = workflowStore.getState();
+    const { workflowId, syncWorkflowDraftHash } = workflowStore.getState();
 
-    if (appId) {
+    if (workflowId) {
       const nodes = getNodes();
       const hasStartNode = nodes.find(
         (node) => node.data.type === BlockEnum.Start
@@ -44,7 +45,7 @@ export const useNodesSyncDraft = () => {
         });
       });
       return {
-        url: `/apps/${appId}/workflows/draft`,
+        url: `/apps/${workflowId}/workflows/draft`,
         params: {
           graph: {
             nodes: producedNodes,

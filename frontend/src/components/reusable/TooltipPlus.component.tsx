@@ -1,8 +1,7 @@
 'use client';
 import type { FC } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
-import { useBoolean } from 'ahooks';
 import type { OffsetOptions, Placement } from '@floating-ui/react';
 import {
   PortalToFollowElem,
@@ -12,7 +11,6 @@ import {
 
 export type TooltipProps = {
   position?: Placement;
-  triggerMethod?: 'hover' | 'click';
   popupContent: React.ReactNode;
   children: React.ReactNode;
   hideArrow?: boolean;
@@ -33,59 +31,55 @@ const arrow = (
 
 export const TooltipPlus: FC<TooltipProps> = ({
   position = 'top',
-  triggerMethod = 'hover',
   popupContent,
   children,
   hideArrow,
   popupClassName,
-  offset,
+  offset = 10,
 }) => {
   const [open, setOpen] = useState(false);
-  const [isHoverPopup, { setTrue: setHoverPopup, setFalse: setNotHoverPopup }] =
-    useBoolean(false);
+  const [isHoveringPopup, setIsHoveringPopup] = useState(false);
 
-  const isHoverPopupRef = useRef(isHoverPopup);
+  const isHoveringPopupRef = useRef(isHoveringPopup);
   useEffect(() => {
-    isHoverPopupRef.current = isHoverPopup;
-  }, [isHoverPopup]);
+    isHoveringPopupRef.current = isHoveringPopup;
+  }, [isHoveringPopup]);
 
-  const [
-    isHoverTrigger,
-    { setTrue: setHoverTrigger, setFalse: setNotHoverTrigger },
-  ] = useBoolean(false);
+  const [isHoveringTrigger, setIsHoveringTrigger] = useState(false);
 
-  const isHoverTriggerRef = useRef(isHoverTrigger);
+  const isHoveringTriggerRef = useRef(isHoveringTrigger);
   useEffect(() => {
-    isHoverTriggerRef.current = isHoverTrigger;
-  }, [isHoverTrigger]);
+    isHoveringTriggerRef.current = isHoveringTrigger;
+  }, [isHoveringTrigger]);
 
-  const handleLeave = (isTrigger: boolean) => {
-    if (isTrigger) setNotHoverTrigger();
-    else setNotHoverPopup();
+  const handleTriggerMouseEnter = useCallback(() => {
+    setIsHoveringTrigger(true);
+    setOpen(true);
+  }, []);
 
-    // give time to move to the popup
-    setTimeout(() => {
-      if (!isHoverPopupRef.current && !isHoverTriggerRef.current)
-        setOpen(false);
-    }, 500);
-  };
+  const handleTriggerMouseLeave = useCallback(() => {
+    setIsHoveringTrigger(false);
+    setOpen(false);
+  }, []);
+
+  const handlePopupMouseEnter = useCallback(() => {
+    setIsHoveringPopup(true);
+  }, []);
+  const handlePopupMouseLeave = useCallback(() => {
+    setIsHoveringTrigger(false);
+    setOpen(false);
+  }, []);
 
   return (
     <PortalToFollowElem
       open={open}
       onOpenChange={setOpen}
       placement={position}
-      offset={offset ?? 10}
+      offset={offset}
     >
       <PortalToFollowElemTrigger
-        onClick={() => triggerMethod === 'click' && setOpen((v) => !v)}
-        onMouseEnter={() => {
-          if (triggerMethod === 'hover') {
-            setHoverTrigger();
-            setOpen(true);
-          }
-        }}
-        onMouseLeave={() => triggerMethod === 'hover' && handleLeave(true)}
+        onMouseEnter={handleTriggerMouseEnter}
+        onMouseLeave={handleTriggerMouseLeave}
       >
         {children}
       </PortalToFollowElemTrigger>
@@ -95,8 +89,8 @@ export const TooltipPlus: FC<TooltipProps> = ({
             'relative px-3 py-2 text-xs font-normal text-gray-700 bg-white rounded-md shadow-lg',
             popupClassName
           )}
-          onMouseEnter={() => triggerMethod === 'hover' && setHoverPopup()}
-          onMouseLeave={() => triggerMethod === 'hover' && handleLeave(false)}
+          onMouseEnter={handlePopupMouseEnter}
+          onMouseLeave={handlePopupMouseLeave}
         >
           {popupContent}
           {!hideArrow && arrow}

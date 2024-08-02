@@ -5,6 +5,9 @@ import IfElseDefault from './nodes/if-else/default';
 import { ComponentType } from 'react';
 import StartNode from './nodes/start';
 import IfElseNode from './nodes/if-else';
+import DatasetNode, { DatasetDefault } from './nodes/Dataset';
+import ModelNode from './nodes/Model';
+import TrainNode from './nodes/Train';
 
 type NodesExtraData = {
   author: string;
@@ -18,6 +21,9 @@ type NodesExtraData = {
 export const NodeComponentMap: Record<string, ComponentType<any>> = {
   [BlockEnum.Start]: StartNode,
   [BlockEnum.IfElse]: IfElseNode,
+  [BlockEnum.Dataset]: DatasetNode,
+  [BlockEnum.Model]: ModelNode,
+  [BlockEnum.Train]: TrainNode,
 };
 
 export const NODES_EXTRA_DATA: Record<BlockEnum, NodesExtraData> = {
@@ -38,6 +44,33 @@ export const NODES_EXTRA_DATA: Record<BlockEnum, NodesExtraData> = {
     getAvailablePrevNodes: IfElseDefault.getAvailablePrevNodes,
     getAvailableNextNodes: IfElseDefault.getAvailableNextNodes,
     checkValid: IfElseDefault.checkValid,
+  },
+  [BlockEnum.Dataset]: {
+    author: 'Vertile',
+    about: '',
+    availablePrevNodes: [],
+    availableNextNodes: [],
+    getAvailablePrevNodes: DatasetDefault.getAvailablePrevNodes,
+    getAvailableNextNodes: DatasetDefault.getAvailableNextNodes,
+    checkValid: DatasetDefault.checkValid,
+  },
+  [BlockEnum.Model]: {
+    author: 'Vertile',
+    about: '',
+    availablePrevNodes: [],
+    availableNextNodes: [],
+    getAvailablePrevNodes: DatasetDefault.getAvailablePrevNodes,
+    getAvailableNextNodes: DatasetDefault.getAvailableNextNodes,
+    checkValid: DatasetDefault.checkValid,
+  },
+  [BlockEnum.Train]: {
+    author: 'Vertile',
+    about: '',
+    availablePrevNodes: [],
+    availableNextNodes: [],
+    getAvailablePrevNodes: DatasetDefault.getAvailablePrevNodes,
+    getAvailableNextNodes: DatasetDefault.getAvailableNextNodes,
+    checkValid: DatasetDefault.checkValid,
   },
 };
 

@@ -1,14 +1,14 @@
 import type { MouseEvent } from 'react';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import produce from 'immer';
 import type { OnSelectionChangeFunc } from 'reactflow';
 import { useStoreApi } from 'reactflow';
-import { useWorkflowStore } from '../store';
 import type { Node } from '../types';
+import { WorkflowContext } from '../context';
 
 export const useSelectionInteractions = () => {
   const store = useStoreApi();
-  const workflowStore = useWorkflowStore();
+  const workflowStore = useContext(WorkflowContext)!;
 
   const handleSelectionStart = useCallback(() => {
     const { getNodes, setNodes, edges, setEdges, userSelectionRect } =

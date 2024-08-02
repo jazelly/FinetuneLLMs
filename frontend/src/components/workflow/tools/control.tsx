@@ -1,13 +1,11 @@
+import React from 'react';
 import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
-import { useKeyPress } from 'ahooks';
 import { useNodesReadOnly, useWorkflow } from '../hooks/hooks';
-import { isEventTargetInputArea } from '../utils';
 import { useStore } from '../store';
 import AddBlock from './add-block';
 import TipPopup from './tip-popup';
-import React from 'react';
 import { CursorClick, HandPointing, SquaresFour } from '@phosphor-icons/react';
 import { useSelectionInteractions } from '../hooks/use-selection-interactions';
 
@@ -20,49 +18,12 @@ const Control = () => {
   const { handleSelectionCancel } = useSelectionInteractions();
 
   const handleModePointer = useCallback(() => {
-    if (getNodesReadOnly()) return;
     setControlMode('pointer');
   }, [getNodesReadOnly, setControlMode]);
   const handleModeHand = useCallback(() => {
-    if (getNodesReadOnly()) return;
     setControlMode('hand');
     handleSelectionCancel();
   }, [getNodesReadOnly, setControlMode, handleSelectionCancel]);
-
-  useKeyPress(
-    'h',
-    (e) => {
-      if (getNodesReadOnly()) return;
-
-      if (isEventTargetInputArea(e.target as HTMLElement)) return;
-
-      e.preventDefault();
-      handleModeHand();
-    },
-    {
-      exactMatch: true,
-      useCapture: true,
-    }
-  );
-
-  useKeyPress(
-    'v',
-    (e) => {
-      if (isEventTargetInputArea(e.target as HTMLElement)) return;
-
-      e.preventDefault();
-      handleModePointer();
-    },
-    {
-      exactMatch: true,
-      useCapture: true,
-    }
-  );
-
-  const goLayout = () => {
-    if (getNodesReadOnly()) return;
-    handleLayout();
-  };
 
   return (
     <div className="flex items-center p-0.5 rounded-lg border-[0.5px] border-gray-100 bg-white shadow-lg text-gray-500">
@@ -111,7 +72,7 @@ const Control = () => {
             'flex items-center justify-center w-8 h-8 rounded-lg hover:bg-black/5 hover:text-gray-700 cursor-pointer',
             `${nodesReadOnly && '!cursor-not-allowed opacity-50'}`
           )}
-          onClick={goLayout}
+          onClick={handleLayout}
         >
           <SquaresFour size={24} />
         </div>

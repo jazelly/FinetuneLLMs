@@ -2,17 +2,11 @@ import { useContext } from 'react';
 import { useStore as useZustandStore } from 'zustand';
 import { createStore } from 'zustand/vanilla';
 import { debounce } from 'lodash-es';
-import type { WorkflowRunningData } from './types';
 import { WorkflowContext } from './context';
-
-type PreviewRunningData = WorkflowRunningData & {
-  resultTabActive?: boolean;
-  resultText?: string;
-};
 
 export const createWorkflowStore = () => {
   return createStore<Record<string, any>>((set) => ({
-    appId: '',
+    workflowId: '',
     panelWidth: localStorage.getItem('workflow-node-panel-width')
       ? parseFloat(localStorage.getItem('workflow-node-panel-width')!)
       : 420,
@@ -62,9 +56,6 @@ export const createWorkflowStore = () => {
     shortcutsDisabled: false,
     setShortcutsDisabled: (shortcutsDisabled) =>
       set(() => ({ shortcutsDisabled })),
-    showDebugAndPreviewPanel: false,
-    setShowDebugAndPreviewPanel: (showDebugAndPreviewPanel) =>
-      set(() => ({ showDebugAndPreviewPanel })),
     selection: null,
     setSelection: (selection) => set(() => ({ selection })),
     bundleNodeSize: null,
@@ -108,7 +99,3 @@ export function useStore<T>(selector: (state) => T): T {
 
   return useZustandStore(store, selector);
 }
-
-export const useWorkflowStore = () => {
-  return useContext(WorkflowContext)!;
-};
