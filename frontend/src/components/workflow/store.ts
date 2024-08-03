@@ -33,8 +33,6 @@ export const createWorkflowStore = () => {
     setShowInputsPanel: (showInputsPanel) => set(() => ({ showInputsPanel })),
     inputs: {},
     setInputs: (inputs) => set(() => ({ inputs })),
-    files: [],
-    setFiles: (files) => set(() => ({ files })),
     backupDraft: undefined,
     notInitialWorkflow: false,
     setNotInitialWorkflow: (notInitialWorkflow) =>

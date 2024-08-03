@@ -35,8 +35,10 @@ class TrainerReporter(Reporter):
         self.channel_name = channel_name
 
     def report(self, message: TrainerMessage):
-        channel_layer = get_channel_layer(self.channel_group_id)
-        logger.info(f"Sending message to group {self.channel_group_id}: {message}")
+        channel_layer = get_channel_layer(self.channel_name or "default")
+        logger.info(
+            f"Sending message to group {self.channel_group_id} of layer {self.channel_name or 'default'}: {message}"
+        )
         async_to_sync(channel_layer.group_send)(
             str(self.channel_group_id),
             {"type": "send_job_update", "message": json.dumps(message)},

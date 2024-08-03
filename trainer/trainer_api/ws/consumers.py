@@ -15,9 +15,8 @@ class TrainingConsumer(AsyncWebsocketConsumer):
             f"----------NEW CONNECT COMING-----------------------"
         )
         training_consumer_logger.info(f"[SCOPE]: {self.scope}")
-        # TODO: not use client_port as group name. Instead, use jobId/taskId
-        self.client_port = self.scope["client"][1]
-        await self.channel_layer.group_add(str(self.client_port), self.channel_name)
+        self.client_port = str(self.scope["client"][1])
+        await self.channel_layer.group_add(self.client_port, self.channel_name)
 
         # Accept the WebSocket connection
         await self.accept()
@@ -55,10 +54,9 @@ class TrainingConsumer(AsyncWebsocketConsumer):
         if type == "command":
             if (
                 not data
-                or data.get("baseModel") not in BASE_MODELS
+                or data.get("baseModel") is None
                 or data.get("datasetName") is None
-                or data.get("trainingMethod")
-                not in map(lambda m: m["name"], TRAINING_METHODS)
+                or data.get("trainingMethod") not in TRAINING_METHODS
             ):
                 training_consumer_logger.warning(
                     f"Client requested for {type.upper()}, but did not give valid data"

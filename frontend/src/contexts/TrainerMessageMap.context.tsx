@@ -3,8 +3,6 @@ import { TRAINER_WS_URL_BASE } from '@/utils/constants';
 import React, { createContext, useEffect, useState } from 'react';
 import useWebSocket, { ReadyState, SendMessage } from 'react-use-websocket';
 
-export type TrainerMessageMap = Record<string, TrainerMessage[]>;
-
 export interface TrainerMessage {
   type: 'title' | 'info' | 'warning';
   message: string;
@@ -15,14 +13,14 @@ export interface TrainerMessage {
 }
 
 export interface TrainerMessageMapContextData {
-  messageMap: TrainerMessageMap;
+  messageHistory: TrainerMessage[];
   sendMessage: SendMessage | undefined;
   readyState: ReadyState;
 }
 
 export const TrainerMessageMapContext =
   createContext<TrainerMessageMapContextData>({
-    messageMap: {},
+    messageHistory: [],
     sendMessage: undefined,
     readyState: ReadyState.UNINSTANTIATED,
   });
@@ -31,7 +29,7 @@ export const TrainerMessageMapProvider = ({ children }) => {
   const [socketUrl, setSocketUrl] = useState(
     `${TRAINER_WS_URL_BASE}training/job/`
   );
-  const [messageMap, setMessageMap] = useState<TrainerMessageMap>({});
+  const [messageHistory, setMessageHistory] = useState<TrainerMessage[]>([]);
 
   const { sendMessage, lastMessage, readyState } = useWebSocket<
     TrainerMessage | string
@@ -42,14 +40,13 @@ export const TrainerMessageMapProvider = ({ children }) => {
     try {
       dataJson = JSON.parse(lastMessage?.data);
     } catch (err) {
-      // noop
+      return;
     }
+    console.log('from trianer', dataJson);
 
     if (dataJson) {
-      setMessageMap((prev) => {
-        const newMessageMap = { ...prev };
-        const oldList = newMessageMap[dataJson.data.task_id] ?? [];
-        newMessageMap[dataJson.data.task_id] = oldList.concat(dataJson);
+      setMessageHistory((prev) => {
+        const newMessageMap = prev.concat(dataJson);
         return newMessageMap;
       });
     }
@@ -65,7 +62,7 @@ export const TrainerMessageMapProvider = ({ children }) => {
 
   return (
     <TrainerMessageMapContext.Provider
-      value={{ messageMap, sendMessage, readyState }}
+      value={{ messageHistory, sendMessage, readyState }}
     >
       {children}
     </TrainerMessageMapContext.Provider>

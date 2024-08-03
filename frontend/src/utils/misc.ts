@@ -1,3 +1,4 @@
+import { TrainerMessage } from '@/contexts/TrainerMessageMap.context';
 import { HF_DATASET_LINK_BASE } from './constants';
 
 export const isHFDatasetLinkValid = (link) => {
@@ -26,3 +27,34 @@ export function calculateTimeDifference(startDate: Date, endDate: Date) {
     diffInDays,
   };
 }
+
+export interface LogEntry {
+  title: string;
+  logs: string[];
+}
+
+export const groupLogs = (logs: TrainerMessage[]): LogEntry[] => {
+  const result: LogEntry[] = [];
+
+  let currentBlock: any | null = null;
+
+  logs.forEach((trainerMessage) => {
+    if (!trainerMessage.message) return;
+
+    if (trainerMessage.type === 'title') {
+      if (currentBlock) {
+        result.push(currentBlock);
+      }
+      currentBlock = { title: trainerMessage.message, logs: [] };
+    } else {
+      // discard headless messages
+      if (currentBlock) {
+        currentBlock.logs.push(trainerMessage.message);
+      }
+    }
+  });
+
+  if (currentBlock) result.push(currentBlock);
+
+  return result;
+};

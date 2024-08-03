@@ -28,7 +28,6 @@ def train(request):
             ):
                 try:
                     # schedule the task and repond immediately
-                    logger.info("[Worker] Submitting task")
                     worker = Worker()
 
                     t = Task(

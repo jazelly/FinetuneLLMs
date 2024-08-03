@@ -144,7 +144,6 @@ export const initNodesAndEdges = (
     return node;
   });
 
-  console.log('initNodes', initNodes);
   let selectedNode: Node | null = null;
   const nodesMap = nodes.reduce(
     (acc, node) => {
@@ -204,8 +203,12 @@ export const initNodesAndEdges = (
  * @param messyNodes Nodes to be sorted
  * @param messyEdges Edges connecting the nodes
  */
-export const sortNodes = (messyNodes: Node[], messyEdges: Edge[]) => {
-  const graphLayout = getLayoutByDagre(messyNodes, messyEdges);
+export const sortNodes = (
+  messyNodes: Node[],
+  messyEdges: Edge[],
+  workflowWidth?: number
+) => {
+  const graphLayout = getLayoutByDagre(messyNodes, messyEdges, workflowWidth);
   const rankMap = {} as Record<string, Node>;
 
   messyNodes.forEach((node) => {
@@ -235,7 +238,11 @@ export const sortNodes = (messyNodes: Node[], messyEdges: Edge[]) => {
   return newNodes;
 };
 
-export const getLayoutByDagre = (originNodes: Node[], originEdges: Edge[]) => {
+export const getLayoutByDagre = (
+  originNodes: Node[],
+  originEdges: Edge[],
+  workflowWidth?: number
+) => {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
   const nodes = cloneDeep(originNodes).filter((node) => !node.parentId);
@@ -246,8 +253,8 @@ export const getLayoutByDagre = (originNodes: Node[], originEdges: Edge[]) => {
     nodesep: 40,
     ranksep: 60,
     ranker: 'tight-tree',
-    marginx: 30,
-    marginy: 200,
+    marginx: workflowWidth ? Math.floor(workflowWidth / 2) - 100 : 200,
+    marginy: 30,
   });
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, {

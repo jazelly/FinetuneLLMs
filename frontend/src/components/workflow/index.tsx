@@ -44,6 +44,8 @@ import { useSelectionInteractions } from './hooks/use-selection-interactions';
 import { NodeSelector } from './NodeSelector.component';
 import { TrainerMessageMapContext } from '@/contexts/TrainerMessageMap.context';
 import { NodeDetailStateProvider } from '@/contexts/Workflow.context';
+import { useNavigate } from 'react-router-dom';
+import { v4 } from 'uuid';
 
 const nodeTypes = {
   custom: CustomNode,
@@ -77,8 +79,16 @@ const Workflow: FC<WorkflowProps> = memo(
       const { setNodes: setStoreNodes } = store.getState();
       const { setViewport } = reactflow;
 
-      if (originalNodes.length && isFirstUpdate) {
-        const newNodes = sortNodes(nodes, edges);
+      if (
+        originalNodes.length &&
+        isFirstUpdate &&
+        workflowContainerRef.current
+      ) {
+        const newNodes = sortNodes(
+          nodes,
+          edges,
+          workflowContainerRef.current.clientWidth
+        );
         console.log('afterSort', newNodes);
         setNodes(newNodes);
         setEdges(edges);
@@ -175,6 +185,26 @@ const Workflow: FC<WorkflowProps> = memo(
       }
     );
 
+    const { sendMessage } = useContext(TrainerMessageMapContext);
+    const navigate = useNavigate();
+    const handleRunAll = async () => {
+      if (!sendMessage) return;
+
+      const data = {
+        type: 'command',
+        message: 'submitted a job',
+        data: {
+          baseModel: 'TinyLlama/TinyLlama-1.1B-Chat-v1.0',
+          trainingMethod: 'SFT',
+          datasetName: 'soulhq-ai/insuranceQA-v2',
+        },
+      };
+      console.log('send to ws', data);
+      sendMessage(JSON.stringify(data));
+      navigate(`/job/${v4()}`);
+      return;
+    };
+
     return (
       <div
         id="workflow-container"
@@ -185,6 +215,12 @@ const Workflow: FC<WorkflowProps> = memo(
         ref={workflowContainerRef}
       >
         <CandidateNode />
+        <button
+          onClick={handleRunAll}
+          className="absolute top-4 right-4 z-[100] bg-blue-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none"
+        >
+          Run All
+        </button>
 
         <div className="z-[100] absolute top-5 left-2">
           <NodeSelector />
@@ -266,34 +302,9 @@ const WorkflowWrap = memo(() => {
 WorkflowWrap.displayName = 'WorkflowWrap';
 
 const WorkflowContainer = () => {
-  const { sendMessage } = useContext(TrainerMessageMapContext);
-
-  const handleRunAll = async () => {
-    if (!sendMessage) return;
-
-    const data = {
-      type: 'command',
-      message: 'submitted a job',
-      data: {
-        baseModel: 'TinyLlama/TinyLlama-1.1B-Chat-v1.0',
-        trainingMethod: 'SFT',
-        datasetName: 'soulhq-ai/insuranceQA-v2',
-      },
-    };
-    console.log('send to ws', data);
-    sendMessage(JSON.stringify(data));
-
-    return;
-  };
   return (
     <WorkflowContextProvider>
       <NodeDetailStateProvider>
-        <button
-          onClick={handleRunAll}
-          className="absolute top-4 right-4 z-[100] bg-blue-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none"
-        >
-          Run All
-        </button>
         <WorkflowWrap />
       </NodeDetailStateProvider>
     </WorkflowContextProvider>

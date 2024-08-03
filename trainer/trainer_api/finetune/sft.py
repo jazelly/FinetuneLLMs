@@ -181,7 +181,7 @@ def get_trainer(
     tokenizer,
     method,
 ):
-    if method == "sft":
+    if method.lower() == "sft":
         k, v = next(iter(train_dataset.features.items()))
         training_arguments = SFTConfig(
             output_dir=MODEL_OUTPUT_DIR,
@@ -209,8 +209,9 @@ def get_trainer(
             tokenizer=tokenizer,
             args=training_arguments,
         )
+        return trainer
 
-    elif method == "orpo":
+    elif method.lower() == "orpo":
         training_arguments = ORPOConfig(
             learning_rate=learning_rate,
             beta=0.1,
@@ -236,7 +237,7 @@ def get_trainer(
             peft_config=peft_config,
             tokenizer=tokenizer,
         )
-    return trainer
+        return trainer
 
 
 class SFTRunner:
@@ -265,12 +266,10 @@ class SFTRunner:
     def validate_dataset(self, dataset, method, dataset_name):
         if not dataset:
             self.report(
-                json.dumps(
-                    {
-                        "type": "warning",
-                        "message": f"[Warning] the dataset {dataset_name} has no train split",
-                    }
-                )
+                {
+                    "type": "warning",
+                    "message": f"[Warning] the dataset {dataset_name} has no train split",
+                }
             )
             return False
 
@@ -282,12 +281,10 @@ class SFTRunner:
             and "rejected" not in dataset.features
         ):
             self.report(
-                json.dumps(
-                    {
-                        "type": "warning",
-                        "message": f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}",
-                    }
-                )
+                {
+                    "type": "warning",
+                    "message": f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}",
+                }
             )
             return False
 
@@ -297,65 +294,43 @@ class SFTRunner:
             and len(dataset.features) != 1
         ):
             self.report(
-                json.dumps(
-                    {
-                        "type": "warning",
-                        "message": f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}",
-                    }
-                )
+                {
+                    "type": "warning",
+                    "message": f"[Warning] the dataset {dataset_name} is not suitable for the chosen method {method.upper()}",
+                }
             )
             return False
         return True
 
     def run(self, model_name, method, dataset_name, hparams):
-        self.report(
-            json.dumps({"type": "title", "message": "Validating finetuning options"})
-        )
-        if not model_name and not method and not dataset_name:
-            if not method:
-                self.report(
-                    json.dumps(
-                        {
-                            "type": "warning",
-                            "message": "No training method provided, exiting",
-                        }
-                    )
-                )
-                return
+        self.report({"type": "title", "message": "Validating options"})
+
+        if not method:
             self.report(
-                json.dumps({"type": "detail", "message": f"Training method： {method}"})
-            )
-
-            if not model_name:
-                self.report(
-                    json.dumps(
-                        {"type": "warning", "message": "No model provided, exiting"}
-                    )
-                )
-                return
-            self.report(json.dumps({"detail": f"Base model： {model_name}"}))
-
-            if not dataset_name:
-                self.report(
-                    json.dumps(
-                        {"type": "warning", "message": "No dataset provided, exiting"}
-                    )
-                )
-                return
-            self.report(
-                json.dumps(
-                    {"type": "detail", "message": f"Selected dataset {dataset_name}"}
-                )
-            )
-        self.report(json.dumps({"type": "info", "message": "ok"}))
-
-        self.report(
-            json.dumps(
                 {
-                    "type": "title",
-                    "message": f"Checking hardware requirements",
+                    "type": "warning",
+                    "message": "No training method provided, exiting",
                 }
             )
+            return
+        self.report({"type": "detail", "message": f"Training method： {method}"})
+
+        if not model_name:
+            self.report({"type": "warning", "message": "No model provided, exiting"})
+            return
+        self.report({"detail": f"**Base model** {model_name}"})
+
+        if not dataset_name:
+            self.report({"type": "warning", "message": "No dataset provided, exiting"})
+            return
+        self.report({"type": "detail", "message": f"Selected dataset {dataset_name}"})
+        self.report({"type": "info", "message": "Validationg success"})
+
+        self.report(
+            {
+                "type": "title",
+                "message": f"Checking hardware requirements",
+            }
         )
         total_memory, free_memory = self.get_gpu_memory()
         self.report(
@@ -366,16 +341,13 @@ class SFTRunner:
         )
         if total_memory == 0:
             self.report(
-                json.dumps(
-                    {"type": "info", "message": f"CUDA is not available. Exiting"}
-                )
+                {"type": "info", "message": f"CUDA is not available. Finishing"}
             )
             return
 
         if total_memory < 0:
-            self.report(
-                json.dumps({"type": "info", "message": f"No GPU detected. Exiting"})
-            )
+            self.report({"type": "info", "message": f"No GPU detected. Finishing"})
+            self.report({"type": "info", "message": f"Job is finished"})
             return
 
         interceptor = StdoutInterceptor(logger_name=__name__)
@@ -388,6 +360,7 @@ class SFTRunner:
         with contextlib.redirect_stdout(interceptor):
             estimated_result = estimate_command(estimate_args)
             print(estimated_result)
+            self.report({"type": "info", "message": estimated_result})
         intercepted_output = interceptor.get_value()
 
         trainable = True
@@ -417,12 +390,10 @@ class SFTRunner:
         everything_parser = TrainingParamsParser()
         model_args, data_args = everything_parser.parse(model_name)
         self.report(
-            json.dumps(
-                {
-                    "type": "title",
-                    "message": f"Loading model params",
-                }
-            )
+            {
+                "type": "title",
+                "message": f"Loading model params",
+            }
         )
         bnb_config = get_bnb_config()
         model_loader = ModelLoader(model_name, bnb_config, device_map)
@@ -430,12 +401,10 @@ class SFTRunner:
         tokenizer_loader = TokenizerLoader(model_args)
         tokenizer = tokenizer_loader.load()
         self.report(
-            json.dumps(
-                {
-                    "type": "detail",
-                    "message": f"Loading dataset {dataset_name}",
-                }
-            )
+            {
+                "type": "detail",
+                "message": f"Loading dataset {dataset_name}",
+            }
         )
 
         train_dataset = get_dataset(
@@ -450,12 +419,10 @@ class SFTRunner:
         lora_alpha = 16
         lora_dropout = 0.1
         self.report(
-            json.dumps(
-                {
-                    "type": "detail",
-                    "message": f"Loading LORA configuration:\n 'lora_alpha': {lora_alpha}\n 'lora_dropout': {lora_dropout}\n 'lora_rank': {lora_rank}\n",
-                }
-            )
+            {
+                "type": "detail",
+                "message": f"Loading LORA configuration:\n 'lora_alpha': {lora_alpha}\n 'lora_dropout': {lora_dropout}\n 'lora_rank': {lora_rank}\n",
+            }
         )
 
         peft_config = get_lora_config(
@@ -463,12 +430,10 @@ class SFTRunner:
         )
 
         self.report(
-            json.dumps(
-                {
-                    "type": "detail",
-                    "message": f"Preparing trainer\n",
-                }
-            )
+            {
+                "type": "title",
+                "message": f"Preparing trainer\n",
+            }
         )
 
         trainer = get_trainer(
@@ -477,6 +442,13 @@ class SFTRunner:
             peft_config=peft_config,
             tokenizer=tokenizer,
             method=method,
+        )
+
+        self.report(
+            {
+                "type": "detail",
+                "message": f"Trainer is loaded for\n\n Model: {model_name}\n\n Dataset: {dataset_name}",
+            }
         )
 
         # Fine-tuned model name
@@ -488,8 +460,8 @@ class SFTRunner:
 
         kwargs = {
             "finetuned_from": model_name,
-            "dataset": list(data_config.dataset_mixer.keys()),
-            "dataset_tags": list(data_config.dataset_mixer.keys()),
+            "dataset": list(data_args.dataset_mixer.keys()),
+            "dataset_tags": list(data_args.dataset_mixer.keys()),
             "tags": ["aimo"],
         }
         # Save trained model

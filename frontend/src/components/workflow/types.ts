@@ -138,8 +138,6 @@ export interface CommonNodeType extends GraphNode {
   _showAddVariablePopup?: boolean;
   _holdAddVariablePopup?: boolean;
   selected?: boolean;
-  width?: number;
-  height?: number;
 }
 
 export interface CommonEdgeType {

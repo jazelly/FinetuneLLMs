@@ -32,16 +32,16 @@ export default function App() {
           <PermalinksProvider>
             <InferenceMessageListProvider>
               <TrainerMessageMapProvider>
-                <div className="bg-main-base text-white flex h-full">
+                <div className="bg-main-base text-white flex h-screen">
                   <div
-                    className={`w-16 bg-main-dark flex-shrink-0 p-2 flex flex-col items-center justify-between`}
+                    className={`w-12 bg-main-dark flex-shrink-0 flex flex-col items-center justify-between`}
                     ref={sidebarRef}
                   >
                     <Sidebar />
                   </div>
 
                   <div className="flex flex-col h-full w-full overflow-y-hidden">
-                    <div className="h-[64px] flex-shrink-0">
+                    <div className="h-12 flex-shrink-0">
                       <Header />
                     </div>
 

@@ -1,56 +1,55 @@
 import { TrainerMessageMapContext } from '@/contexts/TrainerMessageMap.context';
 import Job from '@/models/job.model';
 import { JobDetail } from '@/types/dashboard.type';
-import { calculateTimeDifference } from '@/utils/misc';
+import { calculateTimeDifference, groupLogs } from '@/utils/misc';
 import { CheckCircle } from '@phosphor-icons/react';
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 import StatusIcon from './reusable/StatusIcon.component';
 
-const PipelineGraph = ({ jobDetail }: { jobDetail: JobDetail }) => {
-  const id = jobDetail.id;
-  const status = jobDetail.status;
+const PipelineGraph = () => {
+  // const id = jobDetail.id;
+  // const status = jobDetail.status;
+  const { id } = useParams();
+  const status = 'running';
 
-  console.log(jobDetail);
-
-  const { sendMessage } = useContext(TrainerMessageMapContext);
+  const { sendMessage, messageHistory } = useContext(TrainerMessageMapContext);
   const navigate = useNavigate();
 
   const [submitting, setSubmitting] = useState(false);
   const handleResubmit = async () => {
-    setSubmitting(true);
-
-    const jobDetailParams = {
-      baseModel: jobDetail.baseModel,
-      trainingMethod: jobDetail.trainingMethod,
-      datasetName: jobDetail.datasetName,
-      hyperparameters: jobDetail.hyperparameters,
-    };
-    const resp = await Job.submitJob(jobDetailParams);
-
-    if (!resp.success || (resp.success === true && !resp.data.id)) {
-      return;
-    }
-
-    if (!sendMessage) return;
-    console.log('send to ws', resp.data);
-    sendMessage(
-      JSON.stringify({
-        type: 'command',
-        message: 'submitted a job',
-        data: jobDetailParams,
-      })
-    );
-    navigate(`/job/${resp.data.id}`, {
-      state: { fresh: true, jobId: resp.data.id },
-    });
-    setSubmitting(false);
-    return;
+    // setSubmitting(true);
+    // const jobDetailParams = {
+    //   baseModel: jobDetail.baseModel,
+    //   trainingMethod: jobDetail.trainingMethod,
+    //   datasetName: jobDetail.datasetName,
+    //   hyperparameters: jobDetail.hyperparameters,
+    // };
+    // const resp = await Job.submitJob(jobDetailParams);
+    // if (!resp.success || (resp.success === true && !resp.data.id)) {
+    //   return;
+    // }
+    // if (!sendMessage) return;
+    // console.log('send to ws', resp.data);
+    // sendMessage(
+    //   JSON.stringify({
+    //     type: 'command',
+    //     message: 'submitted a job',
+    //     data: jobDetailParams,
+    //   })
+    // );
+    // navigate(`/job/${resp.data.id}`, {
+    //   state: { fresh: true, jobId: resp.data.id },
+    // });
+    // setSubmitting(false);
+    // return;
   };
 
-  const createdDate = new Date(jobDetail.createdAt);
-  const lastUpdatedDate = new Date(jobDetail.lastUpdatedAt);
+  // const createdDate = new Date(jobDetail.createdAt);
+  // const lastUpdatedDate = new Date(jobDetail.lastUpdatedAt);
+  const createdDate = new Date();
+  const lastUpdatedDate = new Date();
   const currentDate = new Date();
 
   const usedTime = calculateTimeDifference(createdDate, lastUpdatedDate);
@@ -62,7 +61,7 @@ const PipelineGraph = ({ jobDetail }: { jobDetail: JobDetail }) => {
   if (usedTime.diffInSeconds % 60 > 0)
     usedTimeString += `${usedTime.diffInSeconds % 60} sec`;
 
-  if (usedTimeString === '') usedTimeString = `Didn't start`;
+  if (!usedTimeString) usedTimeString = `Just started`;
 
   const passedTimeString =
     passedTime.diffInDays > 0
@@ -84,6 +83,7 @@ const PipelineGraph = ({ jobDetail }: { jobDetail: JobDetail }) => {
     'publish-openapi',
   ];
 
+  const logs = groupLogs(messageHistory);
   return (
     <div className="shadow-md w-full h-full flex flex-col overflow-y-auto">
       <div
@@ -148,25 +148,29 @@ const PipelineGraph = ({ jobDetail }: { jobDetail: JobDetail }) => {
                 id="view-configurations"
                 place="bottom"
                 delayShow={200}
-                className="tooltip z-99 text-sm"
+                className="absolute tooltip z-99 text-sm"
               />
             </div>
           </div>
         </div>
-        {majorSteps.map((step, index) => (
+        {logs.map((logGroup, index) => (
           <div className="flex items-center mb-2" key={index}>
-            <CheckCircle
-              size={26}
-              color={
-                status === 'paused'
-                  ? '#626F86'
-                  : status === 'failed'
-                    ? '#c9372c '
-                    : '#22a06b'
-              }
-              weight="fill"
-            />
-            <span className="text-sm ml-2">{step}</span>
+            {index < logs.length - 1 ? (
+              <>
+                <CheckCircle size={26} color={'#22a06b'} weight="fill" />
+                <span className="text-sm ml-2">{logGroup.title}</span>
+              </>
+            ) : (
+              <>
+                <StatusIcon
+                  status={'running'}
+                  size={26}
+                  weight="fill"
+                  color={'#FFF'}
+                />
+                <span className="text-sm ml-2">{logGroup.title}</span>
+              </>
+            )}
           </div>
         ))}
       </div>

@@ -64,8 +64,8 @@ export default function Sidebar() {
         <AppIcon />
       </Link>
 
-      <div className="overflow-hidden mt-5 flex-grow  flex justify-between items-center flex-col">
-        <div className="flex flex-col min-w-[24px] gap-y-3">
+      <div className="overflow-hidden mt-5 flex-grow flex justify-between items-center flex-col">
+        <div className="flex flex-col gap-y-3">
           <div
             className="flex gap-x-2 items-center justify-between"
             data-tooltip-content="Workflow"

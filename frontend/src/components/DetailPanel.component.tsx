@@ -10,59 +10,37 @@ import HoverableIcon from './reusable/HoverableIcon.component';
 import styled from 'styled-components';
 import ExpandableLog from './reusable/ExpandableLog.component';
 import { ReadyState } from 'react-use-websocket';
+import { AnyArray } from 'immer/dist/internal.js';
+import { groupLogs } from '@/utils/misc';
 
 export interface DetailPanelProps {
   jobDetail: JobDetail | undefined;
   jobDetailLoading: boolean;
 }
 
-export interface LogEntry {
-  title: string;
-  logs: string[];
-}
-
 const DetailPanel = ({ jobDetail, jobDetailLoading }: DetailPanelProps) => {
-  const { messageMap, readyState } = useContext(TrainerMessageMapContext);
+  const { messageHistory, readyState } = useContext(TrainerMessageMapContext);
 
-  if (jobDetailLoading || readyState !== ReadyState.OPEN)
+  // if (jobDetailLoading || readyState !== ReadyState.OPEN)
+  //   return (
+  //     <div className="flex flex-col bg-main-gradient h-full justify-center items-center">
+  //       <RunningSpinner size={80} color={'#3c97fd'} />
+  //       <span className="text-white">Loading</span>
+  //     </div>
+  //   );
+
+  console.log('messageHistory', messageHistory);
+
+  const groupedLogs = groupLogs(messageHistory);
+  console.log('groupedLoged', groupedLogs);
+  if (!groupedLogs.length) {
     return (
       <div className="flex flex-col bg-main-gradient h-full justify-center items-center">
         <RunningSpinner size={80} color={'#3c97fd'} />
         <span className="text-white">Loading</span>
       </div>
     );
-
-  // TODO: get job list based on id
-  let firstJobList: TrainerMessage[] = [];
-  for (const key in messageMap) {
-    firstJobList = messageMap[key];
-    break;
   }
-
-  console.log('messageMap', messageMap);
-
-  const groupLogs = (logs: TrainerMessage[]): LogEntry[] => {
-    const result: LogEntry[] = [];
-
-    let grouped: LogEntry = { title: '', logs: [] };
-
-    logs.forEach((trainerMessage) => {
-      if (!trainerMessage.message) return;
-
-      if (trainerMessage.type === 'title') {
-        if (grouped.logs.length) result.push(grouped);
-        grouped = { title: trainerMessage.message, logs: [] };
-      } else {
-        grouped.logs.push(trainerMessage.message);
-      }
-    });
-
-    if (grouped.logs.length) result.push(grouped);
-
-    return result;
-  };
-
-  const groupedLogs = groupLogs(Object.entries(messageMap)[0][1]);
 
   return (
     <div

@@ -1,18 +1,11 @@
-import { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import cn from 'classnames';
 import { intersection } from 'lodash-es';
 import type { EdgeProps } from 'reactflow';
-import {
-  BaseEdge,
-  EdgeLabelRenderer,
-  Position,
-  getBezierPath,
-} from 'reactflow';
+import { BaseEdge, EdgeLabelRenderer, getBezierPath } from 'reactflow';
 import { useAvailableBlocks, useNodesInteractions } from './hooks/hooks';
 import BlockSelector from './block-selector';
 import type { Edge, OnSelectBlock } from './types';
-import { ITERATION_CHILDREN_Z_INDEX } from './constants';
-import React from 'react';
 
 const CustomEdge = ({
   id,
@@ -27,14 +20,25 @@ const CustomEdge = ({
   targetY,
   selected,
 }: EdgeProps) => {
+  // console.log('customEdge', {
+  //   id,
+  //   data,
+  //   source,
+  //   sourceHandleId,
+  //   target,
+  //   targetHandleId,
+  //   sourceX,
+  //   sourceY,
+  //   targetX,
+  //   targetY,
+  //   selected,
+  // });
   const [edgePath, labelX, labelY] = getBezierPath({
-    sourceX: sourceX - 8,
+    sourceX: sourceX - 120,
     sourceY,
-    sourcePosition: Position.Right,
-    targetX: targetX + 8,
+    targetX: targetX + 120,
     targetY,
-    targetPosition: Position.Left,
-    curvature: 0.16,
+    curvature: 0.15,
   });
   const [open, setOpen] = useState(false);
   const { handleNodeAdd } = useNodesInteractions();

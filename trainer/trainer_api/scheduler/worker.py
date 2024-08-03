@@ -136,7 +136,7 @@ class WorkerThread(threading.Thread):
             try:
                 while True:
                     task = self.worker_instance.pop_task()
-
+                    worker_thread_logger.info(f"popped a task {task}")
                     if task is None:
                         print(
                             f"[Worker_{self.id}] Nothing to pick | state: {self.state}"
@@ -159,7 +159,9 @@ class WorkerThread(threading.Thread):
 
                     else:
                         self.task_id = task.id
-                        print(f"[Worker_{self.id}] Picked a task: {task}")
+                        worker_thread_logger.info(
+                            f"[Worker_{self.id}] Picked a task: {task}"
+                        )
                         log.write(f"[Worker_{self.id}] Picked a task: {task}\n")
                         # process task
                         self.state = WorkerStates.BUSY

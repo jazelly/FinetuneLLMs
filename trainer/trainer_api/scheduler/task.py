@@ -37,16 +37,13 @@ class Task:
         self.ws = kwargs.get("ws")
 
     def run(self):
-        mapped_methods = map(lambda m: m["name"], TRAINING_METHODS)
-        if self.method in mapped_methods and self.model in BASE_MODELS:
-            if self.method == mapped_methods["SFT"]:
-
-                reporter_factory = TrainerReporterFactory()
-                reporter = reporter_factory.create_reporter(
-                    channel_name=None, channel_group_id=self.ws.client_port
-                )
-                r = SFTRunner(self.id, reporter)
-                r.run(self.model, self.method, self.dataset, self.hparams)
+        if self.method == "SFT":
+            reporter_factory = TrainerReporterFactory()
+            reporter = reporter_factory.create_reporter(
+                channel_name=None, channel_group_id=self.ws.client_port
+            )
+            r = SFTRunner(self.id, reporter)
+            r.run(self.model, self.method, self.dataset, self.hparams)
 
     def __str__(self):
         return f"[Task] method: {self.method if hasattr(self, 'method') else 'None'} | model: {self.model if hasattr(self, 'model') else 'None'}"

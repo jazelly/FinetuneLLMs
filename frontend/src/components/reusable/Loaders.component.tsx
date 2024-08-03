@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cube } from '@phosphor-icons/react';
+import { ArrowClockwise, ArrowsClockwise, Cube } from '@phosphor-icons/react';
 
 export default function FullScreenLoader() {
   return (
@@ -27,11 +27,11 @@ export interface LoadingSpinnerProps {
 
 export const RunningSpinner = ({ size, color }: LoadingSpinnerProps) => {
   return (
-    <Cube color={color} weight="duotone" size={size}>
+    <ArrowsClockwise color={color} weight="thin" size={size}>
       <animate
         attributeName="opacity"
         values="0;1;0"
-        dur="4s"
+        dur="2s"
         repeatCount="indefinite"
       ></animate>
       <animateTransform
@@ -43,6 +43,6 @@ export const RunningSpinner = ({ size, color }: LoadingSpinnerProps) => {
         to="360 0 0"
         repeatCount="indefinite"
       ></animateTransform>
-    </Cube>
+    </ArrowsClockwise>
   );
 };

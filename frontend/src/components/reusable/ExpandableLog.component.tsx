@@ -2,6 +2,7 @@ import { CaretDown, CaretRight, CaretUp } from '@phosphor-icons/react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 
 interface ExpandableLogProps {
   title: string;
@@ -13,7 +14,7 @@ const StyledLineNumber = styled.div`
 `;
 
 const ExpandableLog: React.FC<ExpandableLogProps> = ({ title, logs }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [hovered, setHovered] = useState(false);
 
   const handleMouseEnter = () => {
@@ -72,7 +73,7 @@ const ExpandableLog: React.FC<ExpandableLogProps> = ({ title, logs }) => {
                 <StyledLineNumber className="text-center w-8">
                   {index + 1}
                 </StyledLineNumber>
-                <span className="text-xs flex-1">{log}</span>
+                <ReactMarkdown>{log}</ReactMarkdown>
               </div>
             ))}
           </motion.div>

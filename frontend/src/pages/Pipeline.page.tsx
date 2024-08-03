@@ -21,6 +21,7 @@ import {
 import PipelineGraph from '@/components/PipelineGraph.component';
 import { RunningSpinner } from '@/components/reusable/Loaders.component';
 import paths from '@/utils/paths';
+import { TrainerMessageMapContext } from '@/contexts/TrainerMessageMap.context';
 
 const MIN_BOTTOM_HEIGHT = 200;
 
@@ -134,39 +135,10 @@ const Pipeline = () => {
         className="flex h-full"
       >
         <div className="h-full w-full relative bg-main-menu text-white">
-          {jobDetail ? (
-            <PipelineGraph jobDetail={jobDetail} />
-          ) : (
-            <div className="flex flex-col bg-main-menu h-full justify-center items-center">
-              <RunningSpinner size={80} color={'#3c97fd'} />
-              <span className="text-white">Loading</span>
-            </div>
-          )}
+          <PipelineGraph />
         </div>
       </ResizableBox>
       {!isRightCollapsed && (
-        // <div className="flex-1 flex flex-col h-full">
-        //   <ResizableBox
-        //     height={topHeight}
-        //     axis="y"
-        //     resizeHandles={isBottomCollapsed ? [] : ['s']}
-        //     onResize={handleTopResize}
-        //     minConstraints={[leftWidth, minHeightTop]}
-        //     maxConstraints={[leftWidth, maxHeightTop]}
-        //     className="border-b-2 flex w-full flex-col"
-        //   >
-        //     <DetailPanel
-        //       jobDetail={jobDetail}
-        //       jobDetailLoading={jobDetailLoading}
-        //     />
-        //   </ResizableBox>
-        //   <div className="flex-1 bg-main-gradient">
-        //     <InferencePanel
-        //       jobDetail={jobDetail}
-        //       jobDetailLoading={jobDetailLoading}
-        //     />
-        //   </div>
-        // </div>
         <div className="flex-1 flex flex-col h-full">
           <DetailPanel
             jobDetail={jobDetail}
