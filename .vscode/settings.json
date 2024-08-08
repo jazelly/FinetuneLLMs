@@ -1,0 +1,5 @@
+{
+  "editor.accessibilityPageSize": 12,
+  "editor.formatOnSave": true,
+  "python.analysis.typeCheckingMode": "off"
+}
