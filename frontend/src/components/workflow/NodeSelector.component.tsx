@@ -25,21 +25,6 @@ const DraggableNode = ({ type, children, className }) => {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    end: (item, monitor) => {
-      if (monitor.didDrop()) {
-        const x = monitor.getSourceClientOffset()?.x;
-        const y = monitor.getSourceClientOffset()?.y;
-        console.log('x, y', x, y);
-      }
-    },
-    options: {
-      dropEffect: 'move',
-      previewOptions: {
-        anchorX: 0.5,
-        anchorY: 0.5,
-        component: DragPreview,
-      },
-    },
   }));
 
   useEffect(() => {
