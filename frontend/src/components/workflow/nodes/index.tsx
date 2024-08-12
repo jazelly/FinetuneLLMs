@@ -7,7 +7,6 @@ import BaseNode from './base/base.node';
 const CustomNode = (props: NodeProps) => {
   const nodeData = props.data;
   const NodeComponent = NodeComponentMap[nodeData.type];
-  console.log('nodeData', nodeData);
 
   return (
     <>

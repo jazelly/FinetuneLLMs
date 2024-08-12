@@ -7,14 +7,12 @@ import {
 } from '@phosphor-icons/react';
 import cn from 'classnames';
 import { t } from 'i18next';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { TooltipPlus } from '../reusable/TooltipPlus.component';
 import { AnimatedDropdown } from '../reusable/AnimatedDropdown.component';
 import { DragPreviewImage, useDrag, useDragLayer } from 'react-dnd';
-import CustomNode from './nodes';
 import { BlockEnum } from './types';
-import styled from 'styled-components';
-import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid';
+import { WorkflowContext } from './context';
 
 const DraggableNode = ({ type, children, className }) => {
   const ref = useRef(null);
@@ -22,9 +20,9 @@ const DraggableNode = ({ type, children, className }) => {
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type,
     item: { type },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
+    collect: (monitor) => {
+      return { isDragging: monitor.isDragging() };
+    },
   }));
 
   useEffect(() => {
@@ -40,39 +38,9 @@ const DraggableNode = ({ type, children, className }) => {
   );
 };
 
-const DragLayer = ({ type }) => {
-  const { isDragging, currentOffset } = useDragLayer((monitor) => ({
-    isDragging: monitor.isDragging(),
-    currentOffset: monitor.getSourceClientOffset(),
-  }));
-
-  if (!isDragging || !currentOffset) {
-    return null;
-  }
-
-  const { x, y } = currentOffset;
-
-  const layerStyles = {
-    position: 'fixed',
-    pointerEvents: 'none',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 100,
-    transform: `translate(${x}px, ${y}px)`,
-  };
-
-  return (
-    <div style={layerStyles}>
-      <DragPreview type={type} />
-    </div>
-  );
-};
-
 const DragPreview = ({ type }) => {
   // return <CustomNode data={{ type }} />
-  return <div className="h2 text-white">NMSL</div>;
+  return <div className="h2 text-white">1234</div>;
 };
 
 export const NodeSelector = () => {

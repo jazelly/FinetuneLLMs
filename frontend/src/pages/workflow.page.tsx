@@ -92,7 +92,7 @@ const WorkflowPage = () => {
     <div
       ref={containerRef}
       onMouseUp={(e) => handleMouseUp(e, undefined)}
-      className="flex overflow-y-hidden"
+      className="flex overflow-y-hidden h-full"
     >
       <ResizableBox
         width={leftWidth}

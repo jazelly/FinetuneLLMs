@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import type { FC } from 'react';
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
-import { setAutoFreeze } from 'immer';
+import produce, { setAutoFreeze } from 'immer';
 import { useEventListener, useKeyPress } from 'ahooks';
 import ReactFlow, {
   Background,
@@ -31,11 +31,16 @@ import CustomConnectionLine from './custom-connection-line';
 import CandidateNode from './candidate-node';
 import { useStore } from './store';
 import {
+  generateNewNode,
   getKeyboardKeyCodeBySystem,
   initNodesAndEdges,
   sortNodes,
 } from './utils';
-import { ITERATION_CHILDREN_Z_INDEX, WORKFLOW_DATA_UPDATE } from './constants';
+import {
+  ITERATION_CHILDREN_Z_INDEX,
+  NODES_INITIAL_DATA,
+  WORKFLOW_DATA_UPDATE,
+} from './constants';
 import { useEventEmitterContextContext } from '@/contexts/EventEmitter';
 import { RunningSpinner } from '../reusable/Loaders.component';
 import { useWorkflowInit } from './hooks/workflow.hooks';
@@ -46,8 +51,9 @@ import { TrainerMessageMapContext } from '@/contexts/TrainerMessageMap.context';
 import { NodeDetailStateProvider } from '@/contexts/Workflow.context';
 import { useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
-import { DndProvider } from 'react-dnd';
+import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { t } from 'i18next';
 
 const nodeTypes = {
   custom: CustomNode,
@@ -68,41 +74,78 @@ const Workflow: FC<WorkflowProps> = memo(
 
     const workflowContainerRef = useRef<HTMLDivElement>(null);
     const workflowStore = useContext(WorkflowContext)!;
-    const [nodes, setNodes] = useNodesState(originalNodes);
-    const [edges, setEdges] = useEdgesState(originalEdges);
-    console.log('afterInit', nodes, edges);
     const controlMode = useStore((s) => s.controlMode);
     const nodeAnimation = useStore((s) => s.nodeAnimation);
     const { nodesReadOnly } = useNodesReadOnly();
     const store = useStoreApi();
     const reactflow = useReactFlow();
+    const mousePosition = useStore((s) => s.mousePosition);
+
+    const [{ isOver, canDrop }, drop] = useDrop(() => ({
+      accept: Object.values(BlockEnum),
+      canDrop: () => true,
+      drop: (dropProps: { type: BlockEnum }, monitor) => {
+        const dropPosition = monitor.getClientOffset();
+        if (!dropPosition) return;
+
+        const type = dropProps.type;
+        console.log('dropped a node, type', type);
+        const { getNodes } = store.getState();
+        const nodes = getNodes();
+        const nodesWithSameType = nodes.filter(
+          (node) => node.data.type === type
+        );
+        const newNode = generateNewNode({
+          data: {
+            ...NODES_INITIAL_DATA[type],
+            title:
+              nodesWithSameType.length > 0
+                ? `${t(`workflow.blocks.${type}`)} ${nodesWithSameType.length + 1}`
+                : t(`workflow.blocks.${type}`),
+            _isCandidate: true,
+          } as any,
+          position: {
+            x: dropPosition.x,
+            y: dropPosition.y,
+          },
+        });
+
+        const { screenToFlowPosition } = reactflow;
+        const { x, y } = screenToFlowPosition({
+          x: dropPosition.x,
+          y: dropPosition.y,
+        });
+        const newNodes = produce(nodes, (draft) => {
+          draft.push({
+            ...newNode,
+            data: newNode.data,
+            position: {
+              x,
+              y,
+            },
+          });
+        });
+        setNodes(newNodes);
+      },
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+        canDrop: !!monitor.canDrop(),
+      }),
+    }));
+
+    const { setNodes, getNodes, edges, setEdges } = store.getState();
+    const nodes = getNodes();
+    const { setViewport } = reactflow;
 
     useEffect(() => {
-      const { setNodes: setStoreNodes } = store.getState();
-      const { setViewport } = reactflow;
-
-      if (
-        originalNodes.length &&
-        isFirstUpdate &&
-        workflowContainerRef.current
-      ) {
-        const newNodes = sortNodes(
-          nodes,
-          edges,
-          workflowContainerRef.current.clientWidth
-        );
-        console.log('afterSort', newNodes);
-        setNodes(newNodes);
-        setEdges(edges);
-        setStoreNodes(newNodes);
-        setViewport({
-          x: 0,
-          y: 0,
-          zoom: 1,
-        });
-        setIsFirstUpdate(false);
-      }
-    }, [isFirstUpdate]);
+      setNodes(originalNodes);
+      setEdges(originalEdges);
+      setViewport({
+        x: 0,
+        y: 0,
+        zoom: 1,
+      });
+    }, []);
 
     const { eventEmitter } = useEventEmitterContextContext();
 
@@ -115,7 +158,6 @@ const Workflow: FC<WorkflowProps> = memo(
 
     useEffect(() => {
       setAutoFreeze(false);
-
       return () => {
         setAutoFreeze(true);
       };
@@ -229,6 +271,7 @@ const Workflow: FC<WorkflowProps> = memo(
         </div>
         <Operator />
         <ReactFlow
+          ref={drop}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           nodes={nodes}

@@ -1,6 +1,6 @@
 import { Position, getConnectedEdges, getOutgoers } from 'reactflow';
 import dagre from '@dagrejs/dagre';
-import { v4 as uuid4 } from 'uuid';
+import { v4 as uuid4, v4 } from 'uuid';
 import { cloneDeep, uniqBy } from 'lodash-es';
 import type {
   Edge,
@@ -362,7 +362,7 @@ export const generateNewNode = ({
   ...rest
 }: Omit<Node, 'id'> & { id?: string }) => {
   return {
-    id: id || `${Date.now()}`,
+    id: id || v4(),
     type: 'custom',
     data,
     position,

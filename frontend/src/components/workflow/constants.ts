@@ -7,7 +7,7 @@ import StartNode from './nodes/start';
 import IfElseNode from './nodes/if-else';
 import DatasetNode, { DatasetDefault } from './nodes/Dataset';
 import ModelNode from './nodes/Model';
-import TrainNode from './nodes/Train';
+import TrainNode, { TrainDefault } from './nodes/Train';
 
 type NodesExtraData = {
   author: string;
@@ -90,9 +90,21 @@ export const NODES_INITIAL_DATA = {
   },
   [BlockEnum.IfElse]: {
     type: BlockEnum.IfElse,
-    title: '',
+    title: 'If Else',
     desc: '',
     ...IfElseDefault.defaultValue,
+  },
+  [BlockEnum.Dataset]: {
+    type: BlockEnum.Dataset,
+    title: 'Dataset',
+    desc: '',
+    ...DatasetDefault.defaultValue,
+  },
+  [BlockEnum.Train]: {
+    type: BlockEnum.Train,
+    title: 'Training Node',
+    desc: '',
+    ...TrainDefault.defaultValue,
   },
 };
 

@@ -18,9 +18,7 @@ export const createWorkflowStore = () => {
       set(() => ({ historyWorkflowData })),
     showRunHistory: false,
     setShowRunHistory: (showRunHistory) => set(() => ({ showRunHistory })),
-    showFeaturesPanel: false,
-    setShowFeaturesPanel: (showFeaturesPanel) =>
-      set(() => ({ showFeaturesPanel })),
+
     draftUpdatedAt: 0,
     setDraftUpdatedAt: (draftUpdatedAt) =>
       set(() => ({
@@ -66,12 +64,11 @@ export const createWorkflowStore = () => {
       set(() => ({ controlMode }));
       localStorage.setItem('workflow-operation-mode', controlMode);
     },
-    candidateNode: undefined,
-    setCandidateNode: (candidateNode) => set(() => ({ candidateNode })),
     panelMenu: undefined,
     setPanelMenu: (panelMenu) => set(() => ({ panelMenu })),
     nodeMenu: undefined,
     setNodeMenu: (nodeMenu) => set(() => ({ nodeMenu })),
+
     mousePosition: { pageX: 0, pageY: 0, elementX: 0, elementY: 0 },
     setMousePosition: (mousePosition) => set(() => ({ mousePosition })),
     showConfirm: undefined,
