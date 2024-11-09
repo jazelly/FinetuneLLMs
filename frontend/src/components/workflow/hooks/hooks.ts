@@ -1180,7 +1180,7 @@ export const useNodesInteractions = () => {
 
   const handleNodeContextMenu = useCallback(
     (event: React.MouseEvent, node: Node) => {
-      event.preventDefault();
+      // event.preventDefault();
       const container = document.querySelector('#workflow-container');
       const { x, y } = container!.getBoundingClientRect();
       workflowStore.setState({

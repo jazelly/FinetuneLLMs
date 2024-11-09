@@ -2,7 +2,13 @@ import React, { memo, useCallback, useState } from 'react';
 import cn from 'classnames';
 import { intersection } from 'lodash-es';
 import type { EdgeProps } from 'reactflow';
-import { BaseEdge, EdgeLabelRenderer, getBezierPath } from 'reactflow';
+import {
+  BaseEdge,
+  EdgeLabelRenderer,
+  getBezierPath,
+  Position,
+  useNodes,
+} from 'reactflow';
 import { useAvailableBlocks, useNodesInteractions } from './hooks/hooks';
 import BlockSelector from './block-selector';
 import type { Edge, OnSelectBlock } from './types';
@@ -20,25 +26,31 @@ const CustomEdge = ({
   targetY,
   selected,
 }: EdgeProps) => {
-  // console.log('customEdge', {
-  //   id,
-  //   data,
-  //   source,
-  //   sourceHandleId,
-  //   target,
-  //   targetHandleId,
-  //   sourceX,
-  //   sourceY,
-  //   targetX,
-  //   targetY,
-  //   selected,
-  // });
+  const nodes = useNodes();
+
+  console.log('source', source);
+  console.log('target', target);
+  const sourceNode = nodes.find((node) => node.id === source);
+  const targetNode = nodes.find((node) => node.id === target);
+  console.log('sourceNode', sourceNode);
+  console.log('targetNode', targetNode);
+  const sourceNodeHeight = sourceNode?.height || 240;
+  const targetNodeHeight = targetNode?.height || 240;
+
+  console.log(sourceY, sourceNodeHeight, targetY, targetNodeHeight);
+
+  // Adjust sourceY and targetY based on node heights
+  const adjustedSourceY = sourceY + sourceNodeHeight / 2;
+  const adjustedTargetY = targetY - 20;
+
   const [edgePath, labelX, labelY] = getBezierPath({
-    sourceX: sourceX - 120,
-    sourceY,
-    targetX: targetX + 120,
-    targetY,
-    curvature: 0.15,
+    sourceX: sourceX,
+    sourceY: adjustedSourceY,
+    sourcePosition: Position.Bottom,
+    targetX: targetX + 128,
+    targetY: adjustedTargetY,
+    targetPosition: Position.Top,
+    curvature: 0.16,
   });
   const [open, setOpen] = useState(false);
   const { handleNodeAdd } = useNodesInteractions();

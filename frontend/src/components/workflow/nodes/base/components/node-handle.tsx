@@ -65,7 +65,7 @@ export const NodeTargetHandle = memo(
         <Handle
           id={handleId}
           type="target"
-          position={Position.Left}
+          position={Position.Top}
           className={`
           !w-4 !h-4 !bg-transparent !rounded-none !outline-none !border-none z-[1]
           after:absolute after:w-0.5 after:h-2 after:left-1.5 after:top-1 after:bg-primary-500
@@ -152,7 +152,7 @@ export const NodeSourceHandle = memo(
         <Handle
           id={handleId}
           type="source"
-          position={Position.Right}
+          position={Position.Bottom}
           className={`
           !w-4 !h-4 !bg-transparent !rounded-none !outline-none !border-none z-[1]
           after:absolute after:w-0.5 after:h-2 after:right-1.5 after:top-1 after:bg-primary-500

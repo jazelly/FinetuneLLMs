@@ -69,7 +69,7 @@ export const initialNodes: Node[] = [
     id: '4',
     position: { x: 250, y: 800 },
     width: 240,
-    height: 100,
+    height: 140,
     data: {
       id: '4',
       title: 'Train',

@@ -7,6 +7,7 @@ import ReactFlow, {
   Background,
   ReactFlowProvider,
   SelectionMode,
+  useEdges,
   useEdgesState,
   useNodesState,
   useOnViewportChange,
@@ -133,8 +134,12 @@ const Workflow: FC<WorkflowProps> = memo(
       }),
     }));
 
-    const { setNodes, getNodes, edges, setEdges } = store.getState();
-    const nodes = getNodes();
+    const { setNodes, getNodes, setEdges } = store.getState();
+    // const nodes = getNodes();
+
+    const edges = originalEdges;
+
+    const nodes = originalNodes;
     const { setViewport } = reactflow;
 
     useEffect(() => {
