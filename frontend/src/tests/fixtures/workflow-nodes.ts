@@ -60,7 +60,7 @@ export const initialNodes: Node[] = [
     data: {
       id: '3',
       title: 'Model',
-      desc: '',
+      desc: 'very long description of the model very long description of the model very long description of the model very long description of the model',
       type: BlockEnum.Model,
       modelName: 'TinyLlama/TinyLlama-1.1B-Chat-v1.0',
     },

@@ -96,7 +96,7 @@ const NodeSelector: FC<NodeSelectorProps> = ({
                 `}
             style={triggerStyle}
           >
-            <PlusCircle className="w-2.5 h-2.5 text-white" />
+            <PlusCircle size={24} color="white" weight="fill" />
           </div>
         )}
       </PortalToFollowElemTrigger>

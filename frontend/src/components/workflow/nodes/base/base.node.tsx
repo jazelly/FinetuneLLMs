@@ -1,4 +1,4 @@
-import React, { type FC, type ReactElement } from 'react';
+import React, { useState, type FC, type ReactElement } from 'react';
 import { cloneElement, memo, useEffect, useMemo, useRef } from 'react';
 import cn from 'classnames';
 import type { NodeProps } from '../../types';
@@ -12,6 +12,22 @@ type BaseNodeProps = {
 
 const BaseNode: FC<BaseNodeProps> = ({ id, data, children, className }) => {
   const nodeRef = useRef<HTMLDivElement>(null);
+
+  const [nodeHeight, setNodeHeight] = useState(0);
+
+  useEffect(() => {
+    if (!nodeRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setNodeHeight(entry.contentRect.height);
+      }
+      console.log('obs');
+    });
+
+    resizeObserver.observe(nodeRef.current);
+    return () => resizeObserver.disconnect();
+  }, []);
 
   const showSelectedBorder = data.selected || data._isEntering;
   const { showRunningBorder, showSuccessBorder, showFailedBorder } =
@@ -49,25 +65,23 @@ const BaseNode: FC<BaseNodeProps> = ({ id, data, children, className }) => {
           showFailedBorder && '!border-[#F04438]'
         )}
       >
-        {!data._isCandidate && (
+        {
           <NodeTargetHandle
             id={id}
             data={data}
-            handleClassName="!top-4 !-left-[9px] !translate-y-0"
+            handleClassName="!-top-2.5"
             handleId="target"
           />
-        )}
+        }
         {data.type !== BlockEnum.IfElse && (
           <NodeSourceHandle
             id={id}
             data={data}
-            handleClassName="!top-4 !-right-[9px] !translate-y-0"
+            handleClassName="!-bottom-[11px]"
             handleId="source"
           />
         )}
-        {!data._runningStatus && !data._isCandidate && (
-          <NodeControl id={id} data={data} />
-        )}
+        {!data._runningStatus && <NodeControl id={id} data={data} />}
         {cloneElement(children, { id, data })}
 
         <div className="px-3 pt-1 pb-2 text-xs leading-[18px] text-gray-500 whitespace-pre-line break-words">

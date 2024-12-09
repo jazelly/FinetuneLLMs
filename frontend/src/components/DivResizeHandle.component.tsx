@@ -1,32 +1,26 @@
-import { ArrowLineLeft, ArrowLineRight } from '@phosphor-icons/react';
-import React, { MouseEventHandler, TouchEventHandler, useState } from 'react';
+import React, { TouchEventHandler, useCallback, useState } from 'react';
 import type { ResizableBox, ResizeHandle } from 'react-resizable';
 
 interface ResizeHandleProps {
   innerRef: any;
-  isHoldingHandle: boolean;
-  setIsHoldingHandle: Function;
-  handleMouseUp: (e, cb) => void;
-  onMouseDown?: MouseEventHandler<HTMLDivElement>;
-  onMouseUp?: MouseEventHandler<HTMLDivElement>;
-  onTouchEnd?: TouchEventHandler<HTMLDivElement>;
   className: any;
 }
 
 const DivResizeHandle = React.forwardRef<ResizableBox, ResizeHandleProps>(
-  (props, ref) => {
-    const {
-      innerRef,
-      isHoldingHandle,
-      setIsHoldingHandle,
-      handleMouseUp,
-      onMouseDown,
-      onMouseUp,
-      onTouchEnd,
-      className: classNameOuter,
-    } = props;
-    const [isHolding, setIsHolding] = useState(false);
+  (props) => {
+    const { innerRef, className: classNameOuter } = props;
+    const [isDragging, setIsDragging] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+
+    // const handleMouseDown = useCallback(() => {
+    //   setIsDragging(true);
+    //   console.log('123');
+    //   const handleMouseUp = () => {
+    //     setIsDragging(false);
+    //     document.removeEventListener('mouseup', handleMouseUp);
+    //   };
+    //   document.addEventListener('mouseup', handleMouseUp);
+    // }, []);
 
     const handleMouseEnter = (e) => {
       setIsHovered(true);
@@ -36,30 +30,21 @@ const DivResizeHandle = React.forwardRef<ResizableBox, ResizeHandleProps>(
       setIsHovered(false);
     };
 
-    const handleMouseDown = (e) => {
-      setIsHoldingHandle(true);
-      onMouseDown!(e);
-    };
-
-    const handleMouseUpCallback = () => {
-      setIsHoldingHandle(false);
-    };
-
     return (
       <div
         id="div-line-lr"
         ref={innerRef}
         className={`${classNameOuter} ${
-          isHoldingHandle || isHovered ? 'div-handle-highlight' : ''
+          isDragging || isHovered ? 'div-handle-highlight' : ''
         }`}
-        onMouseDown={handleMouseDown}
-        onMouseUp={(e) => handleMouseUp(e, onMouseUp)}
-        onTouchEnd={onTouchEnd}
+        // onMouseDown={handleMouseDown}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       ></div>
     );
   }
 );
+
+DivResizeHandle.displayName = 'DivResizeHandle';
 
 export default DivResizeHandle;

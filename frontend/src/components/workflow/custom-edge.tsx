@@ -28,27 +28,12 @@ const CustomEdge = ({
 }: EdgeProps) => {
   const nodes = useNodes();
 
-  console.log('source', source);
-  console.log('target', target);
-  const sourceNode = nodes.find((node) => node.id === source);
-  const targetNode = nodes.find((node) => node.id === target);
-  console.log('sourceNode', sourceNode);
-  console.log('targetNode', targetNode);
-  const sourceNodeHeight = sourceNode?.height || 240;
-  const targetNodeHeight = targetNode?.height || 240;
-
-  console.log(sourceY, sourceNodeHeight, targetY, targetNodeHeight);
-
-  // Adjust sourceY and targetY based on node heights
-  const adjustedSourceY = sourceY + sourceNodeHeight / 2;
-  const adjustedTargetY = targetY - 20;
-
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX: sourceX,
-    sourceY: adjustedSourceY,
+    sourceY: sourceY,
     sourcePosition: Position.Bottom,
-    targetX: targetX + 128,
-    targetY: adjustedTargetY,
+    targetX: targetX,
+    targetY: targetY,
     targetPosition: Position.Top,
     curvature: 0.16,
   });

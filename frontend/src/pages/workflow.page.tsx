@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import FinetunePanel from '@/components/FinetunePanel.component';
-import DivResizeHandle from '@/components/DivResizeHandle.component';
-import { ResizableBox } from 'react-resizable';
-import type { ResizeHandle } from 'react-resizable';
-import 'react-resizable/css/styles.css';
-import DashboardModel from '../models/dashboard';
-import type { AllJobOptions, JobDetail } from '@/types/dashboard.type';
-import InferencePanel from '@/components/InferencePanel.component';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { PermalinksContext } from '@/contexts/Permalinks.context';
 import {
   BOTTOM_GAP,
@@ -18,30 +16,42 @@ import {
 } from '@/utils/constants';
 import ChatContainer from '@/components/Chat/ChatContainer.component';
 import Workflow from '@/components/workflow';
+import DashboardModel from '../models/dashboard';
+import type { AllJobOptions } from '@/types/dashboard.type';
 
 const WorkflowPage = () => {
   const [jobOptions, setJobOptions] = useState<AllJobOptions | undefined>(
     undefined
   );
-
   const [error, setError] = useState<string | null>(null);
-
   const { setPermalinks } = useContext(PermalinksContext);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isRightCollapsed, setIsRightCollapsed] = useState(false);
+
+  // Drag state management
+  const isDraggingRef = useRef(false);
+  const dragStartPosRef = useRef(0);
+  const leftPanelRef = useRef<HTMLDivElement>(null);
+  const currentWidthRef = useRef(0);
+
+  const initialLeftWidth = ((window.innerWidth - 42 - 16) * 2) / 3;
+  const [leftWidth, setLeftWidth] = useState(initialLeftWidth);
+  const minWidthLeft = SIDEBAR_WIDTH + 240;
 
   useEffect(() => {
     const fetchJobOptions = async () => {
       try {
         const resp = await DashboardModel.getJobOptions();
-        if (!resp.success) {
-          setJobOptions({
-            baseModels: [],
-            trainingMethods: [],
-            datasets: [],
-            hyperparameters: {},
-          });
-        } else {
-          setJobOptions(resp.data);
-        }
+        setJobOptions(
+          resp.success
+            ? resp.data
+            : {
+                baseModels: [],
+                trainingMethods: [],
+                datasets: [],
+                hyperparameters: {},
+              }
+        );
       } catch (error: any) {
         setError(error);
       }
@@ -52,69 +62,100 @@ const WorkflowPage = () => {
 
   useEffect(() => {
     setPermalinks([PERMALINK_FINETUNE]);
-    return;
-  }, []);
+  }, [setPermalinks]);
 
-  const initialLeftWidth = ((window.innerWidth - 42 - 16) * 2) / 3; // 2/3 width for the left panel
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      isDraggingRef.current = true;
+      dragStartPosRef.current = e.clientX;
+      currentWidthRef.current = leftWidth;
+      document.body.style.cursor = 'col-resize';
+      document.body.classList.add('select-none');
+    },
+    [leftWidth]
+  );
 
-  const [leftWidth, setLeftWidth] = useState(initialLeftWidth);
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isDraggingRef.current) return;
 
-  const [isRightCollapsed, setIsRightCollapsed] = useState(false);
+      const delta = e.clientX - dragStartPosRef.current;
+      const newWidth = Math.max(
+        minWidthLeft,
+        Math.min(currentWidthRef.current + delta, window.innerWidth - 200)
+      );
 
-  const [isHoldingHandle, setIsHoldingHandle] = useState(false);
+      // Use direct DOM manipulation for smooth resizing
+      if (leftPanelRef.current) {
+        leftPanelRef.current.style.width = `${newWidth}px`;
+      }
+    },
+    [minWidthLeft]
+  );
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const handleMouseUp = useCallback(
+    (e: MouseEvent) => {
+      if (!isDraggingRef.current) return;
 
-  const handleLeftResize = (event, { size }) => {
-    setLeftWidth(size.width);
-  };
+      isDraggingRef.current = false;
+      document.body.style.cursor = '';
+      document.body.classList.remove('select-none');
 
-  // TODO: lift it to global so it can catch all mouse up
-  const handleMouseUp = (e, cb) => {
-    setIsHoldingHandle(false);
-    if (cb) cb(e);
-  };
+      // Update React state once dragging is complete
+      const delta = e.clientX - dragStartPosRef.current;
+      const newWidth = Math.max(
+        minWidthLeft,
+        Math.min(currentWidthRef.current + delta, window.innerWidth - 200)
+      );
+      setLeftWidth(newWidth);
+    },
+    [minWidthLeft]
+  );
 
-  const containerHeight = window.innerHeight - BOTTOM_GAP - 64;
-  const minWidthLeft = SIDEBAR_WIDTH + 240;
-  const maxWidthLeft = window.innerWidth - RIGHT_GAP - 330; // 330 is the min width of detail panel
+  useEffect(() => {
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [handleMouseMove, handleMouseUp]);
 
   const toggleRightCollapse = () => {
-    if (isRightCollapsed) {
-      setLeftWidth(initialLeftWidth); // TODO: use snapshot of last time left width
-    } else {
-      setLeftWidth(containerRef.current!.offsetWidth - 8 - 12.5);
-    }
-    setIsRightCollapsed(!isRightCollapsed);
+    setIsRightCollapsed((prev) => {
+      const newIsCollapsed = !prev;
+      setLeftWidth(
+        newIsCollapsed
+          ? (containerRef.current?.offsetWidth ?? 0) - 8 - 12.5
+          : initialLeftWidth
+      );
+      return newIsCollapsed;
+    });
   };
 
   return (
-    <div
-      ref={containerRef}
-      onMouseUp={(e) => handleMouseUp(e, undefined)}
-      className="flex overflow-y-hidden h-full"
-    >
-      <ResizableBox
-        width={leftWidth}
-        height={containerRef.current?.offsetHeight ?? containerHeight}
-        axis="x"
-        resizeHandles={isRightCollapsed ? [] : ['e']}
-        handle={(handleAxis: ResizeHandle, ref) => (
-          <DivResizeHandle
-            className={`handle-${handleAxis} div-handle div-handle-drag-horizontal`}
-            isHoldingHandle={isHoldingHandle}
-            setIsHoldingHandle={setIsHoldingHandle}
-            handleMouseUp={(e, cb) => handleMouseUp(e, cb)}
-            innerRef={ref}
-          />
-        )}
-        onResize={handleLeftResize}
-        minConstraints={[minWidthLeft, Infinity]} // width and height
-        maxConstraints={[maxWidthLeft, Infinity]}
+    <div ref={containerRef} className="flex overflow-y-hidden h-full">
+      <div
+        ref={leftPanelRef}
+        style={{
+          width: `${leftWidth}px`,
+          minWidth: `${minWidthLeft}px`,
+          willChange: 'width',
+        }}
         className="flex h-full bg-main-menu text-white"
       >
         <Workflow />
-      </ResizableBox>
+      </div>
+
+      <div
+        className={`relative w-1 flex items-center justify-center cursor-col-resize 
+          hover:bg-blue-400 active:bg-blue-500 transition-colors
+          ${isDraggingRef.current ? 'bg-blue-500' : 'bg-transparent'}`}
+        onMouseDown={handleMouseDown}
+      ></div>
+
       {!isRightCollapsed && (
         <div className="flex-1 bg-main-workspace">
           <ChatContainer

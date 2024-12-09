@@ -298,6 +298,14 @@ const Workflow: FC<WorkflowProps> = memo(
           onSelectionChange={handleSelectionChange}
           onSelectionDrag={handleSelectionDrag}
           onPaneContextMenu={handlePaneContextMenu}
+          defaultEdgeOptions={{
+            animated: false,
+            type: 'default',
+            style: {
+              strokeWidth: 2,
+              stroke: '#6366f1', // Indigo-500
+            },
+          }}
           connectionLineComponent={CustomConnectionLine}
           connectionLineContainerStyle={{ zIndex: ITERATION_CHILDREN_Z_INDEX }}
           defaultViewport={viewport}

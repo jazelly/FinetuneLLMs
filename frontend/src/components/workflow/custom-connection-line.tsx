@@ -19,38 +19,10 @@ const CustomConnectionLine = ({
     curvature: 0.16,
   });
 
-  const markerEnd = {
-    type: 'arrow',
-    color: '#D0D5DD',
-    width: 20,
-    height: 20,
-    markerUnits: 'strokeWidth',
-  };
-
   return (
     <g>
-      <defs>
-        <marker
-          id="custom-arrow"
-          viewBox="0 0 10 10"
-          refX="5"
-          refY="5"
-          markerWidth={markerEnd.width}
-          markerHeight={markerEnd.height}
-          orient="auto-start-reverse"
-        >
-          <path d="M 0 0 L 10 5 L 0 10 z" fill={markerEnd.color} />
-        </marker>
-      </defs>
-
-      {/* The connection path with arrow marker */}
-      <path
-        fill="none"
-        stroke="#D0D5DD"
-        strokeWidth={2}
-        d={edgePath}
-        markerEnd="url(#custom-arrow)"
-      />
+      <path fill="none" stroke="#D0D5DD" strokeWidth={2} d={edgePath} />
+      <rect x={toX} y={toY - 4} width={2} height={8} fill="#2970FF" />
     </g>
   );
 };
