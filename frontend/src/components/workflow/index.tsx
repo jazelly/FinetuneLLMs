@@ -300,12 +300,13 @@ const Workflow: FC<WorkflowProps> = memo(
           onPaneContextMenu={handlePaneContextMenu}
           defaultEdgeOptions={{
             animated: false,
-            type: 'default',
+            type: 'custom',
             style: {
               strokeWidth: 2,
               stroke: '#6366f1', // Indigo-500
             },
           }}
+          connectOnClick={true}
           connectionLineComponent={CustomConnectionLine}
           connectionLineContainerStyle={{ zIndex: ITERATION_CHILDREN_Z_INDEX }}
           defaultViewport={viewport}

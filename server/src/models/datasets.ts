@@ -41,7 +41,9 @@ export const Datasets = {
   readBy: async (params: Partial<DatasetRemote>) => {
     const whereParams: Prisma.datasetsWhereInput[] = [];
     for (const [key, value] of Object.entries(params)) {
-      whereParams.push({ [key]: value });
+      if (value !== undefined) {
+        whereParams.push({ [key]: value });
+      }
     }
     const datasets = await prisma.datasets.findMany({
       where: {

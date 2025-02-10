@@ -28,7 +28,7 @@ export interface ModelNodeProps extends NodeProps {
 export const ModelDefault: NodeDefault<ModelNodeType> = {
   defaultValue: {},
   getAvailablePrevNodes() {
-    return [];
+    return [...ALL_COMPLETION_AVAILABLE_BLOCKS];
   },
   getAvailableNextNodes() {
     const nodes = ALL_COMPLETION_AVAILABLE_BLOCKS;

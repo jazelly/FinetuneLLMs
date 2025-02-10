@@ -582,6 +582,7 @@ export const useNodesInteractions = () => {
 
   const handleNodeConnect = useCallback<OnConnect>(
     ({ source, sourceHandle, target, targetHandle }) => {
+      console.log('on connect triggerred');
       if (source === target) return;
       if (getNodesReadOnly()) return;
 

@@ -6,7 +6,7 @@ import { ComponentType } from 'react';
 import StartNode from './nodes/start';
 import IfElseNode from './nodes/if-else';
 import DatasetNode, { DatasetDefault } from './nodes/Dataset';
-import ModelNode from './nodes/Model';
+import ModelNode, { ModelDefault } from './nodes/Model';
 import TrainNode, { TrainDefault } from './nodes/Train';
 
 type NodesExtraData = {
@@ -59,18 +59,18 @@ export const NODES_EXTRA_DATA: Record<BlockEnum, NodesExtraData> = {
     about: '',
     availablePrevNodes: [],
     availableNextNodes: [],
-    getAvailablePrevNodes: DatasetDefault.getAvailablePrevNodes,
-    getAvailableNextNodes: DatasetDefault.getAvailableNextNodes,
-    checkValid: DatasetDefault.checkValid,
+    getAvailablePrevNodes: ModelDefault.getAvailablePrevNodes,
+    getAvailableNextNodes: ModelDefault.getAvailableNextNodes,
+    checkValid: ModelDefault.checkValid,
   },
   [BlockEnum.Train]: {
     author: 'Vertile',
     about: '',
     availablePrevNodes: [],
     availableNextNodes: [],
-    getAvailablePrevNodes: DatasetDefault.getAvailablePrevNodes,
-    getAvailableNextNodes: DatasetDefault.getAvailableNextNodes,
-    checkValid: DatasetDefault.checkValid,
+    getAvailablePrevNodes: TrainDefault.getAvailablePrevNodes,
+    getAvailableNextNodes: TrainDefault.getAvailableNextNodes,
+    checkValid: TrainDefault.checkValid,
   },
 };
 

@@ -28,7 +28,7 @@ export interface TrainNodeProps extends NodeProps {
 export const TrainDefault: NodeDefault<TrainNodeType> = {
   defaultValue: {},
   getAvailablePrevNodes() {
-    return [];
+    return [...ALL_COMPLETION_AVAILABLE_BLOCKS];
   },
   getAvailableNextNodes() {
     const nodes = ALL_COMPLETION_AVAILABLE_BLOCKS;

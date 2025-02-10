@@ -22,7 +22,6 @@ const BaseNode: FC<BaseNodeProps> = ({ id, data, children, className }) => {
       for (const entry of entries) {
         setNodeHeight(entry.contentRect.height);
       }
-      console.log('obs');
     });
 
     resizeObserver.observe(nodeRef.current);
