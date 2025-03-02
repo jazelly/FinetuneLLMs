@@ -111,5 +111,124 @@ class PriorityQueueTestCase(TestCase):
         self.assertEqual(queue.pop(), 5)
 
 
+class Task:
+    """Simple task class for testing"""
+
+    def __init__(self, name, created_at=None):
+        self.name = name
+        self.created_at = created_at
+
+    def __eq__(self, other):
+        if not isinstance(other, Task):
+            return False
+        return self.name == other.name
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def __repr__(self):
+        return f"Task(name='{self.name}')"
+
+
+class PriorityQueueMethodsTestCase(TestCase):
+    """Test case for PriorityQueue class methods"""
+
+    def test_with_priority_field(self):
+        """Test the with_priority_field class method"""
+        # Create a priority queue using the priority field
+        queue = PriorityQueue.with_priority_field("priority")
+
+        # Add tasks with different priorities
+        task1 = Task("Low Priority Task")
+        task1.priority = 3  # not recommended but to illustrate the idea
+
+        task2 = Task("High Priority Task")
+        task2.priority = 1
+
+        task3 = Task("Medium Priority Task")
+        task3.priority = 2
+
+        queue.add(task1)
+        queue.add(task2)
+        queue.add(task3)
+
+        # Verify tasks are popped in priority order (lowest first)
+        self.assertEqual(queue.pop(), task2)  # Priority 1
+        self.assertEqual(queue.pop(), task3)  # Priority 2
+        self.assertEqual(queue.pop(), task1)  # Priority 3
+
+    def test_with_priority_key(self):
+        """Test the with_priority_key class method"""
+        # Create tasks without any priority field
+        task1 = Task("Task A")
+        task2 = Task("Task B")
+        task3 = Task("Task C")
+
+        # Create a separate priority mapping
+        priorities = {task1: 3, task2: 1, task3: 2}
+
+        # Create a priority queue using the mapping as priority source
+        queue = PriorityQueue.with_priority_key(lambda task: priorities[task])
+
+        # Add tasks
+        queue.add(task1)
+        queue.add(task2)
+        queue.add(task3)
+
+        # Verify items are popped in priority order (lowest first)
+        self.assertEqual(queue.pop(), task2)  # Priority 1
+        self.assertEqual(queue.pop(), task3)  # Priority 2
+        self.assertEqual(queue.pop(), task1)  # Priority 3
+
+    def test_with_external_priority_system(self):
+        """Test using an external priority system"""
+
+        # Create a priority queue system for tasks
+        class TaskPrioritySystem:
+            def __init__(self):
+                self.task_priorities = {}
+                self.default_priority = 10
+
+            def set_priority(self, task, priority):
+                self.task_priorities[task] = priority
+
+            def get_priority(self, task):
+                return self.task_priorities.get(task, self.default_priority)
+
+        # Create tasks and priority system
+        priority_system = TaskPrioritySystem()
+
+        task1 = Task("Task 1")
+        task2 = Task("Task 2")
+        task3 = Task("Task 3")
+
+        # Set priorities externally
+        priority_system.set_priority(task1, 5)
+        priority_system.set_priority(task2, 2)
+        priority_system.set_priority(task3, 8)
+
+        # Create queue using the external priority system
+        queue = PriorityQueue.with_priority_key(priority_system.get_priority)
+
+        # Add tasks
+        queue.add(task1)
+        queue.add(task2)
+        queue.add(task3)
+
+        # Verify order
+        self.assertEqual(queue.pop(), task2)  # Priority 2
+        self.assertEqual(queue.pop(), task1)  # Priority 5
+        self.assertEqual(queue.pop(), task3)  # Priority 8
+
+        # Change priorities dynamically
+        priority_system.set_priority(task3, 1)
+        queue.add(task1)  # Priority still 5
+        queue.add(task3)  # Now priority 1
+
+        # Verify new order
+        self.assertEqual(queue.pop(), task3)  # Now highest priority (1)
+        self.assertEqual(queue.pop(), task1)  # Priority 5
+
+
 if __name__ == "__main__":
     unittest.main()

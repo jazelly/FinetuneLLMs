@@ -49,7 +49,7 @@ class Worker:
         self.task_queue = MQueue[Task]()
         self.task_queue_lock = threading.Lock()
 
-        # TODO: start a scheduler that check idle time of all threads and shutdown any that exceeds
+        # start a scheduler that check idle time of all threads and shutdown any that exceeds
         self.max_idle_time = (
             kwargs["max_idle_time"] if "max_idle_time" in kwargs else MAX_IDLE_TIME
         )
@@ -85,7 +85,7 @@ class Worker:
         """
         if self._idle_semaphore.acquire(timeout=0):
             worker_manager_logger.info(
-                f"the worker is already working on the task, no spawning"
+                f"the worker is already working on a task, no spawning"
             )
             return
 

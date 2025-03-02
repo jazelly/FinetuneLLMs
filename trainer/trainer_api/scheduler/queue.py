@@ -79,25 +79,98 @@ class PriorityQueueParams:
         comparator: Optional[Comparator[T]] = None,
     ):
         self.from_ = from_
-        self.comparator = comparator
+        self.comparator_ = comparator
 
 
 class PriorityQueue:
     def __init__(self, params):
+        """
+        Initialize a priority queue with the given parameters.
+        The items must be comparable or provided with a comparator
+
+        Args:
+            params: A PriorityQueueParams object containing optional parameters
+        """
+
         default_q: List[T] = []
-        default_comparator: Comparator[T] = lambda a, b: (
-            0 if a == b else -1 if a < b else 1
-        )
+
+        def default_comparator(a: T, b: T) -> int:
+            if not hasattr(a, "__lt__") or not hasattr(b, "__lt__"):
+                raise TypeError(
+                    f"Cannot compare objects of type {type(a).__name__} and {type(b).__name__}"
+                )
+            return -1 if a < b else 1
 
         options = params or PriorityQueueParams()
 
-        self.comparator = options.comparator or default_comparator
+        self.comparator = options.comparator_ or default_comparator
 
         if options.from_ is not None:
             self.q = options.from_.copy()
             self.heapify_all()
         else:
             self.q = default_q
+
+    @classmethod
+    def with_priority_field(cls, field_name: str):
+        """
+        Create a priority queue that uses a specific field of objects as priority.
+
+        This allows objects to be prioritized based on any attribute without
+        requiring them to implement specific comparison methods.
+
+        Args:
+            field_name: The name of the object attribute to use as priority
+
+        Returns:
+            PriorityQueue: A new priority queue instance
+        """
+
+        def field_comparator(a, b):
+            if not hasattr(a, field_name) or not hasattr(b, field_name):
+                raise AttributeError(f"Objects must have '{field_name}' attribute")
+
+            a_priority = getattr(a, field_name)
+            b_priority = getattr(b, field_name)
+
+            if a_priority < b_priority:
+                return -1
+            else:
+                return 1
+
+        # Create parameters and return new instance
+        params = PriorityQueueParams(comparator=field_comparator)
+        return cls(params)
+
+    @classmethod
+    def with_priority_key(cls, key_func):
+        """
+        Create a priority queue that uses a key function to extract priority values.
+
+        This allows complete decoupling between objects and their priorities.
+        The key function can extract or compute any value to use as priority.
+
+        Args:
+            key_func: A function that extracts priority value from objects
+
+        Returns:
+            PriorityQueue: A new priority queue instance
+        """
+
+        def key_comparator(a, b):
+            # Extract priority values
+            a_priority = key_func(a)
+            b_priority = key_func(b)
+
+            # Compare priorities
+            if a_priority < b_priority:
+                return -1
+            else:
+                return 1
+
+        # Create parameters and return new instance
+        params = PriorityQueueParams(comparator=key_comparator)
+        return cls(params)
 
     @property
     def length(self) -> int:
