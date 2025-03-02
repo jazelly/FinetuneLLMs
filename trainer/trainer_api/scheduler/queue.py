@@ -86,18 +86,22 @@ class PriorityQueue:
     def __init__(self, params):
         default_q: List[T] = []
         default_comparator: Comparator[T] = lambda a, b: (
-            0 if a == b else -1 if a > b else 1
+            0 if a == b else -1 if a < b else 1
         )
 
         options = params or PriorityQueueParams()
 
+        self.comparator = options.comparator or default_comparator
+
         if options.from_ is not None:
-            self.q = options.from_
+            self.q = options.from_.copy()
             self.heapify_all()
         else:
             self.q = default_q
 
-        self.comparator = options.comparator or default_comparator
+    @property
+    def length(self) -> int:
+        return len(self.q)
 
     def is_empty(self) -> bool:
         return len(self.q) == 0
@@ -110,76 +114,60 @@ class PriorityQueue:
             return None
 
         max_val = self.q[0]
+        if len(self.q) == 1:
+            self.q.pop()
+            return max_val
+
         self.q[0] = self.q[-1]
         self.q.pop()
 
-        i = 0
-        while True:
-            left = 2 * i + 1
-            right = 2 * i + 2
-            largest = i
-
-            if (
-                self.is_valid_index(left)
-                and self.comparator(self.q[left], self.q[largest]) <= 0
-            ):
-                largest = left
-
-            if (
-                self.is_valid_index(right)
-                and self.comparator(self.q[right], self.q[largest]) <= 0
-            ):
-                largest = right
-
-            if largest != i:
-                self.q[i], self.q[largest] = self.q[largest], self.q[i]
-                i = largest
-            else:
-                break
-
+        self._sift_down(0)
         return max_val
 
-    def peek(self) -> T:
+    def peek(self) -> Optional[T]:
+        if len(self.q) == 0:
+            return None
         return self.q[0]
 
     def add(self, t: T) -> bool:
         self.q.append(t)
-        i = len(self.q) - 1
-
-        while i > 0:
-            parent = self.get_parent_index(i)
-
-            if (
-                self.is_valid_index(parent)
-                and self.comparator(self.q[i], self.q[parent]) <= 0
-            ):
-                self.q[i], self.q[parent] = self.q[parent], self.q[i]
-                i = parent
-            else:
-                break
-
+        self._sift_up(len(self.q) - 1)
         return True
 
     def heapify_all(self):
         n = len(self.q)
-        last_parent = self.get_parent_index(n)
-        for i in range(last_parent, -1, -1):
-            self.heapify(i)
+        for i in range(n // 2 - 1, -1, -1):
+            self._sift_down(i)
 
-    def heapify(self, i: int):
-        largest = i
-        left = self.get_left_child_index(i)
-        right = self.get_right_child_index(i)
+    def _sift_down(self, i: int):
+        n = len(self.q)
+        smallest = i
 
-        if self.is_valid_index(left) and self.q[left] > self.q[largest]:
-            largest = left
+        while True:
+            left = 2 * i + 1
+            right = 2 * i + 2
 
-        if self.is_valid_index(right) and self.q[right] > self.q[largest]:
-            largest = right
+            if left < n and self.comparator(self.q[left], self.q[smallest]) < 0:
+                smallest = left
 
-        if largest != i:
-            self.q[i], self.q[largest] = self.q[largest], self.q[i]
-            self.heapify(largest)
+            if right < n and self.comparator(self.q[right], self.q[smallest]) < 0:
+                smallest = right
+
+            if smallest == i:
+                break
+
+            self.q[i], self.q[smallest] = self.q[smallest], self.q[i]
+            i = smallest
+
+    def _sift_up(self, i: int):
+        while i > 0:
+            parent = (i - 1) // 2
+
+            if self.comparator(self.q[i], self.q[parent]) < 0:
+                self.q[i], self.q[parent] = self.q[parent], self.q[i]
+                i = parent
+            else:
+                break
 
     def get_left_child_index(self, i: int) -> int:
         return i * 2 + 1
