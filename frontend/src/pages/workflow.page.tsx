@@ -6,18 +6,20 @@ import React, {
   useState,
 } from 'react';
 import { PermalinksContext } from '@/contexts/Permalinks.context';
-import {
-  BOTTOM_GAP,
-  DEFAULT_CHAT_MESSAGES,
-  HEADER_HEIGHT,
-  PERMALINK_FINETUNE,
-  RIGHT_GAP,
-  SIDEBAR_WIDTH,
-} from '@/utils/constants';
-import ChatContainer from '@/components/Chat/ChatContainer.component';
+import { PERMALINK_FINETUNE, SIDEBAR_WIDTH } from '@/utils/constants';
 import Workflow from '@/components/workflow';
+import NodeConfigPanel from '@/components/workflow/NodeConfigPanel';
 import DashboardModel from '../models/dashboard';
 import type { AllJobOptions } from '@/types/dashboard.type';
+
+// Create a context to share the selected node between components
+export const SelectedNodeContext = React.createContext<{
+  selectedNode: any;
+  setSelectedNode: React.Dispatch<React.SetStateAction<any>>;
+}>({
+  selectedNode: null,
+  setSelectedNode: () => {},
+});
 
 const WorkflowPage = () => {
   const [jobOptions, setJobOptions] = useState<AllJobOptions | undefined>(
@@ -27,6 +29,9 @@ const WorkflowPage = () => {
   const { setPermalinks } = useContext(PermalinksContext);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isRightCollapsed, setIsRightCollapsed] = useState(false);
+
+  // State to track the selected node
+  const [selectedNode, setSelectedNode] = useState<any>(null);
 
   // Drag state management
   const isDraggingRef = useRef(false);
@@ -135,36 +140,47 @@ const WorkflowPage = () => {
     });
   };
 
+  // Calculate the right panel width
+  const rightPanelWidth = window.innerWidth - leftWidth - 20;
+
+  // Expose the context to the window for access from other components
+  useEffect(() => {
+    (window as any).selectedNodeContext = { selectedNode, setSelectedNode };
+
+    return () => {
+      delete (window as any).selectedNodeContext;
+    };
+  }, [selectedNode, setSelectedNode]);
+
   return (
-    <div ref={containerRef} className="flex overflow-y-hidden h-full">
-      <div
-        ref={leftPanelRef}
-        style={{
-          width: `${leftWidth}px`,
-          minWidth: `${minWidthLeft}px`,
-          willChange: 'width',
-        }}
-        className="flex h-full bg-main-menu text-white"
-      >
-        <Workflow />
-      </div>
-
-      <div
-        className={`relative w-1 flex items-center justify-center cursor-col-resize 
-          hover:bg-blue-400 active:bg-blue-500 transition-colors
-          ${isDraggingRef.current ? 'bg-blue-500' : 'bg-transparent'}`}
-        onMouseDown={handleMouseDown}
-      ></div>
-
-      {!isRightCollapsed && (
-        <div className="flex-1 bg-main-workspace">
-          <ChatContainer
-            chatMessages={[...DEFAULT_CHAT_MESSAGES]}
-            chatDisabled={true}
-          />
+    <SelectedNodeContext.Provider value={{ selectedNode, setSelectedNode }}>
+      <div ref={containerRef} className="flex overflow-y-hidden h-full">
+        <div
+          ref={leftPanelRef}
+          style={{
+            width: `${leftWidth}px`,
+            minWidth: `${minWidthLeft}px`,
+            willChange: 'width',
+          }}
+          className="flex h-full bg-main-menu text-white"
+        >
+          <Workflow />
         </div>
-      )}
-    </div>
+
+        <div
+          className={`relative w-1 flex items-center justify-center cursor-col-resize 
+            hover:bg-blue-400 active:bg-blue-500 transition-colors
+            ${isDraggingRef.current ? 'bg-blue-500' : 'bg-transparent'}`}
+          onMouseDown={handleMouseDown}
+        ></div>
+
+        {!isRightCollapsed && (
+          <div className="flex-1 bg-main-workspace">
+            <NodeConfigPanel width={rightPanelWidth} />
+          </div>
+        )}
+      </div>
+    </SelectedNodeContext.Provider>
   );
 };
 

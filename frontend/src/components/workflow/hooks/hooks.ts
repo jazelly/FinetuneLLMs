@@ -576,6 +576,21 @@ export const useNodesInteractions = () => {
   const handleNodeClick = useCallback<NodeMouseHandler>(
     (_, node) => {
       handleNodeSelect(node.id);
+
+      try {
+        const selectedNodeContext = (window as any).selectedNodeContext;
+        if (selectedNodeContext && selectedNodeContext.setSelectedNode) {
+          selectedNodeContext.setSelectedNode({
+            id: node.id,
+            type: node.data.type,
+            title: node.data.title,
+            desc: node.data.desc,
+            data: node.data,
+          });
+        }
+      } catch (error) {
+        console.error('Error updating shared context:', error);
+      }
     },
     [handleNodeSelect]
   );

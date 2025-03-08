@@ -372,4 +372,7 @@ const WorkflowContainer = () => {
   );
 };
 
+// Export the ReactFlowProvider for use in other components
+export const WorkflowReactFlowProvider = ReactFlowProvider;
+
 export default memo(WorkflowContainer);
