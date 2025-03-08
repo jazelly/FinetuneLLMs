@@ -40,22 +40,22 @@ const VarItem: FC<Props> = ({
   return (
     <div
       ref={ref}
-      className="flex items-center h-8 justify-between px-2.5 bg-white rounded-lg border border-gray-200 shadow-xs cursor-pointer hover:shadow-md"
+      className="flex items-center h-8 justify-between px-2.5 bg-gray-900 rounded-lg border border-gray-700 shadow-xs cursor-pointer hover:shadow-md"
     >
       <div className="flex items-center space-x-1 grow w-0">
-        <ArrowElbowDownRight className="w-3.5 h-3.5 text-primary-500" />
+        <ArrowElbowDownRight className="w-3.5 h-3.5 text-blue-500" />
         <div
           title={payload.variable}
-          className="shrink-0 max-w-[130px] truncate text-[13px] font-medium text-gray-700"
+          className="shrink-0 max-w-[130px] truncate text-[13px] font-medium text-gray-300"
         >
           {payload.variable}
         </div>
         {payload.label && (
           <>
-            <div className="shrink-0 text-xs font-medium text-gray-400">·</div>
+            <div className="shrink-0 text-xs font-medium text-gray-600">·</div>
             <div
               title={payload.label as string}
-              className="max-w-[130px] truncate text-[13px] font-medium text-gray-500"
+              className="max-w-[130px] truncate text-[13px] font-medium text-gray-400"
             >
               {payload.label as string}
             </div>
@@ -68,13 +68,13 @@ const VarItem: FC<Props> = ({
             {!isHovering || readonly ? (
               <>
                 {payload.required && (
-                  <div className="mr-2 text-xs font-normal text-gray-500">
+                  <div className="mr-2 text-xs font-normal text-gray-400">
                     {t('workflow.nodes.start.required')}
                   </div>
                 )}
                 <ArrowElbowDownRight
                   type={payload.type}
-                  className="w-3.5 h-3.5 text-gray-500"
+                  className="w-3.5 h-3.5 text-gray-400"
                 />
               </>
             ) : (
@@ -82,15 +82,15 @@ const VarItem: FC<Props> = ({
                 <>
                   <div
                     onClick={showEditVarModal}
-                    className="mr-1 p-1 rounded-md cursor-pointer hover:bg-black/5"
+                    className="mr-1 p-1 rounded-md cursor-pointer hover:bg-gray-800"
                   >
-                    <ArrowElbowDownRight className="w-4 h-4 text-gray-500" />
+                    <ArrowElbowDownRight className="w-4 h-4 text-gray-400" />
                   </div>
                   <div
                     onClick={onRemove}
-                    className="p-1 rounded-md cursor-pointer hover:bg-black/5"
+                    className="p-1 rounded-md cursor-pointer hover:bg-gray-800"
                   >
-                    <ArrowElbowDownRight className="w-4 h-4 text-gray-500" />
+                    <ArrowElbowDownRight className="w-4 h-4 text-gray-400" />
                   </div>
                 </>
               )

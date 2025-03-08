@@ -27,7 +27,7 @@ const Panel: FC<NodePanelProps> = () => {
                   } as any
                 }
                 rightContent={
-                  <div className="text-xs font-normal text-gray-500">
+                  <div className="text-xs font-normal text-gray-400">
                     String
                   </div>
                 }
@@ -41,7 +41,7 @@ const Panel: FC<NodePanelProps> = () => {
                   } as any
                 }
                 rightContent={
-                  <div className="text-xs font-normal text-gray-500">
+                  <div className="text-xs font-normal text-gray-400">
                     Array[File]
                   </div>
                 }
@@ -55,7 +55,7 @@ const Panel: FC<NodePanelProps> = () => {
                     } as any
                   }
                   rightContent={
-                    <div className="text-xs font-normal text-gray-500">
+                    <div className="text-xs font-normal text-gray-400">
                       String
                     </div>
                   }
@@ -69,7 +69,7 @@ const Panel: FC<NodePanelProps> = () => {
                   } as any
                 }
                 rightContent={
-                  <div className="text-xs font-normal text-gray-500">
+                  <div className="text-xs font-normal text-gray-400">
                     String
                   </div>
                 }

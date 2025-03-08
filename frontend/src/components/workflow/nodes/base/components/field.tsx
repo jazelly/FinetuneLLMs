@@ -39,14 +39,14 @@ const Filed: FC<Props> = ({
         )}
       >
         <div className="flex items-center h-6">
-          <div className="text-[13px] font-medium text-gray-700 uppercase">
+          <div className="text-[13px] font-medium text-gray-300 uppercase">
             {title}
           </div>
           {tooltip && (
             <TooltipPlus
               popupContent={<div className="w-[120px]">{tooltip}</div>}
             >
-              <Question className="w-3.5 h-3.5 ml-0.5 text-gray-400" />
+              <Question className="w-3.5 h-3.5 ml-0.5 text-gray-500" />
             </TooltipPlus>
           )}
         </div>
@@ -54,7 +54,7 @@ const Filed: FC<Props> = ({
           {operations && <div>{operations}</div>}
           {supportFold && (
             <CaretCircleDoubleRight
-              className="w-3.5 h-3.5 text-gray-500 cursor-pointer transform transition-transform"
+              className="w-3.5 h-3.5 text-gray-400 cursor-pointer transform transition-transform"
               style={{ transform: fold ? 'rotate(0deg)' : 'rotate(90deg)' }}
             />
           )}

@@ -43,6 +43,9 @@ const WorkflowPage = () => {
   const [leftWidth, setLeftWidth] = useState(initialLeftWidth);
   const minWidthLeft = SIDEBAR_WIDTH + 240;
 
+  // Store the previous width before collapsing
+  const [previousWidth, setPreviousWidth] = useState(initialLeftWidth);
+
   useEffect(() => {
     const fetchJobOptions = async () => {
       try {
@@ -71,6 +74,9 @@ const WorkflowPage = () => {
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
+      // Prevent resizing when the panel is collapsed
+      if (isRightCollapsed) return;
+
       e.preventDefault();
       isDraggingRef.current = true;
       dragStartPosRef.current = e.clientX;
@@ -78,12 +84,12 @@ const WorkflowPage = () => {
       document.body.style.cursor = 'col-resize';
       document.body.classList.add('select-none');
     },
-    [leftWidth]
+    [leftWidth, isRightCollapsed]
   );
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
-      if (!isDraggingRef.current) return;
+      if (!isDraggingRef.current || isRightCollapsed) return;
 
       const delta = e.clientX - dragStartPosRef.current;
       const newWidth = Math.max(
@@ -96,12 +102,12 @@ const WorkflowPage = () => {
         leftPanelRef.current.style.width = `${newWidth}px`;
       }
     },
-    [minWidthLeft]
+    [minWidthLeft, isRightCollapsed]
   );
 
   const handleMouseUp = useCallback(
     (e: MouseEvent) => {
-      if (!isDraggingRef.current) return;
+      if (!isDraggingRef.current || isRightCollapsed) return;
 
       isDraggingRef.current = false;
       document.body.style.cursor = '';
@@ -115,7 +121,7 @@ const WorkflowPage = () => {
       );
       setLeftWidth(newWidth);
     },
-    [minWidthLeft]
+    [minWidthLeft, isRightCollapsed]
   );
 
   useEffect(() => {
@@ -131,17 +137,34 @@ const WorkflowPage = () => {
   const toggleRightCollapse = () => {
     setIsRightCollapsed((prev) => {
       const newIsCollapsed = !prev;
-      setLeftWidth(
-        newIsCollapsed
-          ? (containerRef.current?.offsetWidth ?? 0) - 8 - 12.5
-          : initialLeftWidth
-      );
+
+      if (newIsCollapsed) {
+        // Store the current width before collapsing
+        setPreviousWidth(leftWidth);
+
+        // Expand the left panel to fill the container
+        setLeftWidth((containerRef.current?.offsetWidth ?? 0) - 8 - 12.5);
+      } else {
+        // Restore the previous width when expanding
+        setLeftWidth(previousWidth);
+      }
+
       return newIsCollapsed;
     });
   };
 
+  // Handle panel close
+  const handlePanelClose = () => {
+    // Collapse the right panel
+    if (!isRightCollapsed) {
+      toggleRightCollapse();
+    }
+  };
+
   // Calculate the right panel width
-  const rightPanelWidth = window.innerWidth - leftWidth - 20;
+  const rightPanelWidth = isRightCollapsed
+    ? 0
+    : window.innerWidth - leftWidth - 20;
 
   // Expose the context to the window for access from other components
   useEffect(() => {
@@ -154,7 +177,10 @@ const WorkflowPage = () => {
 
   return (
     <SelectedNodeContext.Provider value={{ selectedNode, setSelectedNode }}>
-      <div ref={containerRef} className="flex overflow-y-hidden h-full">
+      <div
+        ref={containerRef}
+        className="flex overflow-y-hidden h-full bg-gray-900 text-gray-100"
+      >
         <div
           ref={leftPanelRef}
           style={{
@@ -162,21 +188,46 @@ const WorkflowPage = () => {
             minWidth: `${minWidthLeft}px`,
             willChange: 'width',
           }}
-          className="flex h-full bg-main-menu text-white"
+          className="flex h-full bg-gray-800 text-gray-100 shadow-md"
         >
           <Workflow />
         </div>
 
         <div
-          className={`relative w-1 flex items-center justify-center cursor-col-resize 
-            hover:bg-blue-400 active:bg-blue-500 transition-colors
-            ${isDraggingRef.current ? 'bg-blue-500' : 'bg-transparent'}`}
-          onMouseDown={handleMouseDown}
-        ></div>
+          className={`relative w-1 flex items-center justify-center
+            ${
+              !isRightCollapsed
+                ? 'cursor-col-resize hover:bg-blue-600 active:bg-blue-700'
+                : 'bg-gray-700'
+            } 
+            transition-colors
+            ${isDraggingRef.current ? 'bg-blue-700' : ''}`}
+          onMouseDown={!isRightCollapsed ? handleMouseDown : undefined}
+        >
+          {isRightCollapsed && (
+            <button
+              onClick={toggleRightCollapse}
+              className="absolute right-[-12px] bg-gray-700 hover:bg-gray-600 rounded-r-md p-1 shadow-md transition-all duration-200 hover:scale-110"
+              title="Expand panel"
+            >
+              <span className="text-xl text-gray-300">›</span>
+            </button>
+          )}
+        </div>
 
         {!isRightCollapsed && (
-          <div className="flex-1 bg-main-workspace">
-            <NodeConfigPanel width={rightPanelWidth} />
+          <div className="flex-1 bg-gray-800 relative shadow-md">
+            <button
+              onClick={toggleRightCollapse}
+              className="absolute left-[-12px] top-4 bg-gray-700 hover:bg-gray-600 rounded-l-md p-1 z-10 shadow-md transition-all duration-200 hover:scale-110"
+              title="Collapse panel"
+            >
+              <span className="text-xl text-gray-300">‹</span>
+            </button>
+            <NodeConfigPanel
+              width={rightPanelWidth}
+              onClose={handlePanelClose}
+            />
           </div>
         )}
       </div>
