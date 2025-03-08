@@ -56,7 +56,7 @@ const IfElseNode: FC<NodeProps<IfElseNodeType>> = (props) => {
         <NodeSourceHandle
           {...props}
           handleId="true"
-          handleClassName="!top-1/2 !-right-[21px] !-translate-y-1/2"
+          handleClassName="!-right-2.5 !top-1/2 !-translate-y-1/2"
         />
       </div>
       <div className="space-y-0.5">
@@ -103,7 +103,7 @@ const IfElseNode: FC<NodeProps<IfElseNodeType>> = (props) => {
         <NodeSourceHandle
           {...props}
           handleId="false"
-          handleClassName="!top-1/2 !-right-[21px] !-translate-y-1/2"
+          handleClassName="!-right-2.5 !top-1/2 !-translate-y-1/2"
         />
       </div>
     </div>

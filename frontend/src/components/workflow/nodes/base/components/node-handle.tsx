@@ -65,10 +65,10 @@ export const NodeTargetHandle = memo(
         <Handle
           id={handleId}
           type="target"
-          position={Position.Top}
+          position={Position.Left}
           className={`
           !w-4 !h-4 !bg-transparent !rounded-none !outline-none !border-none z-[1]
-          after:absolute after:w-2 after:h-0.5 after:left-1 after:top-1.5 after:bg-primary-500
+          after:absolute after:w-0.5 after:h-2 after:left-1.5 after:top-1 after:bg-primary-500
           hover:scale-125 transition-all
           ${!connected && 'after:opacity-0'}
           ${data.type === BlockEnum.Start && 'opacity-0'}
@@ -152,10 +152,10 @@ export const NodeSourceHandle = memo(
         <Handle
           id={handleId}
           type="source"
-          position={Position.Bottom}
+          position={Position.Right}
           className={`
           !w-4 !h-4 !bg-transparent !rounded-none !outline-none !border-none z-[1]
-          after:absolute after:w-2 after:h-0.5 after:left-1 after:top-1.5 after:bg-primary-500
+          after:absolute after:w-0.5 after:h-2 after:left-1.5 after:top-1 after:bg-primary-500
           hover:scale-125 transition-all
           ${!connected && 'after:opacity-0'}
           ${handleClassName}

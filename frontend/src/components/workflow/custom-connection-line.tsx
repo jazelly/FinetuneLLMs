@@ -12,17 +12,18 @@ const CustomConnectionLine = ({
   const [edgePath] = getBezierPath({
     sourceX: fromX,
     sourceY: fromY,
-    sourcePosition: Position.Bottom,
+    sourcePosition: Position.Right,
     targetX: toX,
     targetY: toY,
-    targetPosition: Position.Top,
+    targetPosition: Position.Left,
     curvature: 0.16,
   });
 
   return (
     <g>
       <path fill="none" stroke="#D0D5DD" strokeWidth={2} d={edgePath} />
-      <rect x={toX} y={toY - 4} width={2} height={8} fill="#2970FF" />
+      <rect x={fromX} y={fromY - 1} width={4} height={2} fill="#2970FF" />
+      <rect x={toX - 4} y={toY - 1} width={4} height={2} fill="#2970FF" />
     </g>
   );
 };

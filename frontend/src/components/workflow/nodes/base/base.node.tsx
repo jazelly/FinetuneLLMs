@@ -68,7 +68,7 @@ const BaseNode: FC<BaseNodeProps> = ({ id, data, children, className }) => {
           <NodeTargetHandle
             id={id}
             data={data}
-            handleClassName="!-top-2.5"
+            handleClassName="!-left-2.5 !top-1/2 !-translate-y-1/2"
             handleId="target"
           />
         }
@@ -76,7 +76,7 @@ const BaseNode: FC<BaseNodeProps> = ({ id, data, children, className }) => {
           <NodeSourceHandle
             id={id}
             data={data}
-            handleClassName="!-bottom-[11px]"
+            handleClassName="!-right-2.5 !top-1/2 !-translate-y-1/2"
             handleId="source"
           />
         )}

@@ -31,10 +31,10 @@ const CustomEdge = ({
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX: sourceX,
     sourceY: sourceY,
-    sourcePosition: Position.Bottom,
+    sourcePosition: Position.Right,
     targetX: targetX,
     targetY: targetY,
-    targetPosition: Position.Top,
+    targetPosition: Position.Left,
     curvature: 0.16,
   });
   const [open, setOpen] = useState(false);
@@ -79,7 +79,32 @@ const CustomEdge = ({
               ? '#2970FF'
               : '#D0D5DD',
           strokeWidth: 2,
+          strokeLinecap: 'round',
         }}
+      />
+      {/* Source node connection indicator */}
+      <rect
+        x={sourceX}
+        y={sourceY - 1}
+        width={4}
+        height={2}
+        fill={
+          selected || data?._connectedNodeIsHovering || data?._runned
+            ? '#2970FF'
+            : '#D0D5DD'
+        }
+      />
+      {/* Target node connection indicator */}
+      <rect
+        x={targetX - 4}
+        y={targetY - 1}
+        width={4}
+        height={2}
+        fill={
+          selected || data?._connectedNodeIsHovering || data?._runned
+            ? '#2970FF'
+            : '#D0D5DD'
+        }
       />
       <EdgeLabelRenderer>
         <div

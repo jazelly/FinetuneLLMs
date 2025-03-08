@@ -248,7 +248,7 @@ export const getLayoutByDagre = (
   const nodes = cloneDeep(originNodes).filter((node) => !node.parentId);
   const edges = cloneDeep(originEdges);
   dagreGraph.setGraph({
-    rankdir: 'TB',
+    rankdir: 'LR',
     align: 'UL',
     nodesep: 40,
     ranksep: 60,
