@@ -32,12 +32,12 @@ const NodeControl: FC<NodeControlProps> = ({ id, data }) => {
       `}
     >
       <div
-        className="flex items-center px-0.5 h-6 bg-white rounded-lg border-[0.5px] border-gray-100 shadow-xs text-gray-500"
+        className="flex items-center px-0.5 h-6 bg-white rounded-lg border-[0.5px] border-gray-200 shadow-xs text-gray-600"
         onClick={(e) => e.stopPropagation()}
       >
         {canRunBySingle(data.type) && (
           <div
-            className="flex items-center justify-center w-5 h-5 rounded-md cursor-pointer hover:bg-black/5"
+            className="flex items-center justify-center w-5 h-5 rounded-md cursor-pointer hover:bg-gray-100"
             onClick={() => {
               handleNodeSelect(id);
               handleSyncWorkflowDraft(true);

@@ -53,12 +53,12 @@ const PanelOperator = ({
         <div
           className={`
             flex items-center justify-center w-6 h-6 rounded-md cursor-pointer
-            hover:bg-black/5
-            ${open && 'bg-black/5'}
+            hover:bg-gray-100
+            ${open && 'bg-gray-100'}
             ${triggerClassName}
           `}
         >
-          <DotsThreeOutline color="gray" />
+          <DotsThreeOutline color="#6B7280" />
         </div>
       </PortalToFollowElemTrigger>
       <PortalToFollowElemContent className="z-[11]">

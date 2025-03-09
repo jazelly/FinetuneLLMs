@@ -49,7 +49,7 @@ const PanelOperatorPopup = ({
   const showChangeBlock = data.type !== BlockEnum.Start && !nodesReadOnly;
 
   return (
-    <div className="w-[240px] border-[0.5px] border-gray-200 rounded-lg shadow-xl bg-white">
+    <div className="w-[240px] border-[0.5px] border-gray-200 rounded-lg shadow-xl bg-white text-gray-800">
       {(showChangeBlock || canRunBySingle(data.type)) && (
         <>
           <div className="p-1">

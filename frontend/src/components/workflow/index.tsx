@@ -96,6 +96,16 @@ const Workflow: FC<WorkflowProps> = memo(
         const nodesWithSameType = nodes.filter(
           (node) => node.data.type === type
         );
+
+        // Get the workflow container's bounding rect
+        const containerRect =
+          workflowContainerRef.current?.getBoundingClientRect();
+        if (!containerRect) return;
+
+        // Calculate the position relative to the workflow container
+        const relativeX = dropPosition.x - containerRect.left;
+        const relativeY = dropPosition.y - containerRect.top;
+
         const newNode = generateNewNode({
           data: {
             ...NODES_INITIAL_DATA[type],
@@ -106,23 +116,28 @@ const Workflow: FC<WorkflowProps> = memo(
             _isCandidate: true,
           } as any,
           position: {
-            x: dropPosition.x,
-            y: dropPosition.y,
+            x: relativeX,
+            y: relativeY,
           },
         });
 
         const { screenToFlowPosition } = reactflow;
         const { x, y } = screenToFlowPosition({
-          x: dropPosition.x,
-          y: dropPosition.y,
+          x: relativeX,
+          y: relativeY,
         });
+
+        // Adjust for node width and height to center the node at the cursor
+        const nodeWidth = 240; // Default node width
+        const nodeHeight = 100; // Approximate node height
+
         const newNodes = produce(nodes, (draft) => {
           draft.push({
             ...newNode,
             data: newNode.data,
             position: {
-              x,
-              y,
+              x: x - nodeWidth / 2,
+              y: y - nodeHeight / 2,
             },
           });
         });
@@ -326,7 +341,7 @@ const Workflow: FC<WorkflowProps> = memo(
           selectionOnDrag={controlMode === 'pointer'}
           minZoom={0.25}
         >
-          <Background gap={[14, 14]} size={2} color="#E4E5E7" />
+          <Background gap={[14, 14]} size={2} color="#9CA3AF" />
         </ReactFlow>
       </div>
     );
@@ -342,8 +357,8 @@ const WorkflowWrap = memo(() => {
   }, [data]);
   if (!data || isLoading) {
     return (
-      <div className="flex justify-center items-center relative w-full h-full bg-[#F0F2F7]">
-        <RunningSpinner size={32} color={'black'} />
+      <div className="flex justify-center items-center relative w-full h-full bg-gray-100">
+        <RunningSpinner size={32} color={'#6366f1'} />
       </div>
     );
   }

@@ -76,7 +76,7 @@ const CustomEdge = ({
         style={{
           stroke:
             selected || data?._connectedNodeIsHovering || data?._runned
-              ? '#2970FF'
+              ? '#6366f1'
               : '#D0D5DD',
           strokeWidth: 2,
           strokeLinecap: 'round',
@@ -90,7 +90,7 @@ const CustomEdge = ({
         height={2}
         fill={
           selected || data?._connectedNodeIsHovering || data?._runned
-            ? '#2970FF'
+            ? '#6366f1'
             : '#D0D5DD'
         }
       />
@@ -102,7 +102,7 @@ const CustomEdge = ({
         height={2}
         fill={
           selected || data?._connectedNodeIsHovering || data?._runned
-            ? '#2970FF'
+            ? '#6366f1'
             : '#D0D5DD'
         }
       />

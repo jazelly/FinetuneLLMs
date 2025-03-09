@@ -22,8 +22,8 @@ const CustomConnectionLine = ({
   return (
     <g>
       <path fill="none" stroke="#D0D5DD" strokeWidth={2} d={edgePath} />
-      <rect x={fromX} y={fromY - 1} width={4} height={2} fill="#2970FF" />
-      <rect x={toX - 4} y={toY - 1} width={4} height={2} fill="#2970FF" />
+      <rect x={fromX} y={fromY - 1} width={4} height={2} fill="#6366f1" />
+      <rect x={toX - 4} y={toY - 1} width={4} height={2} fill="#6366f1" />
     </g>
   );
 };

@@ -45,28 +45,28 @@ const DragPreview = ({ type }) => {
 
 export const NodeSelector = () => {
   return (
-    <AnimatedDropdown size={30} color="#E5E7EB">
-      <div className="flex flex-col items-center pb-2 px-1 w-32 bg-white rounded-md text-black">
+    <AnimatedDropdown size={30} color="#6B7280">
+      <div className="flex flex-col items-center pb-2 px-1 w-32 bg-white rounded-md text-gray-800 shadow-md border border-gray-200">
         <TooltipPlus
           position="right"
           offset={4}
           hideArrow
-          popupClassName="!p-0 !bg-gray-25"
+          popupClassName="!p-0 !bg-white"
           popupContent={
-            <div className="flex items-center gap-1 px-2 h-6 text-xs font-medium text-gray-700 rounded-lg border-[0.5px] border-black/5">
+            <div className="flex items-center gap-1 px-2 h-6 text-xs font-medium text-gray-700 rounded-lg border-[0.5px] border-gray-200">
               Use the Dataset node to specify your input data
             </div>
           }
         >
           <DraggableNode
             type={BlockEnum.Dataset}
-            className="mt-2 flex items-center justify-between w-full cursor-pointer"
+            className="mt-2 flex items-center justify-between w-full cursor-pointer hover:bg-gray-100 p-1 rounded-md"
           >
             <div className="flex items-center">
               <Database size={22} color="#9B7280" weight="fill" />
               <span className="ml-1 text-sm">Dataset</span>
             </div>
-            <Question size={18} color={'#1b1b1f'} />
+            <Question size={18} color={'#6B7280'} />
           </DraggableNode>
         </TooltipPlus>
 
@@ -74,16 +74,16 @@ export const NodeSelector = () => {
           position="right"
           offset={4}
           hideArrow
-          popupClassName="!p-0 !bg-gray-25"
+          popupClassName="!p-0 !bg-white"
           popupContent={
-            <div className="flex items-center gap-1 px-2 h-6 text-xs font-medium text-gray-700 rounded-lg border-[0.5px] border-black/5">
+            <div className="flex items-center gap-1 px-2 h-6 text-xs font-medium text-gray-700 rounded-lg border-[0.5px] border-gray-200">
               Use the Train node to specify a model training job
             </div>
           }
         >
           <DraggableNode
             type={BlockEnum.Train}
-            className="mt-2 flex items-center justify-between w-full cursor-pointer"
+            className="mt-2 flex items-center justify-between w-full cursor-pointer hover:bg-gray-100 p-1 rounded-md"
           >
             <div className="flex items-center">
               <MathOperations
@@ -94,7 +94,7 @@ export const NodeSelector = () => {
               />
               <span className="ml-1 text-sm">Train</span>
             </div>
-            <Question size={18} />
+            <Question size={18} color={'#6B7280'} />
           </DraggableNode>
         </TooltipPlus>
       </div>

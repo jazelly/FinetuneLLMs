@@ -7,12 +7,12 @@
 }
 
 #workflow-container .react-flow__nodesselection-rect {
-  border: 1px solid #528bff;
-  background: rgba(21, 94, 239, 0.05);
+  border: 1px solid #6366f1;
+  background: rgba(99, 102, 241, 0.05);
   cursor: move;
 }
 
 #workflow-container .react-flow__selection {
-  border: 1px solid #528bff;
-  background: rgba(21, 94, 239, 0.05);
+  border: 1px solid #6366f1;
+  background: rgba(99, 102, 241, 0.05);
 }
