@@ -163,3 +163,8 @@ cython_debug/
 */package-lock.json
 checkpoint_dir/
 node_modules/
+
+# Cursor rules
+.cursorrules
+
+activate/
