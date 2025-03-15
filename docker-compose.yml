@@ -18,13 +18,17 @@ services:
     networks:
       - internal_network
 
-  frontend:
+  app:
     build:
-      context: ./frontend
-    container_name: frontend
-    image: frontend
+      context: ./app
+    container_name: vertile-app
+    image: app
     ports:
-      - "8080:80"
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: ./app
+        target: /app
 
   trainer:
     build:
@@ -37,24 +41,6 @@ services:
     ports:
       - "8000:8000"
     image: trainer
-    networks:
-      - internal_network
-
-  server:
-    depends_on:
-      - database
-    build:
-      context: ./server
-    container_name: server
-    environment:
-      DATABASE_URL: postgres://postgres:mysecretpassword@database:5432/main
-    volumes:
-      - type: bind
-        source: ./server
-        target: /server
-    ports:
-      - "3001:3001"
-    image: server
     networks:
       - internal_network
 volumes:
