@@ -16,14 +16,12 @@ import {
   Database,
   Brain,
 } from '@phosphor-icons/react';
+import { ModelNode } from './types';
 
 export interface ModelNodeType extends CommonNodeType {
   modelName: string;
 }
 
-export interface ModelNodeProps extends NodeProps {
-  data: ModelNodeType;
-}
 
 export const ModelDefault: NodeDefault<ModelNodeType> = {
   defaultValue: {},
@@ -41,7 +39,7 @@ export const ModelDefault: NodeDefault<ModelNodeType> = {
   },
 };
 
-const ModelNode: FC<ModelNodeProps> = ({ data }) => {
+const ModelNodeImpl: FC<ModelNode> = (data) => {
   const { t } = useTranslation();
 
   return (
@@ -75,4 +73,4 @@ const ModelNode: FC<ModelNodeProps> = ({ data }) => {
   );
 };
 
-export default ModelNode;
+export default ModelNodeImpl;

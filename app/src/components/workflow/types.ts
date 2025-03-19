@@ -157,8 +157,6 @@ export type CommonNodeType = {
   _showAddVariablePopup?: boolean;
   _holdAddVariablePopup?: boolean;
   selected?: boolean;
-  inputTypes: IOType[];
-  outputTypes: IOType[];
 }
 
 export type CommonEdgeType = {

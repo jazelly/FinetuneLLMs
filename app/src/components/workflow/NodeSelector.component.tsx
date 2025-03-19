@@ -13,11 +13,15 @@ import { AnimatedDropdown } from '../reusable/AnimatedDropdown.component';
 import { DragPreviewImage, useDrag, useDragLayer } from 'react-dnd';
 import { BlockEnum } from './types';
 import { WorkflowContext } from './context';
+import { useReactFlow } from 'reactflow';
+import { NODE_WIDTH } from './constants';
 
 // Simplified DraggableNode component that uses HTML5 drag and drop API
 const DraggableNode = ({ type, children, className }) => {
+  const { getZoom } = useReactFlow();
+  
   // Handle drag start event
-  const handleDragStart = (e) => {
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     // Set the data that will be used when dropping
     e.dataTransfer.setData('nodeType', type);
     e.dataTransfer.effectAllowed = 'move';
@@ -27,6 +31,13 @@ const DraggableNode = ({ type, children, className }) => {
     const iconHTML = iconElement ? iconElement.outerHTML : '';
     const nodeLabel = e.currentTarget.querySelector('span')?.textContent || type;
     
+    // Get current zoom level
+    const zoom = getZoom();
+    
+    // Base dimensions
+    const baseWidth = NODE_WIDTH;
+    const baseHeight = 100;
+    const baseFontSize = 14;
     // Create a ghost image for dragging
     const ghostElement = document.createElement('div');
     ghostElement.classList.add('flex', 'items-center', 'gap-2', 'bg-indigo-100', 'p-2', 'rounded', 'border', 'border-indigo-300');
@@ -38,9 +49,16 @@ const DraggableNode = ({ type, children, className }) => {
     `;
     ghostElement.style.position = 'absolute';
     ghostElement.style.top = '-1000px';
+    
+    // Set the ghost element size and scale it according to zoom
+    ghostElement.style.width = `${baseWidth * zoom}px`;
+    ghostElement.style.height = `${baseHeight * zoom}px`;
+    // help me set span font size according to zoom
+    const spanElement = ghostElement.querySelector('span');
+    spanElement!.style.fontSize = `${Math.floor(baseFontSize * zoom)}px`;
     document.body.appendChild(ghostElement);
     
-    e.dataTransfer.setDragImage(ghostElement, 20, 20);
+    e.dataTransfer.setDragImage(ghostElement, 0, 0);
     
     // Remove the ghost element after a short delay
     setTimeout(() => {

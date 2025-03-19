@@ -7,22 +7,17 @@ import {
   type NodeDefault,
 } from '@/src/components/workflow/types';
 
-import type { NodeProps } from '@/src/components/workflow/types';
 import { ALL_COMPLETION_AVAILABLE_BLOCKS } from '../../constants';
 import {
-  PlayCircle,
   SpinnerGap,
   CheckCircle,
   Warning,
   Database,
 } from '@phosphor-icons/react';
+import { DatasetNode } from './types';
 
 export interface DatasetNodeType extends CommonNodeType {
   datasetName: string;
-}
-
-export interface DatasetNodeProps extends NodeProps {
-  data: DatasetNodeType;
 }
 
 export const DatasetDefault: NodeDefault<DatasetNodeType> = {
@@ -41,9 +36,7 @@ export const DatasetDefault: NodeDefault<DatasetNodeType> = {
   },
 };
 
-const DatasetNode: FC<DatasetNodeProps> = ({ data }) => {
-  const { t } = useTranslation();
-
+const DatasetNodeImpl: FC<DatasetNode> = (data) => {
   return (
     <div className="flex flex-col space-y-0.5 mb-1 px-3 py-1 w-full text-neutral-900">
       <div
@@ -75,4 +68,4 @@ const DatasetNode: FC<DatasetNodeProps> = ({ data }) => {
   );
 };
 
-export default DatasetNode;
+export default DatasetNodeImpl;

@@ -19,9 +19,7 @@ import {
 import { NodeRunningStatus } from '../../types';
 const i18nPrefix = 'workflow.nodes.ifElse';
 
-const IfElseNode: FC<NodeProps<IfElseNodeType>> = (props) => {
-  const { data } = props;
-  const { t } = useTranslation();
+const IfElseNodeImpl: FC<IfElseNodeType> = (data) => {
   const { conditions, logical_operator } = data;
 
   return (
@@ -54,7 +52,8 @@ const IfElseNode: FC<NodeProps<IfElseNodeType>> = (props) => {
           IF
         </div>
         <NodeSourceHandle
-          {...props}
+          id={data.id}
+          data={data}
           handleId="true"
           handleClassName="!-right-2.5 !top-1/2 !-translate-y-1/2"
         />
@@ -71,13 +70,7 @@ const IfElseNode: FC<NodeProps<IfElseNodeType>> = (props) => {
                 <TestTube className="w-3.5 h-3.5 text-primary-500" />
                 <span>{condition.variable_selector.slice(-1)[0]}</span>
                 <span className="text-gray-500">
-                  {isComparisonOperatorNeedTranslate(
-                    condition.comparison_operator
-                  )
-                    ? t(
-                        `${i18nPrefix}.comparisonOperator.${condition.comparison_operator}`
-                      )
-                    : condition.comparison_operator}
+                  {condition.comparison_operator}
                 </span>
                 {!isEmptyRelatedOperator(condition.comparison_operator!) && (
                   <span>{condition.value}</span>
@@ -85,12 +78,12 @@ const IfElseNode: FC<NodeProps<IfElseNodeType>> = (props) => {
               </div>
             ) : (
               <div className="flex items-center h-6 px-1 space-x-1 text-xs font-normal text-gray-500 bg-gray-100 rounded-md">
-                {t(`${i18nPrefix}.conditionNotSetup`)}
+                conditionNotSetup
               </div>
             )}
             {i !== conditions.length - 1 && (
               <div className="absolute z-10 right-0 bottom-[-10px] leading-4 text-[10px] font-medium text-primary-600 uppercase">
-                {t(`${i18nPrefix}.${logical_operator}`)}
+                Logical Operator
               </div>
             )}
           </div>
@@ -101,7 +94,8 @@ const IfElseNode: FC<NodeProps<IfElseNodeType>> = (props) => {
           ELSE
         </div>
         <NodeSourceHandle
-          {...props}
+          id={data.id}
+          data={data}
           handleId="false"
           handleClassName="!-right-2.5 !top-1/2 !-translate-y-1/2"
         />
@@ -110,4 +104,4 @@ const IfElseNode: FC<NodeProps<IfElseNodeType>> = (props) => {
   );
 };
 
-export default React.memo(IfElseNode);
+export default React.memo(IfElseNodeImpl);

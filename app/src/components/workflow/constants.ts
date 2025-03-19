@@ -26,6 +26,7 @@ export const NodeInputTypesReverse: Record<IOType, BlockEnum[]> = {
   [IOType.text]: [BlockEnum.Prompt, BlockEnum.Model],
   [IOType.kv]: [BlockEnum.Prompt],
   [IOType.file]: [],
+  [IOType.md]: [BlockEnum.Model],
 };
 
 // This k-v map means, these v nodes can output k.
@@ -34,6 +35,7 @@ export const NodeOutputTypesReverse: Record<IOType, BlockEnum[]> = {
   [IOType.text]: [BlockEnum.Prompt],
   [IOType.kv]: [BlockEnum.Prompt, BlockEnum.Model],
   [IOType.file]: [BlockEnum.Dataset],
+  [IOType.md]: [BlockEnum.Dataset],
 };
 
 export const NODES_EXTRA_DATA: Record<BlockEnum, NodesExtraData> = {
@@ -134,6 +136,7 @@ export const NODES_INITIAL_DATA = {
 };
 
 export const NODE_WIDTH = 240;
+// Node's height is not certain
 export const X_OFFSET = 60;
 export const NODE_WIDTH_X_OFFSET = NODE_WIDTH + X_OFFSET;
 export const Y_OFFSET = 39;

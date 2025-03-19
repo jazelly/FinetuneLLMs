@@ -1,5 +1,5 @@
 import type {
-  CommonNodeType,
+  GraphNode,
   ValueSelector,
 } from '@/src/components/workflow/types';
 
@@ -34,7 +34,7 @@ export type Condition = {
   value: string;
 };
 
-export type IfElseNodeType = CommonNodeType & {
+export interface IfElseNodeType extends GraphNode {
   logical_operator: LogicalOperator;
   conditions: Condition[];
 };

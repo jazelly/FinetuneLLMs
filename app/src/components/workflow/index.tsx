@@ -40,6 +40,7 @@ import {
 } from './utils';
 import {
   ITERATION_CHILDREN_Z_INDEX,
+  NODE_WIDTH,
   NODES_INITIAL_DATA,
   WORKFLOW_DATA_UPDATE,
 } from './constants';
@@ -56,6 +57,7 @@ import { useRouter } from 'next/navigation';
 
 // Import test fixture data
 import { initialNodes, initialEdges } from '../../../test/fixture/workflow-nodes';
+import { HEADER_HEIGHT, SIDEBAR_WIDTH } from '@/src/utils/constants';
 
 const nodeTypes: Record<CustomNodeType, React.FC> = {
   custom: CustomNode,
@@ -89,13 +91,14 @@ const Workflow: FC<WorkflowProps> = memo(
       );
 
       // Get the workflow container's bounding rect
-      const containerRect =
-        workflowContainerRef.current?.getBoundingClientRect();
+      const containerRect = workflowContainerRef.current?.getBoundingClientRect();
       if (!containerRect) return;
 
+      console.log('drop position', position.x, position.y);
+
       // Calculate the position relative to the workflow container
-      const relativeX = position.x - containerRect.left;
-      const relativeY = position.y - containerRect.top;
+      const relativeX = position.x;
+      const relativeY = position.y;
 
       const newNode = generateNewNode({
         data: {
@@ -112,23 +115,30 @@ const Workflow: FC<WorkflowProps> = memo(
         },
       });
 
-      const { screenToFlowPosition } = reactflow;
+      const { screenToFlowPosition, getZoom } = reactflow;
+      const zoom = getZoom();
+      
+      // This handles sidebar and header offset
       const { x, y } = screenToFlowPosition({
         x: relativeX,
         y: relativeY,
       });
 
-      // Adjust for node width and height to center the node at the cursor
-      const nodeWidth = 240; // Default node width
-      const nodeHeight = 100; // Approximate node height
+      // Base dimensions
+      const nodeHeight = 100;
+
+      // Calculate offset based on the inverse scale to maintain proper centering
+      const scale = 1 / zoom;
+      const offsetX = (NODE_WIDTH * scale) / 2;
+      const offsetY = (nodeHeight * scale) / 2;
 
       const newNodes = produce(nodes, (draft) => {
         draft.push({
           ...newNode,
           data: newNode.data,
           position: {
-            x: x - nodeWidth / 2,
-            y: y - nodeHeight / 2,
+            x: x,
+            y: y ,
           },
         });
       });

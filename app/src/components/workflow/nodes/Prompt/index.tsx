@@ -50,8 +50,6 @@ export const PromptDefault: NodeDefault<PromptNodeType> = {
 };
 
 const PromptNodeImpl: FC<PromptNodeType> = (data) => {
-  const { t } = useTranslation();
-
   return (
     <div className="flex flex-col space-y-0.5 mb-1 px-3 py-1 w-full text-neutral-900">
       <div

@@ -7,7 +7,6 @@ import {
   type NodeDefault,
 } from '@/src/components/workflow/types';
 
-import type { NodeProps } from '@/src/components/workflow/types';
 import { ALL_COMPLETION_AVAILABLE_BLOCKS } from '../../constants';
 import {
   SpinnerGap,
@@ -16,13 +15,10 @@ import {
   Database,
   MathOperations,
 } from '@phosphor-icons/react';
+import { TrainNode } from './types';
 
 export interface TrainNodeType extends CommonNodeType {
   trainingMethod: string;
-}
-
-export interface TrainNodeProps extends NodeProps {
-  data: TrainNodeType;
 }
 
 export const TrainDefault: NodeDefault<TrainNodeType> = {
@@ -41,9 +37,7 @@ export const TrainDefault: NodeDefault<TrainNodeType> = {
   },
 };
 
-const TrainNode: FC<TrainNodeProps> = ({ data }) => {
-  const { t } = useTranslation();
-
+const TrainNodeImpl: FC<TrainNode> = (data) => {
   return (
     <div className="flex flex-col space-y-0.5 mb-1 px-3 py-1 w-full text-neutral-900">
       <div
@@ -75,4 +69,4 @@ const TrainNode: FC<TrainNodeProps> = ({ data }) => {
   );
 };
 
-export default TrainNode;
+export default TrainNodeImpl;
