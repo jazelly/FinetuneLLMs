@@ -1,48 +1,28 @@
-name: vertile
-
-networks:
-  internal_network:
-    driver: bridge
 services:
-  database:
-    image: postgres
-    container_name: database
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_DB: main
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    networks:
-      - internal_network
-
-  app:
+  core:
     build:
-      context: ./app
-    container_name: vertile-app
-    image: app
+      context: .
+      dockerfile: ./core/Dockerfile
+    restart: always
     ports:
       - "3000:3000"
-    volumes:
-      - type: bind
-        source: ./app
-        target: /app
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/vertile?schema=public
+    depends_on:
+      - db
 
-  trainer:
-    build:
-      context: ./trainer
-    container_name: trainer
-    volumes:
-      - type: bind
-        source: ./trainer
-        target: /trainer
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=vertile
     ports:
-      - "8000:8000"
-    image: trainer
-    networks:
-      - internal_network
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
 volumes:
-  db-data:
-    
+  postgres_data:
+    driver: local
