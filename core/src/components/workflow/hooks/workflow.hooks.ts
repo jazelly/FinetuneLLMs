@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import { Workflow, WorkflowNode, WorkflowEdge } from '@prisma/client';
 
 type WorkflowWithRelations = Workflow & {
@@ -132,5 +132,57 @@ export function useWorkflow() {
     createWorkflow,
     updateWorkflow,
     deleteWorkflow,
+  };
+}
+
+// Hook for automatic workflow saving
+export function useAutoSaveWorkflow(workflowId: string) {
+  const { updateWorkflow } = useWorkflow();
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const workflowDataRef = useRef<any>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Function to trigger a save
+  const saveWorkflow = useCallback((data: any) => {
+    if (!workflowId) return;
+    
+    // Store the latest data
+    workflowDataRef.current = data;
+    
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
+    // Set a new timeout to save after delay
+    timeoutRef.current = setTimeout(async () => {
+      if (!workflowDataRef.current) return;
+      
+      try {
+        setSaveStatus('saving');
+        await updateWorkflow(workflowId, workflowDataRef.current);
+        setLastSaved(new Date());
+        setSaveStatus('saved');
+      } catch (err) {
+        console.error('Error saving workflow:', err);
+        setSaveStatus('error');
+      }
+    }, 2000); // 2 second delay before saving
+  }, [workflowId, updateWorkflow]);
+
+  // Clean up on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  return {
+    saveStatus,
+    lastSaved,
+    saveWorkflow,
   };
 }

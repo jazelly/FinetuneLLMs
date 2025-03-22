@@ -70,10 +70,13 @@ interface WorkflowProps {
   nodes: Node<AllNodeTypes>[];
   edges: Edge[];
   viewport?: Viewport;
+  workflowId?: string;
+  initialData?: any;
+  onWorkflowChange?: (data: any) => void;
 }
 
 const Workflow: FC<WorkflowProps> = memo(
-  ({ nodes: originalNodes, edges: originalEdges, viewport }) => {
+  ({ nodes: originalNodes, edges: originalEdges, viewport, workflowId, initialData, onWorkflowChange }) => {
     const workflowContainerRef = useRef<HTMLDivElement>(null);
     const workflowStore = useContext(WorkflowContext)!;
     const controlMode = useStore((s) => s.controlMode);
@@ -81,6 +84,81 @@ const Workflow: FC<WorkflowProps> = memo(
     const { nodesReadOnly } = useNodesReadOnly();
     const store = useStoreApi();
     const reactflow = useReactFlow();
+
+    // Track if we need to send an update
+    const shouldUpdateRef = useRef(false);
+
+    // Handle delayed update to backend
+    useEffect(() => {
+      if (!onWorkflowChange || !initialData) return;
+
+      // Function to send workflow data to parent
+      const sendUpdate = () => {
+        const { getNodes } = store.getState();
+        const currentNodes = getNodes();
+        const { edges: currentEdges } = store.getState();
+        const { getViewport } = reactflow;
+        const currentViewport = getViewport();
+        
+        const workflowData = {
+          ...initialData,
+          zoom: currentViewport.zoom,
+          nodes: currentNodes.map(node => ({
+            id: node.id.includes('-') ? undefined : node.id,
+            nodeId: node.id,
+            type: node.data.type,
+            positionX: node.position.x,
+            positionY: node.position.y,
+            data: node.data,
+          })),
+          edges: currentEdges.map(edge => ({
+            id: edge.id.includes('-') ? undefined : edge.id,
+            sourceNodeId: edge.source,
+            targetNodeId: edge.target,
+          })),
+        };
+        
+        onWorkflowChange(workflowData);
+        shouldUpdateRef.current = false;
+      };
+      
+      // Check for updates every 2 seconds if changes detected
+      const interval = setInterval(() => {
+        if (shouldUpdateRef.current) {
+          sendUpdate();
+        }
+      }, 2000);
+      
+      return () => clearInterval(interval);
+    }, [store, reactflow, initialData, onWorkflowChange]);
+
+    // Patch the handlers to trigger updates
+    const originalHandleNodeDragStop = handleNodeDragStop;
+    const patchedHandleNodeDragStop = useCallback((...args) => {
+      if (originalHandleNodeDragStop) {
+        originalHandleNodeDragStop(...args);
+      }
+      shouldUpdateRef.current = true;
+    }, [originalHandleNodeDragStop]);
+    handleNodeDragStop = patchedHandleNodeDragStop;
+    
+    const originalHandleNodeConnect = handleNodeConnect;
+    const patchedHandleNodeConnect = useCallback((...args) => {
+      if (originalHandleNodeConnect) {
+        originalHandleNodeConnect(...args);
+      }
+      shouldUpdateRef.current = true;
+    }, [originalHandleNodeConnect]);
+    handleNodeConnect = patchedHandleNodeConnect;
+    
+    const originalHandleEdgesChange = handleEdgesChange;
+    const patchedHandleEdgesChange = useCallback((...args) => {
+      if (originalHandleEdgesChange) {
+        originalHandleEdgesChange(...args);
+      }
+      shouldUpdateRef.current = true;
+    }, [originalHandleEdgesChange]);
+    handleEdgesChange = patchedHandleEdgesChange;
 
     // Handle DnD for node creation
     const handleNodeDrop = useCallback((type: BlockEnum, position: { x: number, y: number }) => {
@@ -197,24 +275,15 @@ const Workflow: FC<WorkflowProps> = memo(
     const {
       handleNodeDragStart,
       handleNodeDrag,
-      handleNodeDragStop,
       handleNodeEnter,
       handleNodeLeave,
       handleNodeClick,
-      handleNodeConnect,
-      handleNodeConnectStart,
-      handleNodeConnectEnd,
       handleNodeContextMenu,
-      handleNodesCopy,
-      handleNodesPaste,
-      handleNodesDuplicate,
-      handleNodesDelete,
     } = useNodesInteractions();
     const {
       handleEdgeEnter,
       handleEdgeLeave,
       handleEdgeDelete,
-      handleEdgesChange,
     } = useEdgesInteractions();
     const { handleSelectionStart, handleSelectionChange, handleSelectionDrag } =
       useSelectionInteractions();
@@ -225,8 +294,7 @@ const Workflow: FC<WorkflowProps> = memo(
       onEnd: () => {},
     });
 
-    useKeyPress('delete', handleNodesDelete);
-    useKeyPress(['delete', 'backspace'], handleEdgeDelete);
+    useKeyPress('delete', handleEdgeDelete);
     useKeyPress(`${getKeyboardKeyCodeBySystem('ctrl')}.c`, handleNodesCopy, {
       exactMatch: true,
       useCapture: true,
@@ -248,6 +316,43 @@ const Workflow: FC<WorkflowProps> = memo(
     const handleRunAll = () => {
       const jobId = v4();
     };
+
+    // Load initial data when available
+    useEffect(() => {
+      if (initialData?.nodes && initialData?.edges) {
+        try {
+          // Convert backend data to ReactFlow format
+          const flowNodes = initialData.nodes.map(node => ({
+            id: node.nodeId,
+            type: 'custom',
+            position: { x: node.positionX, y: node.positionY },
+            data: { ...node.data, type: node.type },
+          }));
+          
+          const flowEdges = initialData.edges.map(edge => ({
+            id: edge.id || `${edge.sourceNodeId}-${edge.targetNodeId}`,
+            source: edge.sourceNodeId,
+            target: edge.targetNodeId,
+            type: 'custom',
+          }));
+          
+          // Set nodes and edges
+          setNodes(flowNodes);
+          setEdges(flowEdges);
+          
+          // Set viewport if available
+          if (initialData.zoom) {
+            setViewport({
+              x: 0,
+              y: 0,
+              zoom: initialData.zoom || 1,
+            });
+          }
+        } catch (err) {
+          console.error('Error loading workflow data:', err);
+        }
+      }
+    }, [initialData, setNodes, setEdges, setViewport]);
 
     return (
       <div
@@ -326,8 +431,6 @@ const Workflow: FC<WorkflowProps> = memo(
           onNodeClick={handleNodeClick}
           onNodeContextMenu={handleNodeContextMenu}
           onConnect={handleNodeConnect}
-          onConnectStart={handleNodeConnectStart}
-          onConnectEnd={handleNodeConnectEnd}
           onEdgeMouseEnter={handleEdgeEnter}
           onEdgeMouseLeave={handleEdgeLeave}
           onEdgesChange={handleEdgesChange}

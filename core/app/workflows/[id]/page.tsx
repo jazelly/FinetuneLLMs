@@ -1,9 +1,13 @@
 'use client';
 
 import React, { useEffect, useRef, useState, createContext, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 import { WorkflowReactFlowProvider } from '@/src/components/workflow';
 import WorkflowContainer from '@/src/components/workflow';
 import ConfiguredNodePanel from '@/src/components/workflow/NodePanelWrapper';
+import { useWorkflow, useAutoSaveWorkflow } from '@/src/components/workflow/hooks/workflow.hooks';
+import { formatDistanceToNow } from 'date-fns';
+import { FloppyDisk } from '@phosphor-icons/react';
 
 // Create context to share selected node state across components
 export const SelectedNodeContext = createContext({
@@ -12,9 +16,16 @@ export const SelectedNodeContext = createContext({
 });
 
 const WorkflowPage = () => {
+  const params = useParams();
+  const workflowId = params?.id as string;
+  const { fetchWorkflow } = useWorkflow();
+  const { saveStatus, lastSaved, saveWorkflow } = useAutoSaveWorkflow(workflowId);
   const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  
+  // State for workflow data
+  const [workflowData, setWorkflowData] = useState<any>(null);
   
   // State to track the selected node
   const [selectedNode, setSelectedNode] = useState(null);
@@ -27,6 +38,30 @@ const WorkflowPage = () => {
     width: typeof window !== 'undefined' ? window.innerWidth : 1200,
     height: typeof window !== 'undefined' ? window.innerHeight : 800,
   });
+
+  // Load workflow data
+  useEffect(() => {
+    const loadWorkflow = async () => {
+      if (workflowId) {
+        try {
+          const data = await fetchWorkflow(workflowId);
+          if (data) {
+            setWorkflowData(data);
+          }
+        } catch (err) {
+          console.error('Error loading workflow:', err);
+          setError('Failed to load workflow');
+        }
+      }
+    };
+
+    loadWorkflow();
+  }, [workflowId, fetchWorkflow]);
+
+  // Function to handle workflow changes
+  const handleWorkflowChange = useCallback((data) => {
+    saveWorkflow(data);
+  }, [saveWorkflow]);
 
   // Update window dimensions on client side
   useEffect(() => {
@@ -81,24 +116,42 @@ const WorkflowPage = () => {
     }
   }, [selectedNode]);
 
-  // Expose the context to the window for access from other components
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      (window as any).selectedNodeContext = { selectedNode, setSelectedNode };
-
-      return () => {
-        delete (window as any).selectedNodeContext;
-      };
-    }
-  }, [selectedNode, setSelectedNode]);
+  // Format last saved time
+  const formattedLastSaved = lastSaved
+    ? formatDistanceToNow(lastSaved, { addSuffix: true })
+    : null;
 
   return (
     <SelectedNodeContext.Provider value={{ selectedNode, setSelectedNode }}>
       <div className="relative w-full h-screen bg-gray-50">
+        {/* Status indicator */}
+        <div className="absolute top-4 left-4 z-20 bg-white rounded-lg shadow-sm px-4 py-2 flex items-center gap-2 text-sm">
+          <FloppyDisk size={18} weight="fill" className={`
+            ${saveStatus === 'saving' ? 'text-yellow-500 animate-pulse' : ''}
+            ${saveStatus === 'saved' ? 'text-green-500' : ''}
+            ${saveStatus === 'error' ? 'text-red-500' : ''}
+            ${saveStatus === 'idle' ? 'text-gray-400' : ''}
+          `} />
+          <span>
+            {saveStatus === 'saving' && 'Saving...'}
+            {saveStatus === 'saved' && formattedLastSaved ? `Saved ${formattedLastSaved}` : 'Ready to save'}
+            {saveStatus === 'error' && 'Failed to save'}
+            {saveStatus === 'idle' && 'No changes'}
+          </span>
+        </div>
+
         {/* Main workflow area - full width and height */}
         <div className="w-full h-full">
           <WorkflowReactFlowProvider>
-            <WorkflowContainer />
+            {workflowData && (
+              <WorkflowContainer 
+                nodes={[]}
+                edges={[]}
+                workflowId={workflowId}
+                initialData={workflowData}
+                onWorkflowChange={handleWorkflowChange}
+              />
+            )}
           </WorkflowReactFlowProvider>
         </div>
         
