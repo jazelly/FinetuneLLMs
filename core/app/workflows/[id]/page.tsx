@@ -1,149 +1,140 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useWorkflow } from '@/src/components/workflow/hooks/workflow.hooks';
+import React, { useEffect, useRef, useState, createContext, useCallback } from 'react';
 import { WorkflowReactFlowProvider } from '@/src/components/workflow';
-import { ReactFlow, Background } from 'reactflow';
-import 'reactflow/dist/style.css';
+import WorkflowContainer from '@/src/components/workflow';
+import ConfiguredNodePanel from '@/src/components/workflow/NodePanelWrapper';
 
-export default function WorkflowDetailPage({ params }: { params: { id: string } }) {
-  const router = useRouter();
-  const { loading, error, fetchWorkflow, deleteWorkflow } = useWorkflow();
-  const [isLoading, setIsLoading] = useState(true);
-  const [workflowData, setWorkflowData] = useState<any>(null);
+// Create context to share selected node state across components
+export const SelectedNodeContext = createContext({
+  selectedNode: null,
+  setSelectedNode: (node: any) => {},
+});
 
+const WorkflowPage = () => {
+  const [error, setError] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  
+  // State to track the selected node
+  const [selectedNode, setSelectedNode] = useState(null);
+  
+  // State to track if the panel is open
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  // Use state for window dimensions with initial values
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    height: typeof window !== 'undefined' ? window.innerHeight : 800,
+  });
+
+  // Update window dimensions on client side
   useEffect(() => {
-    async function loadWorkflow() {
-      setIsLoading(true);
-      try {
-        const data = await fetchWorkflow(params.id);
-        if (data) {
-          setWorkflowData(data);
-        } else {
-          // If workflow not found, redirect to workflows list
-          router.push('/workflows');
-        }
-      } catch (err) {
-        console.error('Error loading workflow:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setWindowDimensions({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
+      };
 
-    loadWorkflow();
-  }, [params.id, fetchWorkflow, router]);
+      // Set initial dimensions
+      handleResize();
 
-  const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this workflow?')) {
-      const success = await deleteWorkflow(params.id);
-      if (success) {
-        router.push('/workflows');
-      }
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
     }
+  }, []);
+  
+  // Calculate panel width
+  const panelWidth = 320;
+  
+  // Handle panel close
+  const handlePanelClose = () => {
+    setIsPanelOpen(false);
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
-      </div>
-    );
-  }
+  // Handle click away from panel
+  const handleClickAway = useCallback((e: MouseEvent) => {
+    if (isPanelOpen && panelRef.current && !panelRef.current.contains(e.target as Node)) {
+      handlePanelClose();
+    }
+  }, [isPanelOpen]);
+  
+  // Set up click away listener
+  useEffect(() => {
+    if (isPanelOpen) {
+      document.addEventListener('mousedown', handleClickAway);
+    } else {
+      document.removeEventListener('mousedown', handleClickAway);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickAway);
+    };
+  }, [isPanelOpen, handleClickAway]);
+  
+  // When a node is selected, open the panel
+  useEffect(() => {
+    if (selectedNode) {
+      setIsPanelOpen(true);
+    }
+  }, [selectedNode]);
 
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
-          <p className="font-bold">Error</p>
-          <p>{error}</p>
-          <button 
-            onClick={() => router.push('/workflows')}
-            className="mt-4 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-          >
-            Back to Workflows
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // Expose the context to the window for access from other components
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).selectedNodeContext = { selectedNode, setSelectedNode };
 
-  if (!workflowData) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
-          <p className="font-bold">Workflow not found</p>
-          <p>The requested workflow could not be found.</p>
-          <button 
-            onClick={() => router.push('/workflows')}
-            className="mt-4 bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded"
-          >
-            Back to Workflows
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Transform Prisma data to the format expected by ReactFlow
-  const reactFlowNodes = workflowData.nodes.map((node: any) => ({
-    id: node.nodeId,
-    type: 'custom',
-    position: { x: node.positionX, y: node.positionY },
-    data: { ...node.data, type: node.type },
-  }));
-
-  const reactFlowEdges = workflowData.edges.map((edge: any) => ({
-    id: edge.id,
-    source: edge.sourceNodeId,
-    target: edge.targetNodeId,
-    type: 'custom',
-  }));
+      return () => {
+        delete (window as any).selectedNodeContext;
+      };
+    }
+  }, [selectedNode, setSelectedNode]);
 
   return (
-    <div className="h-screen flex flex-col">
-      <div className="bg-white border-b border-gray-200 p-4 flex justify-between items-center">
-        <div>
-          <h1 className="text-xl font-semibold text-gray-800">{workflowData.name}</h1>
-          {workflowData.description && (
-            <p className="text-sm text-gray-600 mt-1">{workflowData.description}</p>
-          )}
+    <SelectedNodeContext.Provider value={{ selectedNode, setSelectedNode }}>
+      <div className="relative w-full h-screen bg-gray-50">
+        {/* Main workflow area - full width and height */}
+        <div className="w-full h-full">
+          <WorkflowReactFlowProvider>
+            <WorkflowContainer />
+          </WorkflowReactFlowProvider>
         </div>
-        <div className="flex space-x-3">
-          <button
-            onClick={() => router.push(`/workflows/${params.id}/edit`)}
-            className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-50"
+        
+        {/* Floating Node configuration panel */}
+        {isPanelOpen && (
+          <div 
+            ref={panelRef}
+            className="absolute right-4 top-4 bottom-4 transition-all duration-300 ease-in-out z-10"
+            style={{ 
+              width: `${panelWidth}px`,
+              animation: 'slide-in 0.3s ease-out forwards',
+            }}
           >
-            Edit Workflow
-          </button>
-          <button
-            onClick={handleDelete}
-            className="bg-red-50 border border-red-300 text-red-700 py-2 px-4 rounded-md hover:bg-red-100"
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-      
-      <div className="flex-grow">
-        {/* Use React Flow's global context provider */}
-        <WorkflowReactFlowProvider>
-          <div className="h-full w-full">
-            {/* Directly render ReactFlow instead of WorkflowContainer to avoid prop type issues */}
-            <ReactFlow
-              nodes={reactFlowNodes}
-              edges={reactFlowEdges}
-              defaultViewport={{ x: 0, y: 0, zoom: workflowData.zoom || 1 }}
-              fitView
-              nodesDraggable={false}
-              nodesConnectable={false}
-              elementsSelectable={false}
-            >
-              <Background gap={12} size={1} color="#f1f1f1" />
-            </ReactFlow>
+            <ConfiguredNodePanel 
+              width={panelWidth} 
+              onClose={handlePanelClose} 
+            />
           </div>
-        </WorkflowReactFlowProvider>
+        )}
+
+        {/* Add CSS animation for panel */}
+        <style jsx>{`
+          @keyframes slide-in {
+            0% {
+              transform: translateX(100%);
+              opacity: 0;
+            }
+            100% {
+              transform: translateX(0);
+              opacity: 1;
+            }
+          }
+        `}</style>
       </div>
-    </div>
+    </SelectedNodeContext.Provider>
   );
-} 
+};
+
+export default WorkflowPage;

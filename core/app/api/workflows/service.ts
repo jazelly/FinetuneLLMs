@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import { Workflow, WorkflowNode, WorkflowEdge } from '@prisma/client';
-import { CreateWorkflowInput, UpdateWorkflowInput } from './workflow.validation';
+import { CreateWorkflowInput, UpdateWorkflowInput } from './validation';
 
 type WorkflowWithRelations = Workflow & {
   nodes: WorkflowNode[];

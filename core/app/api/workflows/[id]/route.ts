@@ -1,41 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { workflowService } from './workflow.service';
-import { createWorkflowSchema, updateWorkflowSchema } from './workflow.validation';
+import { workflowService } from '../service';
+import { updateWorkflowSchema } from '../validation';
 
-// GET /api/workflows - Get all workflows
-export async function GET() {
+// GET /api/workflows/[id] - Get a workflow by ID
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const workflows = await workflowService.getAllWorkflows();
-    return NextResponse.json(workflows);
-  } catch (error) {
-    console.error('Error fetching workflows:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch workflows' },
-      { status: 500 }
-    );
-  }
-}
-
-// POST /api/workflows - Create a new workflow
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
+    const workflow = await workflowService.getWorkflowById(params.id);
     
-    // Validate request body
-    const result = createWorkflowSchema.safeParse(body);
-    if (!result.success) {
+    if (!workflow) {
       return NextResponse.json(
-        { error: 'Validation error', details: result.error.format() },
-        { status: 400 }
+        { error: 'Workflow not found' },
+        { status: 404 }
       );
     }
     
-    const workflow = await workflowService.createWorkflow(result.data);
-    return NextResponse.json(workflow, { status: 201 });
+    return NextResponse.json(workflow);
   } catch (error) {
-    console.error('Error creating workflow:', error);
+    console.error(`Error fetching workflow:`, error);
     return NextResponse.json(
-      { error: 'Failed to create workflow' },
+      { error: 'Failed to fetch workflow' },
       { status: 500 }
     );
   }
@@ -84,4 +70,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-}
+} 
