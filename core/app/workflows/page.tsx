@@ -36,7 +36,7 @@ export default function WorkflowsPage() {
 
   const handleEdit = (id: string, event: React.MouseEvent) => {
     event.stopPropagation();
-    router.push(`/workflows/${id}/edit`);
+    router.push(`/workflows/${id}`);
   };
 
   const handleExport = (workflow: Workflow, event: React.MouseEvent) => {
@@ -51,12 +51,12 @@ export default function WorkflowsPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-slate-50">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">My Workflows</h1>
         <button
           onClick={() => router.push('/workflows/new')}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
         >
           <PlusCircle size={20} weight="bold" />
           <span>New Workflow</span>
@@ -65,27 +65,27 @@ export default function WorkflowsPage() {
 
       {loading && (
         <div className="flex justify-center my-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
       )}
 
       {error && (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8" role="alert">
+        <div className="bg-red-50 border-l-4 border-red-400 text-red-700 p-4 mb-8" role="alert">
           <p className="font-bold">Error</p>
           <p>{error}</p>
         </div>
       )}
 
       {!loading && workflows.length === 0 && (
-        <div className="text-center py-16 bg-gray-50 rounded-xl">
-          <div className="mx-auto w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mb-4">
-            <Circuitry size={48} color="#6B7280" weight="duotone" />
+        <div className="text-center py-16 bg-white rounded-lg shadow-sm">
+          <div className="mx-auto w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+            <Circuitry size={48} color="#3B82F6" weight="duotone" />
           </div>
           <h3 className="text-xl font-medium text-gray-800 mb-2">No workflows yet</h3>
           <p className="text-gray-600 mb-6">Create your first workflow to get started</p>
           <button
             onClick={() => router.push('/workflows/new')}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
           >
             Create Workflow
           </button>
@@ -97,13 +97,13 @@ export default function WorkflowsPage() {
           <div
             key={workflow.id}
             onClick={() => router.push(`/workflows/${workflow.id}`)}
-            className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 cursor-pointer group"
+            className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow transition-shadow duration-200 cursor-pointer group"
           >
-            <div className="h-40 bg-gradient-to-r from-indigo-500 to-purple-600 relative overflow-hidden">
-              <div className="absolute inset-0 bg-black bg-opacity-10 group-hover:bg-opacity-0 transition-all duration-200"></div>
+            <div className="h-40 bg-gradient-to-r from-sky-200 to-cyan-100 relative overflow-hidden">
+              <div className="absolute inset-0 bg-blue-50 bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200"></div>
             </div>
             <div className="p-5">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2 truncate group-hover:text-indigo-600 transition-colors duration-200">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2 truncate group-hover:text-blue-500 transition-colors duration-200">
                 {workflow.name}
               </h3>
               {workflow.description && (
@@ -116,21 +116,21 @@ export default function WorkflowsPage() {
                 <div className="flex space-x-2">
                   <button
                     onClick={(e) => handleExport(workflow, e)}
-                    className="text-gray-500 hover:text-indigo-600 p-1 rounded-full hover:bg-gray-100"
+                    className="text-gray-500 hover:text-blue-500 p-1 rounded-full hover:bg-gray-50"
                     title="Export workflow"
                   >
                     <DownloadSimple size={18} />
                   </button>
                   <button
                     onClick={(e) => handleEdit(workflow.id, e)}
-                    className="text-gray-500 hover:text-indigo-600 p-1 rounded-full hover:bg-gray-100"
+                    className="text-gray-500 hover:text-blue-500 p-1 rounded-full hover:bg-gray-50"
                     title="Edit workflow"
                   >
                     <Pencil size={18} />
                   </button>
                   <button
                     onClick={(e) => handleDelete(workflow.id, e)}
-                    className={`text-gray-500 hover:text-red-600 p-1 rounded-full hover:bg-gray-100 ${
+                    className={`text-gray-500 hover:text-red-500 p-1 rounded-full hover:bg-gray-50 ${
                       isDeleting === workflow.id ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                     disabled={isDeleting === workflow.id}

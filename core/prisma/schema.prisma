@@ -28,13 +28,12 @@ model WorkflowNode {
   workflowId String
   positionX  Int
   positionY  Int
-  nodeId     String   // ID within the ReactFlow system
   type       String   // The type of node
-  data       Json     // The custom node data
+  data       Json?     // The custom node data
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@unique([workflowId, nodeId])
+  @@unique(id)
 }
 
 model WorkflowEdge {

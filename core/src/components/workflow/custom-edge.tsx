@@ -74,7 +74,7 @@ const CustomEdge = ({
         path={edgePath}
         style={{
           stroke:
-            selected || data?._connectedNodeIsHovering || data?._runned
+            selected || data?.connectedNodeIsEntered || data?._runned
               ? '#6366f1'
               : '#D0D5DD',
           strokeWidth: 2,
@@ -88,7 +88,7 @@ const CustomEdge = ({
         width={4}
         height={2}
         fill={
-          selected || data?._connectedNodeIsHovering || data?._runned
+          selected || data?.connectedNodeIsEntered || data?._runned
             ? '#6366f1'
             : '#D0D5DD'
         }
@@ -100,7 +100,7 @@ const CustomEdge = ({
         width={4}
         height={2}
         fill={
-          selected || data?._connectedNodeIsHovering || data?._runned
+          selected || data?.connectedNodeIsEntered || data?._runned
             ? '#6366f1'
             : '#D0D5DD'
         }

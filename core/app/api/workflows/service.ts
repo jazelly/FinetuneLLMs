@@ -1,6 +1,6 @@
-import prisma from '@/lib/prisma';
+import prisma from '@/app/lib/prisma';
 import { Workflow, WorkflowNode, WorkflowEdge } from '@prisma/client';
-import { CreateWorkflowInput, UpdateWorkflowInput } from './workflow.validation';
+import { CreateWorkflowInput, UpdateWorkflowInput } from './validation';
 
 type WorkflowWithRelations = Workflow & {
   nodes: WorkflowNode[];
@@ -17,7 +17,6 @@ export const workflowService = {
         zoom: data.zoom || 1,
         nodes: {
           create: data.nodes.map(node => ({
-            nodeId: node.nodeId,
             type: node.type,
             positionX: node.positionX,
             positionY: node.positionY,
@@ -49,13 +48,24 @@ export const workflowService = {
 
   // Get a workflow by ID with all nodes and edges
   async getWorkflowById(id: string): Promise<WorkflowWithRelations | null> {
-    return prisma.workflow.findUnique({
-      where: { id },
-      include: {
-        nodes: true,
-        edges: true,
-      },
-    });
+    try {
+      console.log(`Fetching workflow with ID: ${id}`);
+      const workflow = await prisma.workflow.findUnique({
+        where: { id },
+        include: {
+          nodes: true,
+          edges: true,
+        },
+      });
+      console.log(`Found workflow: ${workflow ? 'yes' : 'no'}`);
+      if (workflow) {
+        console.log(`Nodes count: ${workflow.nodes.length}, Edges count: ${workflow.edges.length}`);
+      }
+      return workflow;
+    } catch (error) {
+      console.error(`Error in getWorkflowById:`, error);
+      throw error;
+    }
   },
 
   // Update a workflow and its nodes and edges
@@ -101,7 +111,6 @@ export const workflowService = {
             await tx.workflowNode.update({
               where: { id: node.id },
               data: {
-                nodeId: node.nodeId,
                 type: node.type,
                 positionX: node.positionX,
                 positionY: node.positionY,
@@ -113,7 +122,6 @@ export const workflowService = {
             await tx.workflowNode.create({
               data: {
                 workflowId: id,
-                nodeId: node.nodeId,
                 type: node.type,
                 positionX: node.positionX,
                 positionY: node.positionY,

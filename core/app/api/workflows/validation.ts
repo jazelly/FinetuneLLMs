@@ -2,11 +2,10 @@ import { z } from 'zod';
 
 export const workflowNodeSchema = z.object({
   id: z.string().optional(),
-  nodeId: z.string(),
   type: z.string(),
   positionX: z.number(),
   positionY: z.number(),
-  data: z.any(),
+  data: z.any().optional(),
 });
 
 export const workflowEdgeSchema = z.object({

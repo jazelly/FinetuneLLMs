@@ -61,7 +61,7 @@ export const initialEdges: Edge[] = [
     target: '2',
     data: {
       _hovering: false,
-      _connectedNodeIsHovering: false,
+      connectedNodeIsEntered: false,
       _connectedNodeIsSelected: false,
       _runned: false,
       _isBundled: false,
@@ -76,7 +76,7 @@ export const initialEdges: Edge[] = [
     target: '3',
     data: {
       _hovering: false,
-      _connectedNodeIsHovering: false,
+      connectedNodeIsEntered: false,
       _connectedNodeIsSelected: false,
       _runned: false,
       _isBundled: false,
@@ -91,7 +91,7 @@ export const initialEdges: Edge[] = [
     target: '4',
     data: {
       _hovering: false,
-      _connectedNodeIsHovering: false,
+      connectedNodeIsEntered: false,
       _connectedNodeIsSelected: false,
       _runned: false,
       _isBundled: false,

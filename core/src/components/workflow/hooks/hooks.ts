@@ -481,7 +481,7 @@ export const useNodesInteractions = () => {
 
         connectedEdges.forEach((edge) => {
           const currentEdge = draft.find((e) => e.id === edge.id);
-          if (currentEdge) currentEdge.data._connectedNodeIsHovering = true;
+          if (currentEdge) currentEdge.data.connectedNodeIsEntered = true;
         });
       });
       setEdges(newEdges);
@@ -503,7 +503,7 @@ export const useNodesInteractions = () => {
     setNodes(newNodes);
     const newEdges = produce(edges, (draft) => {
       draft.forEach((edge) => {
-        edge.data._connectedNodeIsHovering = false;
+        edge.data.connectedNodeIsEntered = false;
       });
     });
     setEdges(newEdges);
@@ -1294,68 +1294,6 @@ export const useNodesInteractions = () => {
     if (selectedNode) handleNodeDelete(selectedNode.id);
   }, [store, workflowStore, getNodesReadOnly, handleNodeDelete]);
 
-  const handleNodeResize = useCallback(
-    (nodeId: string, params: ResizeParamsWithDirection) => {
-      if (getNodesReadOnly()) return;
-
-      const { getNodes, setNodes } = store.getState();
-      const { x, y, width, height } = params;
-
-      const nodes = getNodes();
-      const currentNode = nodes.find((n) => n.id === nodeId)!;
-      const childrenNodes = nodes.filter((n) =>
-        currentNode.data._children?.includes(n.id)
-      );
-      let rightNode: Node;
-      let bottomNode: Node;
-
-      childrenNodes.forEach((n) => {
-        if (rightNode) {
-          if (n.position.x + n.width! > rightNode.position.x + rightNode.width!)
-            rightNode = n;
-        } else {
-          rightNode = n;
-        }
-        if (bottomNode) {
-          if (
-            n.position.y + n.height! >
-            bottomNode.position.y + bottomNode.height!
-          )
-            bottomNode = n;
-        } else {
-          bottomNode = n;
-        }
-      });
-
-      if (rightNode! && bottomNode!) {
-        if (
-          width <
-          rightNode!.position.x + rightNode.width! + ITERATION_PADDING.right
-        )
-          return;
-        if (
-          height <
-          bottomNode.position.y + bottomNode.height! + ITERATION_PADDING.bottom
-        )
-          return;
-      }
-      const newNodes = produce(nodes, (draft) => {
-        draft.forEach((n) => {
-          if (n.id === nodeId) {
-            n.data.width = width;
-            n.data.height = height;
-            n.width = width;
-            n.height = height;
-            n.position.x = x;
-            n.position.y = y;
-          }
-        });
-      });
-      setNodes(newNodes);
-      
-    },
-    [store, getNodesReadOnly, ]
-  );
 
   return {
     handleNodeDragStart,
@@ -1378,7 +1316,6 @@ export const useNodesInteractions = () => {
     handleNodesPaste,
     handleNodesDuplicate,
     handleNodesDelete,
-    handleNodeResize,
   };
 };
 

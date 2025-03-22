@@ -3,6 +3,7 @@ import { useStore as useZustandStore } from 'zustand';
 import { createStore } from 'zustand/vanilla';
 import { debounce } from 'lodash-es';
 import { WorkflowContext } from './context';
+import { Node } from './types';
 
 // Helper function to safely access localStorage
 export const getLocalStorageItem = (key: string, defaultValue: any) => {
@@ -22,6 +23,9 @@ export const setLocalStorageItem = (key: string, value: string) => {
 
 export const createWorkflowStore = () => {
   return createStore<Record<string, any>>((set) => ({
+    selectedNode: undefined,
+    setSelectedNode: (selectedNode) => set({ selectedNode }),
+
     workflowId: '',
     panelWidth: getLocalStorageItem('workflow-node-panel-width', null)
       ? parseFloat(getLocalStorageItem('workflow-node-panel-width', '420'))

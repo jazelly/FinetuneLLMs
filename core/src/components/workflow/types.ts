@@ -161,7 +161,7 @@ export type CommonNodeType = {
 
 export type CommonEdgeType = {
   _hovering?: boolean;
-  _connectedNodeIsHovering?: boolean;
+  connectedNodeIsEntered?: boolean;
   _connectedNodeIsSelected?: boolean;
   _runned?: boolean;
   _isBundled?: boolean;
