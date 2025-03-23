@@ -18,22 +18,17 @@ export const useWorkflowContext = () => {
 // Props for the provider
 type WorkflowProviderProps = {
   children: React.ReactNode;
-  workflowId: string;
 };
 
 // Provider component that initializes the store and provides it
 export const WorkflowContextProvider = ({
   children,
-  workflowId,
 }: WorkflowProviderProps) => {
   const storeRef = useRef<WorkflowStore>();
 
   // Create the store if it doesn't exist
   if (!storeRef.current) {
     storeRef.current = createWorkflowStore();
-    if (workflowId) {
-      storeRef.current.setState({ workflowId });
-    }
   }
 
   return (

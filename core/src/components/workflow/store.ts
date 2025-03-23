@@ -25,8 +25,14 @@ export const createWorkflowStore = () => {
   return createStore<Record<string, any>>((set) => ({
     selectedNode: undefined,
     setSelectedNode: (selectedNode) => set({ selectedNode }),
+    lastSaved: 0,
+    setLastSaved: (lastSaved) => set({ lastSaved }),
+    saveStatus: 'idle',
+    setSaveStatus: (saveStatus) => set({ saveStatus }),
+
 
     workflowId: '',
+    setWorkflowId: (workflowId) => set({ workflowId }),
     panelWidth: getLocalStorageItem('workflow-node-panel-width', null)
       ? parseFloat(getLocalStorageItem('workflow-node-panel-width', '420'))
       : 420,
@@ -39,11 +45,6 @@ export const createWorkflowStore = () => {
     showRunHistory: false,
     setShowRunHistory: (showRunHistory) => set(() => ({ showRunHistory })),
 
-    draftUpdatedAt: 0,
-    setDraftUpdatedAt: (draftUpdatedAt) =>
-      set(() => ({
-        draftUpdatedAt: draftUpdatedAt ? draftUpdatedAt * 1000 : 0,
-      })),
     publishedAt: 0,
     setPublishedAt: (publishedAt) =>
       set(() => ({ publishedAt: publishedAt ? publishedAt * 1000 : 0 })),

@@ -47,8 +47,6 @@ import { NodeSelector } from './NodeSelector.component';
 import { v4 } from 'uuid';
 import { useRouter } from 'next/navigation';
 
-import { useAutoSaveWorkflow } from './hooks/workflow.hooks';
-
 const nodeTypes: Record<CustomNodeType, React.FC> = {
   custom: CustomNode,
 };
@@ -67,11 +65,13 @@ interface WorkflowProps {
 const Workflow: FC<WorkflowProps> = memo(
   ({ nodes: originalNodes, edges: originalEdges, viewport, initialData }) => {
     const workflowContainerRef = useRef<HTMLDivElement>(null);
-    // Get state handlers from the store
+
     const controlMode = useStore((s) => s.controlMode);
     const nodeAnimation = useStore((s) => s.nodeAnimation);
     const handleWorkflowChange = useStore((s) => s.handleWorkflowChange);
     const setMousePosition = useStore((s) => s.setMousePosition);
+    const setLastSaved = useStore((s) => s.setLastSaved);
+    const setSaveStatus = useStore((s) => s.setSaveStatus);
     const { nodesReadOnly } = useNodesReadOnly();
     const store = useStoreApi();
     const reactflow = useReactFlow();
@@ -120,6 +120,7 @@ const Workflow: FC<WorkflowProps> = memo(
 
       // Function to send workflow data to parent
       const sendUpdate = () => {
+        setSaveStatus('saving');
         const { getNodes } = store.getState();
         const currentNodes = getNodes();
         const { edges: currentEdges } = store.getState();
@@ -143,8 +144,15 @@ const Workflow: FC<WorkflowProps> = memo(
           })),
         };
         
-        updateWorkflow(workflowId, workflowData);
-        shouldUpdateRef.current = false;
+        try {
+          updateWorkflow(workflowId, workflowData);
+          setLastSaved(Date.now());
+          setSaveStatus('saved');
+        } catch (error) {
+          setSaveStatus('error');
+        } finally {
+          shouldUpdateRef.current = false;
+        }
       };
       
       // Check for updates every 2 seconds if changes detected
