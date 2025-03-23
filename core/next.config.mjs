@@ -82,12 +82,6 @@ const nextConfig = {
 
   // Configure page extensions
   pageExtensions: ['tsx', 'ts', 'jsx', 'js', 'mdx'],
-
-  // Configure experimental features
-  experimental: {
-    // Modern App Router features are now stable, no need for these flags
-    // serverComponents, concurrentFeatures, and appDir are now default in newer Next.js
-  },
 };
 
 // Note: i18n configuration with App Router should be moved to app/[locale] directory structure

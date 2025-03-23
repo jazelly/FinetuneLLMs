@@ -107,16 +107,41 @@ export const workflowService = {
         // Upsert each node
         for (const node of data.nodes) {
           if (node.id) {
-            // Update existing node
-            await tx.workflowNode.update({
-              where: { id: node.id },
-              data: {
+            // Check if node exists before updating
+            const existingNode = await tx.workflowNode.findUnique({
+              where: { id: node.id }
+            });
+            
+            if (existingNode) {
+              // Update existing node
+              console.log(`Updating node: ${{
                 type: node.type,
                 positionX: node.positionX,
                 positionY: node.positionY,
                 data: node.data,
-              },
-            });
+              }}`);
+              await tx.workflowNode.update({
+                where: { id: node.id },
+                data: {
+                  type: node.type,
+                  positionX: node.positionX,
+                  positionY: node.positionY,
+                  data: node.data,
+                },
+              });
+            } else {
+              // Node with provided ID not found, create a new one
+              console.log(`Node with ID ${node.id} not found, creating new node`);
+              await tx.workflowNode.create({
+                data: {
+                  workflowId: id,
+                  type: node.type,
+                  positionX: node.positionX,
+                  positionY: node.positionY,
+                  data: node.data,
+                },
+              });
+            }
           } else {
             // Create new node
             await tx.workflowNode.create({
@@ -157,14 +182,31 @@ export const workflowService = {
         // Upsert each edge
         for (const edge of data.edges) {
           if (edge.id) {
-            // Update existing edge
-            await tx.workflowEdge.update({
-              where: { id: edge.id },
-              data: {
-                sourceNodeId: edge.sourceNodeId,
-                targetNodeId: edge.targetNodeId,
-              },
+            // Check if edge exists before updating
+            const existingEdge = await tx.workflowEdge.findUnique({
+              where: { id: edge.id }
             });
+            
+            if (existingEdge) {
+              // Update existing edge
+              await tx.workflowEdge.update({
+                where: { id: edge.id },
+                data: {
+                  sourceNodeId: edge.sourceNodeId,
+                  targetNodeId: edge.targetNodeId,
+                },
+              });
+            } else {
+              // Edge with provided ID not found, create a new one
+              console.log(`Edge with ID ${edge.id} not found, creating new edge`);
+              await tx.workflowEdge.create({
+                data: {
+                  workflowId: id,
+                  sourceNodeId: edge.sourceNodeId,
+                  targetNodeId: edge.targetNodeId,
+                },
+              });
+            }
           } else {
             // Create new edge
             await tx.workflowEdge.create({

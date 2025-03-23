@@ -71,7 +71,6 @@ const Workflow: FC<WorkflowProps> = memo(
     const controlMode = useStore((s) => s.controlMode);
     const nodeAnimation = useStore((s) => s.nodeAnimation);
     const handleWorkflowChange = useStore((s) => s.handleWorkflowChange);
-    const setSelectedNode = useStore((s) => s.setSelectedNode);
     const setMousePosition = useStore((s) => s.setMousePosition);
     const { nodesReadOnly } = useNodesReadOnly();
     const store = useStoreApi();
@@ -144,7 +143,6 @@ const Workflow: FC<WorkflowProps> = memo(
           })),
         };
         
-        console.log('sendUpdate', workflowData);
         updateWorkflow(workflowId, workflowData);
         shouldUpdateRef.current = false;
       };
@@ -232,6 +230,7 @@ const Workflow: FC<WorkflowProps> = memo(
         });
       });
       
+      shouldUpdateRef.current = true
       const { setNodes } = store.getState();
       setNodes(newNodes);
     }, [reactflow, store]);
